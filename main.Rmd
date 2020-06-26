@@ -17,26 +17,26 @@ url <- "https://arxiv.org/"
 arXiv <- read_html(url)
 arXiv_session <- html_session(url)
 
-logic_link <- arXiv %>% 
-  html_nodes("#math\\.LO") %>% 
-  html_attr("href") %>% 
-  paste(url, ., sep = "")
+get_link <- function(link, tag) {
+  read_html(link) %>% 
+    html_nodes(tag) %>%
+    html_attr("href") %>% 
+    paste(url, ., sep = "")
+}
 
-apaper_link <- read_html(logic_link) %>% 
-  html_nodes("dl:nth-child(9) .list-identifier a:nth-child(1)") %>% 
-  html_attr("href") %>% 
-  paste(url, ., sep = "")
+logic_link <- get_link(url, 
+                       "#math\\.LO")
 
-otherformat_link <- read_html(apaper_link) %>% 
-  html_nodes(".full-text li~ li+ li .abs-button") %>% 
-  html_attr("href") %>% 
-  paste(url, ., sep = "")
+apaper_link <- get_link(logic_link, 
+                        "dl:nth-child(9) .list-identifier a:nth-child(1)")
 
-download_link <- read_html(otherformat_link) %>% 
-  html_nodes("b+ a") %>% 
-  html_attr("href") %>% 
-  paste(url, ., sep = "")
+otherformat_link <- get_link(apaper_link, 
+                             ".full-text li~ li+ li .abs-button")
 
+download_link <- get_link(otherformat_link, 
+                          "dd b+ a")
+
+# useless for now
 arXiv_session %>% 
   jump_to(logic_link) %>% 
   jump_to(apaper_link) %>% 
@@ -45,7 +45,14 @@ arXiv_session %>%
 
 # https://arxiv.org/e-print/2006.14048
 
-download.file(download_link, )
+download.file(download_link, "./Download/targz/a.tar.gz")
+
+# some problems here
+# untar.gz files
+untar("./Download/targz/a.tar.gz", 
+      exdir = "./Download/unzipped",
+      list = TRUE)
+
 
 
 ```
