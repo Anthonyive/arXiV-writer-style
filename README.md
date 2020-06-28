@@ -6,6 +6,9 @@ Task list
 - [ ] List by authors
 - [ ] And so on ...
 
+Problem list
+- Cannot untar `.tar.gz` files
+
 ## June 26, 2020
 Add code for downloading specific article, scrap its .tar.gz file and untar (unzip) it.
 
