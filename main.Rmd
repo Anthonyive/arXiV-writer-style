@@ -46,12 +46,18 @@ arXiv_session %>%
 
 # https://arxiv.org/e-print/2006.14048
 
-download.file(download_link, "./Download/targz/a.tar.gz")
+file_name <- download_link %>% 
+  str_extract("(?:.(?!\\/))+$")
+download.file(download_link, paste("./Download/targz", file_name, ".tar.gz", sep = ""))
 
 # some problems here
 # untar.gz files
-untar("./Download/targz/a.tar.gz", 
-      list = TRUE)
+
+unzipped_path <- paste("./Download/unzipped", file_name, sep = "")
+dir.create(unzipped_path)
+
+command <- paste('cd ', unzipped_path, '; tar -zxvf ../../targz', file_name, '.tar.gz', sep = "")
+system(command)
 
 
 
