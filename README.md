@@ -14,3 +14,6 @@ Add code for downloading specific article, scrap its .tar.gz file and untar (unz
 
 ## June 27, 2020
 Add code in `test.ipynb` to scrap links of main topics and automate searching.
+
+## Jul 2, 2020
+Add topic listings and its statistics.
