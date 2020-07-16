@@ -1,0 +1,881 @@
+%-----------------------------------------------------------------------
+% Bianchi's additional symmetries
+%-----------------------------------------------------------------------
+%
+%    Alexander D. Rahm
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[twoside,a4paper,12 pt]{amsart}
+
+\usepackage{amssymb,amsmath}
+\usepackage{graphicx}
+\usepackage[lite]{amsrefs}
+\usepackage[all]{xy}
+\usepackage{geometry}
+\usepackage{tikz}
+\usepackage{color}
+\usetikzlibrary{matrix,arrows}
+
+% \textwidth=42pc
+% \textheight=58pc
+% \oddsidemargin=-12pt
+% \evensidemargin=-12pt
+
+\newcommand{\ringO}{\mathcal{O}}
+\newcommand{\Hy}{\mathcal{H}}
+\newcommand{\C}{{\mathbf{C}}}
+\newcommand{\R}{{\mathbf{R}}}
+\newcommand{\Z}{{\mathbf{Z}}}
+\newcommand{\N}{{\mathbf{N}}}
+\newcommand{\F}{{\mathbf{F}}}
+\newcommand{\T}{{\bf{T}}}
+\newcommand{\rationals}{{\mathbf{Q}}}
+\newcommand{\Ball}{\mathcal{B}}
+\newcommand{\id}{\mathrm{id}}
+\newcommand*{\Homol}{\operatorname{H}}
+\newcommand*{\SL}{\operatorname{SL}}
+\newcommand*{\PSL}{\operatorname{PSL}}
+\newcommand*{\GL}{\operatorname{GL}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}%[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{question}[theorem]{\bfseries Question}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{theoreme}[theorem]{Th\'eor\`eme}
+\newtheorem{lemme}[theorem]{Lemme}
+\newtheorem{corollaire}[theorem]{Corollaire}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{xca}[theorem]{Exercise}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{remarks}[theorem]{\bfseries Remarks}
+
+
+\begin{document}
+
+% \selectlanguage{english}
+\title{Bianchi's additional symmetries}
+\author{Alexander D. Rahm}
+\address{Universit\'e de la Polyn\'esie Fran\c{c}aise, Laboratoire GAATI}
+\urladdr{http://gaati.org/rahm/}
+\email{Alexander.Rahm@upf.pf}
+
+
+
+\date{\today}
+
+\begin{abstract}
+% \selectlanguage{english}
+In a 2012 note in Comptes Rendus Math\'ematique, the author did try to answer a question of \mbox{Jean-Pierre Serre};
+it has recently been announced that the scope of that answer needs an adjustment, 
+and the details of this adjustment are given in the present paper.
+The original question is the following.
+Consider the ring of integers~$\ringO$ in an imaginary quadratic number field,
+and the Borel--Serre compactification of the quotient of hyperbolic 
+$3$--space by $\mathrm{SL_2}(\ringO)$.
+Consider the map~$\alpha$
+ induced on homology when attaching the boundary
+ into the Borel--Serre compactification.\\
+\mbox{\emph{How can one determine the kernel of~$\alpha$ (in degree 1) ?}}\\
+Serre used a global topological argument and obtained the rank of the kernel of~$\alpha$.
+He added the question what submodule precisely this kernel is.
+\end{abstract}
+
+
+\maketitle
+
+%  \selectlanguage{english}
+\section*{Introduction}
+As the note ``On a question of Serre''~\cite{questionOfSerre} by the author had been published prematurely,
+the proof of the key lemma remaining sketchy,
+the author did contact an expert for the Borel--Serre compactification, Lizhen Ji,
+for the project of establishing a detailed version of that key proof.
+Lizhen Ji then found out that there are cases where that proof does not apply.
+So it is necessary to correct the scope of the lemma, which has been announced in Comptes Rendus Math\'ematique~\cite{corrigendum},
+and is detailed in the present paper.
+
+The Bianchi groups, $\mathrm{SL_2}(\ringO)$ over the ring $\ringO$ of integers in an imaginary quadratic field $\rationals(\sqrt{-D})$, 
+where $D$ is a square-free positive natural integer,
+act naturally on hyperbolic $3$-space $\Hy$ (cf. the monographs~\cite{ElstrodtGrunewaldMennicke},~\cite{Fine},~\cite{MaclachlanReid}).
+For a subgroup $\Gamma$ of finite index in $\mathrm{SL_2}(\ringO)$,
+ consider the Borel--Serre compactification $_\Gamma \backslash \widehat{\Hy}$ of the orbit space $_\Gamma \backslash \Hy$,
+constructed by Borel and Serre~\cite{BorelSerre}, which is a manifold with boundary.
+In our case, the boundary components of $_\Gamma \backslash \widehat{\Hy}$ are disjoint,
+which allows for an explicit description (see the appendix of Serre's paper~\cite{Serre}).
+\textit{Throughout this paper, we will exclude the ring $\ringO$ from being the Gaussian integers, in $\rationals(\sqrt{-1})$,
+or the Eisensteinian integers, in $\rationals(\sqrt{-3})$.}
+In those two special cases, the boundary at the single cusp is a 2--sphere, and these two special cases can easily be treated separately by an explicit manual computation. 
+So we are in the setting where each boundary component of $_\Gamma \backslash \widehat{\Hy}$ is a 2-torus $\T_\sigma$ which compactifies the cusp $\sigma$.
+\begin{question}[Serre \cite{Serre}]\label{question}
+ Consider the map~$\alpha$
+ induced on homology when attaching the boundary
+ into the Borel--Serre compactification $_\Gamma \backslash \widehat{\Hy}$.
+How can one determine the kernel of $\alpha$ (in degree 1) ?
+\end{question}
+
+\textit{Motivation of Question~\ref{question}}.
+The search for a set of generators for the kernel of the attaching map has motivations that are indicated already in Serre's 1970 paper.
+The paper does (after achieving its goal, namely solving the congruence subgroups problem), 
+describe how to calculate the Abelianisation of the investigated arithmetic groups in terms of generators for the kernel of the attaching map. 
+Knowledge about the Abelianisation $\Gamma^{\rm ab}$ of $\Gamma$ a (congruence subgroup in a) Bianchi group, especially in terms of generating matrices, has the following application to the Langlands programme 
+(we can assume that this application was already realised by Serre at that time, because of his subsequent question in the paper).
+For each weight $k$ of modular forms, there is a coefficient module $M_k$ such that the Eichler--Shimura--Harder isomorphism identifies the space of weight $k$ modular forms for $\Gamma$
+with the cohomology $H^1(\Gamma; M_k)$. The latter can be computed explicitly as Hom$(\Gamma^{\rm ab} , M_k)$ when $\Gamma^{\rm ab}$ is given in terms of generating matrices.
+These computations would then not have to pass by an explicit computation of a fundamental domain like the Bianchi fundamental polyhedron,
+which is  a necessary step still nowadays~\cites{RahmSengun, RahmTsaknias} for computing the dimension of $H^1(\Gamma; M_k)$.
+
+\medskip
+
+The following lemma was the key for the approach to Question~\ref{question} pursued in the 2012 note. 
+In the remainder of this paper, we consider an imaginary quadratic field $\rationals(\sqrt{-D})$ 
+with $D$ a square-free positive natural integer, and we set $\Gamma = \mathrm{SL_2}(\ringO_{\rationals(\sqrt{-D})})$.
+We decompose the $2$-torus $\T_\sigma$ in the classical way into a $2$--cell, two edges and a vertex.
+
+\begin{lemma} \label{torus-lemma}
+Let $n$ be the number of prime divisors of $D$. Let $N = 2^{n-1}$ for $D \equiv 3 \bmod 4$, $N = 2^{n}$ for $D \equiv 1\text{ or } 2 \bmod 4$. 
+Then $_\Gamma \backslash \Hy$ admits at least $N$ cusps $\sigma$ such that the inclusion of~$\T_\sigma$ into $_\Gamma \backslash \widehat{\Hy}$ 
+induces on~$H_1(\T_\sigma)$ a map of rank $1$.
+\end{lemma}
+
+The restriction to $N$ cusps was missing in the 2012 note, and we will give a completed proof in Section~\ref{The proof}, making use of this restriction.
+For this purpose, we exploit symmetries of the quotient space $_\Gamma \backslash \Hy$, 
+which Bianchi did find additionally to the ``basic'' ones which occur for all studied rings $\ringO$ 
+and which are given by complex conjugation and a rotation of order $2$ around the origin of the complex plane (see Section~\ref{Bianchi's additional symmetries}). 
+
+\begin{corollary} \label{exponent 2 case}
+ If the class group of $\ringO$ is isomorphic to $\Z/2^m\Z$ for some $m \in \N$, then for all cusps $\sigma$ of $_\Gamma \backslash \Hy$,
+ the inclusion of~$\T_\sigma$ into $_\Gamma \backslash \widehat{\Hy}$ 
+induces on~$H_1(\T_\sigma)$ a map of rank $1$.
+\end{corollary}
+\begin{proof}
+Let the numbers $n$ and $N$ be as in Lemma~\ref{torus-lemma}.
+By~\cite{Cox}*{thm. 3.22}, our hypothesis on the class group of $\ringO$ is equivalent to $m = $\scriptsize $\begin{cases}
+        n-1, & D \equiv 3 \bmod 4,\\
+        n,& D \equiv 1 \text{ or } 2 \bmod 4.\\
+       \end{cases}$\normalsize
+
+ It is well known that each ideal class of $\ringO$ corresponds to one cusp of $_\Gamma \backslash \Hy$, so there are exactly $N$ cusps, 
+ and Lemma~\ref{torus-lemma} yields the claim.
+ \end{proof}
+As the class group type assumed in Corollary~\ref{exponent 2 case} occurs only finitely many times~\cite{Weinberger},
+it might seem disappointing that the scope of the theorem deduced from it in~\cite{questionOfSerre}
+is much more narrow than it was originally claimed,
+but this actually means that once that we leave this scope of validity, the topology of the Bianchi orbifolds near their boundary is much richer than asserted in~\cite{questionOfSerre},
+and can provide interesting studies for future generations of mathematicians.
+
+
+
+\section{Bianchi's additional symmetries} \label{Bianchi's additional symmetries}
+In the cases $\Gamma = \mathrm{SL_2}(\ringO)$ which he considered, 
+Luigi Bianchi did make an exhaustive description of the symmetries of the quotient space $_\Gamma \backslash \Hy$.
+They are given by outer automorphisms of $\Gamma$, and a subgroup of these automorphisms is, for all studied rings $\ringO$, 
+the Klein four-group with generators $c$ and $e$,
+where for $\gamma \in \Gamma$, the matrix $c(\gamma) = \overline{\gamma}$ is the complex conjugate of $\gamma$, and $e(\gamma) = E\cdot \gamma \cdot E$ with
+$E = \begin{pmatrix}    -1 & 0 \\ 
+			 0 & 1 \end{pmatrix} 
+			 \in \text{GL}_2(\ringO)$
+-- see~\cite{Swan}*{remark below lemma 4.19}.
+We will consider this Klein four-group as the ``basic'' symmetries, and will call ``additional'' the symmetries of $_\Gamma \backslash \Hy$
+given by outer automorphisms outside this Klein four-group.
+Throughout this paper, we use the upper-half space model $\Hy$ for hyperbolic $3$-space, as it is the one used by Bianchi.
+As a set, $ \Hy = \{ (z,\zeta) \in \C \times \R \medspace | \medspace \zeta > 0 \}.$
+Then, the basic symmetries take the form $c(z,\zeta) = (\overline{z},\zeta)$ and $e(z,\zeta) = (-z,\zeta)$. 
+
+The list of Bianchi's symmetries presented in this section will allow us to reduce the proof in the following section 
+in each case to the situation at the cusp at infinity.
+As a fundamental domain in hyperbolic space, we make use of the polyhedron with missing vertices at the cusps,
+described by Bianchi~\cite{Bianchi1892}, and which we will call the \emph{Bianchi fundamental polyhedron}.
+It is the intersection of a fundamental domain in $\Hy$ for the stabiliser in $\Gamma$ of the cusp at $\infty$ (in the shape of a rectangular prism) 
+with the set of points of $\Hy$ that are closer to~$\infty$ than to any other cusp, with respect to Mendoza's distance to cusps~\cite{Mendoza}.
+We consider the cellular structure on $_\Gamma \backslash \widehat{\Hy}$
+induced by the Bianchi fundamental polyhedron.
+From Bianchi's articles~\cites{Bianchi1892, Bianchi1893}, 
+ it was not clear that one can always compute the Bianchi fundamental polyhedron, 
+ a fact which meanwhile has been established by an algorithm of Richard G. Swan~\cite{Swan} 
+ that has been implemented at least twice~(\cite{BianchiGP}, which is a straight implementation of Swan's algorithm,
+ and \cites{Aranes, CremonaAranes}, which additionally uses ideas of Cremona~\cite{Cremona}).
+The reason why in some cases Bianchi did not obtain the Bianchi fundamental polyhedron, 
+must be that some ``sfere di riflessione impropria'' did escape him
+\cite{Bianchi1892}*{\S 20; at the first example, $D = 14$, it is the hemisphere of center $\frac{1}{2}+\frac{\sqrt{-14}}{3}$
+and radius $\frac{1}{6}$}.
+Note that in the upper-half space model, totally geodesic planes are modelled by vertical planes, respectively by hemispheres centered in the boundary, so we will call the latter ``reflecting (hemi)spheres''
+to continue Bianchi's terminology, even though they are to be thought as mirroring planes in hyperbolic space.
+An improper reflection sphere (``sfera di riflessione impropria'') has its reflection composed with the order-$2$-rotation around its vertical radius (the one connecting its center with its highest point).
+Instead of the missing reflecting spheres, Bianchi did find additional symmetries which did allow him to construct a differently shaped but equivalent fundamental domain~\cite{Bianchi1893}.
+These symmetries are going to be the foundations of our proof.
+Since Bianchi's papers, a cusp is called \textit{singular} 
+when it is not in the $\Gamma$-orbit of~$\infty$. 
+\begin{theorem}[Bianchi] \label{Bianchi statement}
+ Let $D$, $n$ and $N$ be as in Lemma~\ref{torus-lemma}.
+Then there are $N-1$ symmetries of the Bianchi fundamental polyhedron, each flipping the cusp~$\infty$ with a different singular cusp,
+while leaving invariant a hemisphere of radius smaller than~$1$,
+and preserving the $\Gamma$-cell structure.
+\end{theorem}
+
+We will call those symmetries \textit{Bianchi's additional symmetries}. 
+
+\begin{proof}[We sketch Bianchi's proof of Theorem~\ref{Bianchi statement} in order to fix notation.]
+With $D$ a square-free positive natural integer satisfying either
+\begin{itemize}
+ \item Case A: $D \equiv 1$ or $2 \bmod 4$, 
+	and suppose that $D$ admits a prime divisor $m < D$; 
+ \item or Case B:  $D \equiv 1 \bmod 4$ with $D > 1$,
+\end{itemize}
+Bianchi specified the symmetry by composing complex conjugation with the action of the matrix 
+\begin{center}
+\hfill
+ $M_\sigma = $\scriptsize $ \begin{pmatrix}
+    \sqrt{\frac{-D}{m}} & -\sqrt{m} \\
+    \sqrt{m} & \sqrt{\frac{-D}{m}}  \\
+   \end{pmatrix}$\normalsize
+   in Case A;
+   \hfill
+   $M_\sigma = $\scriptsize $  \begin{pmatrix}
+    \frac{\sqrt{-D}+1}{\sqrt{2}} & \frac{D-1}{-4}\sqrt{2} \\
+    \sqrt{2} & \frac{\sqrt{-D}-1}{\sqrt{2}}  \\
+   \end{pmatrix}$\normalsize
+   in Case B,
+   \hfill
+   ${}$
+\end{center}
+where we choose $m$ to be the smallest prime divisor of $D$.
+The action on the boundary of hyperbolic space is given by classical M\"obius transformations,
+\scriptsize
+$ \begin{pmatrix}
+    a & b \\ c & d
+   \end{pmatrix} 
+   \cdot z = \frac{az+b}{cz+d}.$ \normalsize \medspace
+Therefore, Bianchi's additional symmetry flips the cusp $\infty$ with the cusp 
+\begin{center}
+\hfill
+ $\sigma = \frac{\sqrt{-D}}{m}$ in Case A;
+ \hfill
+  $\sigma = \frac{\sqrt{-D}+1}{2}$ in Case B.
+ \hfill
+ ${}$.
+\end{center}
+We can check that the cusp $\sigma$ is singular by checking that the ideal $I_\sigma$ is not principal, where
+\begin{center}
+\hfill
+ $I_\sigma = ({\sqrt{-D}},{m})$ in Case A;
+ \hfill
+  $I_\sigma = ({\sqrt{-D}+1}, {2})$ in Case B.
+ \hfill
+ ${}$
+\end{center}
+We assume the contrary and lead it to a contradiction:
+Suppose that there are $c \in I_\sigma$, $a, b \in \ringO$ with 
+\begin{center}
+\hfill $a c = \sqrt{-D}$, $b c = m$  in Case A;
+\hfill
+$a c = \sqrt{-D}+1$, $b c = 2$ in Case B. \hfill ${}$ 
+\end{center}
+We easily show that $c$ is in the $\Z$-module with generators the two generators of $I_\sigma$
+(we might say that ``$c$ admits coefficients in $\Z$'') when we use 
+\\${}$ \hfill in Case A, that $m$ is a divisor of $D$; \hfill in Case B, that $D \equiv 1 \bmod 4$. \hfill ${}$ \\
+Next, we separate real and imaginary part in the above system of two equations, solve for the coefficients of $c$ 
+and arrive at the desired contradiction.
+Therefore, the cusp $\sigma$ is singular. 
+As we have chosen $m$ to be the smallest prime dividing $D$,
+the cusp $\sigma$ is a vertex of the Bianchi fundamental polyhedron.
+This entails that the matrix $M_\sigma$ 
+of Bianchi's additional symmetry flips the Bianchi fundamental polyhedron onto itself,
+interchanging two isometric halves of it which are separated by a plane equidistant to the cusps $\infty$ and~$\sigma$,
+with respect to Mendoza's distance to cusps~\cite{Mendoza}.
+The Bianchi group $\Gamma$ is a normal subgroup of index 2 in the group $\langle \Gamma, M_\sigma \rangle$,
+whence this symmetry preserves the $\Gamma$-cell structure.
+The other symmetries are obtained similarly~\cite{Bianchi1893}, and we collect them in Table~\ref{the table}.
+The conditions in the table are implied by $\det(M_\sigma) = 1$.
+Then we read off from the table that the radius $r_\sigma$ of the reflecting sphere is smaller than~$1$, and that $\sigma$ is a singular cusp (its numerator and denominator generate a non-principal ideal).
+
+\end{proof}
+
+
+
+\begin{table}
+\scriptsize
+$\begin{array}{|c|c|c|c|c|}
+ \hline \text{Type} & \sigma & r_\sigma & M_\sigma & \text{Conditions} \\
+ \hline \text{I}    & \frac{a_1 m +a_2\sqrt{-D}}{c m} & \frac{1}{c\sqrt{m}} & 
+ \begin{pmatrix}
+ a_1\sqrt{m}+a_2\sqrt{\frac{-D}{m}} & b\sqrt{{m}} \\
+ c\sqrt{{m}} & a_2\sqrt{\frac{-D}{m}}-a_1\sqrt{m} \\
+ \end{pmatrix} &
+ \begin{array}{c} D \equiv 1\text{ or } 2 \bmod 4,\\ 
+  \frac{D}{m} \text{ quadratic residue mod }m, \\
+  m a_1^2+\frac{D}{m}a_2^2+m b c = 1\end{array}
+ \\
+\hline \text{II}    & \frac{a_2D -a_1 mc\sqrt{-D}}{cD} & \frac{1}{c\sqrt{\frac{D}{m}}} & 
+ \begin{pmatrix}
+ a_1\sqrt{m}+a_2\sqrt{\frac{-D}{m}} & b\sqrt{\frac{-D}{m}} \\
+ c\sqrt{\frac{-D}{m}} & a_1\sqrt{m}-a_2\sqrt{\frac{-D}{m}} \\
+ \end{pmatrix} &
+ \begin{array}{c} D \equiv 1\text{ or } 2 \bmod 4,\\ 
+  m \text{ quadratic residue mod }\frac{D}{m},\\
+  m a_1^2 +\frac{D}{m} a_2^2 + \frac{D}{m}b c = 1 \end{array} \\
+\hline \text{III}    & \frac{a_1 +a_2\sqrt{-D}}{2c} & \frac{1}{c\sqrt{2}} & 
+ \begin{pmatrix}
+ \frac{a_1+a_2\sqrt{-D}}{\sqrt{2}} & b\sqrt{2} \\
+ c\sqrt{2} & \frac{a_2\sqrt{-D}-a_1}{\sqrt{2}} \\
+ \end{pmatrix} &
+ \begin{array}{c} D \equiv 1  \bmod 4,\\
+ a_1^2+D a_2^2 +4bc = 2\\ 
+%   m \text{ quadratic residue mod }\frac{D}{m} 
+\end{array} \\
+\hline \text{IV}    & \frac{a_2 D -a_1\sqrt{-D} }{2cD} & \frac{1}{c\sqrt{2 D}} & 
+ \begin{pmatrix}
+ \frac{a_1+a_2\sqrt{-D}}{\sqrt{2}} & b\sqrt{2}\sqrt{-D} \\
+ c\sqrt{2}\sqrt{-D} & \frac{a_1-a_2\sqrt{-D}}{\sqrt{2}} \\
+ \end{pmatrix} &
+ \begin{array}{c} D \equiv 1  \bmod 4\\ 
+   2 \text{ quadratic residue mod } D,\\
+   a_1^2 +Da_2^2 +4Dbc = 2
+\end{array}  \\
+\hline \text{V}    & \frac{a_1 m +a_2 \sqrt{-D}}{2cm} & \frac{1}{c\sqrt{2 m}} & 
+ \begin{pmatrix}
+ \frac{a_1\sqrt{m}+a_2\sqrt{\frac{-D}{m}}}{\sqrt{2}} & b\sqrt{2 m} \\
+ c\sqrt{2 m} & \frac{-a_1\sqrt{m} +a_2\sqrt{\frac{-D}{m}}}{\sqrt{2}} \\
+ \end{pmatrix} &
+ \begin{array}{c} D \equiv 1  \bmod 4\\ 
+   2\text{ and }\frac{D}{m} \text{ have the same}\\
+   \text{quadratic character mod } m,\\
+   m a_1^2 +\frac{D}{m}a_2^2 +4mbc = 2
+\end{array}  \\
+\hline \text{VI}    & \frac{a_2D +a_1 m\sqrt{-D}}{2cD} & \frac{1}{c\sqrt{2 \frac{D}{m}}} & 
+ \begin{pmatrix}
+ \frac{a_1\sqrt{m}+a_2\sqrt{\frac{-D}{m}}}{\sqrt{2}} & b\sqrt{2 \frac{-D}{m}} \\
+ c\sqrt{2 \frac{-D}{m}} & \frac{a_1\sqrt{m} -a_2\sqrt{\frac{-D}{m}}}{\sqrt{2}} \\
+ \end{pmatrix} &
+ \begin{array}{c} D \equiv 1  \bmod 4\\ 
+   2\text{ and }m \text{ have the same}\\
+   \text{quadratic character mod } \frac{D}{m},\\
+   m a_1^2 +\frac{D}{m}a_2^2 +4\frac{D}{m}bc = 2
+\end{array}  \\
+\hline \text{VII}    & \frac{a_1 m +a_2 \sqrt{-D}}{2cm} & \frac{1}{c\sqrt{m}} & 
+ \begin{pmatrix}
+ \frac{a_1\sqrt{m}+a_2\sqrt{\frac{-D}{m}}}{2} & b\sqrt{m} \\
+ c\sqrt{m} & \frac{-a_1\sqrt{m} +a_2\sqrt{\frac{-D}{m}}}{2} \\
+ \end{pmatrix} &
+ \begin{array}{c} D \equiv 3  \bmod 4\\ 
+  \frac{D}{m} \text{ quadratic residue mod }m,\\
+   m a_1^2 +\frac{D}{m}a_2^2 +4mbc = 4
+\end{array}  \\
+\hline \text{VIII}    & \frac{a_2 D +a_1 m\sqrt{-D}}{2cD} & \frac{1}{c\sqrt{\frac{D}{m}}} & 
+ \begin{pmatrix}
+ \frac{a_1\sqrt{m}+a_2\sqrt{\frac{-D}{m}}}{2} & b\sqrt{\frac{-D}{m}} \\
+ c\sqrt{\frac{-D}{m}} & \frac{a_1\sqrt{m} -a_2\sqrt{\frac{-D}{m}}}{2} \\
+ \end{pmatrix} &
+ \begin{array}{c} D \equiv 3  \bmod 4\\ 
+  m \text{ quadratic residue mod }\frac{D}{m},\\
+   m a_1^2 +\frac{D}{m}a_2^2 +4\frac{D}{m}bc = 4
+\end{array}  \\
+\hline
+\end{array}$\normalsize
+\caption{Bianchi's additional symmetries~\cite{Bianchi1893}*{\S III}. The parameters $a_1, a_2, b, c \in \Z$ and the divisor $m$ of $D$ have to satisfy the specified conditions.
+Examples for Type I are \hfill $m = 2, a_1 = 0, a_2 = c = 1$, $(D,b) \in \{(6,-1), (10,-2), (22,-5), (58,-14)\}$;
+examples for Type III are $a_1 = a_2 = c = 1$, $(D,b) \in \{(5,-1), (13,-3), (37,-9)\}$.} \label{the table}
+\end{table}
+
+
+
+
+
+\section{Proof of Lemma 2}\label{The proof}
+We will use Bianchi's additional symmetries for decomposing the Bianchi fundamental polyhedron into two isometric parts
+with the cutting plane between them being equidistant between $\infty$ and the singular cusp at which $\T_\sigma$ is located.
+
+\begin{proof}[Proof of lemma \ref{torus-lemma}]
+ Consider, in the boundary of the Bianchi fundamental polyhedron, the fundamental rectangle $\mathcal F$ for the action of the cusp stabiliser on the plane joined to $\Hy$ at the cusp~$\infty$.
+ There is a sequence of rectangles in $\Hy$ obtained as translates of~$\mathcal F$ orthogonal to all the geodesic arcs emanating from the cusp~$\infty$.
+ This way, the portion of the fundamental polyhedron which touches the cusp~$\infty$, is locally homeomorphic to the Cartesian product of a geodesic arc with a translate of~$\mathcal F$.
+
+ The boundaries of these translates are subject to the same identifications by $\Gamma$ as the boundary of~$\mathcal F$.
+ Namely, denote by $t({\mathcal F})$ one of the translates of~$\mathcal F$; and denote by 
+ $\gamma_x$ and $\gamma_y$ two generators, up to the $-1$ matrix, of the cusp stabiliser identifying the opposite edges of~$\mathcal F$.
+We can choose $\gamma_x =$\scriptsize$\begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$ \normalsize 
+and $\gamma_y =$\scriptsize$\begin{pmatrix} 1 & \omega \\ 0 & 1 \end{pmatrix}$, \normalsize
+with $\omega = \sqrt{-D}$ for $D \equiv 1\text{ or }2 \bmod 4$, respectively $\omega = \frac{\sqrt{-D}+1}{2}$ for $D \equiv 3 \bmod 4$.
+Then,  $\gamma_x$ and $\gamma_y$ identify the opposite edges of $t({\mathcal F})$
+ and make the quotient of $t({\mathcal F})$ into a torus.
+  So in the quotient space by the action of  $\Gamma$, the image of~$\T_\infty$ is wrapped into a sequence of layers of tori.
+ And therefore in turn, the 3-dimensional interior of the  Bianchi fundamental polyhedron is wrapped around the image of~$\T_\infty$
+ along the entire surface of the latter, such that there is a neighbourhood inside $_\Gamma \backslash \Hy$ which is homeomorphic to the Cartesian product of a $2$-torus and an open interval.
+ Hence, there is, in a suitable ambient space, a neighbourhood of the image of~$\T_\infty$ that is homeomorphic to Euclidean $3$--space with the interior of a solid torus removed.
+ Now, considering the cell structure of the torus, we see that precisely one of the loops generating the fundamental group of~$\T_\infty$
+ can be contracted in the interior of the quotient of the Bianchi fundamental polyhedron --- namely, the loop given by the edge that has its endpoints identified by $\gamma_x$.
+ The other loop (the one obtained by the identification by  $\gamma_y$) is nontrivially linked with the removed solid torus.
+ This entails that it cannot be unlinked when moving it in the Borel--Serre compactification of~$_\Gamma \backslash \Hy$,
+ and thus remains uncontractible there.
+ For each ideal class that is represented by a singular cusp $\sigma$ which is subject to one of Bianchi's additional symmetries, we observe the following.
+  The radius $r_\sigma$ of the reflecting sphere is smaller than~$1$ (cf. Table~\ref{the table}), 
+  and hence the above described contraction happens \textit{within} the half touching the cusp~$\infty$.
+ By our $\Gamma$-cell structure preserving isometry, we get a copy of this contraction.
+ The r\^oles of~$\gamma_x$ and~$\gamma_y$ are then played by~$M_\sigma\gamma_xM_\sigma^{-1}$ and~$M_\sigma\gamma_y M_\sigma^{-1}$ with $M_\sigma$ specified in Table~\ref{the table}.
+ Hence the inclusion of~$\T_\sigma$ into $_\Gamma \backslash \widehat{\Hy}$ makes exactly one of the edges of~$\T_\sigma$ become the boundary of a $2$--chain.
+ The number of such cusps~$\sigma$ is given by Theorem~\ref{Bianchi statement}.
+ And Serre's theorem about the rank of the map $\alpha$ \cite{Serre}*{th\'eor\`eme 7} allows us to conclude that no nontrivial linear combination of these loops can be homologous to zero.
+ \end{proof}
+
+Note that only with Bianchi's additional symmetries, we get more than one linked loop.
+Sufficiently many of these symmetries are available only for the Bianchi orbifolds specified in Corollary~\ref{exponent 2 case},
+and in general we just have the one linked loop at the torus at infinity, which was already observed in Serre's original paper.
+
+
+\subsection*{Acknowledgements}
+The author would like to thank Lizhen Ji for a fruitful correspondence which laid the foundations for the present paper.
+He would like to heartily thank the anonymous referee for the many very knowledgeable and helpful suggestions made on various aspects.
+He is grateful to the University of Luxembourg for funding his research through Gabor Wiese's AMFOR grant.
+
+
+% \section*{Version fran\c{c}aise}
+% \begin{abstract} 
+% Dans une note pr\'ec\'edente, l'auteur a essay\'e de r\'epondre une question de Jean-Pierre Serre;
+% il s'av\`ere que le domaine de validit\'e de cette r\'eponse doit \^etre ajust\'e, ce qui est le but de la note pr\'esente.
+% La question originale est la suivante. Consid\'erons l'anneau d'entiers $\ringO$ dans un corps quadratique imaginaire, 
+% et la compactification de Borel--Serre du quotient de l'espace hyperbolique $\Hy$ \`a $3$ dimensions 
+% par $\mathrm{SL_2}(\ringO)$.
+% Consid\'erons l'application~$\alpha$ induite en homologie quand le bord est attach\'e dans la compactification de Borel--Serre.
+% \emph{Comment peut-on d\'eterminer le noyau de $\alpha$ (en degr\'e 1) ?} 
+% Serre se servait d'un argument topologique global et obtenait le rang du noyau de $\alpha$.
+% Il rajoutait la question de quel sous-module pr\'ecis\'ement il s'agit pour ce noyau.
+% \end{abstract} 
+% 
+% \setcounter{theorem}{0}
+% 
+% \section*{Introduction}
+% 
+% Comme la note ``On a question of Serre''~\cite{questionOfSerre} par l'auteur fut publi\'ee avant d'atteindre son \'etat de maturit\'e,
+% la d\'emonstration du lemme cl\'e restant en esquisse,
+% l'auteur a contact\'e un expert pour la compactification de Borel--Serre, Lizhen Ji,
+% avec le projet d'\'etablir une version d\'etaill\'ee de cette d\'emonstration cl\'e.
+% Ensuite, Lizhen Ji trouvait qu'il y a des cas o\`u la d\'emonstration ne peut pas \^etre appliqu\'ee.
+% Il est donc n\'ecessaire de corriger le domaine de validit\'e du lemme, ce que nous allons faire dans le manuscrit pr\'esent.
+% 
+% Dans tout ce manuscrit, nous nous servons du mod\`ele $\Hy$ de demi-espace sup\'erieur pour l'espace hyperbolique $\Hy$ \`a trois dimensions, 
+% comme il est celui utilis\'e par Bianchi.
+% En tant qu'ensemble, $ \Hy = \{ (z,\zeta) \in \C \times \R \medspace | \medspace \zeta > 0 \}.$
+% Consid\'erons un corps quadratique imaginaire $\rationals(\sqrt{-m})$, o\`u $m$ est un entier positif ne contenant pas de carr\'e, 
+% et son anneau d'entiers $\ringO$.
+% Les \emph{groupes de \mbox{Bianchi}} sont les groupes $\mathrm{SL_2}(\ringO)$, qui agissent de mani\`ere naturelle sur $\Hy$ 
+% (cf. les monographes~\cite{ElstrodtGrunewaldMennicke},~\cite{Fine},~\cite{MaclachlanReid}).
+% \textit{Dans l'int\'egralit\'e de ce manuscrit, nous allons exclure pour l' anneau $\ringO$ les entiers Gauss, dans $\rationals(\sqrt{-1})$,
+% et les entiers de Eisenstein, dans $\rationals(\sqrt{-3})$.}
+% Ces deux cas particuliers peuvent \^etre trait\'es s\'epar\'ement.
+% Pour un sous-groupe $\Gamma$ d'indice fini dans un groupe de Bianchi,
+% nous consid\'erons la compactification $_\Gamma \backslash \widehat{\Hy}$ de Borel--Serre du quotient $_\Gamma \backslash \Hy$ de l'espace hyperbolique \`a trois dimensions,
+%  construite dans l'appendice de~\cite{Serre}, qui joint un $2$-tore~$\T_\sigma$
+% \`a $_\Gamma \backslash \Hy$ \`a chaque pointe $\sigma$.
+% 
+% \begin{question}[Serre \cite{Serre}]
+% Consid\'erons l'application~$\alpha$ induite en homologie quand le bord  est attach\'e dans la compactification de Borel--Serre $_\Gamma \backslash \widehat{\Hy}$.
+% Comment peut-on d\'eterminer le noyau de $\alpha$ (en degr\'e 1) ? 
+% \end{question}
+% 
+% 
+% \textit{Motivation de la question~\ref{question}}.
+% La recherche d'un ensemble de g\'en\'erateurs pour le noyau de l'application $\alpha$ de recollement du bord admet des motivations qui sont indiqu\'ees d\'ej\`a dans l' ouvrage de Serre datant de 1970.
+% Cet ouvrage, apr\`es d'achever son but qui est de r\'esoudre le probl\`eme des sous-groupes de congruence, 
+% d\'ecrit comment on peut calculer l' Ab\'elianis\'e des groupes arithm\'etiques cern\'es en termes de g\'en\'erateurs du noyau de l'application de recollement du bord.
+% Pour $\Gamma$ un groupe de Bianchi o\`u un de ses sous-groupes de congruence, un tel savoir sur l' Ab\'elianis\'e $\Gamma^{\rm ab}$, en particulier en termes de matrices g\'en\'eratrices, 
+% admet l'application suivante au programme de Langlands (et nous pouvons pr\'esumer que cette application fut d\'ej\`a r\'ealis\'ee par Serre en ces temps, \`a cause de sa question suivante dans le m\^eme ouvrage).
+% Pour tout poids $k$ de formes modulaires, il y a un module $M_k$ de coefficients tel que l' isomorphisme de Eichler--Shimura--Harder identifie l' espace de formes modulaires de poids $k$
+% pour $\Gamma$ avec la cohomologie $H^1(\Gamma; M_k)$. 
+% Cette derni\`ere peut \^etre calcul\'ee explicitement comme Hom$(\Gamma^{\rm ab} , M_k)$ quand $\Gamma^{\rm ab}$ est donn\'e en termes de matrices g\'en\'eratrices.
+% Pour ces calculs, il ne serait donc pas n\'ecessaire de passer par une d\'etermination explicite d'un domaine fondamental comme le poly\`edre fondamental de Bianchi,
+% ce qui est une \'etape n\'ecessaire encore de nos jours~\cites{RahmSengun, RahmTsaknias} pour calculer la dimension de $H^1(\Gamma; M_k)$.
+% 
+% Le lemme suivant fut la cl\'e pour l'approche \`a la question~\ref{question} 
+% suivie dans la note de 2012~\cite{questionOfSerre}. 
+% Pour le reste de ce manuscrit, nous consid\'erons un corps quadratique imaginaire
+% $\rationals(\sqrt{-D})$ avec $D$ en entier naturel sans carr\'e, 
+% et nous posons $\Gamma = \mathrm{SL_2}(\ringO_{\rationals(\sqrt{-D})})$.
+% Nous d\'ecomposons le $2$-tore $\T_\sigma$ de la mani\`ere classique en une $2$-cellule,
+% deux ar\^etes et un sommet.
+% 
+% \begin{lemme} \label{lemme du tore}
+% Soit $n$ le nombre de diviseurs premiers de $D$. Soit $N = 2^{n-1}$ pour 
+% $D \equiv 2\text{ o\`u }3 \bmod 4$, $N = 2^{n}$ pour $D \equiv 1 \bmod 4$. 
+% Alors, $_\Gamma \backslash \Hy$ admet au moins $N$ pointes $\sigma$
+% telles que l' inclusion de~$\T_\sigma$ dans $_\Gamma \backslash \widehat{\Hy}$ 
+% fait devenir pr\'ecis\'ement une des ar\^etes de~$\T_\sigma$ le bord d'une $2$--cha\^ine.
+% \end{lemme}
+% 
+% L'hypoth\`ese concernant $\sigma$ \'etait manquante dans la note de 2012~\cite{questionOfSerre}, 
+% et nous allons donner une d\'emonstration compl\'et\'ee dans le paragraphe~\ref{la demo}, 
+% faisant usage de cette hypoth\`ese.
+% 
+% \begin{corollaire} %\label{cas de puissance 2}
+%  Si le groupe de classes d' id\'eaux de $\ringO$ est isomorphe \`a $\Z/2^m\Z$ 
+%  pour quelque $m \in \N$, alors pour toutes les pointes $\sigma$ de $_\Gamma \backslash \Hy$,
+% l' inclusion de~$\T_\sigma$ dans $_\Gamma \backslash \widehat{\Hy}$ 
+% fait devenir pr\'ecis\'ement une des ar\^etes de~$\T_\sigma$ le bord d'une $2$--cha\^ine.
+% \end{corollaire}
+% \begin{proof}
+% Par~\cite{Cox}*{thm. 3.22}, notre hypoth\`ese sur le groupe de classes de $\ringO$ est \'equivalent \`a \\
+% $m = $\scriptsize $\begin{cases}
+%         n-1, & D \equiv 2 \text{ o\`u } 3 \bmod 4,\\
+%         n,& D \equiv 1 \bmod 4.\\
+%        \end{cases}$\normalsize
+%  \qquad \hfill Il est bien connu que chaque classe d' id\'eaux de $\ringO$ correspond \`a une pointe de~$_\Gamma \backslash \Hy$;
+%   donc il y a $N$ pointes, et le lemme~\ref{lemme du tore} entra\^ine l' assertion.
+%  \end{proof}
+% 
+% \section*{1. Les sym\'etries suppl\'ementaires de Bianchi}
+% 
+% La liste de sym\'etries trouv\'ees par Bianchi et pr\'esent\'ees dans ce paragraphe nous permet de r\'eduire la d\'emons\-tration dans le prochain paragraphe
+% en chaque cas \`a la situation \`a la pointe \`a l'infini.
+% Comme domaine fondamental dans l'espace hyperbolique, nous nous servons du poly\`edre manquant des sommets aux pointes
+% d\'ecrit par Bianchi~\cite{Bianchi1892}, et que nous allons appeler le \emph{poly\`edre fondamental de Bianchi}.
+% Il est l' intersection d'un domaine fondamental dans $\Hy$ pour le stabilisateur dans $\Gamma$ de la pointe \`a~$\infty$ (de la forme d'un prisme rectangulaire) 
+% avec l'ensemble des points de $\Hy$ qui sont plus proches de~$\infty$ que de n'importe quelle autre pointe.
+% Nous consid\'erons la structure cellulaire sur $_\Gamma \backslash \widehat{\Hy}$
+% induite par le poly\`edre fondamental de Bianchi.
+% \`A travers les articles de Bianchi~\cites{Bianchi1892, Bianchi1893}, 
+% il n'\'etait pas clair que l' on peut toujours calculer le poly\`edre fondamental de Bianchi, 
+% un fait qui entre-temps a \'et\'e \'etabli par un algorithme de \mbox{Richard G. Swan~\cite{Swan},} 
+% qui a \'et\'e implant\'e au moins deux fois~\cites{Aranes, BianchiGP}.
+% La raison pourquoi dans quelques cas Bianchi ne trouvait pas le poly\`edre fondamental de Bianchi, 
+% doit \^etre que quelques ``sfere di riflessione impropria'' lui \'echappaient
+% \cite{Bianchi1892}*{\S 20; dans le premier exemple, $D = 14$, il s'agit de la h\'emisph\`ere de centre $\frac{1}{2}+\frac{\sqrt{-14}}{3}$
+% et rayon $\frac{1}{6}$}.
+% Notons que dans le mod\`ele de demi-espace sup\'erieur, 
+% les plans totalement g\'eod\'esiques sont model\'es par des plans verticaux, 
+% respectivement par des h\'emisph\`eres centr\'ees dans le bord; 
+% donc nous allons les appeler des ``(h\'emi)sph\`eres de reflet'' afin de continuer la terminologie de Bianchi, bien qu'ils doivent \^etre pens\'es comme des plans refl\'etants dans l' espace hyperbolique.
+% \`A la place des sph\`eres de reflet manquantes, Bianchi trouvait des sym\'etries suppl\'ementaires qui lui permettaient de construire un domaine fondamental d'une forme diff\'erente mais \'equivalente~\cite{Bianchi1893}.
+% Ces sym\'etries vont constituer la base de notre d\'emonstration.
+% Depuis les ouvrages de Bianchi, une pointe est appel\'ee \textit{singuli\`ere} si elle n'est pas sur la $\Gamma$-orbite de $\infty$. 
+% \begin{theoreme}[Bianchi] %\label{Bianchi statement}
+% Soient $D$, $n$ et $N$ comme dans le lemme~\ref{lemme du tore}.
+% Alors le groupe de sym\`etries du poly\`edre fondamental de Bianchi admet un sous-groupe d' ordre $N$, 
+% dont chaque \'el\'ement non-trivial \'echange la pointe~$\infty$ contre une pointe singuli\`ere diff\'erente,
+% en laissant invariante une h\'emisph\`ere de rayon inf\'erieur \`a~$1$,
+% et pr\'eservant la structure $\Gamma$-cellulaire.
+% \end{theoreme}
+% 
+% Nous allons appeler ces \'el\'ements les \textit{sym\'etries suppl\'ementaires de Bianchi}. 
+% Pour la d\'emonstration du th\'eor\`eme, nous suivons soit la version anglaise ci-dessus, soit l'article original de Bianchi en italien~\cite{Bianchi1893}*{\S1 et \S2}. 
+% 
+% 
+% \section*{2. La d\'emonstration} \label{la demo}
+% 
+% Nous allons utiliser les sym\'etries suppl\'ementaires de Bianchi afin de d\'ecomposer le poly\`edre fondamental de Bianchi en deux parties isom\'etriques
+% telles que le plan coupant entre les deux parties est \'equidistant entre $\infty$ et la pointe singuli\`ere o\`u se trouve $\T_\sigma$.
+% % We will call the \emph{real upper-half plane} the subset of $\Hy$ such that the coordinate $z$ has vanishing imaginary part,
+% % and the \emph{imaginary upper-half plane} the subset of $\Hy$ such that the coordinate $z$ has vanishing real part.
+% 
+% \begin{proof}[Proof of lemma \ref{torus-lemma}]
+%  Consid\'erons, dans le bord du poly\`edre fondamental de Bianchi, le rectangle fondamental $\mathcal F$ pour l' action du stabilisateur de la pointe $\infty$
+%  sur le plan coll\'e \`a $\Hy$ \`a la pointe~$\infty$.
+% Il y a une suite de rectangles dans $\Hy$ obtenue comme d\'eplacements de~$\mathcal F$ orthogonaux \`a tous les arcs g\'eodesiques rayonnant de la pointe~$\infty$.
+% De cette mani\`ere, la portion du poly\`edre fondamental qui touche la pointe~$\infty$, est localement hom\'eomorphe au produit Cart\'esian d' un arc g\'eodesique avec un d\'eplacement de~$\mathcal F$.
+% Les bords de ces d\'eplacements sont sujets aux m\^emes identifications par $\Gamma$ que le bord de~$\mathcal F$.
+% En effet, d\'enotons par $t({\mathcal F})$ un de ces d\'eplacements de~$\mathcal F$; et d\'enotons par $\gamma_x$ et $\gamma_y$
+% deux g\'en\'erateurs, modulo la matrice $-1$, du stabilisateur de la pointe, identifiant les ar\^etes oppos\'ees de~$\mathcal F$.
+% Nous pouvons choisir
+% $\gamma_x =$\scriptsize$\begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}$ \normalsize et
+% $\gamma_y =$\scriptsize$\begin{pmatrix} 1 & \omega \\ 0 & 1 \end{pmatrix}$. \normalsize
+% Alors,  $\gamma_x$ et $\gamma_y$ identifient les ar\^etes oppos\'ees de $t({\mathcal F})$
+%  et font en sorte que le quotient de $t({\mathcal F})$ devienne un tore.
+%  Donc dans l'espace quotient de l' action de $\Gamma$, l' image de~$\T_\infty$ est emball\'ee par une suite de couches de tores.
+%  Et alors l' int\'erieur 3-dimensionnel
+% du poly\`edre fondamental de Bianchi \`a son tour emballe l' image de~$\T_\infty$
+%  le long de toute la surface de ce dernier,
+%   tel qu'il y a, \`a l'int\'erieur de $_\Gamma \backslash \Hy$, 
+%   un voisinage qui est hom\'eomorphe au produit Cart\'esien d'un $2$-tore et d'un intervalle ouvert. 
+% Pour cette raison, il y a, dans un espace ambiant convenable, un voisinage de l' image de~$\T_\infty$
+%  qui est hom\'eomorphe \`a l' espace Euclid\'een \`a $3$ dimensions duquel on a enlev\'e l'int\'erieur d' un tore solide.
+% Maintenant, nous consid\'erons la structure cellulaire du tore,
+% et nous voyons que pr\'ecis\'ement un des lacets engendrant le groupe fondamental de~$\T_\infty$
+% peut \^etre contract\'e \`a l'int\'erieur du quotient du poly\`edre fondamental de Bianchi;
+% en effet, il s'agit du lacet donn\'e par l' ar\^ete les sommets terminaux de laquelle sont identifi\'es par $\gamma_x$. 
+% L' autre lacet --- celui obtenu par l' identification par $\gamma_y$ ---
+% est entrelac\'e avec le tore solide enlev\'e, et reste donc incontractile dans la compactification de Borel--Serre de~$_\Gamma \backslash \Hy$.
+%  Pour toute classe d' id\'eaux qui est repr\'esent\'ee par une pointe singuli\`ere $\sigma$ qui est sujet \`a une des sym\'etries suppl\'ementaires de Bianchi,
+% nous observons le fait suivant.
+%   Le rayon $r_\sigma$ d'une sph\`ere de reflet est inf\'erieur \`a $1$ 
+%   (cf. le tableau~\ref{the table}), 
+%   et pour cette raison, la contraction d\'ecrite ci-dessus se produit 
+%   \textit{\`a l' int\'erieur} de la moiti\'e qui touche la pointe~$\infty$.
+% Par notre isom\'etrie pr\'eservant la structure $\Gamma$-cellulaire, nous obtenons une copie de cette contraction.
+% Les r\^oles de~$\gamma_x$ et~$\gamma_y$ sont alors jou\'es par~$M_\sigma\gamma_xM_\sigma^{-1}$
+%  et~$M_\sigma\gamma_y M_\sigma^{-1}$, avec $M_\sigma$ sp\'ecifi\'ee dans le tableau~\ref{the table}.
+%  Donc l' inclusion de~$\T_\sigma$ dans $_\Gamma \backslash \widehat{\Hy}$ 
+%  fait devenir exactement une ar\^ete de~$\T_\sigma$ le bord d' une $2$--cha\^ine.
+%  Le nombre de telles pointes~$\sigma$ est donn\'e par le th\'eor\`eme~\ref{Bianchi statement}.
+% Et le th\'eor\`eme de Serre sur le rang de l'application $\alpha$ \cite{Serre}*{th\'eor\`eme 7} 
+% nous permet de conclure qu'aucune combinaison lin\'eaire non-triviale de ces lacets ne peut \^etre homologue \`a z\'ero.
+%  \end{proof}
+% 
+% Notons que seulement avec les sym\'etries suppl\'ementaires de Bianchi, nous obtenons plus qu'un seul entrelac nou\'e.
+% Un nombre suffisant de ces sym\'etries est disponible seulement pour les orbi-espaces de Bianchi sp\'ecifi\'es dans le corollaire~\ref{exponent 2 case};
+% et en g\'en\'eral, nous avons seulement l'entrelac nou\'e au tore \`a l'infini, qui a d\'ej\`a \'et\'e observ\'e dans l'article original de Serre.
+% Comme le type de groupe de classes pr\'esum\'e dans le corollaire~\ref{exponent 2 case} appara\^it seulement un nombre fini de fois~\cite{Weinberger},
+% il peut para\^itre decevant que le domaine de validit\'e du th\'eor\`eme d\'eduit de lui dans~\cite{questionOfSerre}
+% est beaucoup plus \'etroit qu' affirm\'e originalement;
+% mais ceci signifie en fait que d\`es que nous partons de ce domaine de validit\'e, la topologie des orbi-espaces de Bianchi proche \`a leur bord est beaucoup plus riche qu' affirm\'e dans~\cite{questionOfSerre},
+% et peut fournir des \'etudes int\'eressantes \`a des futures g\'en\'erations de math\'ematiciennes et math\'ematiciens.
+
+\begin{bibdiv}
+\begin{biblist}
+\bib{Aranes}{thesis}{
+            author={Aran{\'e}s, M.~T.},
+%             title={Modular symbols over number fields}, 
+%             Ph.D. thesis,  University of Warwick, 2010.
+%             month = {December},
+           title = {Modular symbols over number fields},
+          school = {Ph.D. thesis, University of Warwick},% \url{http://wrap.warwick.ac.uk/35128/}},
+%           author = {M.~T. Aran{\'e}s},
+            year = {2010},
+             }
+\bib{Bianchi1892}{article}{
+   author={Bianchi, L.},
+   title={Sui gruppi di sostituzioni lineari con coefficienti appartenenti a corpi quadratici immaginar\^{\i}},
+   language={Italian},
+   journal={Math. Ann.},
+   volume={40},
+   date={1892},
+   number={3},
+   pages={332--412},
+   ISSN={0025-5831},
+   review={\MR{1510727}},
+   review={JFM 24.0188.02}
+}
+\bib{Bianchi1893}{article}{
+   author={Bianchi, L.},
+   title={Sui gruppi di sostituzioni lineari},
+   language={Italian},
+   journal={Math. Ann.},
+   volume={42},
+   date={1893},
+   number={1},
+   pages={30--57},
+   issn={0025-5831},
+   review={\MR{1510766}},
+   review={JFM 25.0198.04},
+   doi={10.1007/BF01443444},
+}
+\bib{BorelSerre}{article}{
+ Author = {{Borel}, A.},
+ author = {{Serre}, J.-P.},
+ Title = {{Corners and arithmetic groups}},
+%  FJournal = {{Commentarii Mathematici Helvetici}},
+ Journal = {{Comment. Math. Helv.}},
+ ISSN = {0010-2571; 1420-8946/e},
+ Volume = {48},
+ Pages = {436--483},
+ Year = {1973},
+ Publisher = {European Mathematical Society (EMS) Publishing House, Zurich},
+%  Language = {English},
+%  MSC2010 = {22E15 57T99 14F99 57T10 20J06},
+      review={ Zbl 0274.22011}
+}
+\bib{Cox}{book}{
+   author={Cox, D. A.},
+   title={Primes of the form $x^2 + ny^2$},
+   series={Pure and Applied Mathematics (Hoboken)},
+   edition={2},
+   note={Fermat, class field theory, and complex multiplication},
+   publisher={John Wiley \& Sons, Inc., Hoboken, NJ},
+   date={2013},
+   pages={xviii+356},
+   isbn={978-1-118-39018-4},
+   review={\MR{3236783}},
+      review={ Zbl 1275.11002},
+   doi={10.1002/9781118400722},
+}
+
+\bib{Cremona}{article}{
+   author={Cremona, J. E.},
+   title={Hyperbolic tessellations, modular symbols, and elliptic curves
+   over complex quadratic fields},
+   journal={Compositio Math.},
+   volume={51},
+   date={1984},
+   number={3},
+   pages={275--324},
+   issn={0010-437X},
+   review={\MR{743014}},
+}
+
+\bib{CremonaAranes}{article}{
+   author={Cremona, J. E.},
+   author={Aran\'{e}s, M. T.},
+   title={Congruence subgroups, cusps and Manin symbols over number fields},
+   conference={
+      title={Computations with modular forms},
+   },
+   book={
+      series={Contrib. Math. Comput. Sci.},
+      volume={6},
+      publisher={Springer, Cham},
+   },
+   date={2014},
+   pages={109--127},
+   review={\MR{3381450}},
+%    doi={10.1007/978-3-319-03847-6_4},
+}
+		
+\bib{ElstrodtGrunewaldMennicke}{book}{
+   author={Elstrodt, J.},
+   author={Grunewald, F.},
+   author={Mennicke, J.},
+   title={Groups acting on hyperbolic space},
+   series={Springer Monographs in Mathematics},
+   publisher={Springer-Verlag},
+   place={Berlin},
+   date={1998},
+   pages={xvi+524},
+   ISBN={3-540-62745-6},
+   review={\MR{1483315 (98g:11058)}},
+   review={Zbl 0888.11001 }
+}
+\bib{Fine}{book}{
+   author={Fine, B.},
+   title={Algebraic theory of the Bianchi groups},
+   series={Monographs and Textbooks in Pure and Applied Mathematics},
+   volume={\textbf{129}},
+   publisher={Marcel Dekker Inc.},
+   place={New York},
+   date={1989},
+   pages={viii+249},
+   ISBN={0-8247-8192-9},
+   review={\MR{1010229 (90h:20002)}},
+   review={Zbl 0760.20014 }
+}
+ \bib{MaclachlanReid}{book}{
+   author={Maclachlan, C.},
+   author={Reid, A. W.},
+   title={The arithmetic of hyperbolic 3-manifolds},
+   series={Graduate Texts in Mathematics},
+   volume={\textbf{219}},
+   publisher={Springer-Verlag},
+   place={New York},
+   date={2003},
+   pages={xiv+463},
+   ISBN={0-387-98386-4},
+   review={\MR{1937957 (2004i:57021)}},
+   review={Zbl 1025.57001}
+}
+\bib{Mendoza}{book}{
+   author={Mendoza, Eduardo R.},
+   title={Cohomology of ${\rm PGL}_{2}$ over imaginary quadratic integers},
+   series={Bonner Mathematische Schriften [Bonn Mathematical Publications],
+   128},
+   note={Dissertation, Rheinische Friedrich-Wilhelms-Universit\"{a}t, Bonn,
+   1979},
+   publisher={Universit\"{a}t Bonn, Mathematisches Institut, Bonn},
+   date={1979},
+   pages={vi+83},
+   review={\MR{611515}},
+}
+% \bib{Poincare}{article}{
+%    author={Poincar{\'e}, H.},
+%    title={M\'emoire sur les groupes klein\'eens},
+%    language={French},
+%    journal={Acta Math.},
+%    volume={3},
+%    date={1883},
+%    number={1},
+%    pages={49--92},
+%    issn={0001-5962},
+%    review={\MR{1554613}, JFM~15.0348.02},
+% }
+
+
+\bib{BianchiGP}{article}{
+   author={Rahm, A. D.},
+   title={Higher torsion in the Abelianization of the full Bianchi groups},
+   journal={LMS J. Comput. Math.},
+   volume={16},
+   date={2013},
+   pages={344--365},
+   issn={1461-1570},
+   review={\MR{3109616}},
+}
+		
+\bib{questionOfSerre}{article}{
+   author =  {Rahm, A. D.} ,
+   title =   {On a question of Serre},
+   journal = {C. R. Math. Acad. Sci. Paris},
+   volume={350},
+   pages={  no. 15-16, 741--744},
+   review={\MR{2981344}},
+   year =    {2012}
+}
+
+\bib{corrigendum}{article}{
+   author =  {Rahm, A. D.} ,
+   title =   {Corrigendum to ``On a question of Serre''},
+   journal = {C. R. Math. Acad. Sci. Paris},
+   volume={357},
+   pages={589--590},
+   year ={2019},
+}
+\bib{RahmSengun}{article}{
+   author={Rahm, A. D.},
+   author={\c Seng\"un, M. H.},
+   title={On level one cuspidal Bianchi modular forms},
+   journal={LMS J. Comput. Math.},
+   volume={16},
+   date={2013},
+   pages={187--199},
+   issn={1461-1570},
+   review={\MR{3091734}},
+}
+\bib{RahmTsaknias}{article}{
+   author={Rahm, A. D.},
+      author={Tsaknias, P.},
+      journal={Journal de Th\'eorie des Nombres de Bordeaux},
+      volume={31},
+      number={1},
+      pages={27--48},
+           title = {Genuine Bianchi modular forms of higher level, at varying weight and discriminant},
+          review = {\url{http://hdl.handle.net/10993/29493}},
+            year = {2019},
+             }
+\bib{Serre}{article} {
+    AUTHOR = {Serre, J.-P.},
+     TITLE = {Le probl\`eme des groupes de congruence pour ${SL}_2$},
+   JOURNAL = {Ann. of Math. (2)},
+%  FJOURNAL = {Annals of Mathematics. Second Series},
+    VOLUME = {92},
+      YEAR = {1970},
+     PAGES = {489--527},
+      ISSN = {0003-486X},
+%   MRCLASS = {14.50},
+%  MRNUMBER = {MR0272790 (42 \#7671)},
+%MRREVIEWER = {J. E. Humphreys},
+     review = { \MR{ 0272790}},% (\textbf{42} \#7671)},
+%      review = { Zbl 0239.20063}
+}
+\bib{Swan}{article}{
+   author={Swan, R. G.},
+   title={Generators and relations for certain special linear groups},
+   journal={Advances in Math.},
+   volume={6},
+   date={1971},
+   pages={1--77},
+   ISSN={0001-8708},
+   review={\MR{0284516}},% (\textbf{44} \#1741)},
+%    review={Zbl 0221.20060 }
+}
+\bib{Weinberger}{article}{
+   author={Weinberger, P. J.},
+   title={Exponents of the class groups of complex quadratic fields},
+   journal={Acta Arith.},
+   volume={22},
+   date={1973},
+   pages={117--124},
+   issn={0065-1036},
+   review={\MR{0313221}},% (47 \#1776)}},
+}
+\end{biblist}
+\end{bibdiv}
+\end{document}
