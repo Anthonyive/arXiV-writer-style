@@ -1,0 +1,135 @@
+In this section, the non-centralized economic dispatch scheme based on the previously explained repartitioning approach is discussed. %The main objective of the scheme is to have as less communication traffic as possible. In this regard, 
+We let each self-sufficient microgrid to solve its local economic dispatch problem and does not allow this microgrid to exchange power with its neighbors. Therefore, by imposing an additional constraint, self-sufficient microgrids do not need to communicate with its neighbors to dispatch its components. However, a fully decentralized method can only be performed if all microgrids are self-sufficient. For any microgrid that is not self-sufficient, its local economic dispatch problem might be infeasible since local power production is not enough to meet the load.  Since the repartitioning outcome does not guarantee the self-sufficiency of each microgrid, then the microgrids that are not self-sufficient form a coalition with some other microgrids such that the resulting economic dispatch problem that must be solved by each coalition is feasible. Note that in general, Problem \eqref{eq:MPC_net} might actually have feasible solutions that require high power exchange, implying it might be impossible to partition the network into self-sufficient microgrids.
+
+\subsection{Coalition formation}
+%\paragraph{why coalition is needed?}
+%\paragraph{brief explanation about the main idea} how it works. Creating a coalition of self-sufficient microgrids.
+%\paragraph{coalition} 
+%We adapt the notion of coalition from coalitional control framework \cite{fele2017,fele2018}, in which only sub-systems that belong to the same coalition cooperatively compute their control inputs, whereas those that do not belong to the coalition can independently compute their control inputs. %In this regard, it means that Problem \eqref{eq:MPC_mg} will be decomposed into a number of subproblems, each of which will be solved by a coalition. The decomposition is possible due to the self-sufficiency and by adding extra constraints, as will be shown later in Section \ref{sec:nc_ed}.
+In order to describe the coalition formation procedure, denote by $\mathcal{C}_{p,k}$ and $\mathcal{D}_{p,k}$ the set of nodes and the set of microgrids that belong to coalition $p$, respectively. We  assign one pair $(\mathcal{C}_{p,k},\mathcal{D}_{p,k})$ to each microgrid $\mathcal{M}_{p,k}$ to keep tracking the nodes and neighboring microgrids with which it forms a coalition. The coalition formation mechanism is described in Algorithm \ref{alg:clust}. 
+\begin{alg}[Coalition formation procedure]
+	\label{alg:clust}
+	\hfill
+	
+	Each microgrid $\mathcal{M}_{p,k}$ defines $\mathcal{C}_{p,k}^{(0)}=\mathcal{M}_{p,k}$ and $\mathcal{D}_{p,k}^{(0)}=\{\mathcal{M}_{p,k}\}$. 
+	While $r < m-1$, do:
+	\begin{enumerate}
+		
+		\item Each microgrid $\mathcal{M}_{p,k}$ evaluates whether its coalition is self-sufficient based on Definition \ref{def:ss_mg}, i.e., whether $ \Delta_{\mathcal{C}_{p,k}^{(r)},\ell}^{\mathrm{im}} \leq 0, \quad \forall \ell \in \{k,\dots,k+h-1 \},$
+		holds true. 
+		\item If coalition $\mathcal{C}_{p,k}^{(r)}$ is self-sufficient, then microgrid $\mathcal{M}_{p,k}$ waits for commands until $r=m-1$.  
+		\item Otherwise, microgrid $\mathcal{M}_{p,k}$ initiates a coalition merger by sending $\Delta_{\mathcal{C}_{p,k}^{(r)},\ell}^{\mathrm{im}}$, for all $\ell \in \{k,\dots,k+h-1 \}$, to the microgrids that do not belong to coalition $\mathcal{C}_{p,k}^{(r)}$ but they have physical connections with at least one bus in coalition $\mathcal{C}_{p,k}^{(r)}$, i.e.,  $\mathcal{M}_{q,k} \in \mathcal{N}_{p,k}^{\mathrm{c}}= \{\mathcal{M}_{q,k}: (i,j)\in \mathcal{E}, i \in \mathcal{C}_{p,k}^{(r)}, j \in \mathcal{M}_{q,k}, \mathcal{C}_{q,k}^{(r)} \neq \mathcal{C}_{p,k}^{(r)}  \}$. Note that if $\mathcal{N}_{p,k}^{\mathrm{c}}=\emptyset$, then $\mathcal{M}_{p,k}$ waits for commands until  $r=m-1$. \color{black}
+		\item For each neighbor $\mathcal{M}_{q,k} \in \mathcal{N}_{p,k}^{\mathrm{c}}$, if it is not communicating with another microgrid, then it computes 
+		$J_{q}^{\mathrm{cim}}= \sum_{\ell =k}^{k+h-1} \max\left(0,\Delta_{\mathcal{C}_{q,k}^{(r)},\ell}^{\mathrm{im}}+\Delta_{\mathcal{C}_{p,k}^{(r)},\ell}^{\mathrm{im}}\right).$ Otherwise, $J_{q}^{\mathrm{cim}}=\infty$. Then, it sends back $J_{q}^{\mathrm{cim}}$ to coalition $\mathcal{C}_{p,k}^{(r)}$.  
+		\item Based on $J_{q}^{\mathrm{cim}}$, microgrid $\mathcal{M}_{p,k}$ chooses the neighbor that it will merge with as a coalition, as follows: 
+		\begin{equation*}
+		q^{\star}\in\arg\min_{\mathcal{M}_{q,k} \in \mathcal{N}_{p,k}^{\mathrm{c}}} J_{q}^{\mathrm{cim}} \quad \mathrm{s.t.} \ J_{q}^{\mathrm{cim}} < \infty.
+		\end{equation*}
+		\item Update the coalition sets, i.e.,  $\mathcal{C}_{\rho,k}^{(r+1)} = \mathcal{C}_{\rho,k}^{(r)}\cup \mathcal{C}_{q^{\star},k}^{(r)}$ and $\mathcal{D}_{\rho,k}^{(r+1)} = \mathcal{D}_{\rho,k}^{(r)} \cup \mathcal{D}_{q^{\star},k}^{(r)}$, for all $\mathcal{M}_{\rho,k}\in\mathcal{D}_{p,k}^{(r)}$ and $\mathcal{C}_{\rho,k}^{(r+1)} = \mathcal{C}_{\rho,k}^{(r)}\cup \mathcal{C}_{p,k}^{(r)}$ and $\mathcal{D}_{\rho,k}^{(r+1)} = \mathcal{D}_{\rho,k}^{(r)} \cup \mathcal{D}_{p,k}^{(r)}$, for all $\mathcal{M}_{\rho,k}\in\mathcal{D}_{q^{\star},k}^{(r)}$.%, and $\mathcal{C}_{q^{\star},k}^{(r+1)}= \mathcal{C}_{p,k}^{(r)}\cup \mathcal{C}_{q^{\star},k}^{(r)}$. 
+		\item $r\leftarrow r+1$ and go back to step 1. %\eod
+	\end{enumerate}
+\end{alg}
+%The outcome of Algorithm \ref{alg:clust} is stated as follows.
+\begin{prop}
+	\label{prop:alg_clus}
+	By performing Algorithm \ref{alg:clust}, either all resulting coalitions $\mathcal{C}_{p,k}^{(m-1)}$, for $p=1,\dots,m$, are self-sufficient or all coalitions are merged, i.e., $\mathcal{C}_{p,k}^{(m-1)}=\mathcal{N}$, for $p=1,\dots,m$. \eod
+\end{prop}
+
+%\vspace{-18pt}
+%\iffalse
+
+\begin{pf*}{Proof.}
+	%If all microgrids  $\mathcal{M}_{p,k} \in\boldsymbol{\mathcal{M}}_k$ are self-sufficient, then $\mathcal{C}_{p,k}^{(0)}$, for all $p=1,\dots,m$, are self-sufficient. Therefore, $\mathcal{C}_{p,k}^{(r)}=\mathcal{C}_{p,k}^{(0)}$, for any $r\geq1$. Now, we consider the case when there exists at least one microgrid in $\boldsymbol{\mathcal{M}}_k$ that is not self-sufficient. According to the algorithm, at least one coalition that is not self-sufficient is merged with its neighboring coalition per iteration. If at the end of an iteration all coalitions are self-sufficient, then at the Since the number of initial coalitions is finite, i.e., $m$, then there exists a finite number of iterations must be performed such that all coalitions are merged $\mathcal{C}_{p,k}=\mathcal{N}$
+	 %Firstly, notice that the number of iterations $(r)$ is upper-bounded by $m$. 
+	 %If all microgrids  $\mathcal{M}_{p,k} \in\boldsymbol{\mathcal{M}}_k$ are self-sufficient, then $\mathcal{C}_{p,k}^{(0)}$, for all $p=1,\dots,m$, are self-sufficient. As stated in step 2, all microgrids keep the initial coalitions, i.e.,   $\mathcal{C}_{p,k}^{(m)}=\mathcal{C}_{p,k}^{(0)}$, for all $p=1,\dots,m$. Now, we consider that there exists at least one microgrid in $\boldsymbol{\mathcal{M}}_k$  that is not self-sufficient. Equivalently, there exists at least one coalition  $\mathcal{C}_{p,k}^{(0)}$ that is not self-sufficient. 
+	 At each iteration $r<m-1$, the evaluation in step 1 has two mutually exclusive outcomes:
+	 %\vspace{-10pt}
+	 \begin{enumerate}
+	 		 	\setlength\itemsep{0.0em}
+	 	\item All coalitions are self-sufficient.
+	 	\item There exist some coalitions that are not self-sufficient.
+	 \end{enumerate}
+% \vspace{-10pt} 
+	 In case 1, we have that $\mathcal{C}_{p,k}^{(m-1)}=\mathcal{C}_{p,k}^{(r)}$, for all $p=1,\dots,m$ since the coalitions do not change from the $r^{\mathrm{th}}$ iteration until the $(m-1)^{\mathrm{th}}$ iteration.  Note that when all microgrids  $\mathcal{M}_{p,k} \in\boldsymbol{\mathcal{M}}_k$ are self-sufficient, then $\mathcal{C}_{p,k}^{(0)}$, for all $p=1,\dots,m$, are self-sufficient. Therefore, this case is also included here. 
+	 In case 2, according to steps 3-6, at least one of the coalitions that are not self-sufficient will be merged with one of its neighboring coalitions at the next iteration $r+1$. Since the number of initial coalitions is finite ($m$), then if case 2 keeps occurring, all coalitions will be merged, i.e., $\mathcal{C}_{p,k}=\mathcal{N}$, for all $p=1,\dots,m$, at a finite number of iterations. Otherwise, case 1 will occur. Furthermore, in case 2, the minimum number of coalitions that can perform steps 3-6 (merging with one of its neighboring coalitions) is one. If, for $r\geq1$, only one coalition merges with one of its neighbors, then it requires $m-1$ iterations to merge all coalitions. %Note that if more than one pair of coalitions merges at least in one iteration, then the number of iterations required to merge all of them is less than $m-1$.
+	  \eod \color{black}
+\end{pf*}
+% \fi
+%\begin{rem}
+%	Notice that in steps 3-6 more than one coalition that is not self-sufficient can initiate a coalition merger. However, in step 4, each coalition can only be asked by one neighbor at each iteration. In this regard, step 4 can be executed by the principle of first comes first served. %\eod
+%\end{rem}
+
+\subsection{Non-centralized economic dispatch}
+In this section, we outline the proposed scheme to solve Problem \eqref{eq:MPC_net} based on the coalitions that have been formed. Note that when all microgrids $\mathcal{M}_{p,k}, \ p=1,\dots,m,$ are self-sufficient, the coalitions are reset as in the initialization of Algorithm \ref{alg:clust}, i.e., $\mathcal{C}_{p,k}=\mathcal{M}_{p,k}$, for $p=1,\dots,m$. First, we reformulate Problem \eqref{eq:MPC_net} as shown in Proposition \ref{lem:net2co}.
+\begin{prop}
+	\label{lem:net2co}
+	Suppose that, at time instant $k$, the network is partitioned into $m$ non-overlapping microgrids, defined by the set $\boldsymbol{\mathcal{M}}_k~=~\{\mathcal{M}_{1,k}, \mathcal{M}_{2,k}, \dots, \mathcal{M}_{m,k} \}$. Furthermore, coalitions of microgrids, denoted by $\mathcal{C}_{p,k}$, for $p=1,\dots,m$, are formed based on Algorithm \ref{alg:clust}. 
+	Then, Problem \eqref{eq:MPC_net} is equivalent to
+	\begin{subequations}
+		\begin{align}
+		&\min_{\{\{(\bm{u}_{i,\ell},\bm{v}_{i,\ell})\}_{i \in \mathcal{N}}\}_{\ell=k}^{k+h-1}}  \sum_{p=1}^{m} \sum_{i \in \mathcal{M}_{p,k}} \sum_{\ell =k}^{k+h-1}  J_{i,\ell}(\bm{u}_{i,\ell},\bm{v}_{i,\ell}) \label{eq:mg_cost_func}\\
+		&\mathrm{s.t. }  
+		\quad (\bm{u}_{i,\ell},\bm{v}_{i,\ell}) \in \mathcal{P}_i, \ \forall i \in \mathcal{C}_{p,k},  \label{eq:mg_loc_cons}\\
+		&\qquad \quad v_{i,\ell}^j + v_{j,\ell}^i = 0, \ \forall j \in \mathcal{N}_i\cap\mathcal{C}_{p,k}, \  \forall i \in \mathcal{C}_{p,k},  \label{eq:mg_loc_cons2}\\
+		&\qquad \quad v_{i,\ell}^j + v_{j,\ell}^i = 0, \ \forall j \in \mathcal{N}_i\backslash\mathcal{C}_{p,k}, \ \forall i \in \mathcal{C}_{p,k},  \label{eq:mg_coup_cons}
+		\end{align}
+		\label{eq:MPC_mg}%
+	\end{subequations}
+	for all $\mathcal{C}_{p,k}$, where $p=1,\dots,m$, and all $\ell \in\{k,\dots, k+h-1 \}$. \eod %$J_{p,\ell}^{\mu}$ in the cost function \eqref{eq:mg_cost_func} is defined as follows 
+	%\begin{equation}
+	%\eod%\end{equation}
+\end{prop}
+%\iffalse
+
+\begin{pf*}{Proof.}
+	Since $\mathcal{M}_{p,k}$, for each $p=1,\dots,m$, is non-overlapping, the cost function \eqref{eq:net_cost_func} is equal to  \eqref{eq:mg_cost_func}. Moreover, since $\bigcup_{p=1}^m \mathcal{C}_{p,k} = \mathcal{N}$,  \eqref{eq:net_loc_cons} is equivalent to \eqref{eq:mg_loc_cons}. Furthermore, \eqref{eq:net_coup_cons} is decomposed into \eqref{eq:mg_loc_cons2} and \eqref{eq:mg_coup_cons}.  \eod
+\end{pf*}
+%\fi
+\begin{rem}
+	\label{rem:const_coal}
+	For each coalition $\mathcal{C}_{p,k}$, \eqref{eq:mg_loc_cons} and \eqref{eq:mg_loc_cons2} are local constraints. Particularly for the constraints in \eqref{eq:mg_loc_cons2}, some of them might involve two different microgrids. Meanwhile, \eqref{eq:mg_coup_cons} are coupling constraints with other coalitions. \eod
+\end{rem}
+%Suppose that at the end of the coalition formation procedure there exist $c$ distinct coalitions whose elements are different from one to another, where $c\leq m$. Note that when $\mathcal{C}_{p,k}=\mathcal{C}_{q,k}$, microgrids $\mathcal{M}_{p,k}$ and $\mathcal{M}_{q,k}$ belong to the same coalition. 
+%A non-centralized economic dispatch scheme will be formulated for these coalitions by decomposing Problem \eqref{eq:MPC_mg} such that each coalition solves its own economic dispatch. The decomposition is done by not allowing power exchange between two neighboring coalitions. 
+By decomposing Problem \eqref{eq:MPC_mg}, we formulate the decentralized MPC-based economic dispatch problem that must be solved at each coalition $\mathcal{C}_{p,k}$, for $p=1,\dots,m$, as follows:
+\begin{subequations}
+	\begin{align}
+	&\min_{\{\{(\bm{u}_{i,\ell},\bm{v}_{i,\ell})\}_{i \in \mathcal{C}_{p,k}}\}_{\ell=k}^{k+h-1}} \sum_{i \in \mathcal{C}_{p,k}} \sum_{\ell =k}^{k+h-1}  J_{i,\ell}(\bm{u}_{i,\ell},\bm{v}_{i,\ell})\\
+	&\text{s.t. } \quad  (\bm{u}_{i,\ell},\bm{v}_{i,\ell}) \in \mathcal{P}_i,   \label{eq:co_loc_cons}\\
+		&\qquad \quad v_{i,\ell}^j + v_{j,\ell}^i = 0, \ \forall j \in \mathcal{N}_i\cap\mathcal{C}_{p,k},   \label{eq:co_loc_cons2}\\
+		&\qquad \quad v_{i,\ell}^j = 0, \ \forall j \in \mathcal{N}_i\backslash\mathcal{C}_{p,k},  \label{eq:coup_dec_const}
+	\end{align}
+	\label{eq:lo_mpc}%
+\end{subequations}
+for all $i \in \mathcal{C}_{p,k}$ and $\ell \in\{k,\dots, k+h-1 \}$. Note that if microgrids $\mathcal{M}_{p,k}$ and $\mathcal{M}_{q,k}$ belong to the same coalition, i.e., $\mathcal{C}_{p,k}=\mathcal{C}_{q,k}$,  then they must cooperatively solve the same problem in a distributed manner. Additionally, if $c=m$, then each microgrid is self-sufficient, implying a fully decentralized scheme (without communication) is applied to the network. On the other hand, if $c=1$, then a fully distributed scheme (with neighbor-to-neighbor communication) is applied to the network.
+
+Now, we show that Problem \eqref{eq:lo_mpc}, for any coalition, has a solution. Furthermore, the solution to Problem \eqref{eq:lo_mpc} is also a feasible solution to the original problem \eqref{eq:MPC_net}.
+\begin{prop}
+	Suppose that Assumption \ref{as:feas_ED_cent} holds and let the coalitions $\mathcal{C}_{p,k}$, for $p=1,\dots,m$, are formed by using Algorithm \ref{alg:clust}. Then,  there exists a unique solution to Problem \eqref{eq:lo_mpc}, for each coalition $\mathcal{C}_{p,k}$, where \ $p \in \{1,\dots,m\}$.
+	% \eod
+\end{prop}
+%\iffalse
+
+\begin{pf*}{Proof.}
+Since the cost function is strictly convex, the uniqueness of the solution is guaranteed provided that the feasible set is nonempty. Therefore, we only need to show that Problem \eqref{eq:lo_mpc}, for any $\mathcal{C}_{p,k}$, has a  non-empty feasible set. Consider the outcome of Algorithm \ref{alg:clust} (c.f. Proposition \ref{prop:alg_clus}). If Algorithm \ref{alg:clust} results in one coalition over the whole network, i.e., $\mathcal{C}_{p,k}=\mathcal{N}$, for $p=1,\dots,m$, then it implies that all microgrids must solve the centralized economic dispatch problem \eqref{eq:MPC_mg} cooperatively. Therefore, in this case, for any $\mathcal{C}_{p,k}$, Problem \eqref{eq:lo_mpc} is equal to Problem \eqref{eq:MPC_mg}. Due to Assumption \ref{as:feas_ED_cent}, feasible solutions to Problem \eqref{eq:MPC_mg} exist. Otherwise, Algorithm \ref{alg:clust} results in at least two different self-sufficient coalitions. In this case, we have non-positive local imbalance (c.f. Definition \ref{def:local_imb}), i.e., the worst-case uncertain imbalance between loads and non-dispatchable generation can be met cooperatively by the distributed generation units within the coalition.  Therefore, there exists a non-empty subset of feasible solution of Problem \eqref{eq:MPC_mg} such that \eqref{eq:coup_dec_const}, for all $\mathcal{C}_{p,k}$, where $p=1,\dots,m$, hold, implying the existence of a non-empty feasible set of Problem \eqref{eq:lo_mpc}. \eod
+\end{pf*}
+%\fi 
+\begin{prop}
+	\label{prop:feas_of_orig}
+	Let $(\bm{u}_{i,\ell}^{\star},\bm{v}_{i,\ell}^{\star})$, for all $\ell \in\{k,\dots, k+h-1 \}$ and $i\in\mathcal{C}_{p,k}$, be the solution to Problem \eqref{eq:lo_mpc}, for all coalitions  $\mathcal{C}_{p,k}$, where $p=1,\dots,m$. Then, they are also a feasible solution to Problem \eqref{eq:MPC_net}. %\eod
+\end{prop}
+%\iffalse
+
+\begin{pf*}{Proof.}
+	In Proposition \ref{lem:net2co}, we show that Problem \eqref{eq:MPC_mg} is equivalent with Problem \eqref{eq:MPC_net}, therefore we only need to show that $(\bm{u}_{i,\ell}^{\star},\bm{v}_{i,\ell}^{\star})$, for all $\ell \in\{k,\dots, k+h-1 \}$, $i\in\mathcal{C}_{p,k}$, and $p=1,\dots,m$, is a feasible solution to Problem \eqref{eq:MPC_mg}. Note that Problem \eqref{eq:lo_mpc} is obtained by decomposing Problem \eqref{eq:MPC_mg}.  As can be seen, the constraints \eqref{eq:mg_loc_cons}-\eqref{eq:mg_loc_cons2} are decomposed for each coalition and considered as \eqref{eq:co_loc_cons}-\eqref{eq:co_loc_cons2} in Problem \eqref{eq:lo_mpc}. Since $(\bm{u}_{i,\ell}^{\star},\bm{v}_{i,\ell}^{\star})$, for all $\ell \in\{k,\dots, k+h-1 \}$ and $i\in\mathcal{C}_{p,k}$, satisfy the constraints \eqref{eq:co_loc_cons}-\eqref{eq:co_loc_cons2}, they also satisfy \eqref{eq:mg_loc_cons}-\eqref{eq:mg_loc_cons2}. Finally, for any $\mathcal{C}_{p,k}$, by \eqref{eq:coup_dec_const}, we know that $v_{i,\ell}^{j\star}=v_{j,\ell}^{i\star}=0$, for all $j\in\mathcal{N}_i\backslash\mathcal{C}_{p,k}$, $i\in\mathcal{C}_{p,k}$, and $\ell\in\{k,\dots, k+h-1 \}$. From this fact, we obtain that $v_{i,\ell}^{j\star}+v_{j,\ell}^{i\star}=0$ for all $j\in\mathcal{N}_i\backslash\mathcal{C}_{p,k}$ $i\in\mathcal{C}_{p,k}$, and $\ell\in\{k,\dots, k+h-1 \}$, implying the satisfaction of the constraints in \eqref{eq:mg_coup_cons}. \eod
+\end{pf*}
+%\fi
+%Finally, we note that the main issue in solving Problem \eqref{eq:lo_mpc} in a distributed way is the existence of coupling constraints among the microgrids in the same coalition, i.e.,
+Finally, we note that due to the following coupling constraints,
+\begin{equation}
+v_{i,\ell}^j + v_{j,\ell}^i = 0, \quad \forall j \in \mathcal{N}_i\cap\mathcal{C}_{p,k}\backslash\mathcal{M}_{p,k}, \label{eq:coup_con_coal}
+\end{equation}
+for all  $\forall i \in \mathcal{C}_{p,k}$ and $\ell \in\{k,\dots, k+h-1 \}$ (c.f. Remark \ref{rem:const_coal}), a distributed Lagrangian approach, where the coupling constraints \eqref{eq:coup_con_coal} are relaxed, can be implemented to solve Problem \eqref{eq:lo_mpc}. In this regard, a distributed dual-ascent algorithm, such as that presented in \cite{ananduta2018}, can be applied to solve Problem \eqref{eq:lo_mpc}, in which more than one microgrid is involved. Note that, different distributed algorithms, e.g., \cite{boyd2011,wang2015,kraning2014,baker2016}, can also be chosen instead. Nevertheless, since there are available distributed algorithms in the literature that can be applied, we assume that the optimal solution to Problem \eqref{eq:lo_mpc} can be computed in a distributed manner.
+
+
+

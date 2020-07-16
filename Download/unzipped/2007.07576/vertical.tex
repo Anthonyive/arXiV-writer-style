@@ -1,0 +1,954 @@
+\section{Vertical compositionality of dinatural transformations}\label{section vertical compositionality}
+
+%A {full understanding} of how and when dinatural transformations compose is, of course, the very first step towards a proper calculus of dinaturals.
+%%\lettrine{T}{he very first, essential} step towards a calculus of dinatural transformations is, naturally, to have a full understanding of how and when they compose. 
+%Regarding the \emph{how}, the best thing to do is to introduce the notion of \emph{transformation} (\ref{section: Dinatural transformations}) between two functors, which is simply a family of morphisms that does not have to satisfy any naturality condition. (This simple idea is not, unsurprisingly, new: it appears, for example, in~\cite{power_premonoidal_1997}.) Following Kelly's principle~\cite{kelly_many-variable_1972} of having transformations equipped with a \emph{graph} telling us which arguments of the functors involved are to be equated, we shall require that transformations have a \emph{cospan} in $\finset$ as part of their data; such a cospan will play the role of the graph of the transformation. In Chapter~\ref{chapter:Godement} we shall see how cospans are not quite enough, but for pedagogic simplicity and for clarity of exposure we shall use cospans in this chapter. Transformations then compose, and their graphs compose by computing pushouts in $\finset$. The question now is: When is the dinaturality condition preserved, upon composition of transformations? We shall give an actual diagrammatic and computational flavour to our graphs, by interpreting them as \emph{Petri Nets} (\ref{section: Petri Nets}). By reading the dinaturality condition of a transformation as the firing of an enabled transition in the corresponding net, we will find a sufficient (\ref{sec:solution-comp-problem}) and ``essentially necessary'' (\ref{section: a necessary condition}) condition for two dinatural transformations to compose, thus solving the compositionality problem in its full generality.
+%
+%\subsection{Dinatural transformations}\label{section: Dinatural transformations}
+We begin by introducing the notion of \emph{transformation} between two functors of arbitrary variance and arity, which is simply a family of morphisms that does not have to satisfy any naturality condition. (This simple idea is, unsurprisingly, not new: it appears, for example, in~\cite{power_premonoidal_1997}.) A transformation comes equipped with a cospan in $\finset$ that tells us which variables of the functors involved are to be equated to each other in order to write down the general component of the family of morphisms. 
+
+\begin{definition}\label{def:transformation}
+	Let $\alpha$, $\beta \in \List\{+,-\}$, $F \colon \B^\alpha \to \C$, $G \colon \B^\beta \to \C$ be functors. A \emph{transformation} $\phi \colon F \to G$ \emph{of type} 
+	$
+	\begin{tikzcd}[cramped,sep=small]
+	\length\alpha \ar[r,"\sigma"] & n & \length\beta \ar[l,"\tau"']
+	\end{tikzcd}
+	$ 
+	(with $n$ a positive integer) is a family of morphisms in $\C$
+	\[
+	\bigl( \phi_{\bfA} \colon F(\bfA\sigma) \to G(\bfA\tau) \bigr)_{\bfA \in \B^n}
+	\]
+	(i.e., according to our notations, a family $\phi_{A_1,\dots,A_n} \colon F(A_{\sigma 1}, \dots, A_{\sigma\length\alpha}) \to G(A_{\tau1},\dots,A_{\tau\length\beta})$). Notice that $\sigma$ and $\tau$ need not be injected or surjective, so we may have repeated or unused variables.
+	
+	Given another transformation $\phi' \colon F' \to G'$ of type
+	$
+	\begin{tikzcd}[cramped,sep=small]
+	\length\alpha \ar[r,"\sigma'"] & n & \length\beta \ar[l,"\tau'"']
+	\end{tikzcd},
+	$
+	we say that
+	\[
+	\phi \sim {\phi'} \text{ if and only if there exists } \pi \colon n \to n \text{ permutation such that }
+	\begin{cases}
+	\sigma' = \pi\sigma \\
+	\tau' = \pi\tau \\
+	\phi'_\bfA = \phi_{\bfA\pi}
+	\end{cases}. 
+	\]
+	$\sim$ so defined is an equivalence relation and we denote by $\class\phi$ the equivalence class of $\phi$. 
+\end{definition}
+
+\begin{remark}
+	Two transformations are equivalent precisely when they differ only by a permutation of the indices in the cospan describing their type: they are ``essentially the same''. For this reason, from now on we shall drop an explicit reference to the equivalence class $\class\phi$ and just reason with the representative $\phi$, except when defining new operations on transformations, like the vertical composition below.
+\end{remark}
+
+\begin{definition}\label{def:vertical composition}
+	Let $\phi \colon F \to G$ be a transformation as in Definition~\ref{def:transformation}, let $H \colon \B^\gamma \to \C$ be a functor and $\psi \colon G \to H$ a transformation of type
+	$
+	\begin{tikzcd}[cramped,sep=small]
+	\length\beta \ar[r,"\eta"] & m & \ar[l,"\theta"'] \length\gamma
+	\end{tikzcd}
+	$. The \emph{vertical composition} $\class\psi \circ \class\phi$ is defined as the equivalence class of the transformation $\psi\circ\phi$ of type
+	$
+	\begin{tikzcd}[cramped,sep=small]
+	\length\alpha \ar[r,"\zeta\sigma"] & l & \ar[l,"\xi\theta"'] \length\gamma
+	\end{tikzcd}
+	$,
+	where $\zeta$, $\xi$ and $l$ are given by a choice of a pushout
+	\begin{equation}\label{eqn:pushout composite type}
+	\begin{tikzcd}
+	& & \length\gamma \ar[d,"\theta"] \\
+	& \length\beta \ar[d,"\tau"'] \ar[r,"\eta"] \ar[dr,phantom,very near end,"\ulcorner"] & m \ar[d,"\xi",dotted] \\
+	\length\alpha \ar[r,"\sigma"] & n \ar[r,"\zeta",dotted] & l
+	\end{tikzcd}
+	\end{equation}
+	and the general component $(\psi\circ\phi)_{\bfA}$, for $\bfA \in \B^l$, is the composite:
+	\[
+	\begin{tikzcd}
+	F(\bfA\zeta\sigma) \ar[r,"\phi_{\bfA\zeta}"] & G(\bfA\zeta\tau)=G(\bfA\xi\eta) \ar[r,"\psi_{\bfA\xi}"] & H(\bfA\xi\theta)
+	\end{tikzcd}.
+	\]
+	(Notice that by definition $\phi_{\bfA\zeta} = \phi_{(A_{\zeta1},\dots,A_{\zeta n})}$ requires that the $i$-th variable of $F$ be the $\sigma i$-th element of the list $(A_{\zeta1},\dots,A_{\zeta n})=\bfA\zeta$, which is $A_{\zeta\sigma i}$, hence the domain of $\phi_{\bfA\zeta}$ is indeed $F(\bfA\zeta\sigma)$.)
+\end{definition}
+
+Before giving some examples, we introduce the definition of dinaturality of a transformation in one of its variables, as a straightforward generalisation of the classical notion of dinatural transformation in one variable. Recall from p.~\pageref{not:A[X,Y/i]sigma} the meaning of the notation $\substMV \bfA X Y i \sigma$ for $\bfA\in\B^n$, $\sigma \colon \length\alpha \to n$ and $i \in \{1,\dots,n\}$.
+
+\begin{definition}\label{def:dinaturality in i-th variable}
+	Let $\phi = (\phi_{A_1,\dots,A_n}) \colon F \to G$ be a transformation as in Definition~\ref{def:transformation}. For $i \in \{1,\dots,n\}$, we say that $\phi$ is \emph{dinatural in $A_i$} (or, more precisely, \emph{dinatural in its $i$-th variable}) if and only if for all $A_1,\dots,A_{i-1}, A_{i+1},\dots,A_n$ objects of $\B$ and for all $f \colon A \to B$ in $\B$ the following hexagon commutes:
+	\[
+	\begin{tikzcd}
+	& F(\subst \bfA A i \sigma) \ar[r,"\phi_{\subst \bfA A i}"] & G(\subst \bfA A i \tau) \ar[dr,"G(\substMV \bfA A f i \tau)"] \\
+	F(\substMV \bfA B A i \sigma) \ar[ur,"F(\substMV \bfA f A i \sigma)"] \ar[dr,"F(\substMV \bfA B f \sigma)"'] & & & G(\substMV \bfA A B i \tau) \\
+	& F(\subst \bfA B i \sigma) \ar[r,"\phi_{\subst \bfA B i}"'] & G(\subst \bfA B i \tau) \ar[ur,"G(\substMV \bfA f B i \tau)"']
+	\end{tikzcd}
+	\]
+	where $\bfA$ is the $n$-tuple $(A_1,\dots,A_n)$ of the objects above with an additional (unused in this definition) object $A_i$ of $\B$.
+\end{definition}
+
+Definition~\ref{def:dinaturality in i-th variable} 
+%is a generalisation of the well known notion of dinatural transformation~\cite{dubuc_dinatural_1970}, to which it 
+reduces to the well-known notion of dinatural transformation when $\alpha=\beta=[-,+]$ and $n=1$. Our generalisation allows multiple variables at once and the possibility for $F$ and $G$ of having an arbitrary number of copies of $\B$ and $\Op\B$ in their domain, for each variable $i \in \{1,\dots,n\}$. 
+
+\begin{example}\label{ex:delta}
+	Let $\C$ be a cartesian category. The diagonal transformation $\delta=(\delta_A \colon A \to A \times A)_{A \in \C}$, classically a natural transformation from $\id\C$ to the diagonal functor, can be equivalently seen in our notations as a transformation $\delta \colon \id\C \to \times$ of type
+	$
+	\begin{tikzcd}[cramped,sep=small]
+	1 \ar[r] & 1 & \ar[l] 2
+	\end{tikzcd}.
+	$ Of course $\delta$ is dinatural (in fact, natural) in its only variable.
+\end{example}
+
+\begin{example}\label{ex:eval}
+	Let $\C$ be a cartesian closed category and consider the functor
+	\[
+	\begin{tikzcd}[row sep=0em]
+	\C \times \Op\C \times \C  \ar[r,"T"] & \C \\
+	(X,Y,Z) \ar[r,|->] & X \times (Y \Rightarrow Z)
+	\end{tikzcd}
+	\]
+	The evaluation 
+	$
+	\eval{}{} = \left(\eval A B \colon A \times (A \implies B) \to B\right)_{A,B \in \C} \colon T \to \id\C
+	$
+	is a transformation of type
+	\[
+	\begin{tikzcd}[row sep=0em]
+	3 \ar[r] & 2 & 1 \ar[l] \\
+	1 \ar[r,|->] & 1 & 1 \ar[dl,|->,out=180,in=30] \\[-3pt]
+	2 \ar[ur,|->,out=0,in=210]& 2 & \\[-3pt]
+	3 \ar[ur,|->,out=0,in=210]
+	\end{tikzcd}
+	\]
+	which is dinatural in both its variables.
+\end{example}
+
+\begin{example}\label{ex:Church numeral}
+	Let $\C$ be any category, and call $\hom\C \colon \Op \C \times \C \to \Set$ the hom-functor of $\C$. The $n$-th numeral~\cite{dubuc_dinatural_1970}, for $n \in \N$, is the transformation $n \colon \hom\C \to \hom\C$ of type
+	$
+	\begin{tikzcd}[cramped,sep=small]
+	2 \ar[r] & 1 & \ar[l] 2
+	\end{tikzcd}
+	$
+	whose general component $n_A \colon \C(A,A) \to \C(A,A)$ is given, for $A \in \C$ and $g \colon A \to A$, by
+	\[
+	n_A (g) = g^n,
+	\]
+	with $0_A (g) = \id A$. 	Then $n$ is dinatural because for all $f \colon A \to B$ the following hexagon commutes:
+	\[
+	\begin{tikzcd}
+	& \C(B,B) \ar[r,"n_B"] & \C(B,B) \ar[dr,"-\circ f"] \\
+	\C(B,A) \ar[ur,"f\circ -"] \ar[dr,"-\circ f"'] & & & \C(A,B) \\
+	& \C(A,A) \ar[r,"n_A"'] & \C(A,A) \ar[ur,"f \circ -"']
+	\end{tikzcd}	
+	\]
+	It is indeed true that for $h \colon B \to A$, $(f \circ h)^n \circ f = f \circ (h \circ f)^n$: for $n=0$ it follows from the identity axiom; for $n \ge 1$ it is a consequence of associativity of composition.
+\end{example}
+
+\paragraph{The graph of a transformation} Given a transformation $\phi$, we now define a graph that reflects its signature, which we shall use to prove our version of Petri\'c's theorem on compositionality of dinatural transformations~\cite{petric_g-dinaturality_2003}. This graph is, as a matter of fact, a \emph{string diagram} for the transformation. String diagrams were introduced by Eilenberg and Kelly in~\cite{eilenberg_generalization_1966} (indeed our graphs are inspired by theirs) and have had a great success in the study of coherence problems (\cite{kelly_coherence_1980,mac_lane_natural_1963}) and monoidal categories in general (\cite{joyal_geometry_1991,joyal_traced_1996}, a nice survey can be found in~\cite{selinger_survey_2010}).
+
+\begin{definition}\label{def:standard graph}
+	Let $F \colon \B^\alpha \to \C$ and $G \colon \B^\beta \to \C$ be functors, and let $\phi \colon F \to G$ be a transformation of type
+	$
+	\begin{tikzcd}[cramped,sep=small]
+	\length\alpha \ar[r,"\sigma"] & n & \ar[l,"\tau"'] \length\beta
+	\end{tikzcd}
+	$. We define its \emph{standard graph} $\graph\phi = (P,T,\inp{(-)},\out{(-)})$ as a directed, bipartite graph as follows:
+	\begin{itemize}
+		\item $P=\length\alpha + \length\beta$ and $T=n$ are distinct finite sets of vertices;
+		\item $\inp{(-)},\out{(-)} \colon T \to \parts P$ are the input and output functions for elements in $T$: there is an arc from $p \in P$ to $t \in T$ if and only if $p \in \inp t$, and there is an arc from $t$ to $p$ if and only if $p \in \out t$. Indicating with $\injP {\length\alpha} \colon \length\alpha \to P$ and $\injP {\length\beta} \colon \length\beta \to P$ the injections defined as follows:
+		\[
+		\injP{\length\alpha} (x) = x, \quad \injP{\length\beta} (x) = \length\alpha + x,
+		\]
+		we have:
+		\begin{align*}
+		\inp{t}  &=
+		\{ \injP {\length\alpha} (p) \mid \sigma (p) = t,\, \alpha_p = +  \} \, \cup \, \{ \injP {\length\beta} (p) \mid \tau (p) = t,\, \beta_p = -  \} \\
+		\out{t} &= 
+		\{ \injP {\length\alpha} (p) \mid \sigma(p) = t,\, \alpha_p = -  \} \, \cup
+		\, \{ \injP {\length\beta} (p) \mid \tau (p) = t,\, \beta_p = +  \}
+		\end{align*}
+	\end{itemize}
+	In other words, elements of $P$ correspond to the arguments of $F$ and $G$, while those of $T$ to the variables of $\phi$. For $t \in T$, its inputs are the covariant arguments of $F$ and the contravariant arguments of $G$ which are mapped by $\sigma$ and $\tau$ to $t$; similarly for its outputs (swapping `covariant' and `contravariant').
+\end{definition}
+
+	Graphically, we draw elements of $P$ as white or grey boxes (if corresponding to a covariant or contravariant argument of a functor, respectively), and elements of $T$ as black squares. The boxes for the domain functor are drawn at the top, while those for the codomain at the bottom; the black squares in the middle. The graphs of the transformations given in examples \ref{ex:delta}-\ref{ex:Church numeral} are the following:
+	\begin{itemize}
+		\item $\delta=(\delta_A \colon A \to A \times A)_{A \in \C}$ (example \ref{ex:delta}):
+		\[
+		\begin{tikzpicture}
+		\matrix[row sep=1em,column sep=0.5em]{
+			& \node (1) [category] {}; \\
+			& \node (A) [component] {}; \\
+			\node (2) [category] {}; & & \node (3) [category] {}; \\
+		};
+		\graph[use existing nodes]{
+			1 -> A -> {2,3}; 
+		};
+		\end{tikzpicture}
+		\]
+		\item $\eval{}{} = \left(\eval A B \colon A \times (A \implies B) \to B\right)_{A,B \in \C}$ (example \ref{ex:eval}):
+		\[
+		\begin{tikzpicture}
+		\matrix[row sep=1em, column sep=1em]{
+			\node (1) [category] {}; & & \node (2) [opCategory] {}; & & \node (3) [category] {}; \\
+			& \node (A) [component] {}; & & & \node (B) [component] {}; \\
+			& & & & \node (4) [category] {}; \\
+		};
+		\graph[use existing nodes]{
+			1 -> A -> 2; 3 -> B -> 4;
+		};
+		\end{tikzpicture}
+		\] 
+		\item $n=(n_A \colon \C(A,A) \to \C(A,A))_{A \in \C}$ (example \ref{ex:Church numeral}):
+		\[
+		\begin{tikzpicture}
+		\matrix[row sep=1em, column sep=1em]{
+			\node (1) [opCategory] {}; & & \node (2) [category] {};\\
+			& \node (A) [component] {};\\
+			\node (3) [opCategory] {}; & & \node (4) [category] {};\\
+		};
+		\graph[use existing nodes]{
+			2 -> A -> 1;
+			3 -> A -> 4;
+		};
+		\end{tikzpicture}
+		\]
+	\end{itemize}
+
+\begin{remark}
+	Each connected component of $\graph\phi$ corresponds to one variable of $\phi$: the arguments of the domain and codomain of $\phi$ corresponding to (white, grey) boxes belonging to the same connected component are all computed on the same object, when we write down the general component of $\phi$.
+
+\end{remark}
+
+\label{discussion:informal-reading-morphisms-in-a-box}This graphical counterpart of a transformation $\phi \colon F \to G$ permits us to represent, in an informal fashion, the dinaturality properties of $\phi$. By writing inside a box a morphism $f$ and reading a graph from top to bottom as ``compute $F$ in the morphisms as they are written in its corresponding boxes, compose that with an appropriate component of $\phi$, and compose that with $G$ computed in the morphisms as they are written in its boxes (treating an empty box as an identity)'', we can express the commutativity of a dinaturality diagram as an informal equation of graphs. (We shall make this precise in Proposition~\ref{prop:fired labelled marking is equal to original one}.) For instance, the dinaturality of examples~\ref{ex:delta}-\ref{ex:Church numeral} can be depicted as follows, where the upper leg of the diagrams are the left-hand sides of the equations:
+\begin{itemize}
+	\item $\delta=(\delta_A \colon A \to A \times A)_{A \in \C}$ (example \ref{ex:delta}):
+	\[
+	\begin{tikzcd}
+	A \ar[r,"f"] \ar[d,"\delta_A"'] & B \ar[d,"\delta_B"] \\
+	A \times A \ar[r,"f \times f"] & B \times B
+	\end{tikzcd}
+	\qquad
+	\begin{tikzpicture}
+	\matrix[row sep=1em,column sep=0.5em]{
+		& \node (1) [category] {$f$}; \\
+		& \node (A) [component] {}; \\
+		\node (2) [category] {}; & & \node (3) [category] {}; \\
+	};
+	\graph[use existing nodes]{
+		1 -> A -> {2,3}; 
+	};
+	\end{tikzpicture}
+	\quad = \quad
+	\begin{tikzpicture}
+	\matrix[row sep=1em,column sep=0.5em]{
+		& \node (1) [category] {}; \\
+		& \node (A) [component] {}; \\
+		\node (2) [category] {$f$}; & & \node (3) [category] {$f$}; \\
+	};
+	\graph[use existing nodes]{
+		1 -> A -> {2,3}; 
+	};
+	\end{tikzpicture}
+	\]
+	\item $\eval{}{} = \left(\eval A B \colon A \times (A \implies B) \to B\right)_{A,B \in \C}$ (example \ref{ex:eval}):
+	\[\footnotesize{
+		\begin{tikzcd}%[font=\tiny]
+		A \times (A' \implies B) \ar[r,"f\times (1 \implies 1)"] \ar[d,"1\times(f\implies 1)"'] & A' \times (A' \implies B) \ar[d,"\eval {A'} B"] \\
+		A \times (A \implies B) \ar[r,"\eval A B"] & B
+		\end{tikzcd}}
+	\qquad
+	\begin{tikzpicture}%[every node/.style={scale=1}]
+	\matrix[row sep=1em, column sep=.5em]{
+		\node (1) [category] {$f$}; & & \node (2) [opCategory] {}; & & \node (3) [category] {}; \\
+		& \node (A) [component] {}; & & & \node (B) [component] {}; \\
+		& & & & \node (4) [category] {}; \\
+	};
+	\graph[use existing nodes]{
+		1 -> A -> 2; 3 -> B -> 4;
+	};
+	\end{tikzpicture}
+	\quad = \quad
+	\begin{tikzpicture}%[every node/.style={scale=1}]
+	\matrix[row sep=1em, column sep=.5em]{
+		\node (1) [category] {}; & & \node (2) [opCategory] {$f$}; & & \node (3) [category] {}; \\
+		& \node (A) [component] {}; & & & \node (B) [component] {}; \\
+		& & & & \node (4) [category] {}; \\
+	};
+	\graph[use existing nodes]{
+		1 -> A -> 2; 3 -> B -> 4;
+	};
+	\end{tikzpicture}
+	\]
+	\[\footnotesize{
+		\begin{tikzcd}
+		A \times (A \implies B) \ar[r,"1\times(1\implies g)"] \ar[d,"\eval A B"'] & A \times (A \implies B') \ar[d,"\eval A {B'}"] \\
+		B \ar[r,"g"] & B'
+		\end{tikzcd}}
+	\qquad
+	\begin{tikzpicture}%[every node/.style={scale=1}]
+	\matrix[row sep=1em, column sep=.5em]{
+		\node (1) [category] {}; & & \node (2) [opCategory] {}; & & \node (3) [category] {$g$}; \\
+		& \node (A) [component] {}; & & & \node (B) [component] {}; \\
+		& & & & \node (4) [category] {}; \\
+	};
+	\graph[use existing nodes]{
+		1 -> A -> 2; 3 -> B -> 4;
+	};
+	\end{tikzpicture}
+	\quad = \quad
+	\begin{tikzpicture}%[every node/.style={scale=1}]
+	\matrix[row sep=1em, column sep=.5em]{
+		\node (1) [category] {}; & & \node (2) [opCategory] {}; & & \node (3) [category] {}; \\
+		& \node (A) [component] {}; & & & \node (B) [component] {}; \\
+		& & & & \node (4) [category] {$g$}; \\
+	};
+	\graph[use existing nodes]{
+		1 -> A -> 2; 3 -> B -> 4;
+	};
+	\end{tikzpicture}
+	\] 
+	\item $n=(n_A \colon \C(A,A) \to \C(A,A))_{A \in \C}$ (example \ref{ex:Church numeral}):
+	\[\footnotesize{
+		\begin{tikzcd}[column sep={.5cm}]
+		& \C(B,B) \ar[r,"n_B"] & \C(B,B) \ar[dr,"{\C(f,1)}"] \\
+		\C(B,A) \ar[ur,"{\C(1,f)}"] \ar[dr,"{\C(f,1)}"'] & & & \C(A,B) \\
+		& \C(A,A) \ar[r,"n_A"] & \C(A,A) \ar[ur,"{\C(1,f)}"']
+		\end{tikzcd}}	
+	\qquad
+	\begin{tikzpicture}
+	\matrix[row sep=1em, column sep=1em]{
+		\node (1) [opCategory] {}; & & \node (2) [category] {$f$};\\
+		& \node (A) [component] {};\\
+		\node (3) [opCategory] {$f$}; & & \node (4) [category] {};\\
+	};
+	\graph[use existing nodes]{
+		2 -> A -> 1;
+		3 -> A -> 4;
+	};
+	\end{tikzpicture}
+	\quad = \quad
+	\begin{tikzpicture}
+	\matrix[row sep=1em, column sep=1em]{
+		\node (1) [opCategory] {$f$}; & & \node (2) [category] {};\\
+		& \node (A) [component] {};\\
+		\node (3) [opCategory] {}; & & \node (4) [category] {$f$};\\
+	};
+	\graph[use existing nodes]{
+		2 -> A -> 1;
+		3 -> A -> 4;
+	};
+	\end{tikzpicture}
+	\]
+\end{itemize}
+
+All in all, the dinaturality condition becomes, in graphical terms, as follows: \emph{$\phi$ is dinatural if and only if having in $\graph\phi$ one $f$ in all white boxes at the top and grey boxes at the bottom is the same as having one $f$ in all grey boxes at the top and white boxes at the bottom}. 
+
+Not only does $\graph\phi$ give an intuitive representation of the dinaturality properties of $\phi$, but also of the process of composition of transformations. Given two transformations $\phi \colon F \to G$ and $\psi \colon G \to H$ as in Definition~\ref{def:vertical composition}, the act of computing the pushout~(\ref{eqn:pushout composite type}) corresponds to ``glueing together'' $\graph\phi$ and $\graph\psi$ along the boxes corresponding to the functor $G$ (more precisely, one takes the disjoint union of $\graph\phi$ and $\graph\psi$ and then identifies the $G$-boxes), obtaining a composite graph which we will call ${\graph\psi} \circ {\graph\phi}$. The number of its connected components is, indeed, the result of the pushout. That being done, $\graph{\psi\circ\phi}$ is obtained by collapsing each connected component of $\graph\psi\circ\graph\phi$ into a single black square together with the $F$- and $H$-boxes. The following example shows this process. The graph $\graph\psi\circ\graph\phi$ will play a crucial role into the compositionality problem of $\psi\circ\phi$.
+
+\begin{example}\label{ex:acyclic-example}
+	Suppose that $\C$ is cartesian closed, fix an object $R$ in $\C$, consider functors
+	\[
+	\begin{tikzcd}[row sep=0em,column sep=1em]
+	\C \times \Op\C \ar[r,"F"] & \C \\
+	(A,B) \ar[r,|->] & A \times (B \Rightarrow R)
+	\end{tikzcd}
+	\quad
+	\begin{tikzcd}[row sep=0em,column sep=1em]
+	\C \times \C \times \Op\C \ar[r,"G"] & \C \\
+	(A,B,C) \ar[r,|->] & A \times B \times (C \Rightarrow R)
+	\end{tikzcd} 
+	\quad
+	\begin{tikzcd}[row sep=0em,column sep=1.5em]
+	\C \ar[r,"H"] & \C \\
+	A \ar[r,|->] & A \times R
+	\end{tikzcd}
+	\]
+	and transformations $\phi = \delta \times \id{(-)\Rightarrow R} \colon F \to G$
+	and $\psi = \id\C \times \eval {(-)} R \colon G \to H$ of types, respectively,
+	\[
+	\begin{tikzcd}[row sep=0em]
+	2 \ar[r,"\sigma"] & 2 & \ar[l,"\tau"'] 3 \\
+	1 \ar[r,|->]      & 1 & \ar[l,|->]     1 \\[-3pt]
+	2 \ar[r,|->]      & 2 & \ar[ul,|->,out=180,in=-30]    2 \\[-3pt]
+	&	  & \ar[ul,|->,out=180,in=-20]    3
+	\end{tikzcd}
+	\quad\text{and}\quad
+	\begin{tikzcd}[row sep=0em]
+	3 \ar[r,"\eta"] & 2 & \ar[l,"\theta"'] 1 \\
+	1 \ar[r,|->]    & 1 & \ar[l,|->]       1 \\[-3pt]
+	2 \ar[r,|->]    & 2 \\[-3pt]
+	3 \ar[ur,|->,out=0,in=210]
+	\end{tikzcd}
+	\]
+	so that
+	\[
+	\phi_{A,B} = \delta_A \times \id{B\implies R} \colon F(A,B) \to G(A,A,B), \, \psi_{A,B} = \id A \times \eval B R \colon G(A,B,B) \to H(A).
+	\]
+	Then $\psi \circ \phi$ has type $\begin{tikzcd}[cramped,sep=small]
+	2 \ar[r] & 1 & \ar[l] 1
+	\end{tikzcd}$ and $\graph{\psi}\circ\graph{\phi}$ is:
+	\[
+	\begin{tikzpicture}
+	\matrix[column sep=2.4mm,row sep=0.4cm]{
+		&	\node (A) [category] {}; & & & \node(F) [opCategory] {};\\
+		&	\node (B) [component] {}; & & & \node(J) [component] {};\\
+		\node (C) [category] {}; & & \node(D) [category] {}; & & \node(E) [opCategory] {};\\
+		\node (H) [component] {}; & & & \node(I) [component] {};\\
+		\node (G) [category] {}; & & & \\
+	};
+	\graph[use existing nodes]{
+		A -> B -> {C, D};
+		C -> H -> G;
+		D -> I -> E -> J -> F;
+	};
+	\end{tikzpicture}
+	\]
+	The two upper boxes at the top correspond to the arguments of $F$, the three in the middle to the arguments of $G$, and the bottom one to the only argument of $H$. This is a connected graph (indeed, $\psi\circ\phi$ depends only on one variable) and by collapsing it into a single black box we obtain $\graph{\psi\circ\phi}$ as it is according to Definition~\ref{def:standard graph}:
+	\[
+	\begin{tikzpicture}
+	\matrix[column sep=.5em,row sep=1em]{
+		\node (1) [category] {}; & & \node (2) [opCategory] {};\\
+		& \node (A) [component] {}; \\
+		& \node (3) [category] {};\\
+	};
+	\graph[use existing nodes]{
+		1 -> A -> {2,3};
+	};
+	\end{tikzpicture}
+	\]
+	We have that $\psi \circ \phi$ is a dinatural transformation. (This is one of the  transformations studied by Girard, Scedrov and Scott in~\cite{girard_normal_1992}.) The following string-diagrammatic argument proves that:
+	\[
+	\begin{split}
+	\begin{tikzpicture}[ampersand replacement=\&]
+	\matrix[column sep=2.4mm,row sep=0.4cm]{
+		\&	\node (A) [category] {$f$}; \& \& \& \node(F) [opCategory] {};\\
+		\&	\node (B) [component] {}; \& \& \& \node(J) [component] {};\\
+		\node (C) [category] {}; \& \& \node(D) [category] {}; \& \& \node(E) [opCategory] {};\\
+		\node (H) [component] {}; \& \& \& \node(I) [component] {};\\
+		\node (G) [category] {}; \& \& \& \\
+	};
+	\graph[use existing nodes]{
+		A -> B -> {C, D};
+		C -> H -> G;
+		D -> I -> E -> J -> F;
+	};
+	\end{tikzpicture}
+	\quad &= \quad
+	\begin{tikzpicture}[ampersand replacement=\&]
+	\matrix[column sep=2.4mm,row sep=0.4cm]{
+		\&	\node (A) [category] {}; \& \& \& \node(F) [opCategory] {};\\
+		\&	\node (B) [component] {}; \& \& \& \node(J) [component] {};\\
+		\node (C) [category] {$f$}; \& \& \node(D) [category] {$f$}; \& \& \node(E) [opCategory] {};\\
+		\node (H) [component] {}; \& \& \& \node(I) [component] {};\\
+		\node (G) [category] {}; \& \& \& \\
+	};
+	\graph[use existing nodes]{
+		A -> B -> {C, D};
+		C -> H -> G;
+		D -> I -> E -> J -> F;
+	};
+	\end{tikzpicture}
+	\quad = \quad
+	\begin{tikzpicture}[ampersand replacement=\&]
+	\matrix[column sep=2.4mm,row sep=0.4cm]{
+		\&	\node (A) [category] {}; \& \& \& \node(F) [opCategory] {};\\
+		\&	\node (B) [component] {}; \& \& \& \node(J) [component] {};\\
+		\node (C) [category] {}; \& \& \node(D) [category] {$f$}; \& \& \node(E) [opCategory] {};\\
+		\node (H) [component] {}; \& \& \& \node(I) [component] {};\\
+		\node (G) [category] {$f$}; \& \& \& \\
+	};
+	\graph[use existing nodes]{
+		A -> B -> {C, D};
+		C -> H -> G;
+		D -> I -> E -> J -> F;
+	};
+	\end{tikzpicture}
+	\\
+	&= \quad \begin{tikzpicture}[ampersand replacement=\&]
+	\matrix[column sep=2.4mm,row sep=0.4cm]{
+		\&	\node (A) [category] {}; \& \& \& \node(F) [opCategory] {};\\
+		\&	\node (B) [component] {}; \& \& \& \node(J) [component] {};\\
+		\node (C) [category] {}; \& \& \node(D) [category] {}; \& \& \node(E) [opCategory] {$f$};\\
+		\node (H) [component] {}; \& \& \& \node(I) [component] {};\\
+		\node (G) [category] {$f$}; \& \& \& \\
+	};
+	\graph[use existing nodes]{
+		A -> B -> {C, D};
+		C -> H -> G;
+		D -> I -> E -> J -> F;
+	};
+	\end{tikzpicture} \quad =  \quad
+	\begin{tikzpicture}[ampersand replacement=\&]
+	\matrix[column sep=2.4mm,row sep=0.4cm]{
+		\&	\node (A) [category] {}; \& \& \& \node(F) [opCategory] {$f$};\\
+		\&	\node (B) [component] {}; \& \& \& \node(J) [component] {};\\
+		\node (C) [category] {}; \& \& \node(D) [category] {}; \& \& \node(E) [opCategory] {};\\
+		\node (H) [component] {}; \& \& \& \node(I) [component] {};\\
+		\node (G) [category] {$f$}; \& \& \& \\
+	};
+	\graph[use existing nodes]{
+		A -> B -> {C, D};
+		C -> H -> G;
+		D -> I -> E -> J -> F;
+	};
+	\end{tikzpicture}
+	\end{split}
+	\]
+	The first equation is due to dinaturality of $\phi$ in its first variable;  the second to dinaturality of $\psi$ in its first variable; the third to dinaturality of $\psi$ in its second variable; the fourth equation holds by dinaturality of $\phi$ in its second variable.
+\end{example}
+
+The string-diagrammatic argument above is the essence of our proof of Petrić's theorem: we will interpret $\graph\psi \circ \graph\phi$, for arbitrary transformations $\phi$ and $\psi$ as a \emph{Petri Net} whose set of places is $P$ and of transitions is $T$. The dinaturality of $\psi\circ\phi$ will be expressed as a reachability problem and we will prove that, if $\graph\psi \circ \graph\phi$ is acyclic, then $\psi\circ\phi$ is always dinatural because we can always ``move the $f$'s'' from the upper-white boxes and lower-grey boxes all the way to the upper-grey boxes and lower-white boxes, as we did in Example~\ref{ex:acyclic-example}.
+
+%As we have seen, therefore, given $\phi \colon F \to G$ and $\psi \colon G \to H$ transformations, we have \emph{two} canonical graphs to assign to their composite: $\graph{\psi\circ\phi}$ and $\graph\psi \circ \graph\phi$. If we add another transformation $\xi \colon H \to I$, the composite $\xi \circ \psi \circ \xi$ has \emph{four} canonical graphs: $\graph{\xi\circ\psi\circ\phi}$, $\graph{\xi\circ\psi} \circ \graph\phi$, $\graph\xi \circ \graph{\psi\circ\phi}$, $\graph\xi \circ \graph\psi \circ \graph\phi$. In general, we can assign to a transformation $\phi$ many canonical graphs, depending whether we can (or want to) explicitly recognise $\phi$ as a composite of ``smaller'', as it were, transformations.
+%
+%For this reason, we shall define morphisms of our category $\fc \B \C$ of functors  $\B^\alpha \to \C$ and partial dinatural transformations between them as triples $(\phi, N, \Delta)$ where 
+%\begin{itemize}
+%	\item $\phi=(\phi_\bfA)_{\bfA\in\B^n}$ is a transformation of a given type,
+%	\item $N$ is a graph that can be either $\graph\phi$ or $\graph{\phi_k} \circ \dots \circ \graph{\phi_1}$ where the $\phi_i's$ are consecutive transformations such that $\phi=\phi_k \circ \dots \circ \phi_1$,
+%	\item $\Delta \colon \{1,\dots,n\} \to \{0,1\}$ ($n$ being the number of variables of $\phi$) is a function, called \emph{discriminant function}, such that $\phi$ is dinatural in its $i$-th variable for each $i \in \Delta^{-1} \{1\}$. 
+%\end{itemize}
+%(The above is only a sketch of the formal definition.) Composition will be defined component-wise: although composing transformations and graphs will not be difficult, the challenge is in defining the discriminant function of the composite transformation, as it is tantamount to understanding when the composite of two transformations $\phi$ and $\psi$, dinatural in some of their variables, is in turn dinatural. To do this, we shall prove that if $\graph\psi \circ \graph\phi$ is \emph{acyclic}, then $\psi\circ\phi$ is indeed dinatural. The proof will consist in interpreting $\graph\psi \circ \graph\phi$ as a \emph{Petri Net} and in reducing the compositionality problem into a matter of reachability of certain markings from others. The same argument can be used to prove that given dinatural transformations $\phi_1,\dots,\phi_m$, if $\graph{\phi_m} \circ \dots \circ \graph{\phi_1}$ is acyclic, then $\phi_m \circ \dots \circ \phi_1$ is dinatural, allowing us to define composition in $\fc \B \C$.
+
+%In [??], %our paper
+%we proved that if $\graph\psi \circ \graph\phi$ is acyclic, then $\psi\circ\phi$ is dinatural. In this paper we present a more general compositionality theorem, that works for transformations equipped with a graph that is not necessarily their standard one. The main idea of the proof is the same: to interpret the graph of a transformation as a \emph{Petri Net}, thus capturing in a formal way the informal idea of the ``$f$'s moving across the wires'' of the graph, and to reduce the compositionality problem to a matter of reachability of certain configurations in the Petri Net. 
+
+
+\paragraph{Petri Nets}\label{section: Petri Nets}
+
+Petri Nets were invented by Carl Adam Petri in 1962 in \cite{petri_kommunikation_1962}, and have been used since then to model concurrent systems, resource sensitivity and many dynamic systems. A nice survey of their properties was written by Murata in \cite{murata_petri_1989}, to which we refer the reader for more details and examples. Here we shall limit ourselves only to the definitions and the properties of which we will make use in the paper.
+
+\begin{definition}\label{def:Petri Net}
+	A \emph{Petri Net} $N$ is a tuple $(P,T,\inp{(-)},\out{(-)})$ where $P$ and $T$ are distinct, finite sets, and  $\inp{(-)},\out{(-)}\colon T \to \parts{P}$ are functions. Elements of $P$ are called \emph{places}, while elements of $T$ are called \emph{transitions}. For $t$ a transition, $\inp t$ is the set of \emph{inputs} of $t$, and $\out t$ is the set of its \emph{outputs}.  A \emph{marking} for $N$ is a function $M \colon P \to \N$.
+\end{definition}
+
+Graphically, the elements of $P$ and $T$ are drawn as light-blue circles and black bars respectively. Notice that the graph of a transformation is, as a matter of fact, a Petri Net. We can represent a marking $M$ by drawing, in each place $p$, $M(p)$ \emph{tokens} (black dots). Note that there is at most one arrow from a node to another.
+
+With little abuse of notation, we extend the input and output notation for places too, where
+\[
+\inp p = \{ t \in T \mid p \in \out{t}  \},  \qquad
+\out p = \{ t \in T \mid p \in  \inp t \}.
+\]
+
+A pair of a place $p$ and a transition $t$ where $p$ is both an input and an output of $t$ is called \emph{self-loop}. For the purposes of this article, we shall only consider Petri Nets that contain no self-loops.
+
+
+\begin{definition}
+	Let $N$ be a Petri Net. A place $p$ of $N$ is said to be a \emph{source} if $\inp p = \emptyset$, whereas is said to be a \emph{sink} if $\out p = \emptyset$. A source (or sink) place $p$ is said to be \emph{proper} if $\out p \ne \emptyset$ (or $\inp p \ne \emptyset$, respectively).
+\end{definition}
+
+We shall need a notion of (directed) path in a Petri Net, which we introduce now. It coincides with the usual notion of path in a graph.
+
+\begin{definition}
+	Let $N$ be a Petri Net. A \emph{path} from a vertex $v$ to a vertex $w$ is a finite sequence of vertices $\pi=(v_0,\dots,v_l)$ where $l \ge 1$, $v_0=v$, $v_l=w$ and for all $i \in \{0,\dots,l-1\}$ $v_{i+1} \in v_i \! \LargerCdot \! \cup \! \LargerCdot \! v_i $. Two vertices are said to be \emph{connected} if there is a path from one to the other. If every vertex in $N$ is connected with every other vertex, then $N$ is said to be \emph{weakly connected}.
+	
+	A \emph{directed path} from a vertex $v$ to a vertex $w$ is a finite sequence of vertices $\pi=(v_0,\dots,v_l)$ such that $v=v_0$, $w=v_l$ and for all $i \in \{0,\dots,l-1\}\,$ $v_{i+1} \in v_i \! \LargerCdot \!$. In this case we say that the path $\pi$ has length $l$. A directed path from a vertex to itself is called a \emph{cycle}, or \emph{loop}; if $N$ does not have cycles, then it is said to be \emph{acyclic}.
+	Two vertices $v$ and $w$ are said to be \emph{directly connected} if there is a directed path either from $v$ to $w$ or from $w$ to $v$. 
+\end{definition}
+
+
+We can give a dynamic flavour to Petri Nets by allowing the tokens to “flow” through the nets, that is allowing markings to change according to the following \emph{transition firing rule}.
+
+\begin{definition}
+	Let $N=(P,T,\inp{(-)},\out{(-)})$ be a Petri Net, and $M$ a marking for $N$. A transition $t$ is said to be \emph{enabled} if and only if for all $p \in \inp t$ we have $M(p) \ge 1$. An enabled transition may \emph{fire}; the firing of an enabled transition $t$ removes one token from each $p \in \inp t$ and adds one token to each $p \in \out t$, generating the following new marking $M'$:
+	\[
+	M'(p) = \begin{cases}
+	M(p) -1 & p \in \inp t \\
+	M(p)+1  & p \in \out t \\
+	M(p)    & \text{otherwise}
+	\end{cases}
+	\]
+\end{definition}
+
+\begin{example}\label{my-example}
+	Consider the following net:
+	\[
+	\begin{tikzpicture}[yscale=0.5,xscale=0.70]
+	\foreach \i/\u in {1/1,2/1,3/2}
+	{
+		\foreach \j/\v in {1/0,2/0,3/0,4/1}
+		{
+			\node[place,tokens=\u,label=above:$p_\i$](p\i) at (2*\i,0){};
+			\node[place,tokens=\v,label=below:$q_\j$](q\j) at (2*\j-2,-4){};
+			\node[place,label=below:$q_5$](q5) at (8,-4){};
+			\node[place,tokens=1,label=above:$p_4$](p4) at (8,0){};
+			\node[place,label=above:$p_5$](p5) at (10,0){};
+			
+			\node[transition,label=right:{$t$}] at (4,-2) {}
+			edge [pre] (p\i) edge [post] (q\j) edge [post] (q5);
+			
+			\node[transition,label=right:$t'$] at (10,-2) {}
+			edge [pre] (q5) edge [pre] (p4) edge [post] (p5);
+		}
+	}
+	\end{tikzpicture}
+	\]
+	There are two transitions, $t$ and $t'$, but only $t$ is enabled. Firing $t$ will change the state of the net as follows:
+	\[
+	\begin{tikzpicture}[yscale=0.5,xscale=0.70]
+	\foreach \i/\u in {1/0,2/0,3/1}
+	{
+		\foreach \j/\v in {1/1,2/1,3/1,4/2}
+		{
+			\node[place,tokens=\u,label=above:$p_\i$](p\i) at (2*\i,0){};
+			\node[place,tokens=\v,label=below:$q_\j$](q\j) at (2*\j-2,-4){};
+			\node[place,tokens=1,label=below:$q_5$](q5) at (8,-4){};
+			\node[place,tokens=1,label=above:$p_4$](p4) at (8,0){};
+			\node[place,label=above:$p_5$](p5) at (10,0){};
+			
+			\node[transition,label=right:{$t$}] at (4,-2) {}
+			edge [pre] (p\i) edge [post] (q\j) edge [post] (q5);
+			
+			\node[transition,label=right:$t'$] at (10,-2) {}
+			edge [pre] (q5) edge [pre] (p4) edge [post] (p5);
+		}
+	}
+	\end{tikzpicture}
+	\]
+	Now $t$ is disabled, but $t'$ is enabled, and by firing it we obtain:
+	\[
+	\begin{tikzpicture}[yscale=0.5,xscale=0.70]
+	\foreach \i/\u in {1/0,2/0,3/1}
+	{
+		\foreach \j/\v in {1/1,2/1,3/1,4/2}
+		{
+			\node[place,tokens=\u,label=above:$p_\i$](p\i) at (2*\i,0){};
+			\node[place,tokens=\v,label=below:$q_\j$](q\j) at (2*\j-2,-4){};
+			\node[place,label=below:$q_5$](q5) at (8,-4){};
+			\node[place,label=above:$p_4$](p4) at (8,0){};
+			\node[place,tokens=1,label=above:$p_5$](p5) at (10,0){};
+			
+			\node[transition,label=right:{$t$}] at (4,-2) {}
+			edge [pre] (p\i) edge [post] (q\j) edge [post] (q5);
+			
+			\node[transition,label=right:$t'$] at (10,-2) {}
+			edge [pre] (q5) edge [pre] (p4) edge [post] (p5);
+		}
+	}
+	\end{tikzpicture}
+	\]
+\end{example}
+
+\paragraph{The reachability problem and dinaturality} Suppose we have a Petri Net $N$ and an initial marking $M_0$. The firing of an enabled transition in $N$ will change the distribution of tokens from $M_0$ to $M_1$, according to the firing transition rule, therefore a sequence of firings of enabled transitions yields a sequence of markings. A \emph{firing sequence} is denoted by $\sigma = (t_0,\dots,t_n)$ where the $t_i$'s are transitions which fire.
+
+\begin{definition}
+	A marking $M$ for a Petri Net $N$ is said to be \emph{reachable} from a marking $M_0$ if there exists a firing sequence $(t_1,\dots,t_n)$ and markings $M_1,\dots,M_n$ where $M_i$ is obtained from $M_{i-1}$ by firing transition $t_i$, for $i \in \{1,\dots,n\}$, and $M_{n}=M$. 
+\end{definition}
+
+The reachability problem for Petri Nets consists in checking whether a marking $M$ is or is not reachable from $M_0$. It has been shown that the reachability problem is decidable \cite{kosaraju_decidability_1982,mayr_algorithm_1981}.
+
+\begin{remark}\label{rem:preliminary-discussion}
+	The crucial observation that will be at the core of our proof of Petri\'c's theorem is that the firing of an enabled transition in the graph of a dinatural transformation $\phi$ corresponds, under certain circumstances, to the dinaturality condition of $\phi$ in one of its variables. Take, for instance, the $n$-th numeral transformation (see example~\ref{ex:Church numeral}). Call  the only transition $t$, and consider the following marking $M_0$:
+	\[
+	\begin{tikzpicture}[scale=0.7]
+	\node[opCategory] (1) at (-1,1) {};
+	\node[category,tokens=1] (2) at (1,1) {};
+	\node[opCategory,tokens=1] (3) at (-1,-1) {};
+	\node[category] (4) at (1,-1) {};
+	
+	\node[component,label=left:$t$] {} edge[pre] (2) edge[pre] (3) edge[post] (1) edge[post] (4);
+	\end{tikzpicture}
+	\]
+	Transition $t$ is enabled, and once it fires we obtain the following marking $M_1$:
+	\[
+	\begin{tikzpicture}[scale=0.7]
+	\node[opCategory] (1) at (-1,1) {};
+	\node[category,tokens=1] (2) at (1,1) {};
+	\node[opCategory,tokens=1] (3) at (-1,-1) {};
+	\node[category] (4) at (1,-1) {};
+	
+	\node[component,label=left:$t$] {} edge[pre] (2) edge[pre] (3) edge[post] (1) edge[post] (4);
+	
+	\draw[->,snake=snake,segment amplitude=.4mm,segment length=2mm,line after snake=1mm] (1.5,0) -- node[above]{$t$} node[below]{fires} (3.5,0);
+	\begin{scope}[xshift=5cm]
+	\node[opCategory,tokens=1] (1) at (-1,1) {};
+	\node[category] (2) at (1,1) {};
+	\node[opCategory] (3) at (-1,-1) {};
+	\node[category,tokens=1] (4) at (1,-1) {};
+	
+	\node[component,label=left:$t$] {} edge[pre] (2) edge[pre] (3) edge[post] (1) edge[post] (4);
+	\end{scope}
+	\end{tikzpicture}
+	\]
+	The striking resemblance with the graphical version of the dinaturality condition for $n$ is evident:
+	\[
+	\begin{tikzpicture}
+	\matrix[row sep=1em, column sep=1em]{
+		\node (1) [opCategory] {}; & & \node (2) [category] {$f$};\\
+		& \node (A) [component] {};\\
+		\node (3) [opCategory] {$f$}; & & \node (4) [category] {};\\
+	};
+	\graph[use existing nodes]{
+		2 -> A -> 1;
+		3 -> A -> 4;
+	};
+	\end{tikzpicture}
+	\quad = \quad
+	\begin{tikzpicture}
+	\matrix[row sep=1em, column sep=1em]{
+		\node (1) [opCategory] {$f$}; & & \node (2) [category] {};\\
+		& \node (A) [component] {};\\
+		\node (3) [opCategory] {}; & & \node (4) [category] {$f$};\\
+	};
+	\graph[use existing nodes]{
+		2 -> A -> 1;
+		3 -> A -> 4;
+	};
+	\end{tikzpicture}
+	\]
+	By treating the ``morphism $f$ in a box'' as a ``token in a place'' of $\graph n$, we have seen that the firing of $t$ generates an equation in $\Set$, namely the one that expresses the dinaturality of $n$. 
+\end{remark}
+
+Suppose now we have two composable transformations $\phi$ and $\psi$ dinatural in all their variables, in a category $\C$, together with a graph. We shall make precise how certain markings of $\graph\psi\circ\graph\phi$ correspond to morphisms in $\C$, and how the firing of an enabled transition corresponds to applying the dinaturality of $\phi$ or $\psi$ in one of their variables, thus creating an equation of morphisms in $\C$. Therefore, if the firing of a single transition generates an equality in the category, a sequence of firings of enabled transitions yields a chain of equalities. By individuating two markings $M_0$ and $M_d$, each corresponding to a leg of the dinaturality hexagon for $\psi\circ\phi$ we want to prove is commutative, and by showing that $M_d$ is reachable from $M_0$, we shall have proved that $\psi\circ\phi$ is dinatural. 
+
+
+We are now ready to present and prove the first main result of this article. For the rest of this section, fix transformations $\phi \colon F_1 \to F_2$ and $\psi \colon F_2 \to F_3$  where 
+\begin{itemize}
+	\item $F_i \colon \B^{\alpha^i} \to \C$ is a functor for all $i \in \{1,2,3\}$, 
+	\item $\phi$ and $\psi$ have type, respectively,
+	\[
+	\begin{tikzcd}
+	\length{\alpha^1} \ar[r,"\sigma_1"] & k_1 & \length{\alpha^{2}} \ar[l,"\tau_1"']
+	\end{tikzcd}
+	\qquad \text{and} \qquad
+	\begin{tikzcd}
+	\length{\alpha^2} \ar[r,"\sigma_2"] & k_2 & \length{\alpha^{3}}. \ar[l,"\tau_2"']
+	\end{tikzcd}
+	\]
+\end{itemize}
+We shall establish a sufficient condition for the dinaturality of $\psi \circ \phi$ in some of its variables. However, since we are interested in analysing the dinaturality of the composition in each of its variables \emph{separately}, we start by assuming that $\psi\circ\phi$ depends on only one variable, i.e. has type 
+$
+\begin{tikzcd}[cramped,sep=small]
+\length{\alpha^1} \ar[r] & 1 & \length{\alpha^{3}} \ar[l],
+\end{tikzcd}
+$
+and that $\phi$ and $\psi$ are dinatural in all their variables. In this case, we have to show that the following hexagon commutes for all $f \colon A \to B$, recalling that  $\funminplusconst {F_1} B A$ is the result of applying functor $F_1$ in $B$ in all its contravariant arguments and in $A$ in all its covariant ones:
+\begin{equation}\label{eqn:compositionality-hexagon}
+\begin{tikzcd}[column sep=1cm]
+& \funminplusconst {F_1} A A \ar[r,"\phi_{A\dots A}"] &  \funminplusconst {F_2} A A \ar[r,"\psi_{A \dots A}"]  &  \funminplusconst {F_3} A A \ar[dr,"\funminplusconst {F_3} 1 f"] \\
+\funminplusconst {F_1} B A \ar[ur,"\funminplusconst {F_1} f 1"] \ar[dr,"\funminplusconst {F_1} 1 f"'] & &   & & \funminplusconst {F_3} A B \\
+& \funminplusconst {F_1} B B \ar[r,"\phi_{B\dots B}"']  & \funminplusconst {F_2} B B \ar[r,"\psi_{B \dots B}"']  & \funminplusconst {F_3} B B \ar[ur,"\funminplusconst {F_3} f 1"']
+\end{tikzcd}
+\end{equation}
+
+The theorem we want to prove is then the following.
+
+\begin{theorem}\label{theorem:acyclic implies dinatural}
+	Let $\phi$ and $\psi$ be transformations which are dinatural in all their variables and such that $\psi\circ\phi$ depends on only one variable. If \,$\graph\psi \circ \graph\phi$ is acyclic, then $\psi\circ\phi$ is a dinatural transformation. 
+\end{theorem}
+
+The above is a direct generalisation of Eilenberg and Kelly's result on \emph{extranatural transformations} \cite{eilenberg_generalization_1966}, which are dinatural transformations where either the domain or the codomain functor is constant. For example, $\eval{}{}$ is extranatural in its first variable. They worked with the additional assumption that $\graph\phi$ and $\graph\psi$ do not contain any ramifications, that is, the white and grey boxes are always linked in pairs, and they also proved that if the composite graph is acyclic, then the composite transformation is again extranatural. Their condition is also ``essentially necessary''  in the sense that if we do create a cycle upon constructing $\graph\psi \circ \graph\phi$, then that means we are in a situation like this:
+\[
+\begin{tikzpicture}
+\matrix[column sep=1em,row sep=1em]{
+	& \node[component] (A) {}; \\
+	\node[opCategory] (1) {}; & & \node[category] (2) {};\\
+	& \node[component] (B) {};\\
+};
+\graph[use existing nodes]{
+	1 -> A -> 2 -> B -> 1;
+};
+\end{tikzpicture}
+\]
+where we have a transformation between constant functors. Such a family of morphisms is (extra)natural precisely when it is constant (that is, if every component is equal to the same morphism) on each connected component of the domain category.
+%, when seen as a directed graph whose vertices are the objects and arrows are the morphisms.
+
+As already said in Remark~\ref{rem:preliminary-discussion}, the key to prove this theorem is to see $\graph\psi \circ \graph\phi$ as a Petri Net, reducing the dinaturality of $\psi\circ\phi$ to the reachability problem for two markings we shall individuate. We begin by unfolding the definition of $\graph\psi \circ \graph\phi$: we have $\graph\psi \circ \graph\phi = (P,T,\inp{(-)},\out{(-)})$ where $P = \length{\alpha^1} + \length{\alpha^2} + \length{\alpha^{3}}$, $T = k_1 + k_2$ and, indicating with $\injP i \colon \length{\alpha^i} \to P$ and $\injT i \colon k_i \to T$ the injections defined similarly to $\injP{\length\alpha}$ and $\injP{\length\beta}$ in Definition~\ref{def:standard graph}, 
+\begin{equation}\label{input-output-transitions}
+\begin{aligned}
+\inp{(\injT i (t))} &= \, 
+\{ \injP i (p) \mid \sigma_i(p) = t,\, \alpha^i_p = +  \} \, \cup \, \{ \injP {i+1} (p) \mid \tau_i(p) = t,\, \alpha^{i+1}_p = -  \}, \\
+\out{(\injT i (t))} &= \, 
+\{ \injP i (p) \mid \sigma_i(p) = t,\, \alpha^i_p = -  \} \, \cup
+\, \{ \injP {i+1} (p) \mid \tau_i(p) = t,\, \alpha^{i+1}_p = +  \}.
+\end{aligned}
+\end{equation}
+For the rest of this section, we shall reserve the names $P$ and $T$ for the sets of places and transitions of $\graph\psi \circ \graph\phi$.
+
+\begin{remark}\label{rem:graph of a transformation is FBCF}
+	Since $\sigma_i$ and $\tau_i$ are functions, we have that $\length{\inp p}, \length{\out p} \le 1$ and also that $\length{\inp p \cup \out p }\ge 1$ for all $p\in P$. With a little abuse of notation then, if $\inp p = \{t\}$ then we shall simply write $\inp p = t$, and similarly for $\out p$.
+\end{remark}
+
+\paragraph{Labelled markings as morphisms} We now show how to formally translate certain markings of $\graph\psi \circ \graph\phi$ in actual morphisms of $\C$. The idea is to treat every token in the net as a fixed, arbitrary morphism $f \colon A \to B$ of $\C$ and then use the idea discussed on p.~\pageref{discussion:informal-reading-morphisms-in-a-box}.
+
+However, not all possible markings of $\graph\psi \circ \graph\phi$ have a corresponding morphism in $\C$. For example, if $M$ is a marking and $p$ is a place such that $M(p)>1$, it makes no sense to ``compute a functor $F_i$ in $f$ twice'' in the argument of $F_i$ corresponding to $p$. Hence, only markings $M \colon P \to \{0,1\}$ can be considered. Moreover, we have to be careful with \emph{where} the marking puts tokens: if a token corresponds to a morphism $f \colon A \to B$, we have to make sure that there are no two consecutive tokens (more generally, we have to make sure that there is at most one token in every directed path), otherwise a naive attempt to assign a morphism to that marking might end up with type-checking problems. For instance, consider the diagonal transformation in a Cartesian category $\C$ (example \ref{ex:delta}) and the following marking:
+\[
+\begin{tikzpicture}
+\matrix[row sep=1em,column sep=0.5em]{
+	& \node (1) [category,tokens=1] {}; \\
+	& \node (A) [component] {}; \\
+	\node (2) [category,tokens=1] {}; & & \node (3) [category,tokens=1] {}; \\
+};
+\graph[use existing nodes]{
+	1 -> A -> {2,3}; 
+};
+\end{tikzpicture}
+\]
+The token on the top white box should be interpreted as $\id\C(f) \colon A \to B$, hence the black middle box should correspond to the $B$-th component of the family $\delta$, that is $\delta_B \colon B \to B \times B$. However, the bottom two white boxes are read as $f \times f \colon A \times A \to B \times B$, which cannot be composed with $\delta_B$.
+
+We therefore introduce the notion of \emph{labelled marking}, which consists of a marking together with a labelling of the transitions, such that a certain coherence condition between the two is satisfied. This constraint will ensure that every labelled marking 
+corresponds to 
+%be ``translatable'', as it were, into 
+a morphism of $\C$. We will then use only \emph{some} labelled markings to prove our compositionality theorem.
+
+\begin{definition}\label{def:labelled marking}
+	Consider $f \colon A \to B$ a morphism in $\C$. A \emph{labelled marking} for $\graph\psi \circ \graph\phi$ is a triple $(M,L,f)$ where functions $M \colon P \to \{0,1\}$ and $L \colon T \to \{A,B\}$ are such that for all $p \in P$
+	\[
+	M(p)=1 \implies L(\inp p) = A, \, L(\out p ) = B
+	\]
+	\[
+	M(p)=0 \implies  L(\inp p ) = L(\out p ) 
+	\]
+	These conditions need to be satisfied only when they make sense; for example if $M(p) = 1$ and $\inp p = \emptyset$, condition $L(\inp p) = A$ is to be ignored.
+\end{definition}
+
+We are now ready to assign a morphism in $\C$ to every labelled marking by reading a token in a place as a morphism $f$ in one of the arguments of a functor, while an empty place corresponds to the identity morphism of the label of the transition of which the place is an input or an output.
+\begin{definition}\label{def:morphism for labelled marking}
+	Let $(M,L,f\colon A \to B)$ be a labelled marking. We define a morphism $\mor M L f$ in $\C$ as follows:
+	\[
+	\mor M L f = F_1(x^1_1,\dots,x^1_{\length{\alpha^1}});\phi_{X^1_1\dots X^1_{k_1}} ; 
+	F_2(x^2_1,\dots,x^2_{\length{\alpha^2}}); \psi_{X^2_1\dots X^2_{k_2}} ; F_{3}(x^{3}_1,\dots,x^{3}_{\length{\alpha^{3}}})
+	\]
+	where
+	\[
+	x^i_j = \begin{cases}
+	f \quad &M(\injP i (j)) = 1 \\
+	\id{L(t)} \quad & M(\injP i (j)) = 0 \land t \in \inp {\injP v (j)} \cup \out {\injP v (j)} 
+	\end{cases}
+	\qquad
+	X^i_j = L(\injT i (j)).
+	\]
+	for all $i \in \{1,2,3\}$ and $j\in\{1,\dots,\length{\alpha^i}\}$. (Recall that $\injP i \colon \length{\alpha^i} \to P$ and $\injT i \colon k_i \to T$ are the injections defined similarly to $\injP{\length\alpha}$ and $\injP{\length\beta}$ in Definition~\ref{def:standard graph}.)
+\end{definition}
+
+It is easy to see that $\mor M L f$ is indeed a morphism in $\C$, by checking that the maps it is made of are actually composable using the definition of labelled marking and of $\graph\psi \circ \graph\phi$.
+
+What are the labelled markings corresponding to the two legs of diagram~(\ref{eqn:compositionality-hexagon})? In the lower leg of the hexagon, $f$ appears in all the covariant arguments of $F_1$ and the contravariant ones of $F_{3}$, which correspond in $\graph\psi \circ \graph\phi$ to those places which have no inputs (in Petri nets terminology, \emph{sources}), and all variables of $\phi$ are equal to $B$; in the upper leg, $f$ appears in those arguments corresponding to places with no outputs (\emph{sinks}), and $\psi$ is computed in $A$ in each variable. Hence, the lower leg is $\mor {M_0} {L_0} f$ while the upper leg is $\mor {M_d} {L_d} f$, where:
+\begin{equation}\label{eqn:markings-definitions}
+\begin{aligned}
+M_0(p)&=\begin{cases}
+1 & \inp p = \emptyset \\
+0 & \text{otherwise}
+\end{cases} \quad
+&
+M_d(p)&=\begin{cases}
+1 & \out p = \emptyset \\
+0 & \text{otherwise}
+\end{cases}
+\\[.5em]
+L_0(t) &= B 
+&
+L_d(t) &= A
+\end{aligned}
+\end{equation}
+for all $p\in P$ and $t \in T$. It is an immediate consequence of the definition that $(M_0,L_0,f)$ and $(M_d,L_d,f)$ so defined are labelled markings.
+
+We aim to show that $M_d$ is reachable from $M_0$ by means of a firing sequence that preserves the morphism $\mor {M_0} {L_0} f$. In order to do so, we now prove that firing a $B$-labelled transition in an arbitrary labelled marking $(M,L,f)$ generates a new labelled marking, whose associated morphism in $\C$ is still equal to $\mor M L f$.
+
+\begin{proposition}\label{prop:fired labelled marking is equal to original one}
+	Let $(M,L,f)$ be a labelled marking, $t \in T$ an enabled transition such that $L(t) = B$. Consider 
+	\begin{equation}\label{markings after firing definition}
+	\begin{tikzcd}[row sep=0em,column sep=1em,ampersand replacement=\&]
+	P \ar[r,"M'"] \& \{0,1\} \& \& \& \& \& T \ar[r,"L'"] \& \{A,B\} \\
+	p \ar[r,|->] \& \begin{cases}
+	0 & p \in \inp t \\
+	1 & p \in \out t \\
+	M(p) & \text{otherwise}
+	\end{cases}
+	\& \& \& \& \&
+	s \ar[r,|->] \& \begin{cases}
+	A & s = t \\
+	L(s) & s \ne t
+	\end{cases}
+	\end{tikzcd}
+	\end{equation}
+	Then $(M',L',f)$ is a labelled marking and $\mor M L f = \mor {M'} {L'} f$.
+\end{proposition} 
+\begin{proof}
+	By definition of labelled marking, if $\out t \ne \emptyset$ and $L(t) = B$ then $M(p) = 0$ for all $p \in \out t$, because if there were a $p \in \out t$ with $M(p) = 1$, then $L(t) = A$. $M'$ is therefore the marking obtained from $M$ when $t$ fires once. It is easy to see that $(M',L',f)$ is a labelled marking by simply checking the definition. 
+	
+	We have now to prove that $\mor M L f = \mor {M'} {L'} f$. Since $t \in T$, we have $t = \injT u (i)$ for some $u \in \{1,2\}$ and $i \in \{1,\dots,k_u\}$. The fact that $t$ is enabled in $M$, together with the definition of $\graph\psi \circ \graph\phi$ (\ref{input-output-transitions}) and Definition~\ref{def:morphism for labelled marking}, ensures that, in the notations of Definition~\ref{def:morphism for labelled marking},
+	\begin{align*}
+	\sigma_u(j) = i \land \alpha^u_j = + &\implies x^u_j = f  \\
+	\sigma_u(j) = i \land \alpha^u_j = - &\implies x^u_j = \id B \\
+	\tau_u(j) = i \land \alpha^{u+1}_j = + &\implies x^{u+1}_j = \id B \\
+	\tau_u(j) = i \land \alpha^{u+1}_j = - &\implies x^{u+1}_j = f 
+	\end{align*}
+	hence we can apply the dinaturality of $\phi$ or $\psi$ (if, respectively, $u=1$ or $u=2$) in its $i$-th variable. To conclude, one has to show that the morphism obtained in doing so is the same as $\mor {M'} {L'} f$, which is just a matter of identity check. The details can be found in the second author's thesis~\cite{santamaria_towards_2019}.\qed
+\end{proof}
+
+It immediately follows that a sequence of firings of $B$-labelled transitions gives rise to a labelled marking whose associated morphism is still equal to the original one, as the following Proposition states.
+
+\begin{corollary}\label{cor:reachability-implies-equality}
+	Let $\mor M L f$ be a labelled marking, $M'$ a marking reachable from $M$ by firing only $B$-labelled transitions $t_1,\dots,t_m$, $L' \colon T \to \{A,B\}$ defined as:
+	\[
+	L'(s) = \begin{cases}
+	A & s = t_i \text{ for some $i \in \{1,\dots,m\}$} \\
+	L(s) & \text{otherwise}
+	\end{cases}
+	\]
+	Then $(M', L',f)$ is a labelled marking and $\mor M L f = \mor {M'} {L'} f$.
+\end{corollary}
+
+Now all we have to show is that $M_d$ is reachable from $M_0$ (see~(\ref{eqn:markings-definitions})) by only firing $B$-labelled transitions: it is enough to make sure that each transition is fired at most once to satisfy this condition. We shall work on a special class of Petri Nets, to which our $\graph\psi \circ \graph\phi$ belongs (Remark~\ref{rem:graph of a transformation is FBCF}), where all places have at most one input and at most one output.
+
+\begin{definition}\label{def:FBCF petri net}
+	A Petri Net is said to be \emph{forward-backward conflict free} (FBCF) if for all $p$ place $\length{\inp p} \le 1$ and $\length{\out p} \le 1$.
+\end{definition}
+
+\begin{theorem}\label{thm:acyclic-implies-reachable}
+	Let $N$ be an acyclic FBCF Petri Net and let $M_0$, $M_d$ be the only-source and only-sink markings as in~(\ref{eqn:markings-definitions}). Then $M_d$ is reachable from $M_0$ by firing each transition exactly once.
+\end{theorem}
+\begin{proof}
+	We proceed by induction on the number of transitions in $N$. If $N$ has no transitions at all, then every place is both a source and a sink, and $M_0$ and $M_d$ coincide, therefore there is nothing to prove. Now, let $n \ge 0$, suppose that the theorem holds for Petri Nets that have $n$ transitions and assume that $N$ has $n+1$ transitions.
+	
+	Define, given $t$ and $t'$ two transitions, $t \le t'$ if and only if there exists a directed path from $t$ to $t'$. The relation $\le$ so defined is reflexive, transitive and antisymmetric (because $N$ is acyclic), hence it is a partial order on $T$, the set of transitions of $N$. Now, $T$ is finite by definition, hence it has at least one minimal element $t_0$. Since $t_0$ is minimal, every (if any) input of $t_0$ is a source, therefore $t_0$ is enabled in $M_0$. Now, fire $t_0$ and call $M_1$ the resulting marking. Consider the subnet $N'$ obtained from $N$ by removing $t_0$ and all its inputs. Since $N$ is forward-backward conflict free, we have that all the outputs of $t_0$ are sources in $N'$. This means that $N'$ is an acyclic FBCF Petri Net: by inductive hypothesis, we have that $M_d$ (restricted to $N'$) is reachable from $M_1$ in $N'$, and therefore $M_d$ is reachable from $M_0$ in $N$.\qed
+\end{proof}
+
+\begin{remark}
+	Theorem~\ref{thm:acyclic-implies-reachable} is an instance of Hiraishi and Ichikawa's result on reachability for arbitrary markings in arbitrary acyclic Petri Nets~\cite{hiraishi_class_1988}. Our proof is an adapted version of theirs for the special case of FBCF Petri Nets and the particular markings $M_0$ and $M_d$ that put one token precisely in every source and in every sink respectively.
+\end{remark}
+
+We are now ready to give an alternative proof to the first half of Petri\'{c}'s theorem~\cite{petric_g-dinaturality_2003} that solved the compositionality problem of dinatural transformations.
+
+\begin{proofMainTheorem}
+	Let $f \colon A \to B$ be a morphism in $\C$, and define labelled markings $(M_0,L_0,f)$ and $(M_d,L_d,f)$ as in~(\ref{eqn:markings-definitions}). Then $\mor {M_0} {L_0} f$ is the lower leg of~(\ref{eqn:compositionality-hexagon}), while $\mor {M_d} {L_d} f$ is the upper leg. By theorem~\ref{thm:acyclic-implies-reachable}, marking $M_d$ is reachable from $M_0$ by firing each transition of $\graph\psi \circ \graph\phi$ exactly once, hence by only firing $B$-labelled transitions. By Proposition~\ref{cor:reachability-implies-equality}, we have that the hexagon~(\ref{eqn:compositionality-hexagon}) commutes. \qed
+\end{proofMainTheorem}
+
+Theorem~\ref{theorem:acyclic implies dinatural} can then be straightforwardly generalised to the case in which $\psi\circ\phi$ depends on $n$ variables for an arbitrary $n$. Suppose then that the type of $\psi\circ\phi$ is given by the following pushout: 
+\begin{equation}\label{eqn:pushout2}
+\mkern0mu \begin{tikzcd}
+& & \length{\alpha^3} \ar[d, "\tau_2"] \\
+& \length{\alpha^2} \ar[d, "\tau_1"'] \ar[dr, phantom, "\ulcorner" very near start] \ar[r, "\sigma_2"] & k_2 \ar[d, dotted, "\xi"] \\
+\length{\alpha^1} \ar[r, "\sigma_1"] & k_1 \ar[r, dotted, "\zeta"] & n
+\end{tikzcd}
+\end{equation}
+$\graph\psi \circ \graph\phi$ now has $n$ connected components, and a sufficient condition for the dinaturality of $\psi\circ\phi$ in its $i$-th variable is that $\phi$ and $\psi$ are dinatural in all those variables of theirs which are ``involved'', as it were, in the $i$-th connected component of $\graph\psi \circ \graph\phi$ \emph{and} such connected component is acyclic.
+
+\begin{theorem}\label{theorem:acyclicity implies dinaturality GENERAL}
+	In the notations above, let $i\in \{1,\dots,n\}$. If $\phi$ and $\psi$ are dinatural in all the variables in, respectively, $\zeta^{-1}\{i\}$ and $\xi^{-1}\{i\}$ (with $\zeta$ and $\xi$ given by the pushout~(\ref{eqn:pushout2})), and if the $i$-th connected component of $\graph\psi \circ \graph\phi$ is acyclic, then $\psi\circ\phi$ is dinatural in its $i$-th variable.
+\end{theorem}
+
+We then have a straightforward corollary.
+
+\begin{corollary}
+	Let $\phi\colon F \to G$ and $\psi \colon G \to H$ be transformations which are dinatural in all their variables. If $\graph\psi \circ \graph\phi$ is acyclic, then $\psi\circ\phi$ is dinatural in all its variables.
+\end{corollary}
+
+%\subsection{An ``essentially necessary'' condition for compositionality}
+%
+%The condition of acyclicity of the composite graph $\graph\psi \circ \graph\phi$ is not just a sufficient condition for the dinaturality of $\psi \circ \phi$, but also essentially necessary, in the sense that if $\graph\psi \circ \graph\phi$ contains a cycle, then $\psi \circ \phi$ might be dinatural, but not as a sole consequence of the dinaturality of $\phi$ and $\psi$. We will devote this section to put this intuition in formal terms.
+%
+%Let us assume that 
+
+
+\paragraph{An ``essentially necessary'' condition for compositionality} Also the other half of Petri\'c's theorem can be shown with the help of the theory of Petri Nets. One can prove that if $N$ is a weakly connected FBCF Petri Net with at least one proper source or one proper sink and $M_0$ and $M_d$ are the only-source and only-sink markings as before, then a necessary condition for the reachability of $M_d$ from $M_0$ is that every transition in $N$ must fire at least once. The intuition behind this is that there must be at least one transition $t$ which fires, because $M_0$ and $M_d$ are not equal (in the hypothesis that $N$ has at least one proper sink or proper source), and if a transition $t$ fires once, then all the transitions that are connected to it must fire as well: in order for $t$ to fire it must be enabled, hence those transitions which are between the source places and $t$ must fire to move the tokens to the input places of $t$; equally, if $t$ fires, then also all those transitions ``on the way'' from $t$ to the sink places must fire, otherwise some tokens would get stuck in the middle of the net, in disagreement with $M_d$. As a consequence of this fact, we have a sort of inverse of Theorem~\ref{thm:acyclic-implies-reachable}.
+
+\begin{theorem}\label{thm:reachability-implies-acyclicity}
+    Let $N$ be weakly connected with at least one proper source or one proper sink place. If $M_d$ is reachable from $M_0$, then $N$ is acyclic.
+\end{theorem}
+\begin{proof}
+    Suppose that $N$ contains a directed, circular path $\pi=(v_0,\dots,v_{2l})$ where $v_0 = v_{2l}$ is a place. Then each $v_{2i}$ is not a source, given that it is the output of $v_{2i-1}$, hence $M_0(v_{2i})=0$ for all $i \in \{1,\dots,l\}$. This means that $v_{2i+1}$ is disabled in $M_0$, therefore it will not fire when transforming $M_0$ into $M_1$. Then also $M_1(v_{2i})=0$. Using the same argument we can see that none of the transitions in the loop $\pi$ can fire, thus $M_d$ cannot be reached by $M_0$. \qed
+\end{proof}
+
+In other words, if $N$ contains a loop—in the hypothesis that $N$ is weakly connected and has at least one proper source or sink place—then $M_d$ is \emph{not} reachable from $M_0$. In the case of $N=\graph\psi \circ \graph\phi$, given the correspondence between the dinaturality condition of $\phi$ and $\psi$ in each of their variables and the firing of the corresponding transitions, this intuitively means that $\psi\circ\phi$ cannot be proved to be dinatural as a sole consequence of the dinaturality of $\phi$ and $\psi$ when $\graph\psi \circ \graph\phi$ is cyclic. Therefore, acyclicity is not only a \emph{sufficient} condition for the dinaturality of the composite transformation, but also ``essentially necessary'': if the composite happens to be dinatural despite the cyclicity of the graph, then this is due to some ``third'' property, like the fact that certain squares of morphisms are pullbacks or pushouts. The interested reader can find a detailed formalisation of this intuition in the second author's thesis~\cite{santamaria_towards_2019}, where a syntactic category generated by the equations determined by the dinaturality conditions of $\phi$ and $\psi$ was considered, and where it was shown that in there $\psi \circ \phi$ is \emph{not} dinatural in a similar way to Petri\'c's approach in~\cite{petric_g-dinaturality_2003}.

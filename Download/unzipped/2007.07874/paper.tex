@@ -1,0 +1,675 @@
+\documentclass[11pt]{article}
+\usepackage[letterpaper,top=1in,bottom=1in,left=1in,right=1in]{geometry}
+%\usepackage[pass]{geometry}
+\usepackage[utf8]{inputenc}
+
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{fourier}
+\usepackage{listings}
+
+\usepackage{pgfplots}
+\pgfplotsset{width=10cm,compat=1.9}
+
+\usepackage{hyperref}
+
+\usepackage{harpoon}
+
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{conj}[theorem]{Conjecture}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{ex}[theorem]{Example}
+\newtheorem{cor}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{defn}{Definition}[section]
+\newtheorem*{rem}{Remark}
+\newtheorem*{slll}{The Lov\'asz local lemma}
+
+% resettable claim counter
+\newcounter{claimcount} 
+\setcounter{claimcount}{0}
+\newtheorem{claim}[claimcount]{Claim}
+\newcommand{\resetclaimcount}{\setcounter{claimcount}{0}}
+
+\newcommand{\paren}[1]{\left(#1\right)}
+\DeclareMathOperator{\Del}{Del}
+\newcommand{\del}{\Del_c}
+
+\DeclareMathOperator{\dom}{dom}
+%\DeclareMathOperator{\ch}{ch}
+
+
+\newcommand{\comment}[1]{\marginpar{\small\color{blue}#1}}
+\newcommand{\sep}[1]{{\noindent\bf\color{blue}{#1}}\\}
+
+%\newcommand{\bref}[1]{(\ref{#1})}
+
+\newcommand{\Prob}{\mathbb{P}}
+
+\newcommand{\sst}[2]{\left\{\,#1 \,\,\middle|\,\, #2\,\right\}}
+\newcommand{\X}{\chi}
+\DeclareMathOperator{\strong}{s}
+\newcommand{\xs}{\chi'_{\strong}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Eon}[1]{\underset{#1}{\E}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\luv}{\ell_{uv}}
+\newcommand{\lvw}{\ell_{vw}}
+\newcommand{\luw}{\ell_{uw}}
+\newcommand{\luvw}{\ell_{uvw}}
+\newcommand{\I}{{\mathcal{I}}}
+\newcommand{\bI}{{\bf{I}}}
+\newcommand{\A}{{\bf{A}}}
+\newcommand{\Pk}{\Prob_{\text{keep}}}
+
+
+\newcommand{\eps}{\varepsilon}
+
+\newcommand{\GBJ}{\overrightharp{G}_1}%{G_{\mathrm{BJ}}}
+\newcommand{\GHJK}{\overrightharp{G}_2}%{G_{\mathrm{HJK}}}
+
+\title{An improved procedure for colouring graphs \\of bounded local density}
+\author{
+Eoin Hurley
+\thanks{Heidelberg University, Germany.
+Email: \protect\href{mailto:eoin.hurley@umail.ucc.ie}{\protect\nolinkurl{eoin.hurley@umail.ucc.ie}}. Part of this research was carried out while the author was a master's student at Utrecht University.}
+\and
+R\'emi de Joannis de Verclos
+\thanks{Radboud University Nijmegen, Netherlands. 
+Email: \protect\href{mailto:r.deverclos@math.ru.nl}{\protect\nolinkurl{r.deverclos@math.ru.nl}}, \protect\href{mailto:ross.kang@gmail.com}{\protect\nolinkurl{ross.kang@gmail.com}}. Supported by a Vidi grant (639.032.614) of the Netherlands Organisation for Scientific Research (NWO).}
+\and
+Ross J. Kang
+\footnotemark[2]
+}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We develop an improved bound for the chromatic number of graphs of maximum degree $\Delta$ under the assumption that the number of edges spanning any neighbourhood is at most $(1-\sigma)\binom{\Delta}{2}$ for some fixed $0<\sigma<1$.
+The leading term in this bound is best possible as $\sigma\to0$.
+As two consequences, we advance the state of the art in two longstanding and well-studied graph colouring conjectures, the Erd\H{o}s--Ne\v{s}et\v{r}il conjecture and Reed's conjecture.
+We prove that the strong chromatic index is at most $1.772\Delta^2$ for any graph $G$ with sufficiently large maximum degree $\Delta$.
+We prove that the chromatic number is at most $\lceil 0.801(\Delta+1)+0.199\omega\rceil$ for any graph $G$ with clique number $\omega$ and sufficiently large maximum degree $\Delta$.
+\end{abstract}
+
+%keywords: graph colouring, local sparsity, Erd\H{o}s--Ne\v{s}et\v{r}il conjecture, Reed's conjecture
+
+%05C15 (primary), 05C35, 05D40 (secondary)
+
+%\tableofcontents
+
+\section{Introduction}
+
+\input{intro}
+
+\input{prelim}
+
+\section{Colouring graphs of bounded local density}\label{sec:proof}
+
+
+Molloy and Reed's original proof of Theorem~\ref{thm:MoResparse} took the following strikingly basic, one might say na\"ive, form.
+Given a graph $G$ and a palette, say, $[M]$ of $M$ colours, perform the following steps.
+\begin{enumerate}
+\item\label{naivestep1}
+For each vertex $v\in V(G)$, independently and uniformly at random assign an element of $[M]$ as a colour for $v$.
+\item\label{naivestep2}
+For each edge of $G$ for which both endpoints have been assigned the same colour, remove the colour from one or both endpoints.
+\item\label{naivestep3}
+Complete the partial proper colouring to a full colouring of $G$.
+\end{enumerate}
+\noindent
+Consult~\cite{MoRe02} for broader applications and further refinements of this method.
+
+Molloy and Reed~\cite{MoRe97} showed that for $G$ a $\sigma$-sparse $\Delta$-regular graph and $M=(1-\eps)\Delta$, for some $\eps$ depending on $\sigma$, the above na\"ive strategy succeeds. In particular, their essential observation was that, after Step~\ref{naivestep2}, we obtain a partial proper colouring and expect in each neighbourhood for some colours to appear multiple times.
+With the help of Talagrand's inequality and the Lov\'asz local lemma, they could moreover show that, with positive probability and uniformly for each vertex $v$, enough colours are repeated in $N(v)$ to ensure that the residual list of $v$ is larger than the residual degree of $v$. Step~\ref{naivestep3} is then carried out easily by a greedy colouring procedure.
+
+Remarkably, despite the attention this result has received over the years, the only known methods for proving Theorem~\ref{thm:MoResparse} (including those of the present work) take the same basic form above.
+We remark that in the conflict-resolution Step~\ref{naivestep2}, Molloy and Reed were nonpartisan and removed the colour from both endpoints of a monochromatic edge. The advance of Bruhn and Joos~\cite{BrJo18} was obtained by independently tossing a fair coin for each monochromatic edge to decide which of the two endpoints to uncolour in Step~\ref{naivestep2}. In fact they devised their ``exceptional outcomes'' version of Talagrand's inequality, Theorem~\ref{thm:downward certs}, in order to rigorously analyse the resulting random process.
+
+The salient contribution of Bonamy {\em et al.}~\cite{BPP18+} was to show that for $G$ a $\sigma$-sparse $\Delta$-regular graph, Step~\ref{naivestep3} could be performed by an iteration of Steps~\ref{naivestep1} and~\ref{naivestep2} upon the residual subgraph, and so on. The key for showing this to be possible was to demonstrate that neighbourhood intersections in the residual subgraph are expected to behave ``quasirandomly'' (see Subsections~\ref{sub:list colouring}), which helps to guarantee local sparsity (see Subsection~\ref{sub:proof}). Moreover, the list-sizes in the residual list-assignment are uniformly bounded from below in expectation and so, together with Theorem~\ref{thm:downward certs} and the Lov\'asz local lemma, we can be guaranteed a proper partial (list-)colouring of $G$ whose residual subgraph is contained in a $\sigma'$-sparse $\Delta'$-regular graph with a residual list-assignment having list-sizes all at least $(1-\eps')\Delta'$.
+
+Our work advances in this evolution with two distinct but closely related alterations.
+
+The first alteration is to improve in the conflict-resolution Step~\ref{naivestep2} by means of a priority assignment strategy.
+We assign independently and uniformly at random to each vertex $v$ a {\em priority} $\pi(v) \in [0,1]$.
+For each monochromatic edge $uv$ considered in Step~\ref{naivestep2}, we uncolour the vertex with lower priority, i.e.~if $\pi(u) \ge \pi(v)$ we uncolour $v$.
+Curiously, this idea was already suggested at the end of Molloy and Reed's paper!
+
+There are three important benefits to note regarding this first alteration. Solely for the purposes of explaining these benefits, we find it convenient to introduce two auxiliary digraphs $\GBJ$ and $\GHJK$. These encode Bruhn and Joos's conflict-resolution protocol (also used by Bonamy {\em et al.})~and ours, respectively, by having an arc $\overrightharp{uv}$ from $u$ to $v$ if $u$ uncolours $v$ whenever both are assigned the same colour in Step~\ref{naivestep1}.
+Both digraphs have $G$ as the underlying undirected graph: $\GBJ$ orients each edge of $G$ independently and uniformly, and $\GHJK$ is an acyclic orientation of $G$ according to a uniform total ordering of $V(G)$.
+First, notice there can be directed cycles in $\GBJ$, at least one vertex of which might be needlessly uncoloured, but not in $\GHJK$.
+Second, given non-adjacent $v,w\in N(u)$, the events $(\overrightharp{uv}\in E(\GBJ))$ and $(\overrightharp{uw}\in E(\GBJ))$ are independent, whereas the events $(\overrightharp{uv}\in E(\GHJK))$ and $(\overrightharp{uw}\in E(\GHJK))$ are correlated. Thus if $|N(v)\cap N(w)|$ is large, then $v$ and $w$ are more likely to synchronise their colours.
+Third, note that the in-degree of a vertex $v$ in $\GBJ$ has a $\mathrm{Bin}(\Delta,1/2)$ distribution, while in $\GHJK$ it has a $\mathrm{Unif}\{0,\dots,\Delta\}$ distribution. Thus, supposing $v$ has $x$ neighbours assigned the same colour as $v$ after Step~\ref{naivestep1}, in the Bruhn--Joos protocol $v$ keeps its colour with probability $1/2^x$, while in ours the probability is a much larger $1/x$.
+It follows that to successfully colour in one iteration under the Bruhn--Joos protocol versus ours, one needs to maintain that $x$ is uniformly much smaller over all vertices, and the number $M$ of colours in the palette must therefore be larger.
+
+
+We summarise these benefits of priority assignment as follows:
+(1)~fewer needless uncolourings;
+(2)~colour synchronisation for non-adjacent vertices with many common neighbours; and
+(3)~robustness of the colouring procedure to using fewer colours.
+
+Our second alteration critically takes advantage of this last benefit to improve on Steps~\ref{naivestep1} and~\ref{naivestep3}. For Step~\ref{naivestep1}, rather than using $M=(1-\eps)\Delta$ colours for some small but fixed $\eps>0$, we use $M=\lfloor\Delta/\gamma\rfloor$ colours for some large but fixed $\gamma$. This yields larger independent sets (which ultimately correspond to colour classes) and amplifies the colour synchronisation. Resolving conflicts using priorities we then adopt for Step~\ref{naivestep3} the iterative strategy of Bonamy {\em et al.}~to obtain a quasirandom residual subgraph and a residual list-assignment upon which we iterate. Denoting the maximum degree of this residual subgraph by $\Delta'$ we top up our lists so that each vertex has a list with $\lfloor\Delta'/\gamma\rfloor$ colours.  We iterate until we have a partial proper colouring such that the residual subgraph has negligible maximum degree relative to $\Delta$. (Loosely speaking, this procedure ``nibbles'' the original list of $(1-\eps)\Delta$ colours by at most $\lfloor\Delta/\gamma\rfloor$ colours at a time.) We may then greedily complete the colouring.
+
+
+
+Informally, one can understand the procedure and its success as $\sigma\to 0$ by considering what happens if it is run with $M=1$, i.e.~with a single colour, say, red. %MAGA?
+The key question is, in $N(v)$ for $v\in V(G)$, if red appears (thus preventing $v$ from being red), how many times do we expect it to be repeated? Restricting our attention to $N(v)$, we estimate the number of repetitions after Step~\ref{naivestep2} by the expected number of red pairs less the expected number of red triples. We have exactly $\sigma{\Delta\choose 2}$ potential pairs and by a result of Rivin \cite{Riv02}, at most $\sigma^{3/2}{\Delta\choose 3}$ potential triples. The probability of any single vertex being red after conflicts are resolved is simply $1/\Delta$, the chance that it has higher priority than all of its neighbours,  while for non-adjacent pairs and triples it is \emph{roughly} $1/\Delta^2$ and $1/\Delta^3$ (ignoring correlations). This yields the estimate
+\[\frac{1}{\Delta^2}\sigma{\Delta\choose 2}-\frac{1}{\Delta^3}\sigma^{3/2}{\Delta\choose 3}\sim \sigma\left(\frac12 - \frac{\sigma^{1/2}}{6}\right).\]
+As we prove in Theorem~\ref{thm:independent}, this is in fact what we obtain by accurately accounting for the correlations.
+
+
+\subsubsection*{Structure of the proof}
+
+The engine of the proof of Theorem~\ref{col_result} is an effective method of randomly generating a large enough independent set of a $\sigma$-sparse $\Delta$-regular graph, using the conflict-resolution protocol described above. This is embodied in Theorem~\ref{thm:independent}, which we prove in Subsection~\ref{sub:generating independent set}.
+In each step (or ``nibble'') of our colouring procedure, given a $\sigma$-sparse graph of maximum degree $\Delta$ with a $k$-list-assignment, we apply Theorem~\ref{thm:independent} and the Lov\'asz local lemma to obtain a partial proper list-colouring such that the residual subgraph is quasirandom, has maximum degree $\Delta'$, and the corresponding residual list-assignment contains a $k'$-list-assignment.
+This ``nibble'' is embodied in Lemma~\ref{lem:list colouring} and is shown in Subsection~\ref{sub:list colouring}.
+With Lemma~\ref{lem:list colouring} in hand, in Subsection~\ref{sub:proof} we are able to present in full the iterative colouring procedure and the proof of Theorem~\ref{col_result}.
+
+
+\subsection{Sampling independent sets}\label{sub:generating independent set}
+
+\input{stable}
+
+
+\subsection{One nibble}\label{sub:list colouring}
+
+
+Our strategy is to build up the colouring gradually through a sequence of partial proper (list-)colourings. Each step of this sequence has the sampling procedure of Subsection~\ref{sub:generating independent set} at its core. In Lemma~\ref{lem:list colouring} below, we prove (with the help of the Lov\'asz local lemma and Theorem~\ref{thm:downward certs}) that the sampling, with positive probability, has suitable properties for continuation of the iterative colouring procedure.
+
+In addition to the notation for partial list colouring given in Subsection~\ref{sub:notation}, we need the following definition, after~\cite{BPP18+}.
+Given a graph $G$, a vertex subset $A\subseteq V(G)$, and $\mu>0$, we say that $G[A]$ is a {\em $\mu$-quasirandom} subgraph of $G$ if for all not necessarily distinct vertices $u,v\in A$,
+\[
+\left||N(u)\cap N(v) \cap A|-\mu|N(u)\cap N(v)|\right|\le \sqrt{\Delta}\log^5\Delta.
+\]
+Note that in the special case $u=v\in A$, the condition specialises to $|d_{G[A]}(u)-\mu d_G(u)| \le \sqrt{\Delta}\log^5\Delta$.
+ 
+\begin{lemma}\label{lem:list colouring}
+  For every $\iota>0$ and
+  $\gamma\ge\gamma_{\ref{lem:list colouring}}(\iota)=\gamma_{\ref{thm:independent}}(\iota/2)$,
+  there is $\Delta_{\ref{lem:list colouring}}=\Delta_{\ref{lem:list colouring}}(\iota,\gamma)$
+  such that the following holds.
+  Fix some parameters $\sigma>0$ and $\Delta \ge \Delta_{\ref{lem:list colouring}}$
+  and set $k=\lceil\Delta/\gamma\rceil$ and $\mu = 1-(1-e^{-\gamma})/\gamma$.
+  For every $\sigma$-sparse graph~$G$ with maximum degree~$\Delta$
+  and a given $k$-list-assignment $L$, there is a partial proper
+  $L$-colouring $c$ such that the residual subgraph $G_c$ is a $\mu$-quasirandom subgraph.
+  Furthermore, in the residual list-assignment $L_c$, writing $\Delta'$ for the maximum degree of $G_c$, each list has size at least $k'$ where
+  \[
+  \left|\frac{k-k'}{\Delta - \Delta'}
+  - (1 - \eps_{\ref{col_result}}(\sigma))\right|
+  \leq \iota.
+  \]
+ \end{lemma}
+\begin{proof}
+  \resetclaimcount
+  Set $G=(V,E)$.
+In order to have each colour class behaving similarly, we first make $G$ ``colour-wise regular''
+using the following statement.
+\begin{claim}\label{claim:colour regular}
+  There exists $V_1\supseteq V$, a graph $G_1=(V_1,E_1)$ that contains $G=G_1[V]$ as an induced subgraph,
+  and a $k$-list-assignment $L_1$ of $G_1$ that extends $L$ (i.e.~$L_1|_{V}=L$)
+  such that for every colour $c\in \bigcup_{v\in V_1}L(v)$,
+  the subgraph of $G_1$ induced by those vertices~$v$ such that $L(v) \ni c$
+  is $\Delta$-regular and $\sigma$-sparse.
+\end{claim}
+\begin{proof}
+  As a first step,
+  we embed $G$ in a $\Delta$-regular $\sigma$-sparse graph $H$ by the following iterative process.
+  Start with $H=G$ and as long as $H$ is not $\Delta$-regular, take a copy $H'$ of $H$
+  and add an edge between a vertex~$v$ in~$H$ and its copy in~$H'$ if $d_H(v)<\Delta$.
+  Then set $H:=H\cup H'$ and repeat.
+  As each step of this construction does not increase the number of triangles that contain
+  each vertex, the graph $H$ is $\sigma$-sparse.
+  By giving to each copy of a vertex~$v$ a copy of the list $L(v)$, we can extend $L$ to a $k$-list-assignment of $H$.
+  
+  Let $N$ be the smallest multiple of $k$ such that $L(v) \subseteq [N]$ for every vertex
+  $v \in V$.
+  Let us define the graph $G_1=(V_1,E_1)$ as a $N/k$-blow-up of $H$.
+  Specifically, $V_1$ contains $N/k$ copies $v_1,\dots,v_{N/k}$
+  of each vertex $v$ of~$V(H)$,
+  and $u_iv_j\in E_1$ whenever $uv\in E$.
+  For every $v\in V(H)$, we take the convention that $v=v_1$, so that $G_1[V]=G$.
+  For every vertex $v$ of $V(H)$,
+  we define the lists $L(v_1),\dots,L(v_{N/k})$ so that they form a partition of~$[N]$
+  and $L(v_1)=L(v)$.
+
+  Note that every colour $c\in[N]$ is contained in exactly one~$L(v_i)$ for each vertex~$v\in V(H)$.
+  Consequently, the subgraph of~$G$
+  induced by $\sst{v_i\in V_1}{ c\in L(v_i})$ is isomorphic to $H$,
+  and therefore is $\Delta$-regular and $\sigma$-sparse.
+\end{proof}
+We now apply the following random colouring procedure to the graph $G_1$.
+First, assign a colour $c_0(v)$ chosen uniformly at random from
+the list~$L(v)$ to each vertex~$v\in V_1$.
+
+This yields a (not necessarily proper) colouring $c_0:V_1\to\N$.
+In order to resolve conflicts, we use the method discussed in Subsection~\ref{sub:generating independent set}:
+independently assign to each vertex~$v\in V_1$ a priority~$\pi(v)$ chosen uniformly at random in $[0,1]$,
+and define a set of \emph{uncoloured vertices} as
+\[
+U=\sst{v\in V_1}{\exists u\in N_{G_1}(v), ~c_0(u)=c_0(v)\text{ and }\pi(u)\ge\pi(v)}.
+\]
+As intended, the restriction of $c_0$ to $V_1\setminus U$,
+the set of vertices that are not uncoloured,
+is a partial proper colouring of~$G_1$.
+Let $c$ be the partial proper colouring of~$G$ obtained by further restricting~$c_0$
+to $V\setminus U$.
+The residual subgraph of~$G$ with respect to~$c$ is therefore the induced subgraph $G_c=G_1[V\cap U]$.
+Let~$\Delta'$ be the maximum degree of $G_c$, as in the statement of the theorem.
+For every vertex~$v\in V\cap U$,
+we write $\del(v)=c(N_G(v)\setminus U)$
+for the set of colours used by neighbours of~$v$ under $c$.
+The residual list-assignment of $G_c$ is defined as
+$L_c(v)=L(v)\setminus \del(v)$ for every $v\in V\cap U$.
+Further, define $k'= k-(1-\mu)(1-\eps_{\ref{col_result}}(\sigma)+\iota/2)\Delta - \sqrt{\Delta}\log^2\Delta$.
+We aim to prove that $c$, $G_c$, $L_c$, $k'$ and~$\Delta'$ satisfy the theorem with positive
+probability.
+
+In order to have $|L_c(v)|\geq k'$,
+it suffices to prevent the following ``bad'' event for every $v\in V\cap U$:
+\begin{equation}\label{eq:bad1}
+  |\del(v)| < k-k'
+  \tag{$B_v$}.
+\end{equation}
+In order to ensure that $G'$ is a $\mu$-quasirandom subgraph of~$G$, we need to prevent
+the following event~$B_{u,v}$
+for every $u,v\in V(G)\cap U$:
+\begin{equation}\label{eq:bad2}
+\left||N_G(u)\cap N_G(v)\cap U|-\mu|N_G(u)\cap N_G(v)| \right|> \sqrt\Delta\log^5\Delta
+.
+\tag{$B_{u,v}$}
+\end{equation}
+
+Let us prove that preventing~\eqref{eq:bad1} and~$(B_{v,v})$ % No probability here
+for every $v\in V\cap U$ is enough to ensure the claimed
+bound on the ratio $(k-k')/(\Delta-\Delta')$.
+Indeed, if $(B_{v,v})$ does not hold, then
+\[|d_{G_c}(v)-\mu d_{G}(v)|=\left||N_{G}(v)\cap U|- \mu |N_G(v)|\right|\le \sqrt{\Delta}\log^5\Delta,\]
+so in particular $d_{G_c}(v)=\mu\Delta + O(\sqrt{\Delta}\log^5\Delta)$
+for every $v\in V\cap U$,
+so $\Delta'=\mu\Delta + O(\sqrt{\Delta}\log^5\Delta)$.
+It follows from this and the definition of~$k'$ that
+\[
+\frac{k-k'}{\Delta-\Delta'} =
+\frac{(1-\mu)(1-\eps_{\ref{col_result}}(\sigma)+\iota/2)\Delta+ \sqrt\Delta\log^2\Delta}{\Delta-\mu\Delta + O(\sqrt{\Delta}\log^5\Delta)}= 1-\eps_{\ref{col_result}}(\sigma)+\frac\iota2+ O(\Delta^{-1/2}\log^5\Delta).
+\]
+If $\Delta_{\ref{lem:list colouring}}$ is large enough, then the
+$O(\Delta^{-1/2}\log^5\Delta)$ term above is smaller than~$\iota/2$
+for every $\Delta\ge\Delta_{\ref{lem:list colouring}}$.
+
+Given a colour~$a$,
+denote~$V_{a}$ the set of vertices of~$V_1$ whose list contains~$a$.
+Recall that by Claim~\ref{claim:colour regular},
+the graph $G_1[V_{a}]$ is $\sigma$-sparse and $\Delta$-regular.
+The key property of the random colouring $c_0$ is that the independent set
+$\bI_a=c_0^{-1}(\{a\})\cap U$ of~$G_1[V_a]$ that is coloured~$a$
+(after uncolouring) is distributed as the independent set~$\bI$ generated by the procedure
+described in Subsection~\ref{sub:generating independent set} applied to the graph~$G_1[V_a]$
+with parameter
+$\gamma'=\Delta/k=\Delta/\lceil\Delta/\gamma\rceil$.
+%
+Therefore, applying Theorem~\ref{thm:independent} with $\iota'=\iota/2$ first gives that
+\begin{equation}\label{eq:Ia density}
+\left|\Prob[v \in \bI_a] - \frac{1-e^{-\gamma'}}{\Delta}\right|\leq\frac{2}{\Delta^2},
+\end{equation}
+and second that
+\begin{equation}\label{eq:probability Ia empty}
+\frac{\Prob[\bI_a\cap N_{G_1}(v)\neq\varnothing]}{\E[|\bI_a\cap N_{G_1}(v)|]}< 1-\eps_{\ref{col_result}}(\sigma)+\frac{\iota}{2}
+\end{equation}
+for every $v\in V_1$ and $a\in L(v)$.
+
+Set $\mu'=1-(1-e^{-\gamma'})/\gamma'$.
+Recall that $\gamma'=\Delta/{\lceil\Delta/\gamma\rceil}=\gamma+O(1/\Delta)$, so
+$\mu'=\mu+O(1/\Delta)$.
+Since the set of coloured vertices is $V_1\setminus U$ is the disjoint union
+$\bigcup_{a}\bI_a$ on all the colours of~$L$, Equation~\eqref{eq:Ia density} gives
+\[
+\left|\Prob[v \in U] - \mu'\right| =
+\left|\Prob[v \notin U] - \frac{1-e^{-\gamma'}}{\gamma'}\right| \leq
+\sum_{a\in L(v)}\left|\Prob[v \in I_a] -\frac{1-e^{-\gamma'}}{\Delta} \right|
+\leq |L(v)|\cdot\frac{2}{\Delta^2}
+\leq \frac{2}{\Delta}
+\]
+for every~$v\in V_1$.
+As a consequence, $\Prob[v\in U]=\mu + O(1/\Delta)$.
+
+Given~$v\in U$, let us estimate the expected size of $\del(v)$.
+A fixed colour $a\in L(v)$ is in $\del(v)$
+if at least one neighbour of~$v$ in $G$ is selected in $\bI_a$,
+that is, if $N_G(v)\cap\bI_a\neq\varnothing$.
+Since $N_{G}(v)$ is a subset of $N_{G_1}(v)$,
+it follows from~\eqref{eq:probability Ia empty} that
+$\Prob[a\in\del(v)]<
+(1-\eps_{\ref{col_result}}(\sigma)+\iota/2)\E[|\bI_a\cap N_{G_1}(v)|]$.
+Note further that
+$\sum_{a\in L(v)}\E[|\bI_a\cap N_{G_1}(v)|]=\E[\bI_a\setminus U]\leq(1-\mu)\Delta+O(1)$.
+Consequently,
+\[
+\E[|\del(v)|] = \sum_{a\in L(v)}\Prob[a\in\del(v)] \leq
+\left(1-\eps_{\ref{col_result}}(\sigma)+\frac{\iota}{2}\right)(1-\mu)\Delta + O(1),
+\]
+and so we need to prove the following concentration statement.
+\begin{claim}\label{claim:emptiness concentration}
+  If $\Delta$ is large enough then \[
+  \Prob[\left| |\del(v)| - \E[|\del(v)|]\right|
+  \ge \sqrt{\Delta}\log\Delta]\le\Delta^{-\frac{1}{2}\log\log\Delta}.
+    \]
+\end{claim}
+
+
+Moreover,
+$\E[|N_G(u)\cap N_G(v)\cap U|]=\sum_{w\in N_G(u)\cap N_G(v)}\Prob[w\in U]=\mu|N_G(u)\cap N_G(v)|$.
+We use the following statement to exclude~\eqref{eq:bad2}.
+\begin{claim}\label{claim:set concentration}
+  Let $S$ be a set of vertices with $|S|\le \Delta$.
+  Then if $\Delta$ is large enough,
+    \[
+    \Prob[~\left|\,|S\cap U|-\E[|S\cap U|]\,\right| \ge
+      \sqrt{\Delta}\log^2\Delta~]\le\Delta^{-\frac{1}{2}\log\log\Delta}.
+    \]
+\end{claim}
+Assuming Claims~\ref{claim:emptiness concentration} and~\ref{claim:set concentration},
+we apply the Lov\'asz local lemma to show that, with positive probability, neither of the events~\eqref{eq:bad1} and~\eqref{eq:bad2} occurs.
+
+The event~\eqref{eq:bad2} can only happen when~$u$ and~$v$ are at distance at most~$2$, so we restrict our attention to these cases.
+The final state of a vertex in the procedure only depends on the state of the colours and priorities of its neighbours, so the final state of two vertices at distance at least~$4$ are independent.
+Taking into account that~\eqref{eq:bad2} concerns the neighbourhood of~$u$ and~$v$,
+the number of bad events correlated with~\eqref{eq:bad1} or~\eqref{eq:bad2}
+is generously bounded by $d=\Delta^4(\Delta^2+1)<\Delta^7$.
+The upper bound $p:=\Delta^{-\frac{1}{2}\log\log\Delta}$ on the probability of a bad event therefore satisfies
+$4pd<1$ for $\Delta$ greater than some $\Delta_0$,
+so the Lov\'asz local lemma proves the theorem.
+
+It only remains to show that the random variables $|\del(v)|$ and $|N(u)\cap N(v)\cap U|$
+are concentrated, as asserted in Claims~\ref{claim:emptiness concentration}
+and~\ref{claim:set concentration}.
+To do so, we use Theorem~\ref{thm:downward certs}.
+
+% Actually a weaker corollary of Talagrand is enough for Claim~\ref{claim:emptiness concentration}
+\begin{proof}[Proof of Claim~\ref{claim:emptiness concentration}]
+  Consider $X=|\del(u)|$ as a random variable on the product space
+  $\Omega=\Pi_{v\in V}\Omega_v$,
+  where the elements of $\Omega_v$ are the pairs $(c_0(v), \pi(v))$.
+  We prove the concentration of $X$ by applying
+  Theorem~\ref{thm:downward certs} with no exceptional outcome,
+  that is, with $\Omega^*=\varnothing$.
+
+  The coordinates that can decrease~$X(\omega)$ are the vertices of~$N(u)$,
+  and for each $v\in N(u)$ that is uncoloured in~$\omega$,
+  we choose one neighbour $\phi(v)$ of~$v$ that uncolours~$v$,
+  that is, such that $c_0(v)=c_0(\phi(v))$ and $\pi(v)\ge \pi(\phi(v))$.
+  We then define $I=N(u)\cup\phi(N(u)\cap U)$.
+  The set~$I$ has size at most $2\Delta$. 
+
+  Consider another outcome~$\omega'\in\Omega$.
+  A colour~$a$ that is in $\del(u)$ for $\omega$ is also in $\del(u)$ for $\omega'$
+  unless they differ on a coordinate $w$ corresponding to one of the two following
+  situations:
+  $c_0(w)=a$ for $\omega$ and $w$ is a neighbour of~$v$; or
+  $c_0(w)=a$ for $\omega'$ and $w=\phi(v)$ for some neighbour~$v\in N(u)$ with colour $a$
+  (for $\omega$).
+  Note that such a vertex $w$ is part of~$I$ and can correspond to each situation for
+  only one colour.
+  As a consequence, if $\omega$ and $\omega'$ differ in fewer than $t/2$ coordinates,
+  then $X(\omega')$ is at least $X(\omega)-t$.
+
+  Applying Theorem~\ref{thm:downward certs} with $s=2\Delta$, $c=2$ and $t=\sqrt{\Delta}\log\Delta$ gives
+\[
+\Prob[|X-\E[X]|\ge \sqrt{\Delta}\log\Delta]
+\le 4e^{-\frac{\log^2\Delta}{64}}< \Delta^{-\log\Delta}.\qedhere
+\]
+\end{proof}
+
+\begin{proof}[Proof of Claim~\ref{claim:set concentration}]
+  Consider $X=S\cap U$ as a random variable on the product space $\Omega=\prod_{v\in V}\Omega_v$,
+  where the elements of $\Omega_v$ are the pairs $(c_0(v), \pi(v))$.
+  Let us show that $X=|S\cap U|$ has a downward $(s,c)$-certificate.
+
+  We first define a set~$\Omega^*$ of exceptional outcomes as
+  \[
+  \Omega^*=\left\{ |\sst{v\in N(u)}{c(u)=i}| \ge \log\Delta \text{ for some } i \in \N\right\},
+  \]
+  i.e. the set of events in which a particular colour appears
+  (with respect to~$c_0$) more than $\log\Delta$ times in $S$.
+
+  Let us estimate $\Prob[\Omega^*]$.
+  % Adapted from Bruhn and Joos, p18
+  For each colour~$x$, let~$s_x$ be the number of vertices of~$S$
+  with $x$ in their list.
+  Now, the probability that~$S$ contains more than $\log\Delta$ vertices coloured
+  with~$x$ is at most 
+  \[
+  \sum_{i = \log\Delta}^{s_x}{s_x \choose i}
+  \frac{\gamma^i}{\Delta^i}
+  \le \sum_{i = \log\Delta}^{s_x}{\Delta \choose i}
+  \frac{\gamma^i}{\Delta^i}
+  \le \sum_{i = \log\Delta}^{s_x} \left(\frac{e\Delta}{i}\right)^i\frac{\gamma^i}{\Delta^i}
+  \le s_x \cdot \left(\frac{\gamma e}{\log\Delta}\right)^{\log\Delta}.
+  \]
+  So by the union bound and a simple double-counting argument,
+  \[
+  \Prob[\Omega^*]\le\sum_{x\in\N}s_x\cdot \left(\frac{\gamma e}{\log\Delta}\right)^{\log\Delta}
+  \le |S|\cdot k\cdot\left(\frac{\gamma e}{\log\Delta}\right)^{\log\Delta}
+  \le \Delta^2\cdot\left(\frac{\gamma e}{\log\Delta}\right)^{\log\Delta}.
+  \]
+  For $\Delta$ large enough,
+  $\Prob[\Omega^*] \le \Delta^{-\frac{2}{3}\log\log\Delta}$.
+
+  Given an unexceptional outcome $\omega\in \Omega\backslash \Omega^*$,
+  define a set of the coordinates that can decrease 
+  $X(\omega)$ as a set $I$ containing the vertices of $S\cap U(\omega)$,
+  as well as for each $v\in S$ that is uncoloured in $\omega$,
+  one neighbour~$\phi(v)$ that uncoloured $v$,
+  that is, such that $c_0(\phi(v))=c_0(v)$ and $\pi(\phi(v))\leq\pi(v)$.
+  This yields a set $I:=(S\cap U)\cup\phi(S\cap U)$ of size at most $2\Delta$.  
+
+  Now, consider another unexceptional outcome $\omega'\in\Omega$ such that
+  $X(\omega')\leq X(\omega)-t$ for some $t$.
+  Note that a vertex $v\in S\cap U(\omega)$ remains uncoloured if the colours and
+  priorities of~$v$ and~$\phi(v)$ remain the same,
+  so $v$ remains uncoloured in $\omega'$
+  unless $\omega'$ and $\omega$ differ in one of the coordinates $v$ or $\phi(v)$.
+  %
+  Moreover, for a vertex $u\in I$, the set $\phi^{-1}(\{u\})$ is a monochromatic subset of~$S$
+  and therefore has size at most $\log\Delta$ in an unexceptional outcome,
+  so the coordinate $u$ is part of the certificate of at most $c:=\log\Delta+1$ vertices.
+  As consequence, $\omega$ differs from $\omega'$ in at least $t/c$ coordinates.
+  
+  Applying Theorem~\ref{thm:downward certs} with $s=2\Delta$, $c=\log\Delta+1$
+  and $t=\sqrt{\Delta}\log^2\Delta$ gives the bound
+  \[
+  \Prob[\left|X-\E[X]\right|\ge t] \le
+  4e^{-\frac{\log^4\Delta}{32(\log\Delta+1)^2}}+4\Delta^{-\frac{2}{3}\log\log\Delta},
+  \]
+  which is less than $\Delta^{-\frac{1}{2}\log\log\Delta}$
+  when $\Delta$ is large enough.
+  This completes the proof of the claim.
+\end{proof}
+This completes the proof of the lemma.
+\end{proof}
+
+\subsection{Proof of Theorem~\ref{col_result}}\label{sub:proof}
+
+Let us wrap things up.
+We need to combine Lemma~\ref{lem:list colouring} with a result implicit in the proof of~\cite[Lem.~3.20]{BPP18+}. 
+
+\begin{lemma}[\cite{BPP18+}]\label{lem:maintain-sparsity}
+  For each $\iota>0$ and $0<\sigma<1$, there exists
+  $\Delta_{\ref{lem:maintain-sparsity}}=\Delta_{\ref{lem:maintain-sparsity}}(\iota)$ %only iota
+  such that if $G$ is a  $\sigma$-sparse graph with maximum degree $\Delta\ge\Delta_{\ref{lem:maintain-sparsity}}$ then every $\mu$-quasirandom subgraph of $G$ is $(\sigma-\iota)$-sparse.
+  \end{lemma}
+ \begin{proof}
+ We take the following fact, without proof, from the end of the proof of~\cite[Lem.~3.20]{BPP18+}. For all vertices $u$ in a $\mu$-quasirandom subgraph $G'$ of $G$ 
+ \[
+ |E(G'[N_{G'}(u)])|<(1-\sigma){\Delta\choose 2}+O(\Delta^{3/2}\log^5\Delta).
+ \]
+ Thus $G'$ is $(\sigma-\iota)$-sparse, where $\iota=O(\Delta^{-1/2}\log^5\Delta)$.  
+ \end{proof}
+
+
+To prove our main result, we repeatedly apply Lemma~\ref{lem:list colouring}.
+We start with a comparatively small segment of the palette $[\lceil (1-\eps_{\ref{col_result}}(\sigma)+\iota)\Delta \rceil]$ as the list for every vertex.
+In each iteration, we apply Lemma~\ref{lem:list colouring} to the residual subgraph. This yields a new residual subgraph of slightly smaller maximum degree but also of slightly smaller guaranteed list sizes.
+We must pad each of the lists using another small, so far unused, segment of $[\lceil (1-\eps_{\ref{col_result}}(\sigma)+\iota)\Delta \rceil]$ so that the ratio $\gamma$ in our application of Lemma~\ref{lem:list colouring} is consistent.
+Note that Lemma~\ref{lem:maintain-sparsity} will help to ensure that we can still apply Lemma~\ref{lem:list colouring} in the following iteration, if so needed.
+Once the residual subgraph has had its maximum degree fall below a certain threshold, we can greedily colour it to successfully complete the procedure.
+
+In the proof, it will be handy to define for any graph $G$ the (local) sparsity $\sigma(G)$ as the largest $\sigma>0$ for which $G$ is $\sigma$-sparse.
+
+\begin{proof}[Proof of Theorem~\ref{col_result}]
+Fix $\iota$ and $\sigma$, and let $G$ and $\Delta=\Delta(G)$ be as in the statement, where $\Delta_{\ref{col_result}}=\Delta_{\ref{col_result}}(\iota)$ will satisfy certain inequalities to be specified during the proof.
+Let $\gamma>\min\{2,\gamma_{\ref{lem:list colouring}}\}$, where $\gamma_{\ref{lem:list colouring}}=\gamma_{\ref{lem:list colouring}}(\iota/3)$ is as given in Lemma~\ref{lem:list colouring}, and let $\mu = 1-(1-e^{-\gamma})/\gamma$. 
+Let $k=\lceil\Delta/\gamma\rceil$, and let $L$ be the $k$-list-assignment defined by $L(u)=[k]$ for all $u\in V(G)$.
+We iteratively colour the graph using Lemma~\ref{lem:list colouring}. 
+
+Initialising $\kappa=k$, $\Gamma=G$ and $\Lambda=L$, we perform the following procedure.
+\begin{enumerate}
+    \item\label{colstep1} Let $c$ be the partial proper $\Lambda$-colouring of $\Gamma$ given by Lemma~\ref{lem:list colouring}, with specific parameter choices $\gamma\leftarrow\gamma$, $\iota\leftarrow\iota/3$, $\sigma\leftarrow\sigma(\Gamma)$, $\Delta\leftarrow\Delta(\Gamma)$, $k\leftarrow\kappa$, and let $\Gamma_c$ be the $\mu$-quasirandom residual subgraph of maximum degree $\Delta'$ with residual list-assignment $\Lambda_c$ satisfying $|\Lambda_c(u)| \ge k'$ for each $u\in V(\Gamma_c)$.
+    \item\label{colstep2}  Arbitrarily delete colours from each list so that each list in $\Lambda_c$ has size exactly $k'$. As $k'< k''=:\lceil\Delta'/\gamma\rceil$ (see below) we add the elements $\{\kappa+1,\dots,\kappa+1+k''-k'\}$ to each list in order to maintain $\gamma$, the ratio of maximum degree to list-size.
+    \item\label{colstep3} If $\Delta'\ge\lfloor\iota\Delta/3\rfloor$ replace $\Gamma$ with $\Gamma_c$, $\Lambda$ with $\Lambda_c$, $\kappa$ with $\kappa+1+k''-k'$, and return to Step~\ref{colstep1}.
+\end{enumerate}
+In Step~\ref{colstep2} of the procedure, we used the fact that $k''=\lceil\Delta'/\gamma\rceil > k'$ which can be seen by comparing $k''$ to the value of $k'$ given in Lemma~\ref{lem:list colouring} 
+\[
+\frac{\kappa-k''}{\Delta(\Gamma)-\Delta'}= \frac{\kappa-\left\lceil\Delta'/\gamma\right\rceil}{\Delta(\Gamma)-\Delta'}\leq\frac{\gamma \kappa-\Delta'}{\gamma(\Delta(\Gamma)-\Delta')}  \le\frac1\gamma<1-\eps_{\ref{col_result}}(\sigma(\Gamma))-\iota/3 \leq \frac{\kappa-k'}{\Delta(\Gamma)-\Delta'}
+\]
+
+where the penultimate inequality holds since $\gamma \ge \gamma_{\ref{lem:list colouring}}>2$.
+
+
+In order to apply Lemma~\ref{lem:list colouring} in Step~\ref{colstep1} we must have that $\Delta(\Gamma)\ge\Delta_{\ref{lem:list colouring}}$ where $\Delta_{\ref{lem:list colouring}}=\Delta_{\ref{lem:list colouring}}(\iota/3,\gamma)$ is as given by Lemma~\ref{lem:list colouring} and so we want $\lfloor\iota\Delta_{\ref{col_result}}/3\rfloor\ge \Delta_{\ref{lem:list colouring}}$. 
+With each application of Lemma~\ref{lem:list colouring} in Step~\ref{colstep1} we have by $\mu$-quasirandomness that
+\[
+\Delta(\Gamma_c)\le \Delta(\Gamma)\left(
+\mu + \xi(\Delta(\Gamma))
+%\frac{\log^5(\Delta(\Gamma))}{\sqrt{\Delta(\Gamma)}}
+\right),
+\] 
+where $\xi(x):=(\log^5 x)/\sqrt{x}$.
+Note that $\xi(x)$ is decreasing in $x$ for all $x\ge e^{10}$ (say).
+Therefore, since we always maintain that $\Delta(\Gamma)\ge \lfloor \iota\Delta/3\rfloor$, the maximum degree in the residual subgraph will decrease each time by at least a factor $\mu+\iota'$, where $\iota':=\xi(\lfloor \iota\Delta_{\ref{col_result}}/3\rfloor)$, provided $\lfloor \iota\Delta_{\ref{col_result}}/3\rfloor \ge e^{10}$.
+It then follows that the procedure will terminate after at most 
+$n=\lceil\log_{\mu + \iota'}(\iota/3)\rceil$ steps. 
+
+Throughout the procedure, there may be some decrease in $\sigma(\Gamma)$, which we must control.
+In particular, it will suffice to ensure that $\eps_{\ref{col_result}}(\sigma(\Gamma))\ge\eps_{\ref{col_result}}(\sigma)-\iota/3$ holds each time we apply Lemma~\ref{lem:list colouring}.
+Note that $\eps_{\ref{col_result}}(x)$ is a continuous, strictly increasing function of $x$ for $0<x<1$.
+Let $0<\sigma'<\sigma$ be the unique choice satisfying $\eps_{\ref{col_result}}(\sigma')=\eps_{\ref{col_result}}(\sigma)-\iota/3$ 
+and let $\iota''=(\sigma-\sigma')/n$.
+By Lemma~\ref{lem:maintain-sparsity} there is some $\Delta_{\ref{lem:maintain-sparsity}}=\Delta_{\ref{lem:maintain-sparsity}}(\iota'')$ such that if $\Delta(\Gamma)\ge \Delta_{\ref{lem:maintain-sparsity}}$ then $\sigma(\Gamma_c)\ge \sigma(\Gamma)-\iota''$. Thus throughout the procedure we have $\sigma(\Gamma)\ge \sigma-n\iota''=\sigma'$, implying that $\eps_{\ref{col_result}}(\sigma(\Gamma))\ge\eps_{\ref{col_result}}(\sigma')=\eps_{\ref{col_result}}(\sigma)-\iota/3$, as desired.
+We therefore also want $\lfloor \iota\Delta_{\ref{col_result}}/3\rfloor \ge \Delta_{\ref{lem:maintain-sparsity}}$.
+
+In summary, with $\Delta_{\ref{col_result}}=\frac{4}{\iota}\max\left\{\Delta_{\ref{lem:list colouring}},e^{10},\Delta_{\ref{lem:maintain-sparsity}}\right\}$, we run the procedure above (over at most $n$ iterations).
+In each application of Lemma~\ref{lem:list colouring} we have sparsity $\sigma(\Gamma)$ close enough to $\sigma$ that the ratio of colours used, $\kappa-k'$, to reduction in maximum degree, $\Delta(\Gamma)-\Delta'$, is at most
+$1-\eps_{\ref{col_result}}(\sigma)+2\iota/3$. Since overall we reduce the maximum degree by at most $\Delta$, we ultimately obtain a partial proper colouring of $G$ using at most 
+$(1-\eps_{\ref{col_result}}(\sigma)+2\iota/3)\Delta$ colours. 
+Moreover, the ultimate residual subgraph has maximum degree less than $\lfloor\iota\Delta/3\rfloor$, and so we may complete to a proper colouring of $G$ greedily using at most $\iota\Delta/3$ additional colours. 
+\end{proof}
+
+
+\begin{rem}
+The method of colouring that we employ requires that at each step we draw from a common reservoir of thus far unused colours. This is an obstacle to extending our results to list colouring. Note that the methods of Bonamy {\em et al.}~did include list colouring and the more general notion of correspondence colouring.
+\end{rem}
+
+
+\section{Applications of Theorem~\ref{col_result}}\label{sec:applications}
+
+\subsection{Proof of Theorem~\ref{strong_bound}}\label{sub:ErdosNesetrilproof}
+
+As mentioned earlier, Bruhn and Joos~\cite{BrJo18} established a good upper bound on the local density in $L(G)^2$ for any $G$. Specifically, they showed that any edge $e$ of a graph $G$ has a neighbourhood in $L(G)^2$ that induces a subgraph of $L(G)^2$ with at most $1.5\Delta(G)^4+5\Delta(G)^3$ edges. 
+One might hope for an even better result in this direction, as the corresponding local edge count in $L(G)^2$ for the hypothetical extremal graphs $G$ for the Erd\H{o}s--Ne\v{s}et\v{r}il conjecture is strictly less than $0.8\Delta(G)^4$.
+However, another construction based on Hadamard codes shows that the bound is asymptotically best possible. In order to circumvent this obstacle Bonamy {\em et al.}~\cite{BPP18+} showed it beneficial to restrict attention to a subgraph of high minimum degree --- as the other vertices may be coloured afterwards greedily --- and the considered subgraph has lower local density. More precisely, with the aid of Bruhn and Joos's result, they showed the following result, which we use too here combined with Theorem~\ref{col_result}.
+
+\begin{theorem}[Bonamy {\em et al.}~\cite{BPP18+}]\label{thm:BPP18+}
+Fix $0\le \eps\le 0.3$. For any graph $G$, let $H=L(G)^2$.
+Let $F$ be a maximum subset of the vertices of $H$ that induces a subgraph of minimum degree $\lceil(2-\eps)\Delta(G)^2\rceil$. For any $f\in F$, the number of edges in the subgraph $H[N_{H[F]}(f)]$ induced by the neighbourhood of $f$ (in $H[F]$) is at most
+\[
+\left(\frac{31}{6}-\frac{128}{3(10-3\eps)}+4\eps-\eps^2\right)\Delta(G)^4.
+\]
+\end{theorem}
+
+\begin{proof}[Proof of Theorem~\ref{strong_bound}]
+Let $0<\iota,\sigma<1$ be constants to be chosen later in the proof, let $\Delta_0=\Delta_{\ref{col_result}}/2$, and let $G$ be a graph with $\Delta(G)\ge \Delta_0$.
+Let $\eps=0.228$, $H=L(G)^2$, and $F\subseteq V(H)$ the subset as in Theorem~\ref{thm:BPP18+}.
+It suffices to show that the subgraph $H[F]$ induced by $F$ has chromatic number satisfying $\chi(H[F])\le \lceil(2-\eps)\Delta(G)^2\rceil$. For then if $\chi(H) > \lceil(2-\eps)\Delta(G)^2\rceil$, there would be some minimal $F' \supsetneq F$ with $\chi(H[F'])> \lceil(2-\eps)\Delta(G)^2\rceil$, and since $H[F']$ would then have minimum degree at least $\lceil(2-\eps)\Delta(G)^2\rceil$, this would contradict the choice of $F$.
+By Theorem~\ref{thm:BPP18+}, for any $f\in F$, the number of edges in the subgraph $H[N_{H[F]}(f)]$ induced by the neighbourhood of $f$ (in $H[F]$) is at most
+\[
+\left(\frac{31}{6}-\frac{128}{3(10-3\eps)}+4\eps-\eps^2\right)\Delta(G)^4
+\le (1-\sigma)\binom{2\Delta(G)^2}{2},
+\]
+where we take the choice $\sigma=0.277$.
+By Theorem~\ref{col_result}, $\chi(H[F])\le (1-\eps_{\ref{col_result}}(\sigma)+\iota)2\Delta(G)^2$, which one can easily verify is at most $(2-\eps)\Delta(G)^2$ if $\iota\le 0.0004$. This completes the proof.
+\end{proof}
+
+\subsection{Proof of Theorem~\ref{Reed_bound}}\label{sub:Reedproof}
+
+The proof essentially follows the plan of King and Reed~\cite{KiRe16}.
+In addition to Theorems~\ref{col_result} and~\ref{thm:Ree98}, we will need the following two results. Recall that a graph is said to be {\em $c$-critical} if it is not properly $c$-colourable, but every proper subgraph is.
+
+\begin{theorem}[King~\cite{Kin11}]\label{thm:Kin11}
+Every graph $G$ satisfying $\omega(G)>\frac23(\Delta(G)+1)$ contains an independent set that intersects every clique of size $\omega(G)$.
+\end{theorem}
+
+\begin{theorem}[Delcourt and Postle~\cite{DePo17}]\label{thm:DePo17}
+For each $\eps,\alpha>0$, if a graph $G$ is 
+$\lceil(1-\eps)(\Delta(G)+1)\rceil$-critical
+and $\omega(G) \le(1-\alpha)(\Delta(G)+1)$, then it is $(1-\alpha/2-\eps)(\alpha-2\eps)$-sparse.
+\end{theorem}
+
+\begin{proof}[Proof of Theorem~\ref{Reed_bound}]
+Let $\Delta_0 = \max\{2\Delta_{\ref{col_result}}(\sigma)/\eps_{\ref{thm:Ree98}},\Delta_{\ref{thm:Ree98}}\}$ where $\sigma>0$ is some constant to be determined later in the proof, and let $G$ be a graph with $\Delta(G)\ge \Delta_0$.
+Letting $\zeta=0.199$, we wish to show that $\chi(G) \le \lceil(1-\zeta)(\Delta(G)+1)+\zeta\omega(G)\rceil$.
+Note that $\Delta(G)-2 \Delta_{\ref{col_result}}(\sigma)\ge \Delta(G)-\eps_{\ref{thm:Ree98}}\Delta_0 \ge (1-\eps_{\ref{thm:Ree98}})\Delta(G)$.
+We may therefore assume by Theorem~\ref{thm:Ree98} that $\omega(G) < \Delta(G)-2 \Delta_{\ref{col_result}}(\sigma)$. %(Note here we are essentially `bootstrapping' Reed's original result to improve on it.)
+
+Next we generate a graph $G'$ from $G$ with the following procedure.
+Let $G_0=G$. For $i=0,1,\dots$, we execute the following steps.
+If $\omega(G_i)\le \frac23(\Delta(G_i)+1)$, then output $G'=G_i$ and $s=i$, and then stop.
+Otherwise, we are guaranteed from Theorem~\ref{thm:Kin11} an independent set $S_i\subseteq V(G_i)$ that intersects every clique in $G_i$ of size $\omega(G_i)$.
+Arbitrarily extend $S_i$ to a maximal independent set $S_i'$ of $G_i$. Let $G_{i+1}=G_i-S_i'$.
+
+We note for each $i=0,1,\dots$ the following facts. Since $S_i'$ is maximal, we have $\Delta(G_{i+1})\le \Delta(G_i)-1$. Since $S_i'$ intersects every maximum clique, we have $\omega(G_{i+1})=\omega(G_i)-1$.
+Since $S_i'$ is an independent set, we have $\chi(G_{i+1})\ge \chi(G_i)-1$.
+The clique number decreases by exactly one at each step, so the procedure terminates, and the number $s$ of steps executed is at most $\omega(G)$.
+Note also that $\Delta(G')\le \Delta(G)-s$, $\omega(G')=\omega(G)-s$ and $\chi(G')\ge \chi(G)-s$.
+
+Suppose first that $\Delta(G')< \Delta_{\ref{col_result}}(\sigma)$. Then, since $\chi(G')\le\Delta(G')+1$, we have 
+\begin{align*}
+\chi(G) 
+& \le \chi(G') + s
+\le \Delta_{\ref{col_result}}(\sigma) + s
+ \le \Delta_{\ref{col_result}}(\sigma) + (1-\zeta)\omega(G) + \zeta\omega(G) \\
+& < \Delta_{\ref{col_result}}(\sigma) + (1-\zeta)(\Delta(G)-2 \Delta_{\ref{col_result}}(\sigma)) + \zeta\omega(G)\\
+& = (1-\zeta)(\Delta(G)+1)+\zeta\omega(G) + (2\zeta-1)\Delta_{\ref{col_result}}(\sigma)\\
+& = (1-\zeta)(\Delta(G)+1)+\zeta\omega(G),
+\end{align*}
+in which case we are done. So from here on, we may assume that $\Delta(G')\ge \Delta_{\ref{col_result}}(\sigma)$.
+
+Note that if we are able to prove that $\chi(G')\le \lceil(1-\zeta)(\Delta(G')+1)+\zeta\omega(G')\rceil$, then we will be finished because we have from the properties of $G'$ that $\chi(G)\le\chi(G')+s \le \lceil(1-\zeta)(\Delta(G')+1)+\zeta\omega(G')\rceil+s \le \lceil (1-\zeta)(\Delta(G)+1)+\zeta\omega(G)\rceil$.
+Since $(1-\zeta)(\Delta(G')+1)+\zeta\omega(G')< (1-\zeta/3)(\Delta(G')+1)$, we may assume without loss of generality that $G'$ is $\lceil(1-\zeta/3)(\Delta(G')+1)\rceil$-critical.
+Now we may apply Theorem~\ref{thm:DePo17} with $\alpha=1/3$ and $\eps=\zeta/3$ to deduce that $G'$ is $\sigma$-sparse with the choice
+$\sigma=(5-2\zeta)(1-2\zeta)/18$.
+We then have from Theorem~\ref{col_result} that $\chi(G') \le (1- \eps_{\ref{col_result}}(\sigma))\Delta(G')$. A quick calculation with the choice $\zeta=0.199$ checks that
+\[
+\frac{\zeta}3 \le \eps_{\ref{col_result}}\left(\frac{(5-2\zeta)(1-2\zeta)}{18}\right)
+\]
+giving a contradiction to the fact that $G'$ is $\lceil(1-\zeta/3)(\Delta(G')+1)\rceil$-critical. This completes the proof.
+\end{proof}
+
+
+
+
+
+\bibliographystyle{abbrv}
+\bibliography{references}
+
+\end{document}
+

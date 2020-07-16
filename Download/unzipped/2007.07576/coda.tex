@@ -1,0 +1,54 @@
+\section{Conclusions}\label{section:coda}
+
+The ultimate goal to achieve a complete substitution calculus of dinatural transformations is to obtain an appropriate functor over $\gcf$
+\[
+M \colon \ring{\FC \B \C} {\FC \A \B} \to \FC \A \C
+\]
+which, \emph{de facto}, realises a \emph{formal} substitution of functors into functors and transformations into transformations as an \emph{actual} new functor or transformation. As in Kelly's case, {horizontal} composition of dinatural transformations will be at the core, we believe, of the desired functor; the rules of vertical composition are, instead, already embodied into the definition of $\FC \B \C$.
+
+Such $M$ will arise as a consequence of proving that $\WCFover\gcf$ is a monoidal closed category, much like Kelly did, by showing that the natural isomorphism~(\ref{natural isomorphism (A circ B, C) -> (A,{B,C})}) extends to
+\[
+\WCFover\gcf (\ring \A \B , \C) \cong \WCFover\gcf (\A , \FC \B \C).
+\]
+Necessarily then, we will first have to show that the substitution category $\ring \A \B$ is itself an object of $\WCFover\gcf$. Following Kelly's steps described in~\cite[\S 2.1]{kelly_many-variable_1972}, this will be done by extending our functor $\ring{}{} \colon \WCFover\gcf \times \Cat \to \Cat$ to a functor
+\[
+\ring{}{} \colon \WCFover\gcf \times \WCFover\gcf \to \WCFover\gcf,
+\]
+exhibiting $\WCFover\gcf$ as a monoidal category, with tensor $\ring{}{}$. 
+To do so in his case, Kelly defined $\ring \A \B$ just as before, ignoring the augmentation on $\B$, and then augmented $\ring \A \B$ using the augmentations of $\A$ and $\B$. In fact, what he did, using the category $\Per$ of permutations, was to regard $\Per$ as a category over itself in the obvious way and then to define a functor $P \colon \ring \Per \Per \to \Per$ that computes substitution of permutations into permutations. That done, he set $\Gamma \colon \ring \A \B \to \Per$ as a composite
+\[
+\begin{tikzcd}
+\ring \A \B \ar[d,"\ring {\Gamma_\A} {\Gamma_\B}"'] \ar[r] & \Per \\
+\ring \Per \Per \ar[ur,"P"']
+\end{tikzcd}
+\]
+This suggests, as usual, to do the same in our case. Hence, the next step will be to come up with a substitution functor
+\[
+S \colon \ring \gcf  \gcf \to \gcf,
+\]
+which is tantamount to define an operation of substitution of graphs, and then define $\Gamma \colon \ring \A \B \to \gcf$ as
+\begin{equation}\label{augmentation of A ring B via G ring G}
+\begin{tikzcd}
+\ring \A \B \ar[d,"\ring {\Gamma_\A} {\Gamma_\B}"'] \ar[r] & \gcf\\
+\ring \gcf \gcf \ar[ur,"S"']
+\end{tikzcd}
+\end{equation}
+
+A possible hint to how to do this is given by how we defined the horizontal composition of dinatural transformations in Chapter~\ref{chapter horizontal}, and what happened to the graphs of the transformations (that is, we consider the special case of $\A = \B = \FC \C \C$). Looking back at Example~\ref{ex:hc example}, when we computed the first horizontal composition of $\delta$ and $(\eval A B)_{A,B}$, in fact we considered the formal substitution $\eval{}{}\bigl[\delta,([+],\id\C)\bigr]$ in $\ring {\FC \C \C} {\FC \C \C}$, which we then realised into the transformation $\HC \delta {\eval{}{}} 1$. This realisation part is what the desired functor $M$ will do, once properly defined. Now, consider, in $\ring \gcf \gcf$, the formal substitution $\graph{\eval{}{}}\bigl[\graph\delta,[+]\bigr]$, which is the image of $\eval{}{}\bigl[\delta,([+],\id\C)\bigr]$ along the functor $\ring \gf \gf \colon \ring {\FC \C \C} {\FC \C \C} \to \ring \gcf \gcf$. Since $M \colon \ring {\FC \C \C} {\FC \C \C}$ ought to be a functor over $\gcf$, we have that $S\bigl(\graph{\eval{}{}}\bigl[\graph\delta,[+]\bigr]\bigr)$ should be the graph that $\HC \delta {\eval{}{}} 1$ has, which is
+\[
+\begin{tikzpicture}
+\matrix[column sep=1em,row sep=1.5em]{
+    \node[category] (1) {}; & \node[opCategory] (2) {}; & \node[opCategory] (3) {}; & \node[category] (4) {}; \\
+    & \node[component] (A) {}; & & \node[component] (B) {};\\
+    & & & \node[category] (5) {};\\
+};
+\graph[use existing nodes]{
+    1 -> A -> {2,3};
+    4 -> B -> 5;
+};
+\end{tikzpicture}
+\]
+The intuition for it was that we ``bent'' $\graph\delta$ into the U-turn that is the first connected component of $\graph{\eval{}{}}$. A possible approach to a general definition of substitution of graphs into graphs is the following: given two connected graphs $N_1$, $N_2$ in $\gcf$, the graph $S\bigl(N_1[N_2]\bigr)$ is the result of subjecting $N_2$ to all the ramifications and U-turns of $N_1$; in so doing, one would have to substitute a copy of $N_2$ in every \emph{directed path} of $N_1$. 
+This idea is not original, as it was suggested by Bruscoli, Guglielmi, Gundersen and Parigot~\cite{guglielmi_substitution} in private communications to implement substitution of \emph{atomic flows}~\cite{GuglGundStra::Breaking:uq}, which are graphs extracted from certain formal proofs in \emph{Deep Inference}~\cite{Gugl:06:A-System:kl} and they look very much like a morphism in $\gcf$. 
+
+How to put such an intuitive idea into a formal, working definition is the subject of current investigations, and this task has already revealed itself as far from being trivial. Once that is done, the rest should follow relatively easily, and we would expect that the correct compatibility law for horizontal and vertical composition sought in \ref{section compatibility} will become apparent, once the substitution functor $M$ above will be found as part of a monoidal closed structure.

@@ -1,0 +1,454 @@
+%!TEX root = paper.tex
+
+
+We introduce and analyse a randomised procedure to generate an independent set.
+This procedure captures the behaviour of each colour class of the colouring procedure we analyse in Subsection~\ref{sub:list colouring}.
+The idea is to assign to each vertex a random \emph{priority}
+and resolve conflicting edges by removing the endpoint with lower priority.
+
+Fix a parameter $\gamma>0$. Given a $\Delta$-regular graph $G=(V,E)$, the following procedure outputs a random independent set $\bI$ of $G$.
+\begin{enumerate} 
+\item\label{samplestep1} Activate each vertex of~$G$ with probability $\gamma/\Delta$,
+  independently at random.
+  Let $\A$ be the set of activated vertices.
+\item\label{samplestep2} Assign to each activated vertex $v\in \A$ a number $\pi(v)$
+  chosen uniformly at random in $[0,1]$.
+\item\label{samplestep3} In order to resolve any conflict, i.e.~two neighbouring vertices in $\A$,
+  remove the vertex with lower priority $\pi$.
+  This yields the independent set
+  \[\bI=\sst{v\in \A}{\pi(v) > \pi(u) \text{ for every }u \in N(v)\cap \A},\]
+  consisting of all the local maxima of $\pi$ in $G[\A]$.
+\end{enumerate}
+
+The purpose of this section is to prove the following result.
+\begin{theorem}\label{thm:independent}
+  For every $\iota>0$, there are $\Delta_{\ref{thm:independent}}=\Delta_{\ref{thm:independent}}(\iota)$
+  and $\gamma_{\ref{thm:independent}}=\gamma_{\ref{thm:independent}}(\iota)$ such that the following holds.
+  Let $G$ be a $\sigma$-sparse $\Delta$-regular graph with $\Delta\geq\Delta_{\ref{thm:independent}}$,
+  and let
+  $\bI$ be a random independent set obtained by the algorithm above with some parameter
+  $\gamma\geq\gamma_{\ref{thm:independent}}$.
+  For every vertex $r\in V(G)$, 
+\[
+\left|\Prob[r\in \bI]-\frac{1-e^{-\gamma}}{\Delta}\right|\leq \frac{\iota}{\Delta}.
+\]
+Moreover, setting $\bI_r = N(r) \cap \bI$, it holds that
+  \[
+  \frac{\Prob\left[\bI_r \neq \varnothing\right]}{\E\left[|\bI_r|\right]}
+ \leq 
+  1-\eps_{\ref{col_result}}(\sigma)+\iota.
+  \]
+\end{theorem}
+\noindent
+The ratio in Theorem~\ref{thm:independent} can be read as the inverse of the average size of~$\bI_v$
+when $\bI_v$ is non-empty.
+For comparison, if $\bI$ is chosen instead as a random colour class of a proper $\chi$-colouring of~$G$, then this ratio is a lower bound for $\chi/\Delta$.
+After proving Theorem~\ref{thm:independent}, we use the remainder of the section to transfer this bound to the chromatic number, showing that
+$\chi(G)\leq (1-\eps_{\ref{col_result}}(\sigma)+o(1))\cdot\Delta$.
+
+
+In the proof, we say that a vertex $u$ \emph{trumps} a vertex $v$ if $uv$ is an edge,
+$u$ and $v$ are activated and $\pi(u)\ge\pi(v)$.
+With this vocabulary, $\bI$ is the set of activated vertices that are not trumped.
+\begin{proof}[Proof of Theorem~\ref{thm:independent}]
+It is convenient to instead prove a slightly stronger, local version of Theorem~\ref{thm:independent},
+where $\sigma$ is the local sparsity of $r$, so that $G[N(r)]$
+contains exactly $(1-\sigma)\binom{\Delta}{2}$ edges.
+Proving the local version is enough because
+$\eps_{\ref{col_result}}(\sigma)$ is an increasing function of $\sigma$.
+
+For convenience, we define
+\[
+ \I_n=\sst{\{u_i\}_{i=1}^n\subseteq N(r)}{\forall i,j\in\{1,\dots,n\}, ~u_iu_j\not\in E(G)}
+\]
+ as the collection of independent sets of size $n$ in $N(r)$.
+For an independent set
+$\{u_i\}_{i=1}^n\in \mathcal{I}_n$, we define
+\[
+ \Pk(\{u_i\}_{i=1}^n):=\Prob\left[\forall i\in[n],~u_i\in \bI \,\,\middle|\,\, \forall i\in[n],~u_i \in \A\right].
+\]
+ This is the probability that all of the considered vertices
+are retained in the independent set if they were activated in Step~\ref{samplestep1}.
+
+Let us show the first part of the lemma.
+\begin{claim}\label{claim:v in I}
+        For every vertex $v\in V$,
+        it holds that 
+\[
+\Prob[v\in\bI]=
+        \frac{1}{\Delta}\int_0^\gamma\left(1 -\frac{x}{\Delta}\right)^{\Delta} dx=
+\frac{1-e^{-\gamma}}{\Delta}+o\left(\frac{1}{\Delta}\right).
+\]
+\end{claim}
+\begin{proof}
+Assuming that~$v$ is activated
+and given $\pi(v)$, the probability that $v$ is trumped by some
+other vertex $q\in N(v)$ is the probability~$q$ is activated times the probability
+that $\pi(q)\geq\pi(v)$.
+This latter probability is $1-\pi(v)$ because $\pi(q)$ is chosen uniformly at random in $[0,1]$.
+Consequently,
+\[
+        \Prob[q\text{ trumps }v]=\frac{\gamma}{\Delta}(1-\pi(v)) = \frac{\gamma x}{\Delta},
+\]
+where we write $x=1-\pi(v)$ in order to simplify integration.
+Expressing the probability that no neighbour of~$v$ trumps~$v$ as
+$\left(1- \gamma x/\Delta\right)^\Delta$ and integrating over the possible values of $x$,
+we get
+\[
+        \Prob[v\in\bI] =
+        \Prob[v\in\A]\cdot\int_0^1\left(1 -\frac{\gamma x}{\Delta}\right)^{\Delta} dx
+        = \frac{\gamma}{\Delta}\int_0^1\left(1 -\frac{\gamma x}{\Delta}\right)^{\Delta} dx
+        = \frac{1}{\Delta}\int_0^\gamma\left(1 -\frac{x'}{\Delta}\right)^{\Delta} dx'
+\]
+which proves the first part of the claim.
+This value is always less than the limit $(1-e^{-\gamma})/\Delta$
+since
+\[\int_0^\gamma\left(1-\frac{x}{\Delta}\right)^{\Delta}dx\leq\int_0^\gamma e^{-x}dx=1-e^{-\gamma}.
+\]
+For the lower bound, we use the fact $e^{-t}(1-t^2)\leq 1-t$ for every $t\in[0,1]$
+applied to $t=x/\Delta$.
+This gives
+\[\int_0^\gamma\left(1-\frac{x}{\Delta}\right)^{\Delta}dx\geq \int_0^\gamma e^{-x}\left(1-\frac{x^2}{\Delta^2}\right)^{\Delta}dx
+\geq \int_0^\gamma e^{-x}dx -\frac{1}{\Delta}\int_0^\gamma e^{-x}x^2 dx.
+\]
+Last, bounding the second integral by $\int_0^\infty e^{-x}x^2dx=2$,
+we deduce that $\Prob[v\in\bI]\geq (1-e^{-\gamma})/\Delta-2/\Delta^2$. 
+\end{proof}
+As a consequence of Claim~\ref{claim:v in I},
+the expected size of $\bI_r=\bI\cap N(r)$ is
+\[
+\E[|\bI_r|]=\sum_{v\in N(r)}\Prob[v\in \bI]= 1 - e^{-\gamma} + o(1).
+\]
+We now prove the following reduction.
+\begin{claim}\label{claim:no outside p3}
+We may assume that no pair of distinct vertices $u,v\in N(r)$ have a common neighbour outside of
+$N[r]$.
+\end{claim}
+\begin{proof}
+Assume otherwise that there is vertex $w\in V(G)\setminus N[r]$
+with at least two neighbours in $N(r)$.
+We construct a $\sigma$-sparse $\Delta$-regular graph $G'$ as the disjoint union
+of $G\setminus w$ and a complete bipartite graph $K_{\Delta-1,\Delta}$ on a vertex partition $X\cup Y$ with $|X|=\Delta$ and $|Y|=\Delta-1$,
+in which we further connect each vertex $N_G(u)$ to a distinct vertex of~$X$.
+Here the role of the bipartite graph is only to preserve the $\Delta$-regularity.
+The neighbourhood of~$r$ is the same in~$G$ and in~$G'$, so $N_{G'}(v)$ induces
+exactly $(1-\sigma)\binom{\Delta}{2}$ edges in~$G'$.
+Let $\bI'$ be the random independent set obtained by our procedure on~$G'$
+and consider $\bI_r'=\bI \cap\{N_{G'}(r)\}$.
+We know as a corollary of Claim~\ref{claim:v in I}
+that $\E[|\bI_r|]=\E[|\bI_r'|]$.
+Further, we claim that
+\begin{equation}\label{eq:G' is worse}
+\Prob[\bI_r\neq\varnothing]\leq\Prob[\bI_r'\neq\varnothing].
+\end{equation}
+In that case,
+$\Prob[\bI_r\neq\varnothing]/\E[|\bI_r|]\leq \Prob[\bI_r'\neq\varnothing]/\E[|\bI_r'|]$,
+so it is enough to prove Theorem~\ref{thm:independent} for $G'$ and $r$ to deduce it for $G$ and $r$.
+Since the number of common neighbours of $N(r)$ outside $N[r]$ is strictly
+lower in $G'$ than in $G$,
+the iteration of this transformation terminates, which proves Claim~\ref{claim:no outside p3}.
+
+It remains to show~\eqref{eq:G' is worse}.
+To do so, we couple $\bI$ and $\bI'$
+in such a way that~$\bI_r$ is empty in every outcome where~$\bI_r'$ is.
+Assuming that $\A$ and $\pi$ are given, the activation set~$\A'$
+and the priority function~$\pi'$ are defined as follows.
+First, vertices of $V(G)\cap V(G')=V(G)\setminus\{r\}$ are activated accordingly for $\A$
+and $\A'$ and get the same priority, that is
+$\A'\cap V(G):= \A\setminus\{r\}$ and $\pi'=\pi$ on this set.
+Now, let $U$ be the set of vertices of $\A\cap N(r)\cap N(w)$
+that trump all their neighbours in $\A\setminus \{w\}$ for $G$,
+i.e. the set of vertices of $N(r)\cap N(w)$ that would be in $\bI$ if we ignore $w$
+in Step~\ref{samplestep3}.
+If $U\neq\varnothing$,
+let $v_U$ be the vertex of $U$ with the highest value $\pi(v_U)$
+and let~$w'$ be the unique neighbour of~$v_U$ in~$X$ for the graph~$G'$.
+We activate $w'$ for $\A'$ if $w$ is activated for $\A$,
+and in this case we set $\pi'(w'):=\pi(w)$.
+Next, we activate (for $\A'$) the remaining vertices of $X\cup Y$ independently at random with
+probability $\gamma/\Delta$ and we give them priorities $\pi'$ chosen independently,
+uniformly at random in $[0,1]$.
+The set $\bI'$ is then defined from $\A'$ and $\pi'$ similarly as for $\bI$,
+as the set of vertices of $\A'$ whose value by $\pi'$ is larger than all of their neighbours
+in $\A'$.
+
+It is clear that $\A'$, $\pi'$, and further $\bI$ are distributed as in our procedure
+because these activations and priorities are mutually independent.
+Crucially, note that the choice of~$v_U$ and~$w'$ (when $U\neq\varnothing$)
+is independent from the value of $\pi(w)$.
+If $U=\varnothing$, then $\bI_r=\varnothing=\bI_r'$ regardless of
+the state of $w$ and the vertices of $X\cup Y$,
+so assume that $U\neq\varnothing$ and $\bI_r'=\varnothing$.
+Since $\bI_r$ and $\bI_r'$ coincide on $N(r)\setminus N(w)$,
+we know that $\bI_r\subseteq U$.
+Further, since $v_U$ is in $U$ but not in $\bI_r'$, this vertex is trumped by $w'$,
+so $w'\in\A'$ and $\pi(v_U)=\pi'(v_U)\le\pi'(w')=\pi(w)$. 
+Moreover, $\pi(v_U)$ is by definition of $v_U$ the highest value of $\pi(U\cap\A)$,
+so $w$ trumps every activated vertex of $U$, and further $\bI_r=\varnothing$.
+\end{proof}
+
+It remains to estimate $\E[\bI_r\neq\varnothing]$.
+To do so, let $P_r$ be the the number of pairs
+in $N(r)\cap \bI_r$, i.e. $P_r=\binom{|\bI_r|}{2}$, and let $T_r$ be the number of triples
+in $N(r)\cap \bI_r$, i.e. $T_r=\binom{|\bI_r|}{3}$.
+Our bound on $\E[\bI_r\neq\varnothing]$ relies on the following variation
+of the inclusion-exclusion principle:
+\begin{equation}\label{eq:inclusion-exclusion} 
+\Prob[\bI_r \neq \varnothing] \leq \E[|\bI_r|] - \E[P_r] + \E[T_r].
+\end{equation}
+To see this, fix $\bI_r$ and
+apply the inclusion-exclusion principle to $|\bI_r|$ identical sets of size $1$
+to get 
+\[\mathbb{1}_{\bI_r \neq \varnothing}\leq |\bI_r| - \binom{|\bI_r|}{2} + \binom{|\bI_r|}{3},\]
+where $\mathbb{1}_{\bI_r \neq \varnothing}$ equal $1$ if $\bI_r$ is non-empty and $0$ otherwise.
+Taking the expectation of this last inequality proves~\eqref{eq:inclusion-exclusion}.
+
+Let us now estimate $P_r$ and $T_r$ in terms of the following parameter.
+Given a pair $uv\in \I_2$,
+define 
+\[\ell_{uv}:=\frac{1}{\Delta}|N(v) \cap N(u)|.\]
+We start with $P_r$.
+\begin{claim}\label{claim:pairs}
+It holds that
+\[
+  \E[P_r] = \sigma\cdot\Eon{uv\in \I_2}\left[\frac{1}{2-\ell_{uv}}\right]
+  + o_\gamma(1)
+  + o_\Delta(1).
+\]
+\end{claim}
+\begin{proof}
+First note that
+\[
+   \E[P_r]= \sum_{uv\in \I_2}\Prob[u, v \in \bI~|~u,v\in \A]\cdot\Prob[u, v \in \A].
+\]
+As the activation of the vertices are independent we have
+$\Prob[u, v\in \A]=\gamma^2/\Delta^2$
+so let us consider $\Pk(u,v)$.
+
+Assume first that $u$ and $v$ are activated and that $\pi(u)\geq\pi(v)$.
+In that case, a vertex of $N(u)\cap N(v)$ that trumps $u$ necessarily trumps $v$,
+so $u$ and $v$ are in $\I$ exactly when $v$ trumps the vertices of~$N(v)$
+and $u$ trumps the vertices of $N(u)\setminus N(v)$.
+As a consequence, the probability that both~$u$ and~$v$ are in $\bI$ is
+\[
+        \left(1-\frac{\gamma}{\Delta}(1-\pi(u))\right)^\Delta\cdot
+        \left(1-\frac{\gamma}{\Delta}(1-\pi(v))\right)^{(1-\ell_{uv})\Delta}
+        = e^{-\gamma(1-\pi(u))}e^{-\gamma(1-\ell_{uv})(1-\pi(v))}+o_\Delta(1),
+\]
+where we again write the probability that a vertex $w$ trumps
+an activated neighbour~$t$ as $\frac{\gamma}{\Delta}(1-\pi(t))$.
+
+Integrating on the values of $x=1-\pi(u)$ and $y=1-\pi(v)$, we get
+\[
+   \Prob[u,v\in\bI\text{ and }\pi(u)>\pi(v)| u,v\in\A]=
+   \int_0^1\int_0^xe^{-\gamma x}e^{-\gamma(1-\ell_{uv})y} dydx + o_\Delta(1).
+\]
+Accounting for the symmetry between the case $\pi(u)>\pi(v)$ and $\pi(u)<\pi(v)$,
+we deduce
+\[
+    \Pk(u,v)=2\int_0^1\int_0^xe^{-\gamma x}e^{-\gamma(1-\ell_{uv})y} dydx + o(1),
+\]
+where the dependence is as $\Delta\to\infty$.
+
+Computing the integral, we obtain
+\begin{align*}
+  \int_0^1\int_0^x\mathrm{e}^{-\gamma x}\mathrm{e}^{-\gamma \left(1-\ell_{uv}\right)y} dydx &=
+  \frac{1}{\gamma(1-\ell_{uv})}\int_0^1\mathrm{e}^{-\gamma x}\left(1-e^{-\gamma(1-\ell_{uv})x}\right) dx \\
+  &=
+  \frac{1}{\gamma^2(1-\ell_{uv})}\left(
+        1-e^{-\gamma}-\frac{1-e^{-\gamma(2-\ell_{uv})}}{2-\ell_{uv}}
+\right)\\
+  &= \frac{1}{\gamma^2(2-\ell_{uv})} + o\left(\frac{1}{\gamma^2}\right).
+\end{align*}
+Recalling that $|\I_2|=(\sigma/2+o(1))\Delta^2$,
+we can conclude that
+\[
+  \E[P_r] =
+  \sum_{uv\in \I_2}\frac{\gamma^2}{\Delta^2}\cdot\frac{2}{\gamma^2(2-\ell_{uv})}
+  +o_\gamma(1)+o_\Delta(1)
+  =\sigma\cdot\Eon{uv\in\I_2}\left[\frac{1}{2-\ell_{uv}}\right]+o_\gamma(1)+o_\Delta(1).\qedhere
+\]
+\end{proof}
+
+Let us estimate the number of triples in $\bI_r$.
+For that purpose, we first derive an integral expression for $\E[T_r]$.
+Set
+\[
+   f(\ell_1,\ell_2,\ell_3)=
+   \frac{1}{(2-\ell_1)(3-\ell_1-\ell_2-\ell_3)}.
+\]
+We now prove the following expression.
+\begin{claim}\label{claim:pkeep triples}
+For every triple $uvw\in\I_3$,
+\[
+   \Pk(u,v,w)\leq
+   \frac{2}{\gamma^3}\cdot
+   \left[
+   f(\luv,\luw,\lvw)+
+   f(\lvw,\luv,\luw)+
+   f(\luw,\luw,\lvw)
+   \right]+ o_\Delta(1).
+   \]
+\end{claim}
+\begin{proof}
+Assuming that $u$, $v$ and~$w$ are activated and that
+the values $x=1-\pi(u)$, $y=1-\pi(v)$ and~$z=1-\pi(w)$
+are given, we aim to express the probability that $\{u,v,w\}\subseteq\bI$.
+If moreover $x\ge y\ge z$, i.e.~$\pi(u)\le\pi(v)\le\pi(w)$,
+this last event happens exactly when none of the  vertices of $N(u)$ trump~$u$,
+none of $N(v)\setminus N(u)$ trump $v$ and
+none of the vertices of $N(w)\setminus(N(u)\cup N(v))$
+trump~$w$.
+The sizes of these sets are estimated by respectively
+$|N(u)|=\Delta$, $|N(v)\setminus N(u)|=(1-\luv)\Delta$
+and $|N(w)\setminus(N(u)\cup N(v))|\geq(1-\luw-\lvw)\Delta$.
+The probability that $\{u,v,w\}\subseteq\bI$ in this case is therefore at most
+ \[
+        \left(1-\frac{\gamma}{\Delta}x\right)^\Delta
+        \left(1-\frac{\gamma}{\Delta}y\right)^{\Delta(1-\luv)}
+        \left(1-\frac{\gamma}{\Delta}z\right)^{\Delta(1-\luw-\lvw)},
+ \]
+ which tends to the limit
+ \[
+   p_{xyz}=
+    e^{-\gamma\left(x +
+    \left(1-\luv\right)y
+    + (1-\luw-\lvw)z
+    \right)}
+  \]
+  as $\Delta\to\infty$.
+%
+Integrating over the possible values of $x$, $y$ and $z$
+satisfying $1\geq x\geq y\geq z\geq 0$ gives
+\begin{align*}
+   \int_0^1\int_{z}^1\int_{y}^1p_{xyz}dxdydz
+    &=\frac{1}{\gamma^3}\cdot
+    \int_{0}^\gamma\int_{z'}^\gamma\int_{y'}^\gamma
+    e^{-x'-(1-\luv)y'
+    - (1-\luw-\lvw)z'}dx'dy'dz'\\
+    &\leq \frac{1}{\gamma^3}\cdot
+    \int_{0}^\infty\int_{z}^\infty\int_{y}^\infty
+    e^{-x-(1-\luv)y
+    - (1-\luw-\lvw)z}dxdydz\\
+    &= \frac{1}{\gamma^3}\cdot\int_{0}^\infty\int_{z}^\infty e^{-(2-\luv)y- (1-\luw-\lvw)z}dydz \\
+    &= \frac{1}{\gamma^3}\cdot\frac{1}{2-\luv}\cdot\int_{0}^\infty e^{- (3-\luv-\luw-\lvw)z}dz\\
+    &= \frac{1}{\gamma^3}\cdot f(\luv,\luw,\lvw),
+\end{align*}
+where the first line comes from the change of variables $x'=\gamma x$, $y'=\gamma y$
+and $z'=\gamma z$.
+To summarise, we have
+\[
+\Prob\left[u,v,w\in\bI\text{ and }\pi(u)\le\pi(v)\le\pi(w)\,\,\middle|\,\,u,v,w\in\A\right]
+\leq \frac{1}{\gamma^3}f(\luv,\luw,\lvw) + o_\Delta(1) 
+\]
+Taking into account the six possible orderings of $\pi(u)$, $\pi(v)$ and~$\pi(w)$
+and the symmetry of $f$ between the second and the third variable yields
+\begin{align*}
+   \Pk(u,v,w)=&\frac{1}{\gamma^3}(
+   2f(\luv,\luw,\lvw)+
+   2f(\lvw,\luv,\luw)+
+   2f(\luw,\lvw,\luv)
+) +o_\Delta(1),
+\end{align*}
+which finishes the proof of the claim.
+\end{proof}
+The function $f$ satisfies the following bound that isolates its parameters:
+\begin{equation}\label{eq:f as sum}
+f(\ell_1,\ell_2,\ell_3)+f(\ell_3,\ell_1,\ell_2)+f(\ell_2,\ell_3,\ell_1) \leq
+        \frac13\cdot\sum_{i=1}^3\frac{1}{(2-\ell_i)(1-\ell_i)}
+\end{equation}
+for every $\ell_1,\ell_2,\ell_3\in[0,1]$.
+This relation can be proven as follows:
+\begin{align*}
+f(\ell_1,\ell_2,\ell_3)+f(\ell_2,\ell_1,\ell_3)+f(\ell_1,\ell_2,\ell_3)&=
+\frac{1}{3-\ell_1-\ell_2-\ell_3}\cdot\left(\frac{1}{2-\ell_1}+\frac{1}{2-\ell_2}+\frac{1}{2-\ell_3}\right)\\
+&\leq \frac13\cdot\sum_{i=1}^3\frac{1}{3-3\ell_i}\left(\frac{1}{2-\ell_1}+\frac{1}{2-\ell_2}+\frac{1}{2-\ell_3}\right)\\
+&\leq \sum_{i=1}^3\frac{1}{3-3\ell_i}\cdot\frac{1}{2-\ell_i}.
+\end{align*}
+Here, the second line is obtained by convexity of the function $x\mapsto\frac{1}{3-x}$
+applied on the left factor and the last step is an application of the rearrangement inequality.
+
+We deduce, from Claim~\ref{claim:pkeep triples} and~\eqref{eq:f as sum},
+the following bound on $\E[T_r]$.
+\begin{claim}\label{claim:triples}
+It holds that
+\[\E[T_r]\leq \frac{|\I_3|}{\Delta^3}+
+\frac\sigma6\cdot\Eon{uv\in \I_2}\left(
+\frac{2}{2-\ell_{uv}}+\luv-1
+\right)
+.\]
+\end{claim}
+\begin{proof}
+We compute the expected number of triples similarly as for the pairs:
+\[\E[T_r]=\sum_{uvw\in\I_3}\Prob[u,v,w\in\A]\cdot\Pk(u,v,w)=\frac{\gamma^3}{\Delta^3}\cdot\sum_{uvw\in\I_3}\Pk(u,v,w).
+\]
+Further, applying Claim~\ref{claim:pkeep triples} and Equation~\eqref{eq:f as sum} gives
+\[
+   \E[T_r]
+   \leq\frac{1}{3\Delta^3}\cdot\sum_{uvw\in \I_3}\sum_{ab\in\{uv,uw,vw\}}\frac{2}{(2-\ell_{ab})(1-\ell_{ab})} + o_\Delta(1).
+\]
+We decompose this expression into two parts:
+   \begin{equation}\label{eq:Tr decomposed}
+   \E[T_r]\leq\frac{|\I_3|}{\Delta^3}+
+   \frac{1}{3\Delta^3}\cdot
+   \sum_{uvw\in \I_3}\sum_{ab\in\{uv,uw,vw\}}\left(\frac{2}{(2-\ell_{ab})(1-\ell_{ab})}-1\right)
+   + o_\Delta(1).
+   \end{equation}
+   Consider the term 
+   \[R:=\sum_{uvw\in \I_3}\sum_{ab\in\{uv,uw,vw\}}\left(\frac{2}{(2-\ell_{ab})(1-\ell_{ab})}-1\right).\]
+   A pair $ab\in \I_2$ contributes to this double sum once for each $w\in N(r)$
+   such that $uvw\in\I_3$.
+   Since such a vertex $w$ cannot be a neighbour of $v$ and, by Claim~\ref{claim:no outside p3},
+   each of the $\luv\Delta$ common neighbours of $u$ and $v$ are in $N[r]$,
+   we know that there are
+   at most $(1-\luv)\Delta$ such vertices $w$. It follows that
+   \[
+   R\leq \sum_{uv\in\I_2}(1-\luv)\Delta\cdot\left(\frac{2}{(2-\luv)(1-\luv)}-1\right)
+   =\Delta\cdot\sum_{uv\in\I_2}\left(\frac{2}{2-\luv}+\luv-1)\right).
+   \]
+   It remains to write the sum as an expectation using $|\I_2|=(\sigma/2+o(1))\Delta^2$:
+   \begin{equation}\label{eq:R}
+   \frac{R}{\Delta^3}\leq
+   \frac{\sigma}{2}\cdot\Eon{uv\in\I_2}\left(\frac{2}{2-\luv}+\luv-1\right)
+   + o(1).
+   \end{equation}
+   The claim then follows from Equations~\eqref{eq:Tr decomposed} and~\eqref{eq:R}.
+\end{proof}
+We are now ready to conclude the proof of the theorem.
+By Claims~\ref{claim:pairs} and~\ref{claim:triples},
+\begin{align*}
+        \E[P_r-T_r] &\geq
+\sigma\cdot\Eon{uv\in \I_2}\left[\frac{1}{2-\ell_{uv}}\right]
+-\left(\frac{|\I_3|}{\Delta^3}+
+\frac\sigma6\cdot\Eon{uv\in \I_2}\left[
+\frac{2}{2-\ell_{uv}}+\luv-1
+\right]\right)+o(1)\\
+&=
+\frac\sigma6\cdot\Eon{uv\in \I_2}\left[
+\frac{4}{2-\luv}-\luv+1
+\right]
+-\frac{|\I_3|}{\Delta^3}.
+\end{align*}
+The function $g:x\mapsto \frac{4}{2-x}-x+1$ is increasing on $[0,1]$,
+so we may bound the last expectation by $g(0)=3$.
+Further, a theorem from Rivin~\cite{Riv02} shows that $|\I_3|\leq\sigma^{3/2}\binom{\Delta}{3}$.
+It follows that
+\[
+\E[P_r-T_r] \geq \frac{\sigma}{2}-\frac{\sigma^{3/2}}{6} + o(1)
+= \eps_{\ref{col_result}}(\sigma) + o(1).
+\]
+Recall that as a consequence to Claim~\ref{claim:v in I},
+the expected size of $\bI_r$ is $1-e^{-\gamma}+o_\Delta(1)$.
+Using Equation~\eqref{eq:inclusion-exclusion}, we conclude that
+\[
+\frac{\Prob[\bI_r\neq\varnothing]}{\E[|\bI_r|]}\leq
+\frac{\E[|\bI_r|-P_r+T_r]}{\E[\bI_r]}\leq
+\frac{1-e^{-\gamma}-\eps_{\ref{col_result}}(\sigma)}{1-e^{-\gamma}}+o_\Delta(1)
+=1-\eps_{\ref{col_result}}(\sigma)+o_\Delta(1)+o_\gamma(1),
+\]
+which proves the theorem.
+\end{proof}
+
+\begin{rem}
+    As observed at the beginning of the section, the value of $\eps_{\ref{col_result}}$ is what we would expect to obtain if we activated the entire graph (used a single colour) and there were no correlations (created by common neighbours). Ultimately we proved above that small lists behave like lists of size 1 and that, given there are many triples, correlations help pairs more than they help triples, thus improving the colouring. 
+\end{rem}

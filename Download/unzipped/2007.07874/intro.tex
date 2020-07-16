@@ -1,0 +1,159 @@
+%!TEX root = paper.tex
+
+
+This paper follows in a long line of investigation of the following Ramsey-type graph colouring problem.
+\begin{quote}\em
+What is the best upper bound on the chromatic number $\chi$ for graphs of given maximum degree $\Delta$ and given maximum local density --- that is, with neighbourhood subgraphs each inducing at most a certain edge density?
+\end{quote}
+This deep and elegant problem has its roots going back more than half a century~\cite{Viz68}.
+The archetypal result of this type is one of Johansson~\cite{Joh96} that was recently sharpened with the entropy compression method by Molloy~\cite{Mol19} as follows: any graph $G$ that is triangle-free --- that is, with a maximum local density of precisely zero --- has chromatic number satisfying $\chi(G)\le(1+o(1))\Delta(G)/\log\Delta(G)$ as $\Delta(G)\to\infty$.
+This betters by a logarithmic factor the trivial upper bound $\chi(G)\le \Delta(G)+1$ that holds for {\em any} graph $G$.
+It is sharp up to a (small) constant multiple due to random regular graphs.
+Alon, Krivelevich and Sudakov~\cite{AKS99} showed a more general bound under the condition of maximum local density at most $1/f=o(1)$. This too has been refined recently~\cite{DKPS20+} (cf.~also~\cite{DJKP18+} and~\cite{DKPS20+b}) as follows: any graph $G$ with local density at most $1/f$, where $f=f(\Delta(G))$, $f \to\infty$ as $\Delta(G)\to\infty$, and $f\le \binom{\Delta(G)}2+1$, has chromatic number satisfying $\chi(G)\le(1+o(1))\Delta(G)/\log\sqrt{f}$. Note that this statement includes the triangle-free one as a special case with $f=\binom{\Delta(G)}2+1$. While in that result the condition $1/f=o(1)$ excludes the possibility of a neighbourhood subgraph having non-negligible density, here it is this `denser' situation which will be our primary focus.
+
+
+To specify how far we are from a trivial local density condition, we adopt the following notation. Given $\sigma>0$, a graph $G$ is said to be {\em $\sigma$-sparse} if for every $v\in V(G)$ the subgraph $G[N(v)]$ induced by the neighbourhood $N(v)$ of $v$ has at most $(1-\sigma)\binom{\Delta(G)}2$ edges.
+As a means towards progress in a problem of Erd\H{o}s and Ne\v{s}et\v{r}il (of which we discuss in further detail later on in the paper), Molloy and Reed~\cite{MoRe97} initiated the study of the chromatic number of $\sigma$-sparse graphs. In particular, using a ``na\"ive'' probabilistic colouring procedure, they showed the following.
+
+\begin{theorem}[Molloy and Reed~\cite{MoRe97}]\label{thm:MoResparse}
+There is a positive function $\eps_{\ref{thm:MoResparse}}=\eps_{\ref{thm:MoResparse}}(\sigma)$ such that the following holds.
+For each $0<\sigma\le1$ there is $\Delta_0$ such that the chromatic number satisfies $\chi(G)\le (1-\eps_{\ref{thm:MoResparse}})\Delta(G)$ for any $\sigma$-sparse graph $G$ with $\Delta(G)\ge\Delta_0$.
+\end{theorem}
+\noindent
+Note this constitutes a constant factor improvement upon the trivial upper bound in this case.
+
+Our work marks important progress in the quantitative optimisation of Theorem~\ref{thm:MoResparse} for $\sigma$-sparse graphs, i.e.~in pursuit of the maximum $\eps_{\ref{thm:MoResparse}}$ as a function of $\sigma$. We briskly survey the landscape prior to our work. Molloy and Reed themselves proved Theorem~\ref{thm:MoResparse} for 
+$\eps_{\ref{thm:MoResparse}} \ge 0.0238\sigma$.
+It was over two decades before Bruhn and Joos~\cite{BrJo18} were able to improve upon this by establishing that 
+$\eps_{\ref{thm:MoResparse}} \ge 0.1827\sigma-0.0778\sigma^{3/2}$.
+Soon after, Bonamy, Perrett and Postle~\cite{BPP18+} improved this further through an iterative approach (that also captured the more general notions of list and correspondence colouring), and showed that  
+$\eps_{\ref{thm:MoResparse}} \ge 0.3012\sigma-0.1283\sigma^{3/2}$.
+Our contribution is the analysis of an improved colouring procedure based on random priority assignment that shows Theorem~\ref{thm:MoResparse} is true for any 
+$\eps_{\ref{thm:MoResparse}} < \sigma/2 - \sigma^{3/2}/6$.
+\begin{theorem}
+\label{col_result}
+Define $\eps_{\ref{col_result}} = \eps_{\ref{col_result}}(\sigma) = \sigma/2 - \sigma^{3/2}/6$.
+For each $\iota>0$ and $0<\sigma\le1$, there is $\Delta_{\ref{col_result}}=\Delta_{\ref{col_result}}(\iota)$ such that the chromatic number satisfies $\chi(G)\le (1-\eps_{\ref{col_result}}(\sigma)+\iota)\Delta(G)$ for any $\sigma$-sparse graph $G$ with $\Delta(G)\ge\Delta_{\ref{col_result}}$.
+\end{theorem}
+
+\noindent
+In the densest cases, as $\sigma\to0$, the leading coefficient $1/2$ in the expression for $\eps_{\ref{col_result}}$ is best possible, as certified by the following simple construction, cf.~also~\cite[Ex.~10.1]{MoRe02}.
+
+\begin{proposition}\label{prop:sharp}
+For each $\Delta\ge 1$ and  $\sigma>0$, there is a $\sigma$-sparse graph $G^\Delta_\sigma$ of maximum degree $\Delta$ such that as $\sigma\to0$ its chromatic number satisfies
+\(
+1-\chi(G^\Delta_\sigma)/\Delta = \sigma/2+o(\sigma^{3/2}).
+\)
+\end{proposition}
+\begin{proof}
+Let $G^\Delta_\sigma$ consist of a clique of size $\min\{1,\lfloor\sqrt{1-\sigma}\cdot\Delta\rfloor\}$ with $\Delta+1-\min\{1,\lfloor\sqrt{1-\sigma}\cdot\Delta\rfloor\}$ vertices of degree one appended to each vertex in the clique. It is trivial to verify that this graph has maximum degree $\Delta$, is $\sigma$-sparse, and has chromatic number $\min\{1,\lfloor\sqrt{1-\sigma}\cdot\Delta\rfloor\}$. The conclusion follows from a Taylor expansion of $1-\sqrt{1-\sigma}$ at $\sigma=0$.
+\end{proof}
+
+\noindent
+On the other hand, in the sparser cases one might hope for a guarantee on $\eps_{\ref{thm:MoResparse}}(\sigma)$ that approaches $1$ as $\sigma\to1$, since Johansson's result for triangle-free graphs implies in the special case $\sigma=1$ that Theorem~\ref{thm:MoResparse} holds for any $\eps_{\ref{thm:MoResparse}}(1) < 1$. Thus there is still room for improvement, since the methods we have employed here only imply for that special case that Theorem~\ref{thm:MoResparse} holds for any $\eps_{\ref{thm:MoResparse}}(1) < 1/3$.
+
+Nevertheless Theorem~\ref{col_result} yields state-of-the-art bounds in two well-known and longstanding graph colouring conjectures, namely the Erd\H{o}s--Ne\v{s}et\v{r}il conjecture and Reed's conjecture.
+In Subsections~\ref{sub:ErdosNesetril} and~\ref{sub:Reed}, we discuss these consequences.
+
+The proof of Theorem~\ref{col_result} is quite technical and involved, and is provided in full in Section~\ref{sec:proof}.
+For the convenience of the reader, we have prefaced Section~\ref{sec:proof} with a succinct overview of the ideas and methods.
+
+\subsubsection*{Structure of the paper}
+
+Subsections~\ref{sub:ErdosNesetril} and~\ref{sub:Reed} describe the background to the Erd\H{o}s--Ne\v{s}et\v{r}il and Reed's conjectures, respectively, and the progress we obtain through Theorem~\ref{col_result}.
+Subsection~\ref{sub:prelim} lists some notation and tools we use.
+We give an outline of the proof of Theorem~\ref{col_result} at the beginning of Section~\ref{sec:proof}.
+The remainder of Section~\ref{sec:proof} provides the full proof.
+In Section~\ref{sec:applications}, we give details of the two applications of Theorem~\ref{col_result}.
+
+
+\subsection{A step towards the Erd\H{o}s--Ne\v{s}et\v{r}il conjecture}\label{sub:ErdosNesetril}
+
+
+Given a graph $G$, an {\em induced matching} is a subset $M$ of the edges of $G$ such that for any pair $e,e'$ of distinct edges of $M$, neither $e$ and $e'$ are incident nor are any of the four possible edges between an endpoint of $e$ and an endpoint of $e'$ present in $G$.
+A {\em strong edge-colouring} of $G$ is a partition of its edge set $E(G)$ into induced matchings of $G$.
+The strong chromatic index $\xs(G)$ of $G$ is the least number of parts needed in any strong edge-colouring of $G$. Equivalently, $\xs(G)$ is the chromatic number $\chi(L(G)^2)$ of the square $L(G)^2$ of the line graph $L(G)$ of $G$. (The square of a graph is obtained from the graph itself by adding edges between all pairs of distinct non-adjacent vertices that are connected by a two-edge path.)
+In the 1980s (cf.~\cite{Erd88}), Erd\H{o}s and Ne\v{s}et\v{r}il proposed the problem of bounding $\xs(G)$ in terms of the maximum degree $\Delta(G)$ of $G$. Since the maximum degree $\Delta(L(G)^2)$ of the square of the line graph of $G$ is at most $2\Delta(G)(\Delta(G)-1)$, the strong chromatic index is trivially bounded by $\xs(G)\le 2\Delta(G)^2-2\Delta(G)+1$. They conjectured something much stronger.
+
+\begin{conj}[Erd\H{o}s and Ne\v{s}et\v{r}il, cf.~\cite{Erd88}]\label{conj:ErNe}
+The strong chromatic index satisfies $\xs(G)\le 1.25\Delta(G)$ for all $G$.
+\end{conj}
+
+\noindent
+(See~\cite{JKP19} for a fascinating strengthened, yet equivalent, form of this conjecture.)
+If true, this bound would be exact for a suitable blow-up of the 5-edge cycle (in the $\Delta(G)$ even case).
+It was more than a decade before a breakthrough by Molloy and Reed~\cite{MoRe97}, yielding some absolute constant $\eps>0$ such that $\xs(G)\le (2-\eps)\Delta(G)$ for all $G$.
+More specifically, they proved the following statement.
+
+\begin{theorem}[Molloy and Reed~\cite{MoRe97}]\label{thm:MoRestrong}
+There is some $\eps_{\ref{thm:MoRestrong}}>0$ and some $\Delta_0$ such that the strong chromatic index satisfies $\xs(G)\leq (2-\eps_{\ref{thm:MoRestrong}})\Delta(G)^2$ for any graph $G$ with $\Delta(G)\ge \Delta_0$.
+\end{theorem}
+
+\noindent
+(We may bound the absolute constant $\eps>0$ mentioned before by comparing the bound of Theorem~\ref{thm:MoRestrong} with the trivial bound on $\xs(G)$ for those $G$ with $\Delta(G)<\Delta_0$.)
+Molloy and Reed proved that $\eps_{\ref{thm:MoRestrong}} \ge 0.001$.
+A key insight they made in their proof of Theorem~\ref{thm:MoRestrong} was to split the task into two separate subtasks, first, showing for some absolute constant $\sigma>0$ that $L(G)^2$ is $\sigma$-sparse for all $G$, and, second, showing a nontrivial improvement on the trivial colouring bound under the assumption of $\sigma$-sparsity, i.e.~Theorem~\ref{thm:MoResparse}.
+Bruhn and Joos~\cite{BrJo18} were the first to revisit this problem, and they not only significantly improved on the estimate of $\eps_{\ref{thm:MoResparse}}$ in Theorem~\ref{thm:MoResparse} as mentioned earlier, but also proved an asymptotically extremal lower bound on $\sigma>0$ such that $L(G)^2$ is $\sigma$-sparse for all $G$. In this way, they obtained that $\eps_{\ref{thm:MoRestrong}} \ge 0.070$.
+The more recent work of Bonamy {\em et al.}~\cite{BPP18+} obtained further improvements. As mentioned earlier, they improved the estimate of $\eps_{\ref{thm:MoResparse}}$ in Theorem~\ref{thm:MoResparse} through an iterative approach. They were moreover able to improve on the separation into two subtasks, by showing better sparsity on a subgraph of $L(G)^2$ according to a degeneracy-type argument. Through this, they obtained that $\eps_{\ref{thm:MoRestrong}} \ge 0.165$.
+By combining Theorem~\ref{col_result} with this last-mentioned method, we derive that $\eps_{\ref{thm:MoRestrong}} \ge 0.228$. The proof is given in Subsection~\ref{sub:ErdosNesetrilproof}.
+
+\begin{theorem}
+\label{strong_bound}
+There is some $\Delta_0$ such that the strong chromatic index satisfies $\xs(G)\leq 1.772\Delta(G)^2$ for any graph $G$ with $\Delta(G)\ge \Delta_0$.
+\end{theorem}
+
+\noindent
+We humbly agree that the above sequence of improvements on estimates for $\eps_{\ref{thm:MoRestrong}}$ suggests that the hypothetically optimal determination $\eps_{\ref{thm:MoRestrong}}=0.75$ remains far from reach. Even a proof of $\eps_{\ref{thm:MoRestrong}}=0.75$ would leave open the nontrivial task of proving Conjecture~\ref{conj:ErNe} for all graphs with maximum degree less than $\Delta_0$. Despite considerable efforts, so far it has only been established for graphs of maximum degree $3$~\cite{And92,HQT93}.
+
+
+
+
+\subsection{A step towards Reed's conjecture}\label{sub:Reed}
+
+Another Ramsey-type problem (perhaps even closer to quantitative Ramsey theory) asks the following.
+\begin{quote}\em
+What is the best upper bound on the chromatic number $\chi$ for graphs of given maximum  degree $\Delta$ and given clique number $\omega$?
+\end{quote}
+
+\noindent
+An aforementioned result of Johansson~\cite{Joh96} has settled this question up to a constant multiple as $\Delta\to\infty$ when $\omega=2$. Already the case $\omega=3$ is open and difficult. This is closely related to an important conjecture of Ajtai, Erd\H{o}s, Koml\'os and Szemer\'edi~\cite{AEKS81}. For $\omega$ asymptotically smaller than $\Delta$ (as $\Delta\to\infty$), the current best bounds were recently obtained in~\cite{DKPS20+}. Again, here we will be mostly concerned with a `denser' regime, namely, when $\omega$ is linear in $\Delta$. Related to this, Reed proposed an evocative conjecture.
+
+\begin{conj}[Reed~\cite{Ree98}]\label{conj:Ree98}
+The chromatic number satisfies $\chi(G) \le \lceil \frac12(\omega(G)+\Delta(G)+1)\rceil$ for any graph $G$.
+\end{conj}
+
+\noindent
+In other words, he asked if the chromatic number $\chi(G)$ of a graph $G$ is always at most the average, rounded up, of the trivial lower bound, $\omega(G)$, and the trivial upper bound, $\Delta(G)+1$, for $\chi(G)$.
+If true, the bound is sharp, for instance, for the Chv\'atal graph. The bound is trivially true when $\omega(G)\ge\Delta(G)$ and it follows from Brooks' theorem~\cite{Bro41} for $\omega(G)=\Delta(G)-1$. 
+In~\cite{DKPS20+}, it was shown that, if $\omega(G) \le \Delta(G)^c$ for some fixed $c<1/100$, then the bound holds provided $\Delta(G)$ is sufficiently large. (There is some room in the method there to increase the constant $1/100$ slightly, but not above $1/16$ without additional ideas.)
+Curiously, despite Johansson's result, the conjecture is still open in the special case $\omega(G)=2$, particularly for small values of $\Delta(G)$.
+As evidence towards his conjecture, Reed succeeded in proving, through a lengthy set of arguments that are probabilistic in nature, the following.
+
+\begin{theorem}[Reed~\cite{Ree98}]\label{thm:Ree98}
+There is some $\eps_{\ref{thm:Ree98}}>10^{-8}$ and some $\Delta_{\ref{thm:Ree98}}$ such that the chromatic number satisfies $\chi(G) \le \frac12(\omega(G)+\Delta(G)+1)$ for any graph $G$ satisfying $\omega(G) \ge (1-\eps_{\ref{thm:Ree98}})\Delta(G)$ and $\Delta(G)\ge \Delta_{\ref{thm:Ree98}}$.
+\end{theorem}
+
+\noindent
+Note that this statement implies that some (barely) nontrivial convex combination of $\omega(G)$ and $\Delta(G)+1$ suffices as an upper bound for $\chi(G)$.
+
+\begin{cor}\label{cor:Ree98}
+There is some $\eps_{\ref{cor:Ree98}}\ge \eps_{\ref{thm:Ree98}}/2$ and some $\Delta_0$ such that the chromatic number satisfies  $\chi(G) \le \lceil (1-\eps_{\ref{cor:Ree98}})(\Delta(G)+1)+\eps_{\ref{cor:Ree98}}\omega(G)\rceil$ for any graph $G$ with $\Delta(G)\ge \Delta_0$.
+\end{cor}
+
+\noindent
+Reed himself made little effort to optimise the value of $\eps_{\ref{cor:Ree98}}$, but noted that it cannot be more than $1/2$ by a standard probabilistic construction.
+Bonamy {\em et al.}~\cite{BPP18+} recently revisited this problem and showed $\eps_{\ref{cor:Ree98}} > 0.038$. Delcourt and Postle~\cite{DePo17} have announced that $\eps_{\ref{cor:Ree98}} > 0.076$. One consequence of Theorem~\ref{col_result} is an improvement on these estimates, in particular, that $\eps_{\ref{cor:Ree98}} \ge 0.199$. The proof is given in Subsection~\ref{sub:Reedproof}.
+
+\begin{theorem}
+\label{Reed_bound}
+There is some $\Delta_0$ such that the chromatic number satisfies $\chi(G) \le \lceil 0.801(\Delta(G)+1)+0.199\omega(G)\rceil$ for any graph $G$ with $\Delta(G)\ge \Delta_0$.
+\end{theorem}
+
+
+
+
+
+
+
+
+

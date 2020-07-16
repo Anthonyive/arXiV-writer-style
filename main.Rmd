@@ -17,8 +17,10 @@ library(stringr)
 ## Scratch: get a random link
 ```{r}
 url <- "https://arxiv.org/"
+mathurl <- "https://arxiv.org/archive/math"
+
 arXiv <- read_html(url)
-arXiv_session <- html_session(url)
+arXivMath <- read_html(mathurl)
 
 get_link <- function(link, tag) {
   read_html(link) %>% 
@@ -27,35 +29,54 @@ get_link <- function(link, tag) {
     paste(url, ., sep = "")
 }
 
-logic_link <- get_link(url, 
-                       "#math\\.LO")
+topicMath_recent_tags <- paste("li:nth-child(", 
+                               1:32, 
+                               ") a:nth-child(3)", 
+                               sep = "")
 
-apaper_link <- get_link(logic_link, 
-                        "dl:nth-child(9) dt:nth-child(1) .list-identifier a:nth-child(1)")
+topicMath_other_tags <- paste("dl:nth-child(9) dt:nth-child(", 
+                               seq(1, by = 2, len = 5), 
+                               ") a:nth-child(4)", 
+                               sep = "")
 
-otherformat_link <- get_link(apaper_link, 
-                             ".full-text li~ li+ li .abs-button")
+# mathurl -> recent links -> other links -> download links
 
-download_link <- get_link(otherformat_link, 
-                          "dd b+ a")
+for (i in seq_along(topicMath_recent_tags)) {
+  topicMath_recent_link <- get_link(mathurl, 
+                             topicMath_recent_tags[i]) %>% 
+    str_extract(".*recent")
+  topicMath_recent_link <- topicMath_recent_link[!is.na(topicMath_recent_link)]
+  
+  for (j in 1:5) {
+    other_link <- get_link(topicMath_recent_link,
+                            topicMath_other_tags[j])
+    download_link <- get_link(other_link, 
+                           "dd b+ a")
+    
+    # untar.gz files
+    file_name <- download_link[1] %>% 
+      str_extract("(?:.(?!\\/))+$")
+    
+    # download tar
+    download.file(download_link, 
+                  paste("./Download/targz", 
+                        file_name, 
+                        ".tar.gz", 
+                        sep = ""))
+    
+    # unzip tar
+    unzipped_path <- paste("./Download/unzipped", 
+                           file_name, 
+                           sep = "")
+    dir.create(unzipped_path)
+    
+    command <- paste('cd ', unzipped_path, '; tar -zxvf ../../targz', file_name, '.tar.gz', sep = "")
+    system(command)
+  }
+  
+}
 
-# useless for now
-arXiv_session %>% 
-  jump_to(logic_link) %>% 
-  jump_to(apaper_link) %>% 
-  jump_to(otherformat_link)
 
-
-# untar.gz files
-file_name <- download_link %>% 
-  str_extract("(?:.(?!\\/))+$")
-download.file(download_link, paste("./Download/targz", file_name, ".tar.gz", sep = ""))
-
-unzipped_path <- paste("./Download/unzipped", file_name, sep = "")
-dir.create(unzipped_path)
-
-command <- paste('cd ', unzipped_path, '; tar -zxvf ../../targz', file_name, '.tar.gz', sep = "")
-system(command)
 
 
 

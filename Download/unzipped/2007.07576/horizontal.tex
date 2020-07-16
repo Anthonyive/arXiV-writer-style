@@ -1,0 +1,702 @@
+\section{Horizontal compositionality of dinatural transformations}\label{chapter horizontal}
+
+Horizontal composition of natural transformations is co-protagonist, together with vertical composition, in the classical Godement calculus. In this section we define a new operation of horizontal composition for dinatural transformations, generalising the well-known version for natural transformations. We also study its algebraic properties, proving it is associative and unitary. Remarkably, horizontal composition behaves better than vertical composition, as it is \emph{always} defined between dinatural transformations of matching type.
+
+\subsection{From the Natural to the Dinatural}
+
+Horizontal composition of natural transformations \cite{mac_lane_categories_1978} 
+is a well-known operation which is rich in interesting properties: it is associative, unitary and compatible with vertical composition. As such, it makes $\mathbb{C}\mathrm{at}$ a strict 2-category. Also, it plays a crucial role in the calculus of substitution of functors and natural transformations developed by Kelly in \cite{kelly_many-variable_1972}; in fact, as we have seen in the introduction, it is at the heart of Kelly's abstract approach to coherence. 
+An appropriate generalisation of this notion for dinatural transformations seems to be absent in the literature: in this section we propose a working definition, as we shall see. The best place to start is to take a look at the usual definition for the natural case.
+
+\begin{definition}\label{def:horizontal composition natural transformations}
+	Consider (classical) natural transformations
+	\[
+	\begin{tikzcd}
+	\A \ar[r,bend left,"F"{above},""{name=F,below}]{} \ar[r,bend right,"G"{below},""{name=G}] 
+	& \B \ar[r,bend left,"H"{above},""{name=H,below}]{} \ar[r,bend right,"K"{below},""{name=K}] 
+	& \C	
+	\arrow[Rightarrow,from=F,to=G,"\phi"]
+	\arrow[Rightarrow,from=H,to=K,"\psi"]
+	\end{tikzcd}
+	\]
+	The horizontal composition $\hc \fst \snd \colon HF \to KG$ is the natural transformation whose $A$-th component, for $A \in \A$, is either leg of the following commutative square:
+	\begin{equation}\label{eqn:horCompNatTransfSquare}
+	\mkern0mu \begin{tikzcd}
+	HF(A) \ar[r,"\psi_{F(A)}"] \ar[d,"H(\phi_A)"'] & KF(A) \ar[d,"K(\phi_A)"] \\
+	HG(A) \ar[r,"\psi_{G(A)}"] & KG(A)
+	\end{tikzcd}
+	\end{equation}
+\end{definition}
+
+Now, the commutativity of (\ref{eqn:horCompNatTransfSquare}) is due to the
+naturality of $\psi$; the fact that $\hc \phi \psi$ is in turn a natural
+transformation is due to the naturality of both $\phi$ and $\psi$. However, in
+order to \emph{define} the family of morphisms $\hc \phi \psi$, all we have to
+do is to apply the naturality condition of $\psi$ to the components of $\phi$,
+one by one. We apply the very same idea to  dinatural
+transformations, leading to the following preliminary definition
+for classical dinatural transformations.  
+
+\begin{definition}\label{def:horCompDef}
+	Let $\fst\colon\fstDom \to \fstCoDom$ and $\snd \colon \sndDom \to \sndCoDom$ dinatural transformations of type
+	$
+	\begin{tikzcd}[cramped,sep=small]
+	2 \ar[r] & 1 & 2 \ar[l]
+	\end{tikzcd}
+	$,
+	where $\fstDom, \fstCoDom \colon \Op\A \times \A \to \B$ and $\sndDom, \sndCoDom \colon \Op\B \times \B \to \C$. The \emph{horizontal composition} $\hc \fst \snd$ is the family of morphisms 
+	\[
+	\bigl((\hc \fst \snd)_A\colon 	\sndDom(\fstCoDom(A,A), \fstDom(A,A)) \to  \sndCoDom(\fstDom(A,A),\fstCoDom(A,A))\bigr)_{A \in \A}
+	\]
+	where the general component $(\hc \fst \snd)_A$ is given, for any object $A \in \A$, by either leg of the following commutative hexagon:
+	\[
+	\begin{tikzcd}[column sep=.8cm,font=\normalsize]
+	& \sndDom(\fstDom(A,A),\fstDom(A,A)) \ar[r,"{\snd_{\fstDom(A,A)}}"]  & \sndCoDom(\fstDom(A,A),\fstDom(A,A)) \ar[dr,"{\sndCoDom(1,\fst_A)}"] \\
+	\sndDom(\fstCoDom(A,A),\fstDom(A,A)) \ar[ur,"{\sndDom(\fst_A,1)}"]  \ar[dr,"{\sndDom(1,\fst_A)}"']  & & & \sndCoDom(\fstDom(A,A),\fstCoDom(A,A)) \\
+	& \sndDom(\fstCoDom(A,A),\fstCoDom(A,A)) \ar[r,"{\snd_{\fstCoDom(A,A)}}"] & \sndCoDom(\fstCoDom(A,A),\fstCoDom(A,A)) \ar[ur,"{\sndCoDom(\fst_A,1)}"']
+	\end{tikzcd}
+	\]
+\end{definition}
+
+\begin{remark}\label{rem:our definition of hc generalises natural case}
+	If $F$, $G$, $H$ and $K$ all factor through the second projection $\Op\A \times \A \to \A$ or $\Op\B \times \B \to \B$, then $\phi$ and $\psi$ are just ordinary natural transformations and Definition~\ref{def:horCompDef} reduces to the usual notion of horizontal composition, Definition~\ref{def:horizontal composition natural transformations}.
+\end{remark}
+
+As in the classical natural case, we can deduce the dinaturality of $\hc \fst \snd$ from the dinaturality of $\fst$ and $\snd$, as the following Theorem states. (Recall that for $F \colon \A \to \B$ a functor, $\Op F \colon \Op\A \to \Op\B$ is the obvious functor which behaves like $F$.)
+
+\begin{theorem}\label{thm:horCompTheorem}
+	Let $\fst$ and $\snd$ be dinatural transformations as in Definition \ref{def:horCompDef}. Then $\hc \fst \snd$ is a dinatural transformation
+	\[
+	\hc \fst \snd \colon \sndDom(\Op\fstCoDom , \fstDom) \to \sndCoDom(\Op\fstDom,\fstCoDom)
+	\]
+	of type 
+	$
+	\begin{tikzcd}[cramped,sep=small]
+	4 \ar[r] & 1 & 4 \ar[l]
+	\end{tikzcd}
+	$, where $\sndDom(\Op\fstCoDom , \fstDom), \sndCoDom(\Op\fstDom,\fstCoDom) \colon \A^{[+,-,-,+]} \to \C$ are defined on objects as
+	\begin{align*}
+	\sndDom(\Op\fstCoDom , \fstDom)(A,B,C,D) &= \hcd A B C D \\
+	\sndCoDom(\Op\fstDom,\fstCoDom)(A,B,C,D) &= \hcc A B C D
+	\end{align*}
+	and similarly on morphisms.
+\end{theorem}
+\begin{proof}
+	The proof consists in showing that the diagram that asserts the dinaturality of $\hc \fst \snd$ commutes: this is done in Figure~\ref{fig:DinaturalityHorizontalCompositionFigure}. \qed
+\end{proof}
+
+\begin{sidewaysfigure}[p]
+	\centering
+	\begin{tikzpicture}[every node/.style={scale=0.5}]
+	\matrix[column sep=1cm, row sep=1.5cm]{
+		
+		\node(1) {$\H(\G(A,A),\F(A,A))$}; & & & \node(2) {$\H(\F(A,A),\F(A,A))$}; & \node(3) {$\K(\F(A,A),\F(A,A))$}; & & &
+		\node(4) {$\K(\F(A,A),\G(A,A))$};\\
+		
+		& \node(5){$\H(\G(A,A),\F(B,A))$}; & \node(6) {$\H(\F(A,A),\F(B,A))$}; & & & \node(7) {$\K(\F(B,A),\F(A,A))$}; &
+		\node (8){$\K(\F(B,A),\G(A,A))$};\\
+		
+		\node(9) {$\H(\G(A,B),\F(B,A))$}; & & &\node(10){$\H(\F(B,A),\F(B,A))$}; & \node(11){$\K(\F(B,A),\F(B,A))$}; & & 
+		&\node(12){$\K(\F(B,A),\G(A,B))$};\\
+		
+		&\node(13){$\H(\G(B,B),\F(B,A))$}; & \node(14){$\H(\F(B,B),\F(B,A))$}; & & & \node(15){$\K(\F(B,A),\F(B,B))$}; & 
+		\node(16){$\K(\F(B,A),\G(B,B))$};\\
+		
+		\node(17){$\H(\G(B,B),\F(B,B))$}; & & &\node(18){$\H(\F(B,B),\F(B,B))$}; & \node(19){$\K(\F(B,B),\F(B,B))$}; & &
+		&\node(20){$\K(\F(B,B),\G(B,B))$};\\ 
+	};
+	
+	\graph[use existing nodes,edge quotes={sloped,anchor=south}]{
+		9 ->["$\H(\G(1,f),\F(f,1))$"] 1 ->["$\H(\fst_A,1)$"] 2 ->["$\snd_{\F(A,A)}$"] 3 ->["$\K(1,\fst_A)$"] 4 ->["$\K(\F(f,1),\G(1,f))$",] 12; 
+		
+		9 ->["$\H(\G(1,f))$"] 5 ->["$\H(\fst_A,1)$"] 6 ->["$\H(1,\F(f,1))$"] 2; 
+		3 ->["$\K(\F(f,1),1)$"] 7 ->["$\K(1,\fst_A)$"] 8 ->["$\K(1,\G(1,f))$"] 12; 
+		
+		6 ->["$\H(\F(f,1),1)$"] 10 ->["$\snd_{\F(B,A)}$"] 11 ->["$\K(1,\F(f,1))$"] 7; 
+		
+		9 ->["$\H(\G(f,1),1)$"] 13 ->["$\H(\fst_B,1)$"] 14 ->["$\H(\F(1,f),1)$"] 10; 
+		
+		11->["$\K(1,\F(1,f))$"] 15 ->["$\K(1,\fst_B)$"] 16 ->["$\K(1,\G(f,1))$"] 12; 
+		
+		14->["$\H(1,F(1,f))$"] 18 ->["$\snd_{\F(B,B)}$"] 19 ->["$\K(\F(1,f),1)$"] 15;
+		
+		18 <-["$\H(\fst_B,1)$"] 17 <-["$\H(\G(f,1),\F(1,f))$"] 9; 
+		12 <-["$\K(\F(1,f),\G(f,1))$"] 20 <-["$\K(1,\fst_B)$"] 19;
+		
+		1 ->[bend left=20,dashed,"$(\hc \fst \snd)_A$"] 4;
+		17->[bend right=20,dashed,"$(\hc \fst \snd)_B$"] 20;
+	};
+	
+	\path[] (9) to [out=-80,in=170] node[anchor=mid,red]{Functoriality of $\H$} (18);
+	\path[] (9) to [out=80,in=-170] node[anchor=mid,red]{Functoriality of $\H$} (2);
+	\path[] (19) to [out=10,in=260] node[anchor=mid,red]{Functoriality of $\K$} (12);
+	\path[] (3) to [out=-10,in=-260] node[anchor=mid,red]{Functoriality of $\K$} (12);
+	\path (6) to node[anchor=mid,red]{Dinaturality of $\snd$} (7);
+	\path (14) to node[anchor=mid,red]{Dinaturality of $\snd$} (15);
+	\path (9) to node[anchor=mid,red]{Dinaturality of $\fst$} (10);
+	\path (11) to node[anchor=mid,red]{Dinaturality of $\fst$} (12);
+	
+	\end{tikzpicture}
+	\caption{Proof of Theorem \ref{thm:horCompTheorem}: dinaturality of horizontal composition in the classical case. Here $f\colon A \to B$.}
+	\label{fig:DinaturalityHorizontalCompositionFigure}
+\end{sidewaysfigure}
+
+We can now proceed with the general definition, which involves transformations
+of arbitrary type. As the idea behind Definition~\ref{def:horCompDef} is to apply
+the dinaturality of $\snd$ to the general component of $\fst$ in order to define
+$\hc \fst \snd$, if $\snd$ is a transformation with many variables, then we
+have many dinaturality conditions we can apply to $\fst$, namely one for each
+variable of $\snd$ in which $\snd$ is dinatural. Hence, the general definition
+will depend on the variable of $\snd$ we want to use. For the sake of
+simplicity, we shall consider only the one-category case, that is when all
+functors in the definition involve one category $\C$; the general case follows with no substantial complications
+except for a much heavier notation. 
+
+\begin{definition}\label{def:generalHorizontalCompositionDef}
+	Let $\F \colon \C^\fstDomVar \to \C$, $\G \colon \C^\fstCoDomVar \to \C$, $\H \colon \C^\sndDomVar \to \C$, $\K \colon \C^\sndCoDomVar \to \C$ be functors, $\fst = (\fst_\bfA)_{\bfA \in \C^n} \colon \fstDom \to \fstCoDom$ be a transformation of type
+	$
+	\begin{tikzcd}[cramped,sep=small]
+	\length\fstDomVar \ar[r,"\fstTypL"] & \fstVarNo & \length\fstCoDomVar \ar[l,"\fstTypR"']
+	\end{tikzcd}
+	$
+	and $\snd = (\snd_{\bf B})_{\bf B \in \C^m}\colon \sndDom \to \sndCoDom$ of type
+	$
+	\begin{tikzcd}[cramped,sep=small]
+	\length\sndDomVar \ar[r,"\sndTypL"] & \sndVarNo & \length\sndCoDomVar \ar[l,"\sndTypR"']
+	\end{tikzcd}
+	$
+	a transformation which is dinatural in its $i$-th variable. 
+	Denoting with $\concat$ the concatenation of a family of lists, let
+	\[
+	\ghcDom  \colon \C^{{\concat_{u=1}^{\length\sndDomVar} \lambda^u}} \to \C, \quad \ghcCoDom \colon \C^{\concat_{v=1}^{\length\sndCoDomVar}\mu^v} \to \C
+	\]	
+	be functors, defined similarly to $\sndDom(\Op\fstCoDom , \fstDom)$ and  $\sndCoDom(\Op\fstDom,\fstCoDom)$ in Theorem \ref{thm:horCompTheorem}, where for all $j \in \sndVarNo$, $u \in\length\gamma$, $v\in\length\delta$:
+	\[	
+	\begin{tikzcd}[ampersand replacement=\&,row sep=.5em]
+		\F_j= 
+		\begin{cases}
+		F & j=i \\
+		\id\C & j \ne i
+		\end{cases}
+		\& \G_j= 
+		\begin{cases}
+		G & j=i \\
+		\id\C & j \ne i
+		\end{cases}
+		\\
+		\lambda^u = \begin{cases}
+		\alpha & \eta u = i \land \gamma_u=+ \\
+		\Not\beta\footnotemark & \eta u = i \land \gamma_u = - \\
+		[\gamma_u] & \eta u \ne i
+		\end{cases}
+		\& \mu^v = \begin{cases}
+		\beta & \theta v = i \land \delta_v=+ \\
+		\Not\alpha & \theta v = i \land \delta_v = - \\
+		[\delta_v] & \theta v \ne i
+		\end{cases}
+	\end{tikzcd}
+	\]
+    \footnotetext{Remember that for any $\beta\in\List\{+,-\}$ we denote $\Not\beta$ the list obtained from $\beta$ by swapping the signs.}Define for all $u \in\length\gamma$ and $v\in\length\delta$ the following functions:
+    \[
+    a_u = \begin{cases}
+    \iota_n \sigma & \eta u = i \land \gamma_u=+ \\
+    \iota_n \tau & \eta u = i \land \gamma_u = - \\
+    %	\iota_m \eta_{\restriction\{u\}} & \eta u \ne i
+    \iota_m K_{\eta u} & \eta u \ne i
+    \end{cases} \quad
+    b_v = \begin{cases}
+    \iota_n \tau & \theta v = i \land \delta_v=+ \\
+    \iota_n \sigma & \theta v = i \land \delta_v = - \\
+    %\iota_m \theta_{\restriction\{v\}} & \theta v \ne i
+    \iota_m K_{\theta v} & \theta v \ne i
+    \end{cases}
+    \]
+     with $K_{\eta u} \colon 1 \to m$ the constant function equal to $\eta u$, while $\iota_n$ and $\iota_m$ are defined as:
+    \[
+    \begin{tikzcd}[row sep=0em]
+    n \ar[r,"\iota_n"] & (i-1)+n+(m-i) \\
+    x \ar[|->,r] & i-1+x
+    \end{tikzcd}
+    \qquad
+    \begin{tikzcd}[row sep=0em,ampersand replacement=\&]
+    m \ar[r,"\iota_m"] \& (i-1)+n+(m-i) \\
+    x \ar[|->,r] \& \begin{cases}
+    x & x < i \\
+    x +n -1 & x \ge i
+    \end{cases}
+    \end{tikzcd}
+    \]
+    The \emph{$i$-th horizontal composition} $\HC {[\fst]} {[\snd]} i$ is the equivalence class of the transformation 
+    \[
+    \HC \fst \snd i \colon \ghcDom \to \ghcCoDom
+    \]	
+    of type
+    \[
+    \begin{tikzcd}[column sep=1.5cm]
+    \displaystyle\sum_{u=1}^{\length\gamma} \length{\lambda^u} \ar[r,"{[a_1,\dots, a_{\length\gamma}]}"] & (i-1) + n + (m-i) & \displaystyle\sum_{v=1}^{\length\delta} \length{\mu^v} \ar[l,"{[b_1,\dots, b_{\length\delta}]}"']
+    \end{tikzcd}
+    \]
+    whose general component, $(\HC \fst \snd i)_{\subst B \bfA i}$, is the diagonal of the commutative hexagon obtained by applying the dinaturality of $\snd$ in its $i$-th variable to the general component $\fst_\bfA$ of $\fst$:
+    \[
+    \begin{tikzcd}[column sep=2em]
+    & \H(\subst \bfB {F(\bfA\sigma)} i \eta) \ar[r,"\psi_{\subst \bfB {\F(\bfA\sigma)} i}"] & \K(\subst \bfB {\F(\bfA\sigma)} i \theta) \ar[dr,"\K(\substMV \bfB {\F(\bfA\sigma)} {\phi_\bfA} i \theta)"] \\
+    \H(\substMV \bfB {\G(\bfA\tau)} {\F(\bfA\sigma)} i \eta) \ar[ur,"\H(\substMV \bfB {\phi_\bfA} {\F(\bfA\sigma)} i \eta)"] \ar[dr,"\H(\substMV \bfB {\G(\bfA\tau)} {\phi_\bfA} \eta)"'] \ar[rrr,dotted,"(\HC \fst \snd i)_{\subst B \bfA i}"] & & & \K(\substMV \bfB {\F(\bfA\sigma)} {\G(\bfA\tau)} i \theta) \\
+    & \H(\subst \bfB {\G(\bfA\tau)} i \eta) \ar[r,"\psi_{\subst \bfB {\G(\bfA\tau)} i}"'] & \K(\subst \bfB {G(\bfA\tau)} i \theta) \ar[ur,"\K(\substMV \bfB {\phi_\bfA} {\G(\bfA\tau)} i \theta)"']
+    \end{tikzcd}
+    \]
+\end{definition}
+
+In other words, the domain of $\HC \fst \snd i$ is obtained by substituting the arguments of $\H$ (the domain of $\snd$) that are in the $i$-th connected component of $\graph\snd$ with $\F$ (the domain of $\fst$) if they are covariant, and with $\Op\G$ (the opposite of the codomain of $\fst$) if they are contravariant; those arguments not in the $i$-th connected component are left untouched. Similarly the codomain. The type of $\HC \fst \snd i$ is obtained by replacing the $i$-th variable of $\snd$ with all the variables of $\fst$ and adjusting the type of $\snd$ with $\fstTypL$ and $\fstTypR$ to reflect this act. In the following example, we see what happens to $\graph\fst$ and $\graph\snd$ upon horizontal composition.
+
+\begin{example}\label{ex:hc example}
+    Consider transformations $\delta$ and $\eval{}{}$ (see examples~\ref{ex:delta},\ref{ex:eval}). In the notations of Definition~\ref{def:generalHorizontalCompositionDef}, we have $F=\id\C \colon \C \to \C$, $G = \times \colon \C^{[+,+]} \to \C$, $H \colon \C^{[+,-,+]} \to \C$ defined as $H(X,Y,Z) = X \times (Y \implies Z)$ and $K = \id\C \colon \C \to \C$. The types of $\delta$ and $\eval{}{}$ are respectively
+    \[
+    \begin{tikzcd}[font=\small]
+    1 \ar[r] & 1 & \ar[l] 2
+    \end{tikzcd}
+    \qquad \text{and} \qquad
+    \begin{tikzcd}[row sep=0em,font=\small]
+    3 \ar[r] & 2 & 1 \ar[l] \\
+    1 \ar[r,|->] & 1 & 1 \ar[dl,|->,out=180,in=30] \\[-3pt]
+    2 \ar[ur,|->,out=0,in=210]& 2 & \\[-3pt]
+    3 \ar[ur,|->,out=0,in=210]
+    \end{tikzcd}
+    \]
+    The transformation $\eval{}{}$ is extranatural in its first variable and natural in its second: we have two horizontal compositions. $(\HC \delta {\eval{}{}} 1 )_{A,B}$ is given by either leg of the following commutative square:
+    \begin{equation}\label{delta inside eval}
+    \begin{tikzcd}
+    A \times \bigl( (A \times A) \implies B  \bigr) \ar[r,"\delta_A \times (1 \implies 1)"] \ar[d,"1 \times (\delta_A \implies 1)"'] & (A \times A) \times \bigl( (A \times A) \implies B \bigr) \ar[d,"\eval {A \times A} B"] \\
+    A \times (A \implies B) \ar[r,"\eval A B"] & B
+    \end{tikzcd}
+    \end{equation}
+    We have $\HC \delta {\eval{}{}} 1 \colon H(\id\C,\times,\id\C) \to \id\C(\id\C)$ where $\id\C(\id\C) = \id\C$ and
+    \[
+    \begin{tikzcd}[row sep=0em]
+    \C^{[+,-,-,+]} \ar[r,"{H(\id\C,\times,\id\C)}"] & \C \\
+    (X,Y,Z,W) \ar[|->,r] &  \quad X \times \bigl( (Y \times Z) \implies W \bigr) 
+    \end{tikzcd}
+    \]
+    and it is of type
+    \[
+    \begin{tikzcd}[row sep=0em]
+    4 \ar[r]      			   & 2 & \ar[l] 1 \\
+    1 \ar[r,|->]  			   & 1 & 1 \ar[dl,|->,out=180,in=30]          \\[-3pt]
+    2 \ar[ur,|->,out=0,in=210] & 2 \\[-3pt]
+    3 \ar[uur,|->,out=0,in=230] \\[-3pt]
+    4 \ar[uur,|->,out=0,in=230] \\
+    \end{tikzcd}
+    \]
+    Intuitively, $\graph{\HC \delta {\eval{}{}} 1}$ is obtained by substituting $\graph{\delta}=\begin{tikzpicture}
+    \matrix[row sep=1em,column sep=0.5em]{
+        & \node (1) [category] {}; \\
+        & \node (A) [component] {}; \\
+        \node (2) [category] {}; & & \node (3) [category] {}; \\
+    };
+    \graph[use existing nodes]{
+        1 -> A -> {2,3}; 
+    };
+    \end{tikzpicture}$
+    into the first connected component of $\graph{\eval{}{}}=\begin{tikzpicture}
+    \matrix[row sep=1em, column sep=1em]{
+        \node (1) [category] {}; & & \node (2) [opCategory] {}; & & \node (3) [category] {}; \\
+        & \node (A) [component] {}; & & & \node (B) [component] {}; \\
+        & & & & \node (4) [category] {}; \\
+    };
+    \graph[use existing nodes]{
+        1 -> A -> 2; 3 -> B -> 4;
+    };
+    \end{tikzpicture}$, by ``bending'', as it were, $\graph\delta$ into the $U$-turn that is the first connected component of $\graph{\eval{}{}}$:
+    \[
+    \begin{tikzpicture}
+    %[graphs/every graph/.style = { edges={rounded corners=5mm} }]
+    \matrix[column sep=1em,row sep=2em]{
+        &\node[category] (1) {}; & & \node[opCategory] (2) {}; & & \node[opCategory] (3) {}; & & \node[category] (4) {};\\
+        &\node[component] (A) {};& &                           & &                           & & \node[component] (B) {};\\
+        \node[coordinate] (fake1) {}; & & \node[coordinate] (fake2) {}; &\node[coordinate] (fake3) {};&  & \node[coordinate] (fake4) {};                       & & \node[category] (5) {};\\
+    };
+    %	\draw[rounded corners] (1) -> (A) -- (fake1) --[out=-90,in=-90] (fake4) -> (3);
+    \graph[use existing nodes]{
+        1 -> A -- fake1 --[out=-90,in=-90] fake4 -> 3;
+        A -- fake2 --[out=-90,in=-90] fake3 -> 2;
+        4 -> B -> 5;
+    };
+    \end{tikzpicture}
+    \quad \text{or} \quad
+    \begin{tikzpicture}
+    \matrix[column sep=1em,row sep=2em]{
+        \node[category] (1) {};&  & \node[opCategory] (2) {}; & & \node[opCategory] (3) {}; & & \node[category] (4) {};\\
+        \node[coordinate] (fake1) {}; & & & \node[component] (A) {}; & & & \node[component] (B) {};\\
+        & & & & & & \node[category] (5) {};\\
+    };
+    \graph[use existing nodes]{
+        1 -- fake1 ->[out=-90,in=-90] A -> {2,3};
+        4 -> B -> 5;
+    };
+    \end{tikzpicture}
+    \]
+    Here the first graph corresponds to the upper leg of (\ref{delta inside eval})  , the second to the lower one. Notice how the component $\eval {A \times A} B$ has now \emph{two} wires, one per each $A$ in the graph on the left. The result is therefore
+    \[
+    \graph{\HC \delta {\eval{}{}} 1} = 
+    \begin{tikzpicture}
+    \matrix[column sep=1em,row sep=1.5em]{
+        \node[category] (1) {}; & \node[opCategory] (2) {}; & \node[opCategory] (3) {}; & \node[category] (4) {}; \\
+        & \node[component] (A) {}; & & \node[component] (B) {};\\
+        & & & \node[category] (5) {};\\
+    };
+    \graph[use existing nodes]{
+        1 -> A -> {2,3};
+        4 -> B -> 5;
+    };
+    \end{tikzpicture}
+    \]
+    Turning now to the other possible horizontal composition, we have that $\HC \delta {\eval{}{}} 2 \colon H(\id\C,\id\C,\id\C) \to \id\C(\times)$ where $ H(\id\C,\id\C,\id\C) = H$ and $\id\C(\times)=\times$ by definition; it is of type
+    \[
+    \begin{tikzcd}[row sep=0em]
+    3 \ar[r]     & 2 & \ar[l] 2 \\
+    1 \ar[r,|->] & 1 & 1  \ar[dl,|->,out=180,in=30] \\[-3pt]
+    2 \ar[ur,|->,out=0,in=210]& 2 & 2 \ar[l,|->]  \\[-3pt]
+    3 \ar[ur,|->,out=0,in=210]
+    \end{tikzcd}
+    \] 
+    and  $(\HC \delta {\eval{}{}} 2)_{A,B}$ is given by either leg of the following commutative square:
+    \[
+    \begin{tikzcd}[column sep=3em]
+    A \times (A \implies B) \ar[r,"1 \times (1 \implies \delta_B)"] \ar[d,"\eval A B"'] & A \times \bigl( A \implies (B \times B) \bigr) \ar[d,"\eval A {B \times B}"] \\
+    B \ar[r,"\delta_B"] & B \times B
+    \end{tikzcd}
+    \]
+    Substituting $\graph\delta$ into the second connected component of $\graph{\eval{}{}}$, which is just a ``straight line'', results into the following graph:
+    \[
+    \graph{\HC \delta {\eval{}{}} 2} = 
+    \begin{tikzpicture}
+    \matrix[column sep=.5em,row sep=1em]{
+        \node[category] (1) {}; & & \node[opCategory] (2) {}; & & \node[category] (3) {}; \\
+        & \node[component] (A) {}; & & & \node[component] (B) {};\\
+        & & & \node[category] (4) {}; & & \node[category] (5) {};\\
+    };
+    \graph[use existing nodes]{
+        1 -> A -> 2;
+        3 -> B -> {4,5};
+    };
+    \end{tikzpicture}
+    \]
+\end{example}
+
+\subsection{Dinaturality of horizontal composition}\label{section dinaturality of horizontal composition}
+
+We aim to prove here that our definition of horizontal composition, which we have already noticed generalises the well-known version for classical natural transformations (Remark~\ref{rem:our definition of hc generalises natural case}), is a closed operation on dinatural transformations. For the rest of this section, we shall fix transformations $\fst$ and $\snd$ with the notations used in Definition~\ref{def:generalHorizontalCompositionDef} for their signature; we also fix the ``names'' of the variables of $\fst$ as $\bfA=(A_1,\dots,A_n)$ and of $\snd$ as $\bfB=(B_1,\dots,B_m)$. In this spirit, $i$ is a fixed element of $\{1,\dots,m\}$, we assume $\snd$ to be dinatural in $B_i$ and we shall sometimes refer to $\HC \fst \snd i$ also as $\HC \fst \snd {B_i}$.
+
+As in the classical natural case (Definition~\ref{def:horizontal composition natural transformations}), only the dinaturality of $\snd$ in $B_i$ is needed to \emph{define} the $i$-th horizontal composition of $\fst$ and $\snd$. Here we want to understand in which variables the $i$-th horizontal composition
+\[
+\HC \fst \snd {B_i} = \bigl( (\HC \fst \snd {B_i})_{\subst \bfB \bfA i}  \bigr)= \bigl( (\HC \fst \snd {B_i})_{B_1,\dots, B_{i-1},A_1,\dots, A_n, B_{i+1}, \dots, B_m} \bigr)
+\] 
+itself is in turn dinatural. It is straightforward to see that $\HC \fst \snd {B_i}$ is dinatural in all its $B$-variables where $\snd$ is dinatural, since the act of horizontally composing $\fst$ and $\snd$ in $B_i$ has not ``perturbed'' $\sndDom$, $\sndCoDom$ and $\snd$ in any way except in those arguments involved in the $i$-th connected component of $\graph\snd$, see example~\ref{ex:hc example}. Hence we have the following preliminary result.
+
+\begin{proposition}
+    If $\snd$ is dinatural in $B_j$, for $j \ne i$, then $\HC \fst \snd {B_i}$ is also dinatural in $B_j$.
+\end{proposition}
+
+More interestingly, it turns out that $\HC \fst \snd {B_i}$ is also dinatural in all those $A$-variables where $\fst$ is dinatural in the first place. We aim then to prove the following Theorem.
+
+\begin{theorem}\label{thm:horCompIsDinat}
+    If $\fst$ is dinatural in its $k$-th variable and $\snd$ in its $i$-th one, then $\HC \fst \snd i$ is dinatural in its $(i-1+k)$-th variable. In other words, if $\fst$ is dinatural in $A_k$ and $\snd$ in $B_i$, then $\HC \fst \snd {B_i}$ is dinatural in $A_k$.
+\end{theorem}
+
+The proof of this theorem relies on the fact that we can reduce ourselves, without loss of generality, to Theorem~\ref{thm:horCompTheorem}. To prove that, we introduce the notion of \emph{focalisation} of a transformation on one of its variables: essentially, the focalisation of a transformation $\varphi$ is a transformation depending on only one variable between functors that have only one covariant and one contravariant argument, obtained by fixing all the parts of the data involving variables different from the one we are focusing on.
+
+\begin{definition}\label{def:focalisation def}
+    Let $\varphi = (\varphi_\bfA) = (\varphi_{A_1,\dots,A_p}) \colon T \to S$ be a transformation of type 
+    \[
+    \begin{tikzcd}
+    \length\alpha \ar[r,"\sigma"] & p & \ar[l,"\tau"'] \length\beta
+    \end{tikzcd}
+    \]
+    with $T \colon \C^\alpha \to \C$ and $S \colon \C^\beta \to \C$. Fix $k\in\{1,\dots,p\}$ and objects $A_1,\dots,A_{k-1}$, $A_{k+1},\dots,A_p$ in $\C$. Consider functors $\bar T k$, $\bar S k \colon \Op\C \times \C \to \C$ defined by
+    \begin{align*}
+    \bar T k (A,B) &= T(\substMV \bfA A B i \sigma) \\
+    \bar S k (A,B) &= S(\substMV \bfA A B i \tau)
+    \end{align*}
+    The \emph{focalisation of $\varphi$ on its $k$-th variable} is the transformation 
+    \[
+    \bar \varphi k \colon \bar T k \to \bar S k
+    \]
+    of type 
+    $
+    \begin{tikzcd}[cramped, sep=small]
+    2 \ar[r] & 1 & \ar[l] 2
+    \end{tikzcd}
+    $
+    where 
+    \[
+    \bar \varphi k_X = \phi_{\subst \bfA X i} = \varphi_{A_1\dots A_{k-1},X,A_{k+1}\dots A_p}.
+    \] 
+    Sometimes we may write $\bar \varphi {A_k} \colon \bar T {A_k} \to \bar S {A_k}$ too, when we fix as $A_1,\dots,A_p$ the name of the variables of $\varphi$.
+\end{definition}
+
+\begin{remark}\label{rem:focalisationIsDinaturalRemark}
+    $\varphi$ is dinatural in its $k$-th variable if and only if $\bar \varphi k$ is dinatural in its only variable for all objects $A_1,\dots,A_{k-1},A_{k+1},\dots,A_p$ fixed by the focalisation of $\varphi$.
+\end{remark}
+
+The $\bar{} k$ construction depends on the $p-1$ objects we fix, but not to make the notation too heavy, we shall always call those (arbitrary) objects $A_1,\dots,A_{k-1},A_{k+1},\dots,A_n$ for $\bar \fst k$ and $B_1,\dots,B_{i-1}$, $B_{i+1},\dots,B_m$ for $\bar \snd i$.
+
+\begin{lemma}\label{lemma:focalisationLemma}
+    It is the case that $\HC \fst \snd i$ is dinatural in its $(i-1+k)$-th variable if and only if $\hc {\bar \fst k} {\bar \snd i}$ is dinatural in its only variable for all objects $B_1,\dots,B_{i-1}$, $A_1,\dots,A_{k-1}$, $A_{k+1},\dots,A_n$, $B_{i+1},\dots,B_m$ in $\C$ fixed by the focalisations of $\fst$ and $\snd$.
+\end{lemma}
+\begin{proof}
+    The proof consists in unwrapping the two definitions and showing that they require the exact same hexagon to commute: see~\cite[Lemma 2.14]{santamaria_towards_2019}. \qed
+\end{proof}
+
+We can now prove that horizontal composition preserves dinaturality.
+
+\begin{proofDinTheorem}
+    Consider transformations $\bar \fst k$ and $\bar \snd i$. By Remark \ref{rem:focalisationIsDinaturalRemark}, they are both dinatural in their only variable. Hence, by Theorem \ref{thm:horCompTheorem}, $\hc {\bar \fst k} {\bar \snd i}$ is dinatural and by Lemma \ref{lemma:focalisationLemma} we conclude. \qed
+\end{proofDinTheorem}
+
+It is straightforward to see that horizontal composition has a left and a right unit, namely the identity (di)natural transformation on the appropriate identity functor. 
+
+\begin{theorem}
+    Let $T \colon \B^\alpha \to \C$, $S \colon \B^\beta \to \C$ be functors, and let $\varphi \colon T \to S$ be a transformation of any type. Then
+    \[
+    \hc \varphi {\id{\id \C}} = \varphi.
+    \]
+    If $\varphi$ is dinatural in its $i$-th variable, for an appropriate $i$, then also
+    \[
+    \HC {\id{\id \B}} \varphi i = \varphi.
+    \]
+\end{theorem}
+\begin{proof}
+    Direct consequence of the definition of horizontal composition.\qed
+\end{proof}
+
+\subsection{Associativity of horizontal composition}\label{section associativity horizontal composition}
+
+Associativity is a crucial property of any respectable algebraic operation. In this section we show that our notion of horizontal composition is at least this respectable. 
+%It gives us the opportunity to safely compose not just two, but an arbitrarily long finite string of objects in whichever order we prefer: in other words, ``bracketing does not matter''. 
+We begin by considering classical dinatural transformations $\fst \colon \F \to \G$, $\snd \colon \H \to \K$ and $\trd \colon \U \to \V$, for $\F,\G,\H,\K,\U,\V \colon \Op\C \times \C \to \C$ functors, all of type
+$
+\begin{tikzcd}[cramped,sep=small]
+2 \ar[r] & 1 & \ar[l] 2
+\end{tikzcd}
+$.
+
+\begin{theorem}\label{thm:associativity simple case}
+    $\hc {\left( \hc \fst \snd \right)} \trd = \hc \fst {\left( \hc \snd \trd \right)}$.
+\end{theorem}
+\begin{proof}
+    We first prove that the two transformations have same domain and codomain functors. Since they both depend on one variable, this also immediately implies they have same type.
+    
+    We have $\hc \fst \snd \colon \H(\Op\G,\F) \to \K(\Op\F,G)$, hence 
+    \[
+    \hc {\left( \hc \fst \snd \right)} \trd \colon \U\Bigl(\Op{\K(\Op\F,G)},\H(\Op\G,\F)\Bigr) \to \V\Bigl( \Op{\H(\Op\G,\F)}, \K(\Op\F,G) \Bigr).
+    \]
+    Notice that $\Op{\K(\Op\F,G)} = \Op\K (F, \Op G)$ and $\Op{\H(\Op\G,\F)}  = \Op\H (G, \Op \F)$. Next, we have $\hc \snd \trd \colon \U(\Op\K, \H) \to \V(\Op\H, \K)$. Given that $\U(\Op\K,\H), \V(\Op\H,\K) \colon \C^{[+,-,-,+]} \to \C$, we have
+    \[
+    \hc \fst {\left( \hc \snd \trd \right)} \colon \underbrace{\U(\Op\K, \H)(\F,\Op\G,\Op\G,\F)}_{\U\bigl(\Op\K(\F,\Op\G),\H(\Op\G,\F)\bigr)} \to \underbrace{\V(\Op\H, \K)(\G,\Op\F,\Op\F,\G)}_{\V\bigl( \Op\H(\G,\Op\F), \K(\Op\F,\G) \bigr)}.
+    \] 
+    This proves $\hc {\left( \hc \fst \snd \right)} \trd$ and $\hc \fst {\left( \hc \snd \trd \right)}$ have the same signature. 
+    
+    Only equality of the single components is left to show. Fix then an object $A$ in $\C$. Figure~\ref{fig:Associativity} shows how to pass from $(\trd \ast \snd) \ast \fst$ to $\trd \ast (\snd \ast \fst)$ by pasting three commutative diagrams. In order to save space, we simply wrote ``$\H(\G,\F)$'' instead of the proper ``$\H(\Op\G(A,A),F(A,A))$'' and similarly for all the other instances of functors in the nodes of the diagram in Figure~\ref{fig:Associativity}; we also dropped the subscript for components of $\fst$, $\snd$ and $\trd$ when they appear as arrows, that is we simply wrote $\fst$ instead of $\fst_A$, since there is only one object involved and there is no risk of confusion. \qed
+\end{proof}
+\begin{sidewaysfigure}%[p]
+    \footnotesize
+    \begin{tikzpicture}
+    \matrix[column sep=1cm, row sep=1cm]{
+        \node(1) {$\U(\K(\F,\G),\H(\G,\F))$}; & & \node(2) {$\U(\K(\F,\F),\H(\F,\F))$}; & \node(3) {$\U(\H(\F,\F),\H(\F,\F))$};\\
+        
+        \node(4) {$\U(\K(\F,\F),\H(\G,\F))$}; & & \node(5) {$\U(\H(\F,\F),\H(\F,\F))$}; & \node(6) {$\V(\H(\F,\F),\H(\F,\F))$}; &
+        \node(7) {$\V(\H(\F,\F),\K(\F,\F))$}; & & \node(8) {$\V(\H(\G,\F),\K(\F,\G))$};\\
+        
+        \node(9) {$\U(\H(\F,\F),\H(\G,\F))$};&&&& \node(10){$\V(\H(\G,\F),\H(\F,\F))$};&& \node(11){$\V(\H(\G,\F),\K(\F,\F))$};\\
+        
+        &  & \node(12){$\U(\H(\G,\F),\H(\G,\F))$}; & \node(13){$\V(\H(\G,\F),\H(\G,\F))$};\\
+    };
+    \graph[use existing nodes]{
+        1 ->["$\U(\K(1,\fst),\H(\fst,1))$"] 2 ->["$\U(\snd,1)$"] 3 ->["$\trd$"] 6;
+        1 ->["$\U(\K(1,\fst),1)$"'] 4 ->["$\U(\snd,1)$"'] 9 ->["$\U(1,\H(\fst,1))$",sloped] 5 ->["$\trd$"] 6;
+        6 ->["$\V(1,\snd)$"] 7 ->["$\V(\H(\fst,1),\K(1,\fst))$"] 8;
+        6 ->["$\V(\H(\fst,1),1)$",sloped] 10 ->["$\V(1,\snd)$"] 11 ->["$\V(1,\K(1,\fst))$"'] 8;
+        9 ->["$\U(\H(\fst,1),1)$"',sloped] 12 ->["$\trd$"] 13 ->["$\V(1,\H(\fst,1))$"', sloped] 10;
+        
+    };
+    
+    \path (2) -- node[anchor=center,red]{\footnotesize Functoriality of $\U$} (5);
+    \path (9) -- node[anchor=center,red]{\footnotesize Dinaturality of $\trd$} (10);
+    \path (10) --node[anchor=center,red]{\footnotesize Functoriality of $\V$} (8);
+    
+    \end{tikzpicture}
+    \caption{Associativity of horizontal composition in the classical case. The upper leg is $(\trd \ast \snd) \ast \fst $, whereas the lower one is $\trd \ast (\snd \ast \fst)$.}
+    \label{fig:Associativity}
+\end{sidewaysfigure}
+
+We can now start discussing the general case for transformations with an arbitrary number of variables; we shall prove associativity by reducing ourselves to Theorem~\ref{thm:associativity simple case} using focalisation (see Definition~\ref{def:focalisation def}). For the rest of this section, fix transformations $\fst$, $\snd$ and $\trd$, dinatural in all their variables, with signatures:
+\begin{itemize}
+    \item $\fst \colon \fstDom \to \fstCoDom$, for $\fstDom \colon \C^\fstDomVar \to \C$ and $\fstCoDom \colon \C^\fstCoDomVar \to \C$, of type 
+    $
+    \begin{tikzcd}[cramped,sep=small]
+    \length\fstDomVar \ar[r,"\fstTypL"] & \fstVarNo & \ar[l,"\fstTypR"'] \length\fstCoDomVar
+    \end{tikzcd}
+    $;
+    \item $\snd \colon \sndDom \to \sndCoDom$, for $\sndDom \colon \C^\sndDomVar \to \C$ and $\sndCoDom \colon \C^\sndCoDomVar \to \C$, of type
+    $
+    \begin{tikzcd}[cramped,sep=small]
+    \length\sndDomVar \ar[r,"\sndTypL"] & \sndVarNo & \ar[l,"\sndTypR"'] \length\sndCoDomVar
+    \end{tikzcd}
+    $;
+    \item $\trd \colon \trdDom \to \trdCoDom$, for $\trdDom \colon \C^\trdDomVar \to \C$ and $\trdCoDom \colon \C^\trdCoDomVar \to \C$, of type
+    $
+    \begin{tikzcd}[cramped,sep=small]
+    \length\trdDomVar \ar[r,"\trdTypL"] & \trdVarNo & \ar[l,"\trdTypR"'] \length\trdCoDomVar
+    \end{tikzcd}
+    $
+\end{itemize}
+For sake of simplicity, let us fix the name of the variables for $\fst$ as $\fstVariables{}{} = (A_1,\dots,A_n)$, for $\snd$ as $\sndVariables{}{} = (B_1,\dots,B_m)$ and for $\trd$ as $\trdVariables{}{} = (C_1,\dots,C_l)$. In this spirit we also fix the variables of the horizontal compositions, so for $i \in \{1,\dots,\sndVarNo\}$, the variables of $\HC \fst \snd i$ are 
+\[
+\sndVariables i {\fstVariables{}{}} = B_1,\dots,B_{i-1},A_1,\dots,A_n,B_{i+1},\dots,B_m
+\]
+and, similarly, for $j \in \{1,\dots,\trdVarNo\}$ the variables of $\HC \snd \trd j$ are 
+$
+\trdVariables j {\sndVariables{}{}}.
+$
+
+The theorem asserting associativity of horizontal composition, which we prove in the rest of this section, is the following.
+
+\begin{theorem}\label{thm:associativityTheorem}
+    For $i \in \{1,\dots,\sndVarNo\}$ and $j \in \{1,\dots,\trdVarNo\}$,
+    \[
+    \HC {\left( \HC \fst \snd i \right)} \trd j = \HC \fst {\left(\HC \snd \trd j\right)} {j-1+i}
+    \]
+    or, in alternative notation,
+    \begin{equation}\label{eqn:associativity equation}
+    \HC {\left( \HC \fst \snd {B_i} \right)} \trd {C_j} = \HC \fst {\left(\HC \snd \trd {C_j}\right)} {B_i}.
+    \end{equation}
+\end{theorem}
+
+We shall require the following, rather technical, Lemma, whose proof is a matter of identity checking.
+
+\begin{lemma}\label{lemma:associativity techincal lemma}
+    Let $\Phi = (\Phi_{V_1,\dots,V_p})$ and $\Psi = (\Psi_{W_1,\dots,W_q})$ be transformations in $\C$ such that $\Psi$ is dinatural in $W_s$, for $s \in \{1,\dots,q\}$. Let $V_1,\dots,V_{r-1}$, $V_{r+1},\dots,V_p$, $W_1,\dots,W_{s-1}$, $W_{s+1},\dots,W_q$ be objects of $\C$, and let $\bar \Phi {V_r}$ and $\bar \Psi {W_s}$ be the focalisation of $\Phi$ and $\Psi$ in its $r$-th and $s$-th variable respectively using the fixed objects above. Let also $X$ be an object of $\C$. Then 
+    \begin{enumerate}[(i)]
+        \item $ \left( \hc { \bar \Phi {V_r} } { \bar \Psi {W_s} } \right)_X = \left( \HC \Phi \Psi {W_s} \right)_{W_1,\dots,W_{s-1},V_1,\dots,V_{r-1},X,V_{r+1},\dots,V_p,W_{s+1},\dots,W_q} = \left( \bar {\HC \Phi \Psi {W_s}} {V_r} \right)_X $
+        \item $\mathit{(co)dom}\left( \bar {\HC \Phi \Psi {W_s}} {V_r} \right) (x,y) = \mathit{(co)dom}\left( \hc {\bar \Phi {V_r}} {\bar \Psi {W_s}} \right) (x,y,y,x)  $ for any morphisms $x$ and $y$.
+    \end{enumerate}
+\end{lemma}
+
+\begin{remark}\label{rem:associativity techincal lemma remark}
+    Part (i) asserts an equality between \emph{morphisms} and not \emph{transformations}, as $ \hc { \bar \Phi {V_r} } { \bar \Psi {W_s} }$ and $\HC \Phi \Psi {W_s}$ have different types and even different domain and codomain functors.
+\end{remark}
+
+\begin{proofAssociativity}
+    One can show that $\HC {\left( \HC \fst \snd {B_i} \right)} \trd {C_j}$ and $ \HC \fst {\left(\HC \snd \trd {C_j}\right)} {B_i}$ have the same domain, codomain and type simply by computing them and observing they coincide. In particular, notice that they both depend on the following variables: $\trdVariables j {\sndVariables i {\fstVariables{}{}}}$. Here we show that their components are equal. Let us fix then $
+    C_1,\dots, C_{j-1}$, $B_1$, $\dots$, $B_{i-1}$, $A_1$, $\dots$, $A_{k-1}$, $X$, $A_{k+1}$, $\dots$, $A_n$, $B_{i+1}$, $\dots$, $B_m$, $C_{j+1}$, $\dots$, $C_l$ objects in $\C$. Writing just $V$ for this long list of objects, we have, by Lemma~\ref{lemma:associativity techincal lemma}, that
+    \[
+    \left(\HC \fst {\left(\HC \snd \trd {C_j}\right)} {B_i}\right)_V = \left( \hc {\bar \fst {A_k}} {\bar {\HC \snd \trd {C_j}} {B_i}} \right)_X .
+    \]
+    Now, we cannot apply again Lemma~\ref{lemma:associativity techincal lemma} to $\bar {\HC \snd \trd {C_j}} {B_i}$ because of the observation in Remark~\ref{rem:associativity techincal lemma remark}, but we can use the definition of horizontal composition to write down explicitly the right-hand side of the equation above: it is the morphism
+    \[
+    %\scalebox{0.95}{$
+        \codom{ \bar {\HC \snd \trd {C_j}} {B_i} } (\id{\bar \F {} (X,X)} , (\bar \fst {A_k})_X) \circ
+        \left( \bar{\HC \snd \trd {C_j}}{B_i} \right)_{\bar \F {} (X,X)} \circ
+        \dom{ \bar {\HC \snd \trd {C_j}} {B_i} }( {(\bar \fst {A_k})}_X ,\id{\bar \F {} (X,X)})
+    %    $}
+    \]
+    (Remember that $\bar \fst {A_k} \colon \bar \F {A_k} \to \bar \G {A_k}$, here we wrote $\bar F {} (X,X)$ instead of $\bar F {A_k}(X,X)$ to save space.) Now we \emph{can} use Lemma~\ref{lemma:associativity techincal lemma} to ``split the bar'', as it were:
+    \begin{multline*}
+    \codom{\hc {\bar \snd {B_i}} {\bar \trd {C_j}}} \bigl( {(\bar \fst {A_k})}_X, \id{\bar \F {} (X,X)}, \id{\bar \F {} (X,X)}, {(\bar \fst {A_k})}_X \bigr) \circ \\[.5em]
+    \left( \hc {\bar \snd {B_i}} {\bar \trd {C_j}} \right)_{\bar \F {} (X,X)} \circ \\[.5em]
+    \dom{\hc {\bar \snd {B_i}} {\bar \trd {C_j}}} \bigl(\id{\bar \F {} (X,X)}, {(\bar \fst {A_k})}_X, {(\bar \fst {A_k})}_X, \id{\bar \F {} (X,X)}\bigr) 
+    \end{multline*}
+    This morphism is equal, by definition of horizontal composition, to
+    \[
+    \left( \hc {\bar \fst {A_k}} {\left( \hc {\bar \snd {B_i}} {\bar \trd {C_j}} \right)} \right)_X
+    \]
+    which, by Theorem~\ref{thm:associativity simple case}, is the same as
+    \[
+    \left( \hc {\left( \hc {\bar \fst {A_k}} {\bar \snd {B_i}} \right)} {\bar \trd {C_j}} \right)_X.
+    \]
+    An analogous series of steps shows how this is equal to $\left( \HC {\left(\HC \fst \snd {B_i}\right)} \trd {C_j}  \right)_V$, thus concluding the proof. \qed
+\end{proofAssociativity}
+
+\subsection{(In?)Compatibility with vertical composition}\label{section compatibility}
+
+Looking at the classical natural case, there is one last property to analyse: the \emph{interchange law}~\cite{mac_lane_categories_1978}. In the following situation,
+\[
+\begin{tikzcd}[column sep=1.5cm]
+\A \arrow[r, out=60, in=120, ""{name=U, below}]
+\arrow[r, ""{name=D, }]
+\arrow[r,phantom,""{name=D1,below}]
+\arrow[r, bend right=60,""{name=V,above}]
+& \B \arrow[r, bend left=60, ""{name=H, below}]
+\arrow[r,""{name=E}]
+\arrow[r,phantom,""{name=E1,below}]
+\arrow[r, bend right=60,""{name=K,above}]
+& \C
+\arrow[Rightarrow, from=U, to=D,"\phi"]
+\arrow[Rightarrow, from=D1, to=V,"\psi"]
+\arrow[Rightarrow, from=H, to=E, "\phi'"]
+\arrow[Rightarrow, from=E1,to=K, "\psi'"]
+\end{tikzcd}
+\]
+with $\phi,\phi',\psi$ and $\psi'$ natural transformations, we have:
+\begin{equation}\label{interchange law}
+\hc {(\psi \circ \phi)} {(\psi' \circ \phi')} = (\hc \psi {\psi'}) \circ (\hc \phi {\phi'}). \tag{$\dagger$}
+\end{equation}
+The interchange law is the crucial property that makes $\C\mathrm{at}$ a 2-category. It is then certainly highly interesting to wonder whether a similar property holds for the more general notion of horizontal composition for dinatural transformations too.
+
+As we know all too well, dinatural transformations are far from being as well-behaved as natural transformations, given that they do not, in general, vertically compose; on the other hand, their horizontal composition always works just fine. Are these two operations compatible, at least when vertical composition is defined?
+The answer, unfortunately, is \emph{No}, at least if by ``compatible'' we mean ``compatible as in the natural case (\ref{interchange law})''. Indeed, consider classical dinatural transformations
+\begin{equation}\label{compatibility situation}
+\begin{tikzcd}[column sep=0.75cm]
+\Op\A \times \A \arrow[rr, bend left=60, ""{name=U,below}]
+\arrow[rr, phantom, bend left=60, "F"{above}]
+\arrow[rr, "G"{name=D,anchor=center,fill=white,pos=0.34}]
+\arrow[rr, bend right=60,""{name=V,above}]
+\arrow[rr, bend right=60,"H"{below}]
+&  & \B
+& \Op\B \times \B \arrow[rr, bend left=60, ""{name=H, below,}]
+\arrow[rr,phantom, bend left=60, "J"{above}]
+\arrow[rr,"K"{name=E,anchor=center,fill=white},pos=0.35]
+\arrow[rr, bend right=60,""{name=K,above}]
+\arrow[rr,phantom, bend right=60,"L"{below}]
+&  & \C
+\arrow[Rightarrow, from=U, to=D,"\phi"]
+\arrow[Rightarrow, from=D, to=V,"\psi"]
+\arrow[Rightarrow, from=H, to=E, "\phi'"]
+\arrow[Rightarrow, from=E,to=K, "\psi'"]
+\end{tikzcd}
+\end{equation}
+such that $\psi\circ\phi$ and $\psi'\circ\phi'$ are dinatural. Then 
+\[
+\hc \phi {\phi'} \colon J(\Op G,F) \to K(\Op F,G) \qquad
+\hc \psi {\psi'} \colon K(\Op H,G) \to L(\Op G,H)
+\]
+which means that $\hc \phi {\phi'}$ and $\hc \psi {\psi'}$ are not even composable
+as families of morphisms, as the codomain of the former is not the domain of the
+latter. The problem stems from the fact that the codomain of the horizontal composition $\hc \phi {\phi'}$ depends on the codomain of $\phi'$ and also the domain \emph{and} codomain of $\phi$, which are not the same as the domain and codomain of $\psi$: indeed, in order to be vertically composable, $\phi$ and $\psi$ must share only one functor, and not both. This does not happen in the natural case: the presence of mixed variance, which forces to consider the codomain of $\phi$ in $\hc \phi {\phi'}$ and so on, is the real culprit here. 
+
+The failure of (\ref{interchange law}) is not completely unexpected: after all, our definition of horizontal composition is strictly more general than the classical one for natural transformations, as it extends the audience of functors and transformations it can be applied to quite considerably. Hence it is not surprising that this comes at the cost of losing one of its properties, albeit so desirable. Of course, one can wonder whether a different definition of horizontal composition exists for which (\ref{interchange law}) holds. Although we cannot exclude \emph{a priori} this possibility, the fact that ours not only is a very natural generalisation of the classical definition for natural transformations (as it follows the same idea, see discussion after Definition~\ref{def:horizontal composition natural transformations}), but also enjoys associativity and unitarity, let us think that we \emph{do} have the right definition at hand. (As a side point, behold Figure~\ref{fig:DinaturalityHorizontalCompositionFigure}: its elegance cannot be the fruit of a wrong definition!)
+
+What we suspect, instead, is that a different \emph{interchange law} should be formulated, that can accommodate the hexagonal shape of the dinatural condition. Indeed, what proves (\ref{interchange law}) in the natural case is the naturality of either $\phi'$ or $\psi'$. For instance, the following diagrammatic proof uses the latter, for $\phi \colon F \to G$, $\psi \colon G \to H$, $\phi' \colon J \to K$, $\psi' \colon K \to L$ natural:
+\[
+\begin{tikzcd}[row sep=2.5em,column sep=2.5em,font=\small]
+JF(A) \ar[r,"{\phi'_{F(A)}}"] \ar[rd,dashed,"{(\hc \phi {\phi'})_A}"'] & KF(A) \ar[r,"\psi'_{F(A)}"] \ar[d,"K(\phi_A)"'] & LF(A) \ar[d,"L(\phi_A)"] \\
+& KG(A) \ar[r,"\psi'_{G(A)}"] \ar[dr,dashed,"{(\hc \psi {\psi'})}_A"'] & LG(A) \ar[d,"L(\psi_A)"] \\
+& & LH(A)
+\end{tikzcd}
+\]
+(The upper leg of the diagram is $	\hc {(\psi \circ \phi)} {(\psi' \circ \phi')}$.) The naturality condition of $\psi'$ is what causes $\phi$ and $\psi'$ to swap places, allowing now $\phi$ and $\phi'$ to interact with each other via horizontal composition; same for $\psi$ and $\psi'$. 
+
+However, for $\phi, \psi, \phi',\psi'$ dinatural as in (\ref{compatibility situation}), this does not happen:
+\[
+\begin{tikzcd}[column sep=.5cm,font=\small]
+& & J(F,F) \ar[r,"\phi'"] & K(F,F) \ar[r,"\psi'"] & L(F,F) \ar[dr,"{L(1,\phi)}"] \\
+& J(G,F) \ar[ur,"{J(\phi,1)}"] \ar[rrrr,dashed,"\hc {\phi} {({\psi'}\circ{\phi'})}"] & & & & L(F,G) \ar[dr,"{L(1,\psi)}"]\\
+J(H,F) \ar[ur,"{J(\psi,1)}"] & & & & & & L(F,H)
+\end{tikzcd}
+\]
+Here, the upper leg of the diagram is again $\hc {(\psi \circ \phi)} {(\psi' \circ \phi')}$; we have dropped the lower-scripts of the transformations and we have written ``$J(H,F)$'' instead of ``$J(H(A,A),F(A,A))$'' to save space. The dinaturality conditions of $\phi'$ and $\psi'$ do not allow a place-swap for $\phi$ and $\phi'$ or for $\phi$ and $\psi'$; in fact, they cannot be applied at all! The only thing we can notice is that we can isolate $\phi$ from $\phi'$, obtaining the following:
+\[
+\hc {(\psi \circ \phi)} {(\psi' \circ \phi')} = L(1,\psi) \circ \Bigl(\hc {\phi} {({\psi'}\circ{\phi'})}\Bigr) \circ J(\psi,1).
+\]
+Notice that the right-hand side is \emph{not} $\hc \psi {\Bigl(\hc {\phi} {({\psi'}\circ{\phi'})}\Bigr)}$, as one might suspect at first glance, simply because the domain of $\hc {\phi} {({\psi'}\circ{\phi'})}$ is not $J$ and its codomain is not $L$. 
+
+It is clear then that the only assumption of $\phi'\circ\phi$ and $\psi'\circ\psi$ being dinatural (for whatever reason) is not enough. One chance of success could come from involving the graph of our transformations; for example, if the composite graphs $\graph\psi \circ \graph\phi$ and $\graph{\psi'} \circ \graph{\phi'}$ are acyclic—hence dinatural, yes, but for a ``good'' reason—then maybe we could be able to deduce a suitably more general, ``hexagonal'' version of (\ref{interchange law}) for dinatural transformations. It also may well be that there is simply no sort of interchange law, of course. This is still an open question, and the matter of further study in the future. In the conclusions we shall make some additional comments in light of the calculus we will build in the rest of the article.

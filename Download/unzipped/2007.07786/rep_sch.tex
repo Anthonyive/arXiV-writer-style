@@ -1,0 +1,213 @@
+Since the loads in the network vary over time, the network might need to be repartitioned to maintain the level of self-sufficiency. In this section, first we state the repartitioning problem. Afterward, we present the repartitioning process, which includes when and how the repartitioning must be performed. Furthermore, we also provide an analysis of the  repartitioning outcome.
+
+\subsection{Repartitioning Problem Formulation}
+Prior to presenting the methodology that we propose, we establish some definitions that will be used throughout the remainder of the paper. 
+
+\begin{defn}[Non-overlapping partition]
+	\label{def:nop}
+	The set $\boldsymbol{\mathcal{M}}~=~\{\mathcal{M}_1, \mathcal{M}_2, \dots, \mathcal{M}_m \}$ defines $m$ non-overlapping partitions of graph $\mathcal{G}=(\mathcal{N},\mathcal{E})$ if $\bigcup_{p=1}^m \mathcal{M}_p = \mathcal{N}$ and $\mathcal{M}_p \cap \mathcal{M}_q = \emptyset$, for any $\mathcal{M}_p,\mathcal{M}_q \in \boldsymbol{\mathcal{M}}$ and $p \neq q$. %\eod
+\end{defn}
+
+\begin{defn}[Local imbalance]
+	The local power imbalance of a subset of nodes $\mathcal{M}\subseteq\mathcal{N}$ at any $k\geq0$, denoted by $\Delta_{\mathcal{M},k}^{\mathrm{im}}$, is defined as
+	\begin{equation}
+		\Delta_{\mathcal{M},k}^{\mathrm{im}}= \sum_{i \in \mathcal{M}} \left(-\bar{u}_{i}^{\mathrm{g}} + {d}_{i,k}\right),
+		\label{eq:p_im}
+	\end{equation}
+	where $\bar{u}_{i}^{\mathrm{g}}$ denotes the maximum capacity of dispatchable generation units, whereas ${d}_{i,k}$ follow \eqref{eq:ul} and the worst case disturbance, which is shown in \eqref{eq:w_ul}, is considered. \eod
+	\label{def:local_imb}
+\end{defn} 
+
+%In the view of Definition \ref{def:local_imb}, the local imbalance of microgrid $\mathcal{M}_{p,k}$ indicates the difference between the aggregated worst-case load of microgrid $\mathcal{M}_{p,k}$ and the local power generation of microgrid $\mathcal{M}_{p,k}$. Based on Definition \ref{def:local_imb}, we define the self-sufficiency feature.
+\begin{defn}[Self-sufficiency]
+	A subset of nodes $\mathcal{M}\subseteq\mathcal{N}$ at any $k\geq0$ is self-sufficient if it has non-positive local imbalance at any step along the prediction horizon $h$, i.e., $\Delta_{\mathcal{M},\ell}^{\mathrm{im}} \leq 0,$ for all $\ell \in \{k,k+1,\dots,k+h-1 \}$. \eod
+	\label{def:ss_mg}
+\end{defn}
+%begin{remark}
+%Self-sufficiency  is suitably defined with the considered economic dispatch problem, which has a certain time horizon $h$. Furthermore, Definition \ref{def:ss_mg} will be used as the criterion to decide whether a repartitioning process is necessary at time instant $k$. 
+%\end{remark}
+%Moreover, we also define the imbalance and efficiency costs, which will be considered in the repartitioning problem.
+%The imbalance cost \eqref{eq:j_im} penalizes a microgrid that does not have enough local power resource to meet the loads over the whole prediction horizon. On the other hand, we also consider another objective, namely the efficiency of each microgrid, which is provided in the following definition.
+\begin{defn}[Imbalance cost]
+	The imbalance cost of microgrid $\mathcal{M}_{p,k}\in\bm{\mathcal{M}}_k$ at any $k\geq0$, denoted by $J_{p,k}^{\mathrm{im}}$, is defined as
+%	\begin{equation}
+$	J_{p,k}^{\mathrm{im}} = \sum_{\ell =k}^{k+h-1}\max \left(0,\Delta_{\mathcal{M}_{p,k},\ell}^{\mathrm{im}}\right),$
+%	\label{eq:j_im}
+%	\end{equation}
+	where $\Delta_{\mathcal{M}_{p,k},\ell}^{\mathrm{im}}$ is defined based on \eqref{eq:p_im}. \eod
+	\label{def:im_cost}
+\end{defn}
+%Note that $c_{i}^{\mathrm{et}}$ can be set quite large to incentivize the decoupling among the microgrids.% Moreover, as can be seen in Definition \ref{def:eff_cost}, in order to compute $J_{p,k}^{\mathrm{ef}}$, the local controller must solve a local economic dispatch problem over $\tau+h$ time instants, which is derived from \eqref{eq:MPC_mg}.
+\begin{defn}[Efficiency cost]
+	\label{def:eff_cost}
+	The efficiency cost of microgrid $\mathcal{M}_{p,k}\in\bm{\mathcal{M}}_k$ at any $k\geq0$, is defined  as follows:
+	\begin{equation*}
+	\begin{aligned}
+	J_{p,k}^{\mathrm{ef}}=&\min_{\{\{\bm{u}_{i,\ell}\}_{i \in \mathcal{M}_{p,k}}\}_{\ell=k}^{k+h-1}} \sum_{\ell =k}^{k+h-1} \left(J_{p,\ell}^{\mu} + J_{p,\ell}^{{\epsilon}}\right)\\
+	& \ \quad \mathrm{s.t.} \
+	(\bm{u}_{i,\ell},\bm{v}_{i,\ell}) \in \mathcal{P}_i, \ \forall i \in \mathcal{M}_{p,k}, \\
+	& \quad \quad v_{i,\ell}^j + v_{j,\ell}^i = 0, \ \forall j\in\mathcal{N}_i\cap\mathcal{M}_{p,k}, \ \forall i \in \mathcal{M}_{p,k},\\ 
+	& \quad \quad \forall\ell \in\{k,\dots, k+h-1 \},
+	\end{aligned}
+	%\label{eq:j_ef}
+	\end{equation*}
+	where $J_{p,\ell}^{{\epsilon}}$ adds extra cost on the power transferred between one microgrid to another in order to minimize the dependency on the neighbors and is defined by
+	%\begin{equation}
+	$J_{p,\ell}^{{\epsilon}} = \sum_{i\in \mathcal{M}_{p,k}^{\mathrm{c}}} \sum_{j \in \mathcal{N}_i\backslash\mathcal{M}_{p,k}} c_{i}^{\mathrm{et}}(p_{ij,\ell}^{\mathrm{t}})^2,$
+%	\label{eq:J_eps}
+%	\end{equation}
+	where $c_{i}^{\mathrm{et}} \in \mathbb{R}_{\geq 0}$ is the extra per-unit cost of transferring power.\eod
+\end{defn}
+
+Now, we state the repartitioning problem that will be solved supposing that the network is triggered to perform the repartitioning. 
+First, assume that the network is initially partitioned into $m$ non-overlapping microgrids and denote the set of initial partition at $k=0$ by $\boldsymbol{\mathcal{M}}_0~=~\{\mathcal{M}_{1,0}, \mathcal{M}_{2,0}, \dots, \mathcal{M}_{m,0} \}$. 
+\iffalse 
+\begin{equation}
+J^{\pi}(\mathcal{M}_{p,k})= \alpha_{\mathrm{im}} J_{p,k}^{\mathrm{im}} + \alpha_{\mathrm{ef}} J_{p,k}^{\mathrm{ef}}, 
+\label{eq:j_pi}
+\end{equation}
+where $J_{p,k}^{\mathrm{im}}$ denotes the imbalance cost and $J_{p,k}^{\mathrm{ef}}$ denotes the efficiency cost, whereas $\alpha_{\mathrm{im}}$ and $\alpha_{\mathrm{ef}}$ denote the positive weight of these two cost components and can be regarded as tuning parameters of the repartitioning procedure. The imbalance cost is defined as follows:
+\begin{equation}
+J_{p,k}^{\mathrm{im}} = \sum_{\ell =k}^{k+\tau-1}\max \left(0,\sum_{i \in \mathcal{M}_{p,k}}p_{i,\ell}^{\mathrm{li}}\right),
+\label{eq:j_im}
+\end{equation}
+where $p_{i,\ell}^{\mathrm{li}}$, which denotes the local power imbalance of bus $i$, is expressed as
+\begin{equation}
+p_{i,\ell}^{\mathrm{li}}=  \sum_{\tau =k}^{\ell} p_{i,\tau}^{\mathrm{li}}-\bar{p}_{i}^{\mathrm{g}}  - {p}^{\mathrm{re}}_{i,\tau} + {p}^{\mathrm{l}}_{i,\tau},
+\label{eq:p_li}
+\end{equation}
+in which
+${p}^{\mathrm{re}}_{i,\tau}$ and ${p}^{\mathrm{l}}_{i,\tau}$ follow \eqref{eq:ul} and \eqref{eq:re}, respectively, and the worst case disturbances, which are shown in \eqref{eq:ws_d}, are considered to robustify the solution against the uncertainties.  The imbalance cost \eqref{eq:j_im} penalizes a microgrid that does not have enough local power resource to meet the loads. Moreover, the efficiency cost is defined  as follows:
+\begin{equation}
+\begin{aligned}
+J_{p,k}^{\mathrm{ef}}=&\min_{\{\{\bm{u}_{i,\ell}\}_{i \in \mathcal{M}_{p,k}}\}_{\ell=k}^{k+\tau+h-1}} \sum_{\ell =k}^{k+\tau+h-1} \left(J_{p,\ell}^{\mu} + J_{p,\ell}^{{\epsilon}}\right)\\
+& \quad \quad \text{s. t. \eqref{eq:mg_loc_cons}-\eqref{eq:mg_loc_cons2}}, \forall\ell \in\{k,\dots, k+\tau+h-1 \},
+\end{aligned}
+\label{eq:j_ef}
+\end{equation}
+where $J_{p,\ell}^{{\epsilon}}$ adds extra cost on the power transferred between one microgrid to another in order to minimize the dependency on the neighbors and is defined as follows:
+\begin{equation}
+J_{p,\ell}^{{\epsilon}} = \sum_{i\in \mathcal{M}_{p,k}^{\mathrm{c}}} \sum_{j \in \mathcal{N}_i\backslash\mathcal{M}_{p,k}} c_{i}^{\mathrm{et}}(p_{ij,\ell}^{\mathrm{t}})^2,
+\label{eq:J_eps}
+\end{equation}
+where $c_{i}^{\mathrm{et}}$ is the extra per-unit cost of transferring power and can be set quite large to minimize the usage of transferred power. As can be seen in \eqref{eq:j_ef}, in order to compute $J_{p,k}^{\mathrm{ef}}$, the local controller must solve a local economic dispatch problem over $\tau+h$ time instants, which is derived from \eqref{eq:MPC_mg}.  
+\fi
+Thus, for some time instants, at which the system must perform repartitioning,  the optimization problem that   must be solved is stated as follows: 
+\begin{equation}
+	\begin{aligned}
+	&\min_{\boldsymbol{\mathcal{M}}_k}  \ \sum_{p=1}^m J^{\pi}(\mathcal{M}_{p,k})\\
+	& \text{s.t. } \boldsymbol{\mathcal{M}}^{(0)}_k = \boldsymbol{\mathcal{M}}_{k-1},\\
+	& \mathcal{M}_{p,k} \in \boldsymbol{\mathcal{M}}_k \text{ is non-overlapping and connected}.%
+	\end{aligned}
+	\label{eq:part_prob}%
+\end{equation}
+The cost function $J^{\pi}(\mathcal{M}_{p,k})$ is defined by 
+\begin{equation}
+J^{\pi}(\mathcal{M}_{p,k})= \alpha J_{p,k}^{\mathrm{im}} + J_{p,k}^{\mathrm{ef}}, 
+\label{eq:j_pi}
+\end{equation}
+where $\alpha$ is the tuning parameter to determine the trade-off between both imbalance and efficiency costs. % Moreover, 
+%$\mathcal{G}_{p,k}=(\mathcal{M}_{p,k},\mathcal{E}_{p,k} )$ denotes the subgraph of microgrid $\mathcal{M}_{p,k}$, with the set of edges denoted by $\mathcal{E}_{p,k}=\{(i,j)\in \mathcal{E}: i,j \in \mathcal{M}_{p,k} \}$ and $\lambda_2(L(\mathcal{G}_{p,k}))$ denotes the second smallest eigenvalue of the Laplacian matrix of subgraph $\mathcal{G}_{p,k}$. Equation \eqref{eq:con_mg} implies 
+Moreover, each microgrid must be connected, i.e., the subgraph formed by each microgrid is connected. This constraint is imposed to avoid decoupling among the nodes within each microgrid. 
+Furthermore, $\boldsymbol{\mathcal{M}}^{(0)}_k$ denotes the initial partition at time step $k$, which is equal to the partition at the previous time step, $k-1$. %In particular, for $k=\tau$, $\boldsymbol{\mathcal{M}}^{(0)}_k = \boldsymbol{\mathcal{M}}_0$.  
+In addition, Assumption \ref{as:in_par}, which is related to the initial partition $\boldsymbol{\mathcal{M}}_0$, is considered.
+\begin{assum}
+	\label{as:in_par}
+	The initial partition $\boldsymbol{\mathcal{M}}_0$ is non-overlapping with connected microgrids. %\eod 
+\end{assum}
+%\begin{rem}
+%	The initial partition $\boldsymbol{\mathcal{M}}_0$ can be obtained by solving an optimal microgrid construction problem \cite{barani2018,arefifar2012}. %Moreover, any graph-partitioning methods, such as \cite{ocampo2011}, can be implemented to obtain an initial partition $\boldsymbol{\mathcal{M}}_0$ and the proposed repartitioning process can also be carried out at $k=0$ to refine the initial partition. 
+	%\eod
+%\end{rem}
+
+
+\subsection{Repartitioning Process}
+
+The repartitioning process consists of two main steps. The first step is to determine whether the system must perform the repartitioning and the second step is to actually perform the repartitioning. The event that triggers a repartitioning process is the existence of a microgrid that is not self-sufficient (c.f. Definition \ref{def:ss_mg}). In this regard, the triggering mechanism is provided in Algorithm \ref{alg:trig}. 
+\begin{alg}[Triggering mechanism]
+	\label{alg:trig}
+	  \hfill
+	\begin{enumerate}
+		\item For each microgrid $\mathcal{M}_{p,k-1} \in\boldsymbol{\mathcal{M}}_{k-1}$, evaluate its self-sufficiency at $k$, based on Definition \ref{def:ss_mg}.
+		\item If a microgrid is not self-sufficient, raise a flag to start repartitioning procedure. Otherwise wait until all microgrids perform step 1.
+		\item If the flag to start the repartitioning procedure is not raised, then keep the  current partition, i.e., $\boldsymbol{\mathcal{M}}_{k}=\boldsymbol{\mathcal{M}}_{k-1}$. \eod
+	\end{enumerate}
+\end{alg}
+%At each time instant $k$, first the controllers in the network execute Algorithm \ref{alg:trig}. Furthermore, when the flag to perform repartitioning is raised, we assume that all other microgrids can receive this information. This assumption can be fulfilled if the controllers have an either all-to-all communication network or at least a connected communication network.% When the communication network of the microgrids is connected, there exists a path from a microgrid to any other microgrid that can be used to relay this information.
+
+Now, we discuss the repartitioning process, where the controllers cooperatively solve Problem \eqref{eq:part_prob}. We propose an iterative local improvement algorithm that can be performed in a distributed and synchronous manner. %The main idea of the algorithm is as follows. At each iteration, one node (bus) is proposed to be moved from one microgrid to a neighboring microgrid in order to improve the total cost. Therefore, 
+Consider the initial partition $\boldsymbol{\mathcal{M}}_k^{(0)}$. Moreover, denote the iteration number by superscript $(r)$ and the set of boundary busses of microgrid $\mathcal{M}_{p,k}$, i.e., busses that are connected (coupled) to at least one bus that belongs to another microgrid by $\mathcal{M}_{p,k}^{\mathrm{c}}=\{i: (i,j) \in \mathcal{E}, i\in \mathcal{M}_{p,k}, j\in \mathcal{N}\backslash\mathcal{M}_{p,k} \}$. Then, the repartitioning procedure is stated in Algorithm \ref{alg:repartitioning}. %\color{blue}
+Note that Algorithm \ref{alg:repartitioning} can be stopped when it reaches a predefined maximum  number of iteration $\bar{r}$.  \color{black}
+
+\begin{alg}[Repartitioning procedure]
+	\label{alg:repartitioning}
+	Suppose that microgrid $\mathcal{M}_{p,k}$ is chosen to propose a node that will be moved at the $r^{\text{th}}$ iteration. Then, the steps at each iteration are described below:
+	
+	\begin{enumerate}
+		\item Microgrid $\mathcal{M}_{p,k}$ computes $J^{\pi}(\mathcal{M}_{p,k}^{(r)})$, which is the local cost function at the $r^{\text{th}}$ iteration, based on \eqref{eq:j_pi}.
+		\item Microgrid $\mathcal{M}_{p,k}$ computes a node that will be offered to be moved, denoted by $\theta_p$, as follows:
+		\begin{equation}
+		\theta_p \in \arg\min_{\theta \in \mathcal{M}_{p,k}^{\theta(r)}} J^{\pi}(\mathcal{M}_{p,k}^{(r)}\backslash\{\theta \}),
+		\label{eq:theta_p}
+		\end{equation}
+		where $\mathcal{M}_{p,k}^{\theta(r)} \subseteq \mathcal{M}_{p,k}^{\mathrm{c}(r)}$ is a subset of boundary busses that do not disconnect microgrid $\mathcal{M}_{p,k}$ when removed, i.e., the graph form by $\mathcal{M}_{p,k}^{(r)} \backslash \{\theta \}$, for $\theta \in \mathcal{M}_{p,k}^{\theta(r)}$, is connected. The node   $\theta_p$ is randomly selected from the set of minimizers of \eqref{eq:theta_p}.
+		\item %If the set of minimizers is empty, then the algorithm jumps to the next iteration. Otherwise, 
+		Microgrid $\mathcal{M}_{p,k}$ computes the local cost difference if $\theta_p$ is moved out from microgrid $\mathcal{M}_{p,k}$, i.e.,
+		\begin{equation}
+		\Delta J^{\pi(r)}_p = J^{\pi}(\mathcal{M}_{p,k}^{(r)}\backslash\{\theta_p \}) - J^{\pi}(\mathcal{M}_{p,k}^{(r)}).
+		\label{eq:delta_Jp}
+		\end{equation} 
+		\item Microgrid $\mathcal{M}_{p,k}$ shares the information of $\theta_p$ and $\Delta J^{\pi(r)}_p$ to the related neighboring microgrids $\mathcal{M}_{q,k}^{(r)} \in \mathcal{N}_{\theta_p}'=
+		\{\mathcal{M}_{q,k}^{(r)}: (\theta_p,j) \in \mathcal{E}, j \in \mathcal{M}_{q,k}^{(r)} \}$.
+		\item  All neighbors $\mathcal{M}_{q,k}^{(r)} \in \mathcal{N}_{\theta_p}'$ compute the expected total cost difference if $\theta_p$ is moved from microgrid $\mathcal{M}_{p,k}^{(r)}$ to microgrid $\mathcal{M}_{q,k}^{(r)}$, as follows:
+		\begin{equation}
+		\Delta J^{\pi(r)}_{\mathrm{t},q} = J^{\pi}(\mathcal{M}_{q,k}^{(r)}\cup\{\theta_p \}) - J^{\pi}(\mathcal{M}_{q,k}^{(r)})+\Delta J^{\pi(r)}_p,
+		\label{eq:delta_Jq}
+		\end{equation}
+		and send the information of $\Delta J^{\pi(r)}_{\mathrm{t},q}$ to microgrid $\mathcal{M}_{p,k}$.
+		\item Microgrid $\mathcal{M}_{p,k}$ selects the neighbor that will receive $\theta_p$ as follows:
+		%\begin{equation}
+		$q^{\star} \in \arg\min_{q \in \mathcal{N}_{\theta_p}'}\Delta J^{\pi(r)}_{\mathrm{t},q},
+		$%\end{equation}
+		where $q^{\star}$ is randomly chosen from the set of minimizers.
+		\item  If $\Delta J^{\pi(r)}_{\mathrm{t},q^{\star}} \leq 0$, then the partition is updated as follows:
+		%\begin{align}
+		$\mathcal{M}_{p,k}^{(r+1)} = \mathcal{M}_{p,k}^{(r)}\backslash \{\theta_p\},\
+		\mathcal{M}_{q^{\star},k}^{(r+1)} = \mathcal{M}_{q^{\star},k}^{(r)}\cup \{\theta_p\}.
+		$ %\end{align}
+		Otherwise, the algorithm jumps to the next iteration, $r+1$. \eod
+	\end{enumerate}
+\end{alg}
+
+
+%The repartitioning procedure can be stopped when it reaches a predefined maximum  number of iteration $\bar{r}$. 
+%Proposition \ref{prop:sol_alg} characterizes the solution obtained by the proposed algorithm.  
+%\vspace{-8pt} 
+\begin{prop}
+	\label{prop:sol_alg}
+	Let $\boldsymbol{\mathcal{M}}_0$ be the initial partition at $k=0$ and Assumption \ref{as:in_par} hold. At any time instant at which the repartitioning process is triggered, the output of Algorithm \ref{alg:repartitioning} is a non-overlapping partition with connected microgrids and converges to a local minimum. \eod 
+\end{prop}
+%\vspace{-12pt} 
+
+
+
+\begin{pf*}{Proof.}
+	Define by $\kappa$ the time instant at which the repartitioning process is triggered, i.e., there exists at least one microgrid in $\boldsymbol{\mathcal{M}}_{\kappa}$ that is not self-sufficient. Let $\kappa_0$ be the first (smallest) repartitioning instant. Notice that the initial partition $\boldsymbol{\mathcal{M}}^{(0)}_{\kappa}$, at any repartitioning instant $\kappa > \kappa_0$, equals to the solution of Algorithm \ref{alg:repartitioning} at the previous repartitioning instant. Therefore, if at $\kappa_0$ the assertion holds, then it also holds for any repartitioning instants. Hence, now we only need to evaluate the outcome of the repartitioning process at $\kappa_0$. 
+	Since the system is not repartitioned when $k<\kappa_0$, the initial partition at $\kappa_0$, $\boldsymbol{\mathcal{M}}^{(0)}_{\kappa_0}=\boldsymbol{\mathcal{M}}_0$, is non-overlapping with connected microgrids due to Assumption \ref{as:in_par}. Moreover, at any iteration of the repartitioning procedure, the node proposed to be moved is selected from $\mathcal{M}_{p,{\kappa_0}}^{\theta (r)}$, which is the set of boundary nodes that do not cause the disconnection of the associated microgrid when removed (see \eqref{eq:theta_p}). At the end of the iteration, either one node is moved from one microgrid to another or no node is moved. These facts imply that, at the end of any iteration, $\boldsymbol{\mathcal{M}}^{(r)}_{\kappa_0}$ remains non-overlapping and the connectivity of each microgrid is maintained. 
+	Now, we show the convergence of the repartitioning solution. To this end, let the total cost at the beginning of iteration $r$  be denoted by $J^{\pi(r)}_{\mathrm{t}} = \sum_{p=1}^m J^{\pi}(\mathcal{M}_{p,{\kappa}})$. The convergence is proved by showing that the evolution of the total cost is non-increasing. Suppose that $\theta_p$ is moved from microgrid $p$ to microgrid $q^{\star}$. Therefore, we have
+	\vspace{-5pt}
+	\begin{align*}
+	J^{\pi(r+1)}_{\mathrm{t}}- J^{\pi(r)}_{\mathrm{t}} 
+	&= J^{\pi}(\mathcal{M}_{p,k}^{(r+1)}) - J^{\pi}(\mathcal{M}_{p,{\kappa}}^{(r)}) \\& \quad + J^{\pi}(\mathcal{M}_{q^{\star},{\kappa}}^{(r+1)}) - J^{\pi}(\mathcal{M}_{q^{\star},{\kappa}}^{(r)})\\
+	%&= J^{\pi}(\mathcal{M}_{p,{\kappa}}^{(r)}\backslash\{\theta_p \}) - J^{\pi}(\mathcal{M}_{p,{\kappa}}^{(r)}) \\ & \quad + J^{\pi}(\mathcal{M}_{q^{\star},{\kappa}}^{(r)}\cup\{\theta_p \}) - J^{\pi}(\mathcal{M}_{q^{\star},{\kappa}}^{(r)})\\
+	%&= \Delta J^{\pi(r)}_p + J^{\pi}(\mathcal{M}_{q^{\star},{\kappa}}^{(r)}\cup\{\theta_p \}) - J^{\pi}(\mathcal{M}_{q^{\star},{\kappa}}^{(r)})\\
+	&=\Delta J^{\pi(r)}_{\mathrm{t},q^{\star}} \leq 0.
+	\end{align*}
+	The first equality follows from the fact that only the local costs of microgrids $p$ and $q^{\star}$ change after iteration $r$. The second equality follows from \eqref{eq:delta_Jp} and \eqref{eq:delta_Jq}, and the inequality comes from the condition imposed in step 7 of Algorithm \ref{alg:repartitioning}, where $\theta_p$ is not moved if  $\Delta J^{\pi(r)}_{\mathrm{t},q^{\star}} > 0$. When no node is moved, $J^{\pi(r+1)}_{\mathrm{t}}- J^{\pi(r)}_{\mathrm{t}}=0$. \eod
+\end{pf*}
+
+%\begin{rem}
+%	After the network is repartitioned by Algorithm \ref{alg:repartitioning}, not all microgrids might be self-sufficient. Note that in general, Problem \eqref{eq:MPC_net} might actually have feasible solutions that require high power exchange, implying it might be impossible to partition the network into self-sufficient microgrids.
+%\end{rem}
+
+
