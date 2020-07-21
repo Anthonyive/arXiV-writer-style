@@ -20,6 +20,7 @@ library(R.utils)
 ###################
 # remove all downloads
 system("./removeDownloads")
+options(warn=-1)
 
 url <- "https://arxiv.org/"
 mathurl <- "https://arxiv.org/archive/math"
@@ -103,6 +104,11 @@ for (i in seq_along(topicMath_recent_tags)) {
     file_name <- download_link[1] %>% 
       str_extract("(?:.(?!\\/))+$")
     
+    if (file_name %>% str_detect("/$")) {
+      break
+      next
+    }
+    
     # download tar
     download.file(download_link, 
                   paste("./Download/targz", 
@@ -128,12 +134,14 @@ for (i in seq_along(topicMath_recent_tags)) {
       any()
     
     if (firstlineIsCommand) {
-      cat("Single file! Chenged into .tex file. \n")
+      cat("Single file! Changed into .tex file. \n")
+      cat("Reference to: ", file_name, "\n")
       system(paste('cd ',unzipped_path, '; ',
                  "mv `ls` `ls`.tex",
                  sep = ""))
     } else {
       cat("Probably multiple files! Untarred it. \n")
+      cat("Reference to: ", file_name, "\n")
       system(paste('cd ',unzipped_path, '; ',
                  "tar -xvf ", substring(file_name,2),
                  sep = ""))
