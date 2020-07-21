@@ -1,0 +1,161 @@
+nonics2.txt
+--- This code implements an algorithm (see sub-section 5.1) for a criterion that tests the minimality of a decomposition 
+T = \lambda_{1}*L_{1}^9+...+\lambda_{18}*L_{18}^9 of a form T of degree 9 in 3 variables.
+--- The code takes in input representative vectors v_i's for the points dual to the linear forms L_{i}'s and controls if the v_{i}'s are in sufficiently general position (tests 1), 2), 3)). 
+--- Moreover it takes in input a column vector containing the coordinates of T in the standard monomial basis of degree 9 in the variables x,y,z and it determines wheter or not f'^{-1}(T) empty (test 4)).
+
+k = ZZ/31991;
+R = k[x,y,z];
+--- input: a 18x3 matrix A with the coordinates of v_{1},...,v_{18}
+A = random(R^18,R^3) 
+--- in the examples of subsection 5.2 we generated the random matrix: 
+--- A = sub(matrix{{1,1,1},{0,1,2},{-1,2,1},{1,2,3},{1,-2,0},{2,1,4},
+{4,2,-3},{1,5,1},{5,2,3},{6,2,3},{1,7,7},{1,7,3},{6,5,4},{-7,2,3},{3,7,4},{2,-5,1},{6,3,-4},{-7,6,6}},R);
+--- the i-th row of A contains the coordinates of v_{i} 
+
+--- test 1): non-redundancy test
+v9A = symmetricPower(9,A^{0});
+for i from 1 to 17 do v9A = v9A||symmetricPower(9,A^{i})
+v9A; --- 18x55 matrix
+rank v9A
+--- if the output is 18, then A provides a non-redundant decomposition for any ternary form of degree 9 in the linear span <v_{9}(A)> 
+
+--- test 2): fourth Kruskal's rank test
+v4A = symmetricPower(4,A^{0});
+for i from 1 to 17 do v4A = v4A||symmetricPower(4,A^{i})
+v4A; --- 18x15 matrix
+gens minors(15,v4A) 
+--- if the output consists of 816 non-zero maximal minors, then k_4(A) = 15
+
+--- test 3): fifth Hilbert function test
+v5A = symmetricPower(5,A^{0});
+for i from 1 to 17 do v5A = v5A||symmetricPower(5,A^{i})
+v5A; --- 18x21 matrix
+rank v5A 
+--- if the output is 18, then h_A(5) = 18
+
+--- construction of the ideal of the set A and of its Hilbert-Burch matrix
+I1 = ideal(A_(0,1)*x-A_(0,0)*y,A_(0,2)*y-A_(0,1)*z);
+I2 = ideal(A_(1,1)*x-A_(1,0)*y,A_(1,2)*y-A_(1,1)*z);
+I3 = ideal(A_(2,1)*x-A_(2,0)*y,A_(2,2)*y-A_(2,1)*z);
+I4 = ideal(A_(3,1)*x-A_(3,0)*y,A_(3,2)*y-A_(3,1)*z);
+I5 = ideal(A_(4,1)*x-A_(4,0)*y,A_(4,2)*y-A_(4,1)*z);
+I6 = ideal(A_(5,1)*x-A_(5,0)*y,A_(5,2)*y-A_(5,1)*z);
+I7 = ideal(A_(6,1)*x-A_(6,0)*y,A_(6,2)*y-A_(6,1)*z);
+I8 = ideal(A_(7,1)*x-A_(7,0)*y,A_(7,2)*y-A_(7,1)*z);
+I9 = ideal(A_(8,1)*x-A_(8,0)*y,A_(8,2)*y-A_(8,1)*z);
+I10 = ideal(A_(9,1)*x-A_(9,0)*y,A_(9,2)*y-A_(9,1)*z);
+I11 = ideal(A_(10,1)*x-A_(10,0)*y,A_(10,2)*y-A_(10,1)*z);
+I12 = ideal(A_(11,1)*x-A_(11,0)*y,A_(11,2)*y-A_(11,1)*z);
+I13 = ideal(A_(12,1)*x-A_(12,0)*y,A_(12,2)*y-A_(12,1)*z);
+I14 = ideal(A_(13,1)*x-A_(13,0)*y,A_(13,2)*y-A_(13,1)*z);
+I15 = ideal(A_(14,1)*x-A_(14,0)*y,A_(14,2)*y-A_(14,1)*z);
+I16 = ideal(A_(15,1)*x-A_(15,0)*y,A_(15,2)*y-A_(15,1)*z);
+I17 = ideal(A_(16,1)*x-A_(16,0)*y,A_(16,2)*y-A_(16,1)*z);
+I18 = ideal(A_(17,1)*x-A_(17,0)*y,A_(17,2)*y-A_(17,1)*z);
+IA=intersect(I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13,I14,I15,
+I16,I17,I18); --- ideal of the set A
+D=res(IA);
+dim IA --- 1
+degree IA --- 18
+M=D.dd_2; --- 4x3 matrix, Hilbert-Burch matrix of the ideal the set A
+MM = transpose(M);
+
+--- in the examples of sub-section 5.2:
+--- M   = 
+{5} | 8549xy+10271y2-4148xz+9866yz-1975z2          
+-3320xy-5755y2+7871xz+8089yz-1533z2          
+6640xy+11510y2-15742xz-7971yz-14056z2 |
+          
+{5} | -8549x2+5132xy+8010y2+15751xz-7245yz+4435z2    
+3320x2+5755xy-10840y2+833xz-5408yz-15055z2    
+-6640x2-11510xy-10311y2-9873xz-5157yz-11657z2 |
+
+{5} | -15403x2-168xy+9922y2-3987xz+1506yz+3797z2     
+6970xy+14859y2-8763xz-1509yz+10505z2          
+-13940xy+2273y2+1508xz-9931yz-8835z2 |
+          
+{6} | -9152z  x-5388z  y-2104z |
+
+
+--- example of ternary nonic T2 of rank 18
+Tensor2 = transpose((v9A)^{0});
+for i from 1 to 17 do Tensor2 = Tensor2+transpose((v9A)^{i})
+Tensor2; --- 55x1 vector containing the coefficients of T2 in the standard monomial basis of degree 9 in x,y,z
+T2 = basis(9,R)*Tensor2;
+
+--- T2 =
+|4283x9-14212x8y+2365x7y2-11335x6y3+10354x5y4-7342x4y5+11432x3y6-15881x2y7-10204xy8-663y9-10837x8z-6573x7yz+6070x6y2z
+-12124x5y3z+8455x4y4z-9097x3y5z+200x2y6z+11563xy7z+11173y8z+2810x7z2+5187x6yz2-1688x5y2z2-3089x4y3z2+8745x3y4z2+12508x2y5z2+151xy6z2+11119y7z2+11414x6z3+2714x5yz3+11939x4y2z3+5024x3y3z3+10884x2y4z3+8404xy5z3+755y6z3+15891x5z4
+-1013x4yz4-11790x3y2z4+14982x2y3z4-8411xy4z4-5236y5z4+4416x4z5
+-11481x3yz5+14698x2y2z5+5309xy3z5+11614y4z5-9777x3z6-2702x2yz6
+-5846xy2z6-10960y3z6-8430x2z7+7085xyz7+12763y2z7-14136xz8
+-9808yz8+9194z9 |
+
+--- test 4) for T2: it is divided into 3 cases, depending on which one between a_1, a_2, a_3 is assumed to be 1
+--- if at the end of each of the 3 cases, max di = -1 then f'^{-1}(T2) has affine dimension 0, i.e. f'^{-1}(T2) is the empty set
+--- in order to check test 4) for the ternary nonic T under investigation, 
+--- Tensor2 has to be replaced with a column vector containing the coordinates of T
+--- in the standard monomial basis of degree 9 in the variables x,y,z
+
+--- case 1): a_1 = 1
+S = k[x,y,z,a_2..a_15, Degrees => {1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0}];
+Msupergen=sub(matrix{{1,a_2,a_3,0}}||matrix{{0,a_4*x^2+a_5*x*y+a_6*x*z+a_7*y^2+a_8*y*z+a_9*z^2,a_10*x^2+a_11*x*y+a_12*x*z+a_13*y^2+a_14*y*z+a_15*z^2,0}},S);
+M' = Msupergen||sub(MM,S);  
+IdFix' = minors(3,sub(M,S))+minors(4,M');
+Polynon' = gens(IdFix')*matrix(basis(9,IdFix')); --- in our example we got the output in 1657.51 seconds
+N1 = contract(transpose(basis(9,S)),Polynon'); 
+Eqns = transpose(N1)*sub(Tensor2,S); 
+Eqns^{37..65} --- 29 not-homogeneous quadratic equations in 
+a_2...a_15 
+TT = k[a_2..a_15];
+II = ideal(sub(Eqns^{37..65},TT));
+dim II -- 2
+degree II -- 1
+for i from 4 to 15 do JJ_{i} = II + ideal(a_i-1)
+di = for i from 4 to 15 list dim JJ_{i}; 
+de = for i from 4 to 15 list degree JJ_{i}; 
+d1 = max di --- in our example the output is -1
+
+--- case 2): a_2 = 1
+S = k[x,y,z,a_1,a_3..a_15, Degrees => {1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0}];
+Msupergen=sub(matrix{{a_1,1,a_3,0}}||matrix{{a_4*x^2+a_5*x*y+a_6*x*z+a_7*y^2+a_8*y*z+a_9*z^2,0,a_10*x^2+a_11*x*y+a_12*x*z+a_13*y^2+a_14*y*z+a_15*z^2,0}},S);
+M' = Msupergen||sub(MM,S);
+IdFix' = minors(3,sub(M,S))+minors(4,M');
+Polynon' = gens(IdFix')*matrix(basis(9,IdFix')); --- in our example we got the output in 948.539 seconds
+N2 = contract(transpose(basis(9,S)),Polynon');   
+Eqns = transpose(N2)*sub(Tensor2,S);
+Eqns^{37..65};
+TT = k[a_1,a_3..a_15];
+II = ideal(sub(Eqns^{37..65},TT));
+dim II -- 2
+degree II -- 1
+for i from 4 to 15 do JJ_{i} = II + ideal(a_i-1)
+di = for i from 4 to 15 list dim JJ_{i}; 
+de = for i from 4 to 15 list degree JJ_{i};
+d2 = max di --- in our example the output is -1
+
+--- case 3): a_3 = 1
+S = k[x,y,z,a_1,a_2,a_4..a_15, Degrees => {1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0}];
+Msupergen=sub(matrix{{a_1,a_2,1,0}}||matrix{{a_4*x^2+a_5*x*y+a_6*x*z+a_7*y^2+a_8*y*z+a_9*z^2,a_10*x^2+a_11*x*y+a_12*x*z+a_13*y^2+a_14*y*z+a_15*z^2,0,0}},S);
+M' = Msupergen||sub(MM,S);
+IdFix' = minors(3,sub(M,S))+minors(4,M');
+Polynon' = gens(IdFix')*matrix(basis(9,IdFix')); --- in our example we got the output in 1054.38 seconds
+N3 = contract(transpose(basis(9,S)),Polynon');   
+Eqns = transpose(N3)*sub(Tensor2,S);
+TT = k[a_1,a_2,a_4..a_15];
+II = ideal(sub(Eqns^{37..65},TT));
+dim II -- 2
+degree II -- 1
+for i from 4 to 15 do JJ_{i} = II + ideal(a_i-1)
+di = for i from 4 to 15 list dim JJ_{i}; 
+de = for i from 4 to 15 list degree JJ_{i}; 
+d3 = max di --- in our example the output is -1
+
+--- Since T2 satisfies tests 1),2),3),4) then T2 has rank 18
+
+
+
+
+
+

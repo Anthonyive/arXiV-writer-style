@@ -1,0 +1,624 @@
+\documentclass[11pt]{amsbook}
+
+%%% PACKAGES
+
+%\usepackage{microtype}%if unwanted, comment out or use option "draft"
+\bibliographystyle{plainurl}% the recommended bibstyle
+%% cholak testing git
+\usepackage[utf8]{inputenc}
+%\usepackage[T1]{fontenc}
+\usepackage{mathrsfs}
+\usepackage[british,UKenglish,USenglish,english,american]{babel}
+%\usepackage{geometry}
+%\usepackage[margin=2.3cm]{geometry}
+\usepackage{proof}
+\usepackage{amsmath}
+\usepackage{stmaryrd}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{enumerate}
+\usepackage{comment}
+\usepackage{interval}
+\usepackage{hyperref}
+\usepackage{cleveref}
+\usepackage{todonotes}
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{thmtools}
+\usepackage{thm-restate}
+\usepackage{bm}
+\usepackage[all]{xy}\usepackage{tikz}
+\usetikzlibrary{arrows,calc, patterns, positioning, decorations.pathreplacing,decorations.markings,decorations.pathmorphing,backgrounds}
+\usetikzlibrary{shapes,snakes}
+\usepackage{graphicx}
+\usepackage{rotating}
+\usepackage{textcomp}
+\usepackage{mathtools}
+\usepackage{color}
+
+\usepackage{color,soul}
+
+
+%%%% THEOREM STYLES
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{propr}[theorem]{Property}%[section]
+\newtheorem{corollary}[theorem]{Corollary}%[section]
+\newtheorem{lemma}[theorem]{Lemma}%[section]
+\newtheorem{claim}[theorem]{Claim}%[section]
+\theoremstyle{definition}
+\newtheorem{defpropr}[theorem]{Property/Definition}%[section]
+\newtheorem{definition}[theorem]{Definition}%[section]
+\newtheorem{remark}[theorem]{Remark}%[section]
+\newtheorem{question}{Question}%[section]
+\newtheorem*{question*}{Question}%[section]
+\newtheorem{notation}[theorem]{Notation}%[section]
+\newtheorem*{notation*}{Notation}%[section]
+\newtheorem*{fact*}{Fact}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{statement}[theorem]{Statement}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{proposition}[theorem]{Proposition}
+\numberwithin{section}{chapter}
+\numberwithin{equation}{chapter}
+\numberwithin{figure}{chapter}
+
+%%%% MACROS
+
+\DeclareMathOperator{\wg}{wg}
+
+% From macro.tex
+
+%%%%%%%%
+% macro for character font
+%%%%%%%%
+
+\providecommand\Ac{\mathcal{A}}
+\providecommand\As{\mathscr{A}}
+\providecommand\Bs{\mathscr{B}}
+\providecommand\Bc{\mathcal{B}}
+\providecommand\Cs{\mathscr{C}}
+\providecommand\Cc{\mathcal{C}}
+\providecommand\Dc{\mathcal{D}}
+\providecommand\Ds{\mathscr{D}}
+\providecommand\Fc{\mathcal{F}}
+\providecommand\Fs{\mathscr{F}}
+\providecommand\Gs{\mathscr{G}}
+\providecommand\Bb{\mathbb{B}}
+\providecommand\Gb{\mathbb{G}}
+\providecommand\Gc{\mathcal{G}}
+\providecommand\Hc{\mathcal{H}}
+\providecommand\Ic{\mathcal{I}}
+\providecommand\Jb{\mathbb{J}}
+\providecommand\Kc{\mathcal{K}}
+\providecommand\Kb{\mathbb{K}}
+\providecommand\Lc{\mathcal{L}}
+\providecommand\Ls{\mathscr{L}}
+\providecommand\Ms{\mathscr{M}}
+\providecommand\Mca{\mathcal{M}}
+\providecommand\Nc{\mathcal{N}}
+\providecommand\Mc{\mathcal{M}}
+\providecommand\Nb{\mathbb{N}}
+\providecommand\Rb{\mathbb{R}}
+\providecommand\Ns{\mathscr{N}}
+\providecommand\Os{\mathscr{O}}
+\providecommand\Pc{\mathcal{P}}
+\providecommand\Fb{\mathbb{F}}
+\providecommand\Pb{\mathbb{P}}
+\providecommand\Qb{\mathbb{Q}}
+\providecommand\Ps{\mathscr{P}}
+\providecommand\Rc{\mathcal{R}}
+\providecommand\Sc{\mathcal{S}}
+\providecommand\Ss{\mathscr{S}}
+\providecommand\Tc{\mathcal{T}}
+\providecommand\Ts{\mathscr{T}}
+\providecommand\Uc{\mathcal{U}}
+\providecommand\Us{\mathscr{U}}
+\providecommand\Wc{\mathcal{W}}
+\providecommand\Xs{\mathscr{X}}
+\providecommand\Xb{\mathbb{X}}
+\providecommand\Ys{\mathscr{Y}}
+\providecommand\Zs{\mathscr{Z}}
+
+%%%%%%%%
+% macro for Computability
+%%%%%%%%
+
+\providecommand\lMnk{<_w}
+\providecommand\leqMnk{\leq_w}
+\providecommand\lMdvd{<_s}
+\providecommand\gMdvd{>_s}
+\providecommand\leqMdvd{\leq_s}
+\providecommand\geqMdvd{\geq_s}
+\providecommand\equivMdvd{\equiv_{s}}
+\providecommand\lT{<_{T}}
+\providecommand\gT{>_{T}}
+\providecommand\leqT{\leq_{T}}
+\providecommand\geqT{\geq_{T}}
+\providecommand\equivT{\equiv_{T}}
+\providecommand\lW{<_{\mathrm W}}
+\providecommand\leqW{\leq_{\mathrm W}}
+\providecommand\leqaW{\leq_{\mathrm{W}}^{\mathrm{a}}}
+\providecommand\leqsW{\leq_{\mathrm {sW}}}
+\providecommand\leqRCA{\leq_{0}}
+\providecommand\KB{\mathrm{KB}}
+\providecommand\leqKB{\leq_{\KB}}
+\providecommand\lKB{<_{\KB}}
+\providecommand\nleqW{\not\leq_{\mathrm W}}
+\providecommand\geqW{\geq_{\mathrm W}}
+\providecommand\equivW{\equiv_{\mathrm W}}
+\providecommand\equivaW{\equiv_{\mathrm{W}}^{\mathrm{a}}}
+% \providecommand\leq{{\leq_{}}}
+% \providecommand\leq{{\leq_{}}}
+
+%%%%%%%%
+% macro for math operator (CHANGER !)
+%%%%%%%%
+
+\providecommand\mrm[1]{\mathrm{#1}}
+\DeclareMathOperator{\Con}{Con}
+\providecommand\pe{\preccurlyeq}
+\providecommand\lh{\mathrm{lh}}
+\providecommand\ep{\succcurlyeq}
+\providecommand\tp{\mathrm{tp}}
+\providecommand\di{\mathrm{div}}
+\providecommand\cof{\mathrm{cof}}
+\providecommand\Aut{\mathrm{Aut}}
+\providecommand\card{\mathrm{card}}
+\providecommand\Card{\mathrm{Card}}
+\providecommand\Club{\mathrm{Club}}
+\providecommand\type{\mathrm{type}}
+\providecommand\Ord{\mathrm{Ord}}
+\providecommand\dom{\mathrm{dom}}
+\providecommand\diam{\mathrm{diam}}
+\providecommand\V{\mathrm{V}}
+\providecommand\trcl{\mathrm{trcl}}
+\providecommand\Rg{\mathrm{Rg}}
+\providecommand\Oc{\mathcal{O}}
+%\DeclareMathOperator{\KB}{KB}
+\DeclareMathOperator{\id}{id}
+\DeclareMathOperator{\tc}{tc}
+\DeclareMathOperator{\rk}{rk}
+\let\nmodels\nvDash
+
+%%%%%%%%
+% macro for Randomness
+%%%%%%%%
+
+
+\providecommand\ml{\mathrm{ML}}
+\providecommand\mlr{\mathrm{MLR}}
+\providecommand\wtr{\mathrm{W}2\mathrm{R}}
+\providecommand\wt{\mathrm{W2}}
+
+\providecommand\marlo{\mathrm{ML}}
+\providecommand\mlp{\mathrm{ML}\langle\emptyset'\rangle}
+\providecommand\mlrp{\mathrm{MLR}\langle\emptyset'\rangle}
+
+\providecommand\hwtr{\mathrm{W}\Pi^1_1\mathrm{R}}
+\providecommand\hml{\Pi^1_1\mhyphen \mathrm{ML}}
+\providecommand\hmlr{\Pi^1_1\mhyphen \mathrm{MLR}}
+\providecommand\hmlp{\Pi^1_1\mhyphen\mathrm{ML}\langle\Oc\rangle}
+\providecommand\hmlrp{\Pi^1_1\mhyphen\mathrm{MLR}\langle\Oc\rangle}
+\providecommand\pr{\Pi^1_1\mhyphen\mathrm{Randoms}}
+
+\providecommand\Vc{\mathcal{V}}
+\providecommand\omCK{\omega_1^{\mathrm{CK}}}
+\providecommand\FS{\mathrm{FS}}
+\providecommand\FU{\mathrm{FU}}
+\providecommand\subseteqFS{\subseteq_\FS}
+\providecommand\subseteqFU{\subseteq_\FU}
+\providecommand\supseteqFS{\supseteq_\FS}
+\providecommand\GP{\mathrm{GP}}
+\providecommand\GQ{\mathrm{GQ}}
+
+%%%%%%%%
+% macro for Reverse Math
+%%%%%%%%
+
+\providecommand\PA{\mathrm{PA}}
+\providecommand\Prm{\mathrm{P}}
+
+\providecommand\RCA{\mathrm{RCA}}
+\providecommand\WKL{\mathrm{WKL}}
+\providecommand\WKLw{\mathrm{WKL}}
+\providecommand\mhWKL{\mhyphen\mathrm{WKL}}
+\providecommand\mhWKLw{\mhyphen\mathrm{WKL}}
+\providecommand\ACA{\mathrm{ACA}}
+\providecommand\ACAw{\mathrm{ACA}}
+\providecommand\ATR{\mathrm{ATR}}
+\providecommand\Sep{\mathrm{Sep}}
+\providecommand\Sepw{\mathrm{Sep}}
+\providecommand\ATRw{\mathrm{ATR}}
+%\providecommand\po{\mathrm{po}}
+\providecommand\IFw{\mathrm{IF}}
+\providecommand\MPH{\mathrm{MPH}}
+\providecommand\MPHw{\mathrm{MPH}}
+\providecommand\PTT{\mathrm{PTT}}
+\providecommand\PTTw{\mathrm{PTT}_1}
+\providecommand\PTTlist{\mathrm{PTT}_{\mathrm{list}}}
+\providecommand\PTTdet{\mathrm{PTT}_{\mathrm{det}}}
+\providecommand\CWO{\mathrm{CWO}}
+\providecommand\CWOw{\mathrm{CWO}}
+\providecommand\WCWOw{\mathrm{WCWO}}
+\providecommand\List{\mathrm{List}}
+\providecommand\ATRp{\ATRw_{\mathrm{pseudo}}}
+\providecommand\ATRwunb{\ATRw_{\mathrm{unb}}}
+\providecommand\PiCA{\Pi^1_1\mhyphen\mathrm{CA}}
+\providecommand\PiCAw{\Pi^1_1\mhyphen\mathrm{CA}}
+
+\providecommand\FinHT{\mathrm{FinHT}}
+\providecommand\HT{\mathrm{HT}}
+\providecommand\FUT{\mathrm{FUT}}
+
+\providecommand\SG{\mathrm{SG}}
+\providecommand\VSG{\mathrm{VSG}}
+\providecommand\IMP{\mathrm{IMP}}
+\providecommand\cgap{c_{\mathrm{vsg}}}
+\providecommand\cimp{c_{\mathrm{imp}}}
+
+\providecommand\IP{\mathrm{IP}}
+\providecommand\IPu{\IP_\cup}
+
+
+\providecommand\Pcfin{\Pc_{\mathrm{fin}}}
+\providecommand\subseteqfin{\subseteq_{\mathrm{fin}}}
+
+\providecommand\HM{\mathrm{HM}}
+\providecommand\RM{\mathrm{RM}}
+\providecommand\LM{\mathrm{LM}}
+\providecommand\FM{\mathrm{FM}}
+\providecommand\MM{\mathrm{MM}}
+\providecommand\MMc[2]{(\mathrm{MM}_{#1,#2})}
+\providecommand\nMMc[2]{(\lnot\mathrm{MM}_{#1,#2})}
+
+\providecommand\RMP{\mathrm{RMP}}
+
+\providecommand\IS{\mathrm{I}\Sigma}
+\providecommand\Cod{\mathrm{Cod}}
+
+\providecommand\RT[2]{\mathrm{RT}^{#1}_{#2}}
+\providecommand\RRT[2]{\mathrm{RRT}^{#1}_{#2}}
+\providecommand\EM{\mathrm{EM}}
+\providecommand\COH{\mathrm{COH}}
+\providecommand\TS[2]{\mathrm{TS}^{#1}_{#2}}
+
+
+%%%%%%%%
+% macro for General Math
+%%%%%%%%
+
+\providecommand\Baire{{\omega^{\omega}}}
+\providecommand\baire{{\omega^{<\omega}}}
+\providecommand\Cantor{{2^{\omega}}}
+\providecommand\cantor{{2^{<\omega}}}
+\providecommand\wo{\mathsf{WO}}
+\providecommand\WO{{\bm{\mathsf{WO}}}}
+\providecommand\WOR{{\mathbb{WO}}}
+\providecommand\lo{\mathsf{LO}}
+\providecommand\LO{{\bm{\mathsf{LO}}}}
+\providecommand\PWO{\mathsf{PWO}}
+\providecommand\JH{\mathsf{JH}}
+\providecommand\Hier{\mathsf{Hier}}
+\providecommand\WF{\mathsf{WF}}
+\providecommand\IF{\mathsf{IF}}
+\providecommand\PWF{\mathsf{PWF}}
+\providecommand\Supp{\mathsf{Supp}}
+\providecommand\om{\omega}
+\providecommand\SOO{{\Sigma^1_1}}
+\providecommand\Si[2]{\Sigma^{#1}_{#2}}
+\providecommand\HYP{\mathrm{HYP}}
+\providecommand\po{{\mathsf{po}}}
+
+\providecommand\forces{{\Vdash}}
+\providecommand\fq{{?\!\vdash}}
+
+%%%%%%%%
+% macro for Variants of Choice
+%%%%%%%%
+
+
+\providecommand\Choice{{\mathrm{C}}}
+\providecommand\UChoice{{\mathrm{UC}}}
+\providecommand\mhUChoice{{\mhyphen\UChoice}}
+\providecommand\KChoice{{\mathrm{KC}}}
+\providecommand\mhKChoice{{\mhyphen\KChoice}}
+\providecommand\mhChoice{{\mhyphen\Choice}}
+\providecommand\SChoice{\Sigma^1_1\mhyphen{\mathrm{C}}}
+\providecommand\SAChoice{\Sigma^1_1\mhyphen{\mathrm{AC}}}
+\providecommand\SDChoice{\Sigma^1_1\mhyphen{\mathrm{DC}}}
+\providecommand\MScl{{\Mca_{\Sigma_1^1-\mathrm{cl}}}}
+\providecommand\MS{{\Mca_{\Sigma_1^1}}}
+\providecommand\MP{{\Mca_{\Pi^0_1}}}
+\providecommand\Mhom{{\Mca_{\mathrm{hom}}}}
+\providecommand\Mcomp{{\Mca_{\mathrm{comp}}}}
+\providecommand\Maof{{\Mca_{\mathrm{aof}}}}
+\providecommand\Maoc{{\Mca_{\mathrm{aoc}}}}
+\providecommand\Mfoc{{\Mca_{\mathrm{foc}}}}
+\providecommand\Soo{\Sigma^1_1}
+
+\providecommand\sW{_{\rm sW}}
+\providecommand\W{{\rm W}}
+\providecommand\csW{^{\rm c}_{\rm sW}}
+\providecommand\cW{^{\rm c}_{\rm W}}
+\providecommand\N{\mathbb{N}}
+\providecommand\upto{\upharpoonright}
+
+\providecommand\ac[1]{\Sigma^1_1\mbox{-}{\sf AC}^{\sf #1}_{\N}}
+\providecommand\dc[1]{\Sigma^1_1\mbox{-}{\sf DC}^{\sf #1}_{\N}}
+
+\providecommand\power{\mathrm{power}}
+\providecommand\pa{\mathrm{PA}}
+
+
+
+\providecommand{\pcolon}{\colon\!\!\!\subseteq}
+
+\providecommand{\fr}{\mbox{}^\smallfrown}
+\providecommand{\cat}{\mbox{}^\smallfrown}
+\providecommand{\peada}[1]{{\color{red}{#1}}}
+
+\providecommand\Pfin{\mathcal{P}_{\mathrm{fin}}}
+
+%typographically correct double quotes
+\def\qt#1{``#1''}%
+
+\mathchardef\mhyphen="2D % Define a "math hyphen"
+\providecommand{\meet}{\wedge}
+\providecommand{\emptystr}{\epsilon}
+\providecommand{\incomp}{\bot}
+\providecommand{\MT}[2]{\mathrm{MTT}^{#1}_{#2}}
+\providecommand{\PMT}[2]{\mathrm{PMTT}^{#1}_{#2}}
+\providecommand{\sTT}{\mathrm{sTT}}
+\providecommand{\TT}{\mathrm{TT}}
+\providecommand{\WT}[2]{\mathrm{WTT}^{#1}_{#2}}
+\providecommand{\embfont}[1]{\mathfrak{#1}}
+\providecommand{\embtype}[1]{\embfont e_{#1}}
+\providecommand{\Sims}[2]{\mathrm{Sims}_{#2}({#1})}
+\providecommand{\Subtree}[2]{\mathcal{S}_{#1}({#2})}
+\providecommand{\Subgraph}[2]{{{#2}\choose{#1}}}
+\providecommand{\SSubgraph}[2]{[#2]^{#1}}
+\providecommand{\SubtreeLeaves}[2]{\mathcal{S}^{l}_{#1}({#2})}
+\providecommand{\strcl}[1]{#1^{\mathrm{cl}}}
+\providecommand{\meetclosure}[1]{{#1}^{\meet}}
+\providecommand{\lvlclosure}[1]{#1^{\mathrm{lvl}}}
+\providecommand{\land}{\ \&\ }
+\DeclareMathOperator{\leaves}{leaves}
+\DeclareMathOperator{\roots}{roots}
+\providecommand{\uh}{\upharpoonright}
+\providecommand{\fhl}{h_{\mathrm{HL}}}
+\providecommand{\flem}{h'_{\mathrm{HL}}}
+\providecommand{\fwidg}{H}
+\providecommand{\lgth}[1]{|#1|}
+
+% Principles
+\providecommand{\RG}{\mathrm{RG}}
+\providecommand{\JRG}{\mathrm{JRG}}
+\providecommand{\DT}[2]{\mathrm{DT}^{#1}_{#2}}
+\providecommand{\JDT}[2]{\mathrm{JDT}^{#1}_{#2}}
+\providecommand{\weakRG}{\mathrm{weak\text{-}RG}}
+\providecommand{\CHMTT}{\mathrm{CHMTT}}
+\providecommand{\vec}[1]{\bm{#1}}
+
+% Notation for the product of trees. We may want to change it
+\providecommand{\prodtree}[2]{\bigcup_n \prod_{i < #2} {#1}_i(n)}
+\providecommand{\exprodtree}[2]{\bigcup_n {#1}_0(n) \times \dots \times {#1}_{#2-1}(n)}
+% Notation for product of leaves of tree:
+% \leavesprodtree{treeVar}{#tree}{height}
+\providecommand{\leavesprodtree}[3]{ \prod_{m<#2}{#1}_m(#3-1)}
+\providecommand{\exleavesprodtree}[3]{ {#1}_0(#3-1) \times \dots \times {#1}_{#2-1}(#3-1)}
+
+\definecolor{lightblue}{rgb}{1,.84,0}
+
+
+% This disables comments
+%\providecommand{\hl}[1]{}
+
+\DeclareRobustCommand{\benoit}[1]{\sethlcolor{lightblue}\hl{#1}}
+\DeclareRobustCommand{\ludovic}[1]{\sethlcolor{green}\hl{#1}}
+\DeclareRobustCommand{\pelliot}[1]{\sethlcolor{pink}\hl{#1}}
+\DeclareRobustCommand{\damir}[1]{\sethlcolor{cyan}\hl{#1}}
+\DeclareRobustCommand{\peter}[1]{\sethlcolor{red}\hl{#1}}
+\providecommand{\cmmnt}[1]{}
+
+% Notation for the enriched graph relations on 2^{<ω}
+\providecommand{\Epn}{E_{\mathrm{pn}}}
+\providecommand{\Rmeet}{\Rc_{\meet}}
+\providecommand{\meetH}[4]{|#1\meet#2|<|#3\meet#4|}
+\providecommand{\meetlevel}[2]{\llbracket #1 , #2 \rrbracket}
+\providecommand{\ltlex}{<_{\mathrm{lex}}}
+\providecommand{\lelex}{\leq_{\mathrm{lex}}}
+\providecommand{\gtlex}{>_{\mathrm{lex}}}
+\providecommand{\gelex}{\geq_{\mathrm{lex}}}
+
+% Reductions
+\providecommand{\Tequiv}{\equiv_{\text{\upshape T}}}
+\providecommand{\Tred}{\leq_{\text{\upshape T}}}
+\providecommand{\nTred}{\nleq_{\text{\upshape T}}}
+\providecommand{\cequiv}{\equiv_{\text{\upshape c}}}
+\providecommand{\cred}{\leq_{\text{\upshape c}}}
+\providecommand{\ncred}{\nleq_{\text{\upshape c}}}
+\providecommand{\scequiv}{\equiv_{\text{\upshape sc}}}
+\providecommand{\scred}{\leq_{\text{\upshape sc}}}
+\providecommand{\nscred}{\nleq_{\text{\upshape sc}}}
+\providecommand{\uequiv}{\equiv_{\text{\upshape W}}}
+\providecommand{\ured}{\leq_{\text{\upshape W}}}
+\providecommand{\nured}{\nleq_{\text{\upshape W}}}
+\providecommand{\suequiv}{\equiv_{\text{\upshape sW}}}
+\providecommand{\sured}{\leq_{\text{\upshape sW}}}
+\providecommand{\nsured}{\nleq_{\text{\upshape sW}}}
+
+% Strings
+\providecommand{\str}[1]{#1}
+
+% Bracketing
+\providecommand{\seq}[1]{( #1 )}
+
+% Other
+\providecommand{\NN}{\mathbb{N}}
+
+\providecommand\Jo[1]{(\texttt{J#1})}
+
+% Joyce relation
+
+\providecommand{\JRel}{\mathsf{R}}
+
+% Obsolete notation
+% \DeclareMathOperator{\levels}{Lvl}
+% \DeclareMathOperator{\Subtree}{Subtree}
+
+% Cleaning up macros for syncing notation
+\providecommand{\setminus}{\smallsetminus}
+
+% Case headings
+\providecommand\case[2]{\medskip\noindent \textbf{Case #1:}~\textit{#2}}
+\providecommand\construction{\medskip\noindent \textbf{Construction.}~}
+\providecommand\verification{\medskip\noindent \textbf{Verification.}~}
+
+% Additional stylistic
+\renewcommand{\langle}{(}
+\providecommand{\rangle}{)}
+
+%%% END MACROS
+
+\makeindex
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\hyphenation{com-putabil-i-ty}
+\hyphenation{com-putabil-i-ty-theoretic}
+\babelhyphenation[english]{com-putabil-i-ty-theoretic}
+
+\begin{document}
+
+
+\frontmatter
+
+\title{Milliken's tree theorem and its applications: a computability-theoretic perspective}
+
+\author{Paul-Elliot Angl\`{e}s d'Auriac}
+\address{Institut Camille Jordan\\
+Universit\'{e} Claude Bernard Lyon 1\\
+43 boulevard du 11 novembre 1918, F-69622 Villeurbanne Cedex, France}
+%\curraddr{}
+\email{peada@free.fr}
+%\thanks{}
+
+\author{Peter A. Cholak}
+\address{Department of Mathematics, University of Notre Dame, 255 Hurley Building, Notre Dame, Indiana 46556, U.S.A.}
+%\curraddr{}
+\email{cholak@nd.edu}
+%\thanks{}
+
+\author{Damir D. Dzhafarov}
+\address{Department of Mathematics, University of Connecticut, 341 Mansfield Road, Storrs, Connecticut 06269, U.S.A.}
+%\curraddr{}
+\email{damir@math.uconn.edu}
+%\thanks{}
+
+\author{Beno\^{i}t Monin}
+\address{LACL, D\'{e}partement d'Informatique, Facult\'{e} des Sciences et Technologie, 61 avenue du G\'{e}n\'{e}ral de Gaulle, 94010 Cr\'{e}teil Cedex}
+%\curraddr{}
+%\email{}
+%\thanks{}
+
+\author{Ludovic Patey}
+\address{Institut Camille Jordan\\
+Universit\'{e} Claude Bernard Lyon 1\\
+43 boulevard du 11 novembre 1918, F-69622 Villeurbanne Cedex, France}
+%\curraddr{}
+\email{ludovic.patey@computability.fr}
+
+\subjclass[2010]{Primary 05D10, 03D80, 03E05; Secondary 05C55, 05D05, 03E75}
+
+\keywords{Milliken's tree theorem, Ramsey's theorem, partition theory, computable combinatorics, reverse mathematics, structural Ramsey theory}
+
+\date{\today}
+
+\begin{abstract}
+	Milliken's tree theorem is a deep result in combinatorics that generalizes a vast number of other results in the subject, most notably Ramsey's theorem and its many variants and consequences. In this sense, Milliken's tree theorem is paradigmatic of structural Ramsey theory, which seeks to identify the common combinatorial and logical features of partition results in general. Its investigation in this area has consequently been extensive.
+	
+	Motivated by a question of Dobrinen, we initiate the study of Milliken's tree theorem from the point of view of computability theory. The goal is to understand how close it is to being algorithmically solvable, and how computationally complex are the constructions needed to prove it. This kind of examination enjoys a long and rich history, and continues to be a highly active endeavor. Applied to combinatorial principles, particularly Ramsey's theorem, it constitutes one of the most fruitful research programs in computability theory as a whole. The challenge to studying Milliken's tree theorem using this framework is its unusually intricate proof, and more specifically, the proof of the Halpern-La\"{u}chli theorem, which is a key ingredient.
+	
+	Our advance here stems from a careful analysis of the Halpern-La\"{u}chli theorem which shows that it can be carried out effectively (i.e., that it is computably true). We use this as the basis of a new inductive proof of Milliken's tree theorem that permits us to gauge its effectivity in turn. The key combinatorial tool we develop for the inductive step is a fast-growing computable function that can be used to obtain a finitary, or localized, version of Milliken's tree theorem. This enables us to build solutions to the full Milliken's tree theorem using effective forcing.
+	
+	The principal outcome of this is a comprehensive classification of the computable content of Milliken's tree theorem, stratified by the size of instance. In terms of upper bounds, we show that Milliken's tree theorem always admits arithmetical solutions (relative to the instances). For lower bounds, we show that Milliken's tree theorem for trees of height three or more can code the halting set, while Milliken's tree theorem for trees of height two cannot. Thus, there is a computability-theoretically detectable distinction between these two cases, which is analogous to the situation for Ramsey's theorem (for colorings of triples of integers versus pairs of integers), albeit proceeding by entirely different methods. As usual, all of these results translates into the parlance of reverse mathematics, yielding a complete understanding of the fragments of second-order arithmetic required to prove Milliken's tree theorem on the one hand, and provable from it on the other.
+	
+	We apply our analysis also to several well-known applications of Milliken's tree theorem, namely Devlin's theorem, a partition theorem for Rado graphs, and a generalized version of the so-called tree theorem of Chubb, Hirst, and McNicholl. These are all certain kinds of extensions of Ramsey's theorem for different structures, namely the rational numbers, the Rado graph, and perfect binary trees, respectively. We obtain a number of new results about how these principles relate to Milliken's tree theorem and to each other, in terms of both their computability-theoretic and combinatorial aspects. We identify again the familiar dichotomy between coding the halting problem or not based on the size of instance, but this is more subtle here owing to the more complicated underlying structures, particularly in the case of Devlin's theorem. We also establish new structural Ramsey-theoretic properties of the Rado graph theorem and the generalized Chubb-Hirst-McNicholl tree theorem using Zucker's notion of big Ramsey structure.
+\end{abstract}
+
+\maketitle
+
+%\begin{acknowledgements}
+%	The authors thanks
+%\end{acknowledgements}
+
+%    Dedication.  If the dedication is longer than a line or two,
+%    remove the centering instructions and the line break.
+%\cleardoublepage
+%\thispagestyle{empty}
+%\vspace*{13.5pc}
+%\begin{center}
+%  Dedication text (use \\[2pt] for line break if necessary)
+%\end{center}
+%\cleardoublepage
+
+%    Change page number to 6 if a dedication is present.
+\setcounter{page}{3}
+
+\tableofcontents
+
+%    Include unnumbered chapters (preface, acknowledgments, etc.) here.
+%\include{}
+
+\mainmatter
+%    Include main chapters here.
+
+\chapter*{Acknowledgments}
+
+Cholak and Dzhafarov were partially supported by a Focused Research Group grant from the National Science Foundation of the United States, DMS-1854136 and DMS-1854355, respectively. Patey was partially supported by grant ANR ``ACTC'' \#ANR-19-CE48-0012-01.
+
+The authors express their gratitude and appreciation to the Institut Henri Poincar\'{e} in Paris for kindly hosting them in February of 2020, during which time this project was conceived, and much of it completed.
+
+They also thank Natasha Dobrinen, Lu Liu, and Andy Zucker, for their valuable insights, suggestions, and clarifications during the preparation of this manuscript.
+
+\chapter{Introduction}
+\input{parts/introduction.tex}
+
+\chapter{Definitions}\label{sec:defns}
+\input{parts/definitions.tex}
+
+\chapter{The Halpern-La\"{u}chli theorem}\label{sect:hl-theorem}
+\input{parts/halpern-lauchli.tex}
+
+\chapter{Milliken's tree theorem}\label{sect:milliken-theorem}
+\input{parts/milliken-tree.tex}
+
+\chapter{Devlin's theorem}\label{sec:devlin}
+\input{parts/devlin.tex}
+
+\chapter{The Rado Graph theorem}\label{sec:radomain}
+\input{parts/rado.tex}
+
+\chapter{A generalized tree theorem}\label{sec:GenCHMTT}
+\input{parts/generalized-tree.tex}
+
+\chapter{Open Questions}\label{sect:open-questions}
+\input{parts/open-questions.tex}
+
+%\appendix
+%    Include appendix "chapters" here.
+%\include{}
+
+\backmatter
+%    Bibliography styles amsplain or harvard are also acceptable.
+\bibliographystyle{amsplain}
+\bibliography{bibliography}
+%    See note above about multiple indexes.
+\printindex
+
+\end{document}

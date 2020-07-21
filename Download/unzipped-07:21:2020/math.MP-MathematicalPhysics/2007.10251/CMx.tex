@@ -1,0 +1,1038 @@
+\documentclass[12pt]{iopart}
+\newcommand{\gguide}{{\it Preparing graphics for IOP Publishing journals}}
+
+\usepackage[]{cite}
+
+\usepackage{tikz}
+
+%%% reconciling iop with amsmath
+\expandafter\let\csname equation*\endcsname\relax
+\expandafter\let\csname endequation*\endcsname\relax
+
+\usepackage[fleqn]{amsmath}
+\usepackage[]{amssymb}
+\usepackage[]{mathrsfs}
+\usepackage[]{eucal}
+\usepackage[]{tensor}
+\usepackage[]{amsthm}
+\usepackage[]{bm}
+
+\newcommand{\defeq}{\mathrel{\mathop:}=}
+\newcommand{\eqdef}{\mathrel{=\mathop:}}
+
+\newcommand{\dd}{\partial}
+\newcommand{\nab}[1]{\nabla_{\! #1}}
+\DeclareBoldMathCommand{\bnab}{\nabla}
+\newcommand{\lap}{\Delta}
+\newcommand{\vlap}{\bm{\Delta}}
+\newcommand{\ddiv}[1]{\bnab\!\cdot #1}
+\newcommand{\rot}[1]{\bnab\!\times #1}
+\newcommand{\vol}{\df V}
+\newcommand{\veps}{\varepsilon}
+
+\newcommand{\ke}{\frac{1}{4\pi\epsilon_0}}
+\newcommand{\km}{\frac{\mu_0}{4\pi}}
+
+\newcommand{\df}{\mathrm{d}}
+\newcommand{\w}{\wedge}
+\newcommand{\Lie}{\pounds}
+\newcommand{\heq}[1]{\buildrel #1 \over =}
+\newcommand{\qqd}{\ , \quad}
+\newcommand{\bc}{\begin{center}}
+\newcommand{\ec}{\end{center}}
+\newcommand{\be}{\begin{equation}}
+\newcommand{\ee}{\end{equation}}
+%\newcommand{\bal}{\begin{align}}
+%\newcommand{\eal}{\end{align}}
+
+\def\bal#1\eal{\begin{align}#1\end{align}}
+
+%%% matrices
+\newcommand{\mx}[1]{\bm{\mathsf{#1}}}
+\newcommand{\trans}{^{\mathsf{T}}}
+
+%%% fields
+\newcommand{\vct}[1]{\mathbf{#1}}
+\newcommand{\uu}[1]{\mathbf{\hat{#1}}}
+\newcommand{\0}{\vct{0}}
+\newcommand{\B}{\vct{B}}
+\newcommand{\E}{\vct{E}}
+\newcommand{\F}{\vct{F}}
+\newcommand{\vv}{\vct{v}}
+\newcommand{\vu}{\vct{u}}
+\newcommand{\vr}{\vct{r}}
+\newcommand{\ur}{\uu{r}}
+\newcommand{\uphi}{\mathbf{\hat{\bm{\varphi}}}}
+\newcommand{\utheta}{\mathbf{\hat{\bm{\theta}}}}
+\newcommand{\bell}{\bm{\ell}}
+\newcommand{\ull}{\mathbf{\hat{\bm{\ell}}}}
+
+\newcommand{\lb}{\left<}
+\newcommand{\rb}{\right>}
+
+\usepackage{dsfont}
+\newcommand{\nn}{\mathds{N}}
+\newcommand{\zz}{\mathds{Z}}
+\newcommand{\rr}{\mathds{R}}
+\newcommand{\cl}[1]{\overline{#1}}
+
+%%% links
+\usepackage[unicode]{hyperref}
+\usepackage{xcolor}
+\definecolor{pastgreen}{HTML}{669900}
+\definecolor{pastblue}{HTML}{336699}
+\definecolor{pastred}{HTML}{990000}
+\definecolor{linkcol}{HTML}{663333}
+\hypersetup{colorlinks,linkcolor={pastblue},citecolor={pastblue},urlcolor={pastblue}}
+
+%%% theorems, lemmas, definitions
+\theoremstyle{plain} \newtheorem{tm}{Theorem}[section]
+\theoremstyle{plain} \newtheorem{lm}[tm]{Lemma}
+\theoremstyle{definition} \newtheorem{defn}[tm]{Definition}
+\newcommand{\btm}{\begin{tm}}
+\newcommand{\etm}{\end{tm}}
+\newcommand{\blm}{\begin{lm}}
+\newcommand{\elm}{\end{lm}}
+\newcommand{\bdefn}{\begin{defn}}
+\newcommand{\edefn}{\end{defn}}
+
+
+
+
+
+
+
+\begin{document}
+
+\begin{flushright}
+ZTF-EP-20-06
+\end{flushright}
+
+\title[Capacitance matrix revisited]{Capacitance matrix revisited}
+
+\author{Ivica Smoli\'c and Bruno Klajn}
+
+\address{Department of Physics, Faculty of Science, University of Zagreb, Bijeni\v cka cesta 32, 10000 Zagreb, Croatia}
+\eads{\mailto{ismolic@phy.hr}, \mailto{bk@phy.hr}}
+\vspace{10pt}
+\begin{indented}
+\item[] \today
+\end{indented}
+
+\begin{abstract}
+The capacitance matrix relates the potentials and the charges on a system of conductors. We review and rigorously generalize its properties, block-diagonal structure, inequalities and regularity, deduced from the geometry of the system of conductors and analytic properties of the permittivity tensor. Furthermore, we discuss alternative choices of regularization of the capacitance matrix, which allows us to find the charge exchanged between the conductors having been brought to equal potential. Finally, we discuss the approximations utilized in calculations of the capacitance of capacitors connected in parallel and series.
+\end{abstract}
+
+\noindent{\it Keywords}: conductors, capacitance, potentials
+
+%%% \submitto{\JPA}
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction} %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+One of the fundamental problems of electrostatics considers the system of charged ideal conductors. Here one either assigns the potentials on each of the conductors and asks for a total charge on each of them or, vice versa, asks for potentials if the charges are known. Since Maxwell's equations are linear, this relation turns out also to be  linear, and given by corresponding matrices: The \emph{capacitance matrix} produces charges from potentials, while the \emph{potential matrix} solves the opposite problem.
+
+The origin of the capacitance matrix goes back at least to Maxwell's \emph{Treatise} \cite{Maxwell}, where it was introduced\footnote{Maxwell refers to elements of the capacitance matrix as ``coefficients of induction'', while the elements of the potential matrix are referred to as the ``potential coefficients''.} and some of its basic properties derived. Several subsequent textbooks on classical electrodynamics, such as Smythe \cite{Smythe}, Landau and Lifshitz \cite{LLED}, and Jackson \cite{Jack}, contain only brief discussions about the capacitance matrix, while similar (or even briefer) analysis may be found in numerous more recent references \cite{CPK,Schwartz,Wangsness,NB,Ohanian,Greiner,PP,Muller,Vanderlinde,Zangwill,Garg,Toptygin}. A slightly more detailed treatment of the problem is presented in \cite{SDeRMTN} (section 24.6), which makes use of the Green's function and generalizes basic results in presence of isotropic inhomogeneous dielectric. Also, a nice alternative discussion about the properties of the capacitance matrix can be found in \cite{HD08}, which was later formalized in \cite{HD11}. 
+
+Still, the situation in the literature can hardly be described as satisfactory, as published proofs rely on many tacit assumptions and suffer from various technical gaps. Our aim is to review the properties of the capacitance matrix, paying special attention to geometry of domains (complements of conductors), smoothness of boundaries and differentiability of all functions present throughout the analysis. One of the benefits of such an approach is that we can give a more precise answer to a delicate, crucial question on regularity and regularization of the capacitance matrix. The paper is organized as follows. In section 2 we give a precise definition of the problem, including geometric conditions on the domain and algebraic and analytic conditions on the permittivity tensor. In sections 3 and 4 we introduce the capacitance matrix (using the auxiliary Dirichlet problem) with some brief remarks on problems with unbounded conductors. Section 5 is devoted to the detailed study of the properties of the capacitance matrix, in which we extend some previous results from the literature. In section 6 we discuss several procedures for the regularization of the capacitance matrix and in section 7 we give an example how a regularized capacitance matrix may be utilized in a concrete physical problem. In section 8 we discuss various approximations which are tacitly used in the analysis of the electric circuits and explain how one can recover formulae for the total capacitance of the capacitors connected in parallel and series from the elements of the capacitance matrix. Finally, in section 9 we give concluding remarks and point to some open questions. In appendix A we give a brief overview of the existence and uniqueness results for the Dirichlet problem, while appendix B contains a proof of one important technical theorem. 
+
+\medskip
+
+\emph{Technical remarks}. Although some basic definitions and auxiliary results are stated for Euclidean spaces $\rr^m$ with $m \ge 3$, our main focus is on the classical $m=3$ case. For any set $A$ we denote its interior by $A^\circ$, boundary by $\dd A$, closure by $\cl{A}$, and if $B$ is any other set, their difference by $A - B$. Matrices are denoted with bold symbols, e.g.~$\mx{A}$. An open ball centred at $x \in \rr^m$, with radius $r > 0$, is denoted by $B(x,r)$.
+
+We say that the \emph{exterior cone condition} is satisfied at the point $x \in \dd\Omega$ of a domain $\Omega \subseteq \rr^m$ (see \cite{Salsa}, p.~145; see also remarks in \cite{Simon}, p.~231) if there exists a closed circular cone $\Gamma_x$ with the vertex at $x$ and an open ball $B = B(x,r)$ with radius $r > 0$, such that $\cl{B} \cap \Gamma_x \subseteq (\rr^m - \Omega)$. Non-examples, worth having in mind, are sets with piecewise smooth boundaries, which do not satisfy the exterior cone condition, such as
+\begin{equation*}
+\big\{ (x,y) \in \rr^2 \mid y < \sqrt[4]{x^2} \, \big\} \quad \textrm{and} \quad \big\{ (x,y,z) \in \rr^3 \mid z < \sqrt[4]{x^2 + y^2} \, \big\} \ .
+\end{equation*}
+
+\bigskip
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{System of conductors} %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The question that introduces the capacitance matrix starts from potentials and charges on (topologically) connected components of the system of ideal conductors. However, we find that for many technical reasons it is much better to focus the beginning of the discussion on the topological complement of conductors and components of its boundary. 
+
+\medskip
+
+We assume that the conductor $K \subseteq \rr^m$ is a closed set, consisting of a finite number of connected components $\{K_1,\dots,K_P\}$. As any connected conducting object is held at a constant potential, the number of independent potentials in the problem is $P$. Furthermore, since physically meaningful observables are potential \emph{differences}, the effective reduced space of potentials is $\rr^{P-1}$. The domain on which we analyze the problem is the open set $\Omega = \rr^m - K$, which consists of a finite number of connected components, $\{\Omega_1,\dots,\Omega_M\}$. In particular, if there is an unbounded connected component of $\Omega$, we denote it by $\Omega_{\mathrm{e}}$ (here ``e'' stands for the ``external''). The boundary of the domain, $\dd\Omega$, consists of a finite number of connected components, $\{\mathcal{S}_1,\dots,\mathcal{S}_N\}$, and on each of them a constant Dirichlet condition must be imposed (as in general we have $N \ge P$, these boundary conditions will not be independent).
+
+\medskip
+
+This setting is still too general and one must narrow down the specifications on the geometry of the problem in order to make some progress.
+
+\medskip
+
+
+
+\bdefn
+We say that a nonempty open set $\Omega \subseteq \rr^m$ is \emph{regular} if it satisfies the following conditions:
+
+\begin{itemize}
+\item[(1)] both $\Omega$ and its complement $\rr^m - \Omega$ have finite number of connected components;
+
+\item[(2)] $\Omega$ is either bounded or it has one unbounded connected component, $\Omega_{\mathrm{e}}$, such that its complement $K_{\mathrm{e}} \defeq \rr^m - \Omega_{\mathrm{e}}$ is a compact set; 
+
+\item[(3)] all connected components of the complement $\rr^m - \Omega$ have nonempty interior;
+
+\item[(4)] closures of connected components of $\Omega$ are pairwise disjoint and connected components of the complement $\rr^m - \Omega$ are pairwise disjoint;
+
+\item[(5)] $\Omega$ has a compact, orientable, piecewise smooth boundary $\dd\Omega$, and the boundary of each connected component of $\Omega$ satisfies the exterior cone condition.
+\end{itemize}
+\edefn
+
+\medskip
+
+
+
+These particular choices deserve a brief justification. With condition (1) we want to leave aside cases with infinite number of conductors or cavities, while with condition (2) we leave aside the cases in which both the conductor and its complement are unbounded (we briefly discuss such cases at the end of section 4). Furthermore, condition (3) is included in the list in order to avoid physically unrealistic cases with measure zero conductors, such as a system which contains a single conducting point as one of its connected components. This, however, excludes some simple textbook examples of conductors, such as a conducting 2--sphere. Nevertheless, these cases can in principle always be simply defined as the limit of the regular ones. Condition (4), as a mere technical simplification, excludes cases where either two parts of the domain $\Omega$ or two pieces of conductor $K$ ``touch'' (e.g.~two cavities in a conducting bulk, separated by a single conducting point), all of which are again just limits of regular cases. Finally, the assumption (5) picks out conductors with boundary which is not too ``irregular'' (say, a fractal) so that it is suitable for simple manipulations of integrals with Stokes' theorem \cite{LeeSmooth,Federer,Morgan} and simultaneously satisfies a sufficient condition that guarantees the existence of the solution of the associated Dirichlet problem. One should stress that apart from the exterior cone condition, there is also the so-called Wiener's criterion \cite{GT,Kellogg}, built around the concept of the capacity, for the regularity of the boundary points of a domain of a Dirichlet problem, but we cannot invoke it here since this would lead us into possible circular reasoning. In the rest of the paper we shall assume that $\Omega$ is a regular open set, as defined above.
+
+%%% https://mathoverflow.net/questions/253488/stokes-theorem-for-manifolds-with-boundary-as-disjoint-union-of-submanifolds
+%%% https://math.stackexchange.com/questions/469437/what-is-the-boundary-in-stokes-theorem
+
+\medskip
+
+We note in passing that numbers $M$, $N$ and $P$ satisfy the constraint $M+P=N+1$. This relation is trivially satisfied in the absence of conductors, where $M=1$ and $P=N=0$, while addition of each new hypersurface $\mathcal{S}_i$, satisfying the conditions from the definition above, increases $N$ by $1$ and simultaneously increases $M+P$ by $1$. Namely, our system of conductors may be built inductively, starting from the empty space $\rr^m$, in which we place pieces of conductors and drill cavities in them. Each step involves the introduction of a novel compact hypersurface in an open ball, either $B \subseteq \Omega$ or $B \subseteq K$, which according to Jordan--Brouwer separation theorem (see \cite{GP}, section 2.5, and \cite{Lima88,McGrath16} for smooth version; \cite{PMK09} for polyhedral generalization), divides the ball into ``outside'' and ``inside''. If the introduction of this hypersurface results with a new conductor then $(\Delta M,\Delta P) = (0,1)$, whereas if the result is a new cavity in conductor, then $(\Delta M,\Delta P) = (1,0)$.
+
+\medskip
+
+
+
+There is a convenient way to represent potentials involved in the problem using graph theory. Each conductor is represented by a vertex and a pair of vertices is connected by a line (edge) if they correspond to a pair of conductors sharing a boundary with a common connected component of $\Omega$ and if one of them bounds the other. In addition, if there is no $K_\mathrm{e}$, one vertex is assigned to a ``point at infinity'' and connected to all the conductors sharing a boundary with $\Omega_\mathrm{e}$. The result of this procedure is in general a \emph{tree}, a connected undirected acyclic graph, which in this context might be called a \emph{capacitance tree}. One can say that each edge represents a potential difference, so that number of edges is $P$. An example, with $M = 5$, $N = 13$ and $P = 9$, is sketched below,
+
+\smallskip
+
+\bc
+\begin{tikzpicture}
+\draw[thick,gray,fill=lightgray,rounded corners=2pt] (-1.1,-1.1) rectangle (3.2,1.1);
+\draw[thick,gray,fill=white] (-0.9,-0.9) rectangle (3.0,0.9);
+
+\draw[thick,gray,fill=lightgray] (0,0) circle (0.5);
+\draw[thick,thick,gray,fill=white] (0,0) circle (0.3);
+\draw[thick,thick,gray,fill=lightgray] (0,0) circle (0.1);
+
+\draw[thick,gray,fill=lightgray] (1.7,0) ellipse (0.8 and 0.6);
+\draw[thick,gray,fill=white] (1.7,0) ellipse (0.6 and 0.5);
+\draw[thick,gray,fill=lightgray] (1.5,0) circle (0.1);
+\draw[thick,gray,fill=lightgray] (1.9,0) circle (0.1);
+
+\draw[thick,gray,fill=lightgray] (4.7,0) ellipse (0.7 and 0.8);
+\draw[thick,gray,fill=white] (4.7,0) ellipse (0.6 and 0.5);
+\draw[thick,gray,fill=lightgray] (4.4,0) circle (0.1);
+\draw[thick,gray,fill=lightgray] (4.9,0) circle (0.15);
+\end{tikzpicture}
+\ec
+
+\medskip
+
+\noindent
+and the associated capacitance tree is
+
+\medskip
+
+\bc
+\begin{tikzpicture}
+\draw[black,fill=black] (1,3) circle (0.05);
+\draw[black,fill=black] (0,2) circle (0.05);
+\draw[black,fill=black] (2,2) circle (0.05);
+
+\draw[black,fill=black] (-0.5,1) circle (0.05);
+\draw[black,fill=black] (0.5,1) circle (0.05);
+\draw[black,fill=black] (1.5,1) circle (0.05);
+\draw[black,fill=black] (2.5,1) circle (0.05);
+
+\draw[black,fill=black] (0.2,0) circle (0.05);
+\draw[black,fill=black] (0.8,0) circle (0.05);
+\draw[black,fill=black] (-0.5,0) circle (0.05);
+
+\draw[thin] (1,3) -- (0,2);
+\draw[thin] (1,3) -- (2,2);
+\draw[thin] (0,2) -- (-0.5,1);
+\draw[thin] (0,2) -- (0.5,1);
+\draw[thin] (2,2) -- (1.5,1);
+\draw[thin] (2,2) -- (2.5,1);
+\draw[thin] (0.5,1) -- (0.2,0);
+\draw[thin] (0.5,1) -- (0.8,0);
+\draw[thin] (-0.5,1) -- (-0.5,0);
+\end{tikzpicture}
+\ec
+
+\medskip
+
+
+
+The domain $\Omega$ is, for generality, assumed to be filled with linear dielectric material with local response which, as a special case, may be vacuum. Linear dielectric is a medium in which the electric scalar potentials $\Phi$ are solutions of the partial differential equation
+\be
+\nab{a} (\hat{\epsilon}^{ab} \, \nab{b}\Phi) = -\rho_{\mathrm{f}}/\epsilon_0
+\ee
+where $\hat{\epsilon}_{ab}$ is the relative permittivity tensor (we use hatted epsilon in order to avoid an additional index ``r''), and $\rho_{\mathrm{f}}$ is the free charge volume density. For example, in the vacuum case we have $\tensor{\hat{\epsilon}}{^a_b} = \tensor{\delta}{^a_b}$. The corresponding dimensionful permittivity tensor is $\epsilon_{ab} = \epsilon_0 \, \hat{\epsilon}_{ab}$. In all of the problems considered here, free charge is placed on the boundary $\dd\Omega$, so that $\rho_{\mathrm{f}} = 0$ within $\Omega$ and the potential $\Phi$ is a solution of the homogeneous equation 
+\be\label{eq:hardie}   %%% "harmonic dielectric"
+\nab{a} (\hat{\epsilon}^{ab} \, \nab{b}\Phi) = 0 \ .
+\ee
+Again, the problem with completely arbitrary tensor $\hat{\epsilon}_{ab}$ would be too difficult to treat, so we make some additional assumptions. 
+
+\medskip
+
+\bdefn
+The relative permittivity tensor $\hat{\epsilon}_{ab}(x)$ is a $C^\infty$ tensor field such that
+\begin{itemize}
+\item[(a)] it is symmetric, $\hat{\epsilon}_{ab} = \hat{\epsilon}_{ba}$, and
+
+\item[(b)] it is bounded in a sense that there exists a real constant $\kappa \ge 1$, such that the following inequalities
+\be\label{eps}
+v_c w^c \le \hat{\epsilon}_{ab}(x) v^a w^b \le \kappa v_c w^c
+\ee
+hold for all $x \in \Omega$ and all nonzero vectors $v^a$ and $w^a$ at $x$.
+\end{itemize}
+\edefn
+
+\noindent
+Equation (\ref{eq:hardie}), with the relative permittivity tensor satisfying the conditions above, belongs to a class of linear uniformly elliptic partial differential equations. Namely, condition (b) is equivalent to the assumption that $\lambda_i(x) \in [1,\kappa]$ for all eigenvalues $\lambda_i(x)$ of $\hat{\epsilon}_{ab}$ at each point of the domain $x \in \Omega$ (see e.g.~\cite{GT}, p.~1). Although the ellipticity itself could be assured by a weaker assumption, such as $0 < \hat{\epsilon}_{ab}(x) v^a w^b$, we need condition (b) for the existence results and some inequalities between the elements of the capacitance matrix. We shall not consider here cases of relative permittivity tensor with lower order differentiability, such as a piecewise smooth $\hat{\epsilon}_{ab}$ for a capacitor filled with layers of different dielectrics. Also, we stress that in some of the results discussed below we need much stronger smoothness assumption for sharper inequalities, namely that $\hat{\epsilon}_{ab}$ is real analytic (this will be clearly emphasized).
+
+\medskip
+
+From a physical standpoint, upper bound $\hat{\epsilon}_{ab}(x) v^a w^b \le \kappa v_c w^c$ follows from the assumption that dielectric response will not be unbounded on a domain. The two other conditions may be justified using thermodynamic arguments: in order to see (a) we express the components of the permittivity tensor as second derivatives of the corresponding Helmholtz free energy (see e.g.~page 54 in \cite{LLED} and section 33 in \cite{Kittel}), while the inequality $v_c w^c \le \hat{\epsilon}_{ab}(x) v^a w^b$ follows from demand that the total Helmholtz free energy is bounded from below (see e.g.~page 59 in \cite{LLED}).
+
+\bigskip
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Auxiliary Dirichlet problem} %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+A systematic approach to the properties of the capacitance matrix, makes use of the auxiliary elementary solutions: for each $i \in \{1,\dots,N\}$ we define $u_i$ as a solution of (\ref{eq:hardie}) with Dirichlet boundary condition 
+\be
+(\forall\,j\in\{1,\dots,N\}) : \ u_i|_{\mathcal{S}_j} = \delta_{ij}
+\ee
+and asymptotic condition $\lim_{r\to\infty} u_i = 0$ on $\Omega_{\mathrm{e}}$ (if there is exterior region of the domain $\Omega$). In other words, $u_i$ is a ``potential'' which forms when we fix the unit potential on the surface $\mathcal{S}_i$, and ground the rest of the surfaces. Note, however, that $u_i$ in general \emph{does not} represent physical potential, as some surfaces on a boundary of the same conductor here might have different values of potential ($0$ and $1$). For example, if we have a single conductor $K$ filling the space between two concentric spheres, where the inner sphere is denoted by $\mathcal{S}_1$ and the outer by $\mathcal{S}_2$, then $u_1 = 1$ on $\mathcal{S}_1$ and $u_1 = 0$ on $\mathcal{S}_2$, representing a nonphysical situation in which the potential is not constant on an ideal connected conductor. Foundational questions about the existence and uniqueness of the auxiliary functions $u_i$ are discussed in detail in the Appendix A.
+
+\medskip
+
+In a general Dirichlet problem we have a set of potential values $\{\varphi_1,\dots,\varphi_N\} \subseteq \rr$ given on boundary hypersurfaces $\{\mathcal{S}_1,\dots,\mathcal{S}_N\}$. In addition, if $\Omega$ is unbounded, we demand asymptotic condition that $\Phi(x) \to \varphi_\infty$ as $||x|| \to \infty$ for some $\varphi_\infty \in \rr$ (usual physical choice is $\varphi_\infty = 0$). If $\Omega$ is bounded we may again denote the value of the potential $\Phi$ on $\dd K_{\mathrm{e}}$ by $\varphi_\infty$. Due to linearity of the equation (\ref{eq:hardie}), the solution is simply given by superposition
+\be\label{eq:Phisum}
+\Phi(x) = \varphi_\infty + \sum_{i=1}^N (\varphi_i - \varphi_\infty) u_i(x) \ . 
+\ee
+A tacit assumption here is that the values of potentials $\varphi_i$ on each component of the boundary $\dd K_p$ of a connected conductor $K_p$ are equal, as the boundary of a connected conductor is an equipotential surface.
+
+\medskip
+
+In the rest of the paper, for the sake of concreteness, we assume that the domain is 3--dimensional, $m = 3$, unless stated otherwise.
+
+\bigskip
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Capacitance matrix} %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Let us denote by $n^a$ normal to $\dd\Omega$, pointing \emph{into} the $\Omega$. Gauss law implies that the total free charge on $i$--th surface is given by the integral
+\be
+Q_i = -\oint_{\mathcal{S}_i} n^a \, \tensor{\epsilon}{_a^b} (\nab{b} \Phi) \, \df a \ .
+\ee
+If for potential $\Phi$ we insert the sum (\ref{eq:Phisum}), this allows us to write
+\be
+Q_i = \sum_{j=1}^N C_{ij} (\varphi_j - \varphi_\infty)
+\ee
+where we have introduced the \emph{capacitance matrix} $\mx{C}$ with elements
+\be\label{eq:basicC}
+C_{ij} \defeq -\oint_{\mathcal{S}_i} n^a \, \tensor{\epsilon}{_a^b} (\nab{b} u_j) \, \df a \ .
+\ee
+There is an alternative, particularly useful form of the formula for the coefficients $C_{ij}$. Using the fact that $u_i$ vanishes on $\mathcal{S}_j$ for $j \ne i$, we have
+\bal
+C_{ij} & = -\oint_{\dd\Omega} u_i \, n^a \, \tensor{\epsilon}{_a^b} (\nab{b} u_j) \, \df a \nonumber\\
+ & = \int_\Omega \nab{a} (u_i \epsilon^{ab} \nab{b} u_j) \, \vol \nonumber\\
+ & = \int_\Omega (\nab{a} u_i) \epsilon^{ab} (\nab{b} u_j) \, \vol
+\eal
+so that
+\be\label{eq:symC}
+C_{ij} = \epsilon_0 \int_\Omega (\nab{a} u_i) \hat{\epsilon}^{ab} (\nab{b} u_j) \, \vol \ .
+\ee
+Thus, the capacitance matrix is symmetric, $\mx{C}^\mathsf{T} = \mx{C}$.
+
+\medskip
+
+
+
+As an aside, note that the capacitance matrix may be equivalently introduced via Green's function. Namely, using the definition of the Green's function
+\be
+\nabla'_{\!a} \big( \hat{\epsilon}^{ab}(x') \, \nabla'_{\!b} \, G(x,x') \big) = \delta(x-x')
+\ee
+it is not difficult to show (see \cite{SDeRMTN}), that the elements of the capacitance matrix are given by
+\be
+C_{ij} = \epsilon_0 \oint_{\mathcal{S}_i} \df a \, n^a \oint_{\mathcal{S}_j} \df a' \, n^b \, \tensor{\hat{\epsilon}}{_a^c} \, \tensor{\hat{\epsilon}}{_b^d} \, \nab{c} \nab{d}' \, G_{\mathrm{D}}(x,x') \ ,
+\ee
+where $G_{\mathrm{D}}(x,x')$ is the Dirichlet Green's function, such that $G_{\mathrm{D}}(x,x') = 0$ for all $x' \in \dd\Omega$. Despite the elegance of this approach, we will not pursue it further.
+
+\medskip
+
+An illustrative example of a system for which the capacitance matrix can be exactly calculated is a bispherical capacitor. Suppose that $\Omega$ is a complement of two conducting balls of radii $a_1$ and $a_2$, with centres separated by $b > a_1 + a_2$. Leaving the details of the calculation to the reference \cite{BT} (problems 1.67 and 3.85), we state the final result for the capacitance matrix,
+\be\label{eq:bisph}
+\mx{C} = \begin{pmatrix} C_{11} & C_{12} \\ C_{21} & C_{22} \end{pmatrix}
+\ee
+with
+\be
+\frac{C_{ii}}{4\pi\epsilon_0} = \frac{a_i}{2} + a_i \sinh \xi_i \sum_{\ell = 0}^\infty \exp\Big( -\big( \ell + \frac{1}{2} \big) \, \xi_i \Big) \coth\left( \big( \ell + \frac{1}{2} \big)(\xi_1 + \xi_2) \right)
+\ee
+and
+\be
+\frac{C_{12}}{4\pi\epsilon_0} = \frac{C_{21}}{4\pi\epsilon_0} = -a_1 \sinh \xi_1 \sum_{\ell=0}^\infty \frac{\exp\big( -(\ell + \frac{1}{2})(\xi_1 + \xi_2) \big)}{\sinh\big( (\ell + \frac{1}{2})(\xi_1 + \xi_2) \big)} \ ,
+\ee
+where we have introduced abbreviations $\xi_1$ and $\xi_2$ via
+\be
+\cosh \xi_1 = \frac{b^2 + a_1^2 - a_2^2}{2 b a_1} \ \quad \textrm{and} \quad \cosh \xi_2 = \frac{b^2 - a_1^2 + a_2^2}{2 b a_2} \ ,
+\ee
+such that $a_1 \sinh \xi_1 = a_2 \sinh \xi_2$.
+
+\medskip
+
+
+
+In our discussion we have left aside some special cases, which may be seen as artificial or pathological configurations from a physical point of view. First, one might wonder what happens with the capacitance matrix when the conductors are sets with empty interior, such as a 2--dimensional plate. The physically reasonable approach is to treat such objects as limiting cases of a regular conductor. For example, Smythe \cite{Smythe} treats disc and line as limits of an ellipsoid. Secondly, there is a class of capacitors with unbounded, but translational invariant conductors. Here one might have a system with one axis of invariance (such as infinite concentric cylinders), in which case the problem is reduced to a 2--dimensional problem, or two axes of invariance (such as a pair of parallel conducting planes), in which case the problem is reduced to a 1--dimensional problem. Since in such cases the integral in (\ref{eq:symC}) will in general diverge, the most sensible solution is to perform the well-defined part of the integration and then interpret the remaining integrand as a ``capacitance density'' (per area or length).
+
+\bigskip
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Structure of the capacitance matrix} %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Once the capacitance matrix has been introduced one can inspect its properties more carefully. Nonnegativity of the diagonal terms immediately follows from (\ref{eq:symC}) and the assumption that $\hat{\epsilon}_{ab}$ is positive semi-definite,
+\be
+C_{ii} \ge 0 \ .
+\ee
+The functions $u_i$ attain a local minimum on each $\mathcal{S}_j$ for $j \ne i$, $u_i|_{\mathcal{S}_j} = 0$, so that $n^a \nab{a} u_i|_{\mathcal{S}_j} \ge 0$ and, from the assumption (\ref{eps}) about the permittivity tensor, $n^a \tensor{\hat{\epsilon}}{_a^b} \nab{b} u_i \ge n^a \nab{a} u_i$. Hence, from (\ref{eq:basicC}) it follows that for each $i \ne j$,
+\be
+C_{ij} \le 0 \ .
+\ee
+Also, it is straightforward to see that the capacitance matrix is block-diagonal.
+
+\medskip
+
+
+
+\btm
+The capacitance matrix $\mx{C}$ has a block diagonal form, where each block corresponds to a connected component $\Omega_k \subseteq \Omega$ and the size of the block is equal to the number of connected components of $\dd\Omega_k$. If $\dd\Omega_k$ has only one connected component (physically describing an empty cavity) then the corresponding block is trivial, $1 \times 1$ block $(0)$.
+\etm
+
+\emph{Proof}. Let $\Omega_k$ and $\Omega_\ell$ be two connected components of $\Omega$, and $\mathcal{S}_i \subseteq \dd\Omega_k$ and $\mathcal{S}_j \subseteq \dd\Omega_\ell$ connected components of their boundaries. Then $u_i|_{\mathcal{S}_j} = 0$ and, vice versa, $u_j|_{\mathcal{S}_i} = 0$. By existence results there is solution for $u_i$ on $\Omega_k$, which we can trivially extend so that $u_i = 0$ on all $\Omega_p$ for $p \ne k$ and, by uniqueness theorems, this is the unique solution (likewise, $u_j$ is zero on all $\Omega_p$ for $p \ne \ell$). Formula (\ref{eq:symC}) then implies that $C_{ij} = 0$. Finally, $\dd\Omega_k$ has only one connected component, the solution is simply $u_k|_{\Omega_p} = \delta_{kp}$, so that $C_{ki} = 0 = C_{ik}$ for all $i \in \{1,\dots,N\}$. \qed
+
+\medskip
+
+One might say that essentially we have $M$ independent problems, with each component $\Omega_i$ described by corresponding block in the capacitance matrix. Now, with a stronger assumption about the permittivity tensor we can infer sharper inequalities on elements of each block. This results turns out to be the information crucial for subsequent analysis of the regularity of the capacitance matrix.
+
+\medskip
+
+
+
+\btm\label{tm:nonzeroC}
+Suppose that the permittivity tensor $\hat{\epsilon}_{ab}$ is real analytic and let $\Omega_i$ be a connected (either bounded or external) component of $\Omega$. If the boundary $\dd\Omega_i$ consists of at least two connected components, then all elements of the corresponding block in the capacitance matrix are strictly non-zero.
+\etm
+
+\emph{Proof}. First we look at nondiagonal elements $C_{k\ell}$, where $k$ and $\ell$ indices correspond to components of the boundary $\dd\Omega_i$, defined by the integral (\ref{eq:basicC}) of normal derivatives $n^a \tensor{\hat{\epsilon}}{_a^b} \nab{b} u_\ell$ over the surface $\mathcal{S}_k$. As on this surface the function $u_\ell$ attains a local minimum, we know that $n^a \tensor{\hat{\epsilon}}{_a^b} \nab{b} u_\ell \ge 0$ over the whole $\mathcal{S}_k$. Hence $C_{k\ell} = 0$ holds if and only if $n^a \tensor{\hat{\epsilon}}{_a^b} \nab{b} u_\ell = 0$ over the whole $\mathcal{S}_k$. But, if the latter holds, the fact that $u_\ell|_{\mathcal{S}_k} = 0$, together with the theorem \ref{tm:CauchyEllipt}, implies $u_\ell = 0$ over the whole $\Omega_i$, in contradiction with the rest of the boundary conditions, namely $u_\ell|_{\mathcal{S}_\ell} = 0$.
+
+For diagonal elements we look at the auxiliary function $v_k \defeq 1 - u_k$, which is again a solution of (\ref{eq:hardie}), satisfies boundary conditions $v_k|_{\mathcal{S}_\ell} = 1 - \delta_{k\ell}$, and has local minimum on $\mathcal{S}_k$. Hence, according to the same argument as with the nondiagonal elements we have $n^a \nab{a} v_k > 0$, that is $n^a \nab{a} u_k < 0$ on $\mathcal{S}_k$, whence $C_{kk} > 0$. \qed
+
+\medskip
+
+Now we turn to the properties of sums of elements in rows and elements in columns of the capacitance matrix.
+
+\medskip
+
+
+
+\btm
+For each connected component $\Omega_i$ of $\Omega$, and connected component $\mathcal{S}_k \subseteq \dd\Omega_i$ we have
+\be\label{ineq:Delta}
+\Delta_k \defeq C_{kk} - \sum_{\substack{\ell=1 \\ \ell\neq k}}^N |C_{k\ell}| \ge 0 \ .
+\ee
+Furthermore, if $\Omega_i$ is bounded then $\Delta_k = 0$ and, conversely, if in addition the permittivity tensor $\hat{\epsilon}_{ab}$ is real analytic and $\Delta_k = 0$ then $\Omega_i$ is necessarily bounded.
+\etm 
+
+\emph{Proof}. We look at the function $F = \sum_{\ell=1}^N u_\ell$ which satisfies the boundary condition $F|_{\dd\Omega} = 1$. By strong maximum principle $n^a \nab{a} F \le 0$ on $\dd\Omega_i$ and the assumption (\ref{eps}) implies that $n^a \tensor{\epsilon}{_a^b} (\nab{b} F) |_{\mathcal{S}_k} \le 0$. Thus,
+\begin{equation*}
+\sum_{\ell=1}^N C_{k\ell} = - \oint_{\mathcal{S}_k} n^a \tensor{\epsilon}{_a^b} (\nab{b} F) \, \df a \ge 0 \ ,
+\end{equation*}
+which can be written in form (\ref{ineq:Delta}) since $C_{kk} \ge 0$ and $C_{k\ell} \le 0$ for all $\ell \ne k$.
+
+If $\Omega_i$ is bounded then $F|_{\Omega_i} = 1$ and immediately $\Delta_k = 0$ for each $k$ corresponding to component of boundary $\dd\Omega_i$. Conversely, if $\Delta_k = 0$ on at least one $k$ corresponding to component of boundary $\dd\Omega_i$, then $n^a \tensor{\epsilon}{_a^b} \nab{b} F = 0$ on $\mathcal{S}_k$. This implies that auxiliary function $G = 1 - F$ is zero on $\mathcal{S}_k$ and $n^a \tensor{\epsilon}{_a^b} \nab{b} G = 0$ on $\mathcal{S}_k$, hence by theorem \ref{tm:CauchyEllipt} it follows that $G|_{\Omega_i} = 0$, that is $F|_{\Omega_i} = 1$. This is consistent if $\Omega_i$ is bounded, but in contradiction with the case when $\Omega_i$ is unbounded, as $F(x) \to 0$ as $||x|| \to \infty$. \qed
+
+\medskip
+
+
+
+An immediate corollary is that for all $i$ and $j$ we have $C_{ii} \ge |C_{ij}|$ and $C_{jj} \ge |C_{ij}|$, implying the inequality
+\be\label{ineq:CCC}
+C_{ii} C_{jj} \ge C_{ij}^2 \ .
+\ee
+It is important to note that the electrostatic energy $W$ of this configuration of charged conductors, which may be written as a matrix product
+\be
+W = \frac{1}{2} \, \bm{\varphi}\trans \mx{C} \bm{\varphi} \ ,
+\ee
+with $\bm{\varphi}\trans = (\varphi_1 \cdots \varphi_N)$, is positive semi-definite $W \ge 0$, if and only if the capacitance matrix $\mx{C}$ is positive semi-definite (for simplicity we have assumed here that $\varphi_\infty = 0$). Since the inequality (\ref{ineq:CCC}) holds for all real symmetric positive-definite matrices, it would equally follow from the assumption about the nonnegativity of the corresponding electrostatic energy.
+
+\bigskip
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Regularization of the capacitance matrix} %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+The fact that for all surfaces $\mathcal{S}_k$ in the boundary of a bounded component $\Omega_i$ the sum of the $k$--th row, as well as the sum of the $k$--th column, are zero, points to another redundancy in the capacitance matrix $\mx{C}$. Let us look more closely at one square block of the capacitance matrix, say $\mx{A}$, of size $r \times r$ (without loss of generality, we shall assume that $\mx{A}$ is the first block in $\mx{C}$), corresponding to a connected component $\Omega_s$. For any $\mx{x} \in \rr^r$ we have
+\bal
+\mx{x}\trans\mx{A}\mx{x} & = \sum_{i=1}^r \sum_{j=1}^r x_i C_{ij} x_j = \sum_{k=1}^r C_{kk} x_k^2 + \sum_{i=1}^r \sum_{j \ne i}^r x_i C_{ij} x_j = \nonumber\\
+ & = \sum_{k=1}^r x_k^2 \left( \Delta_k + \sum_{\ell\neq k}^r |C_{k\ell}| \right) - \sum_{i=1}^r \sum_{j\neq i}^r x_i x_j |C_{ij}|
+\eal
+and since
+\be
+\sum_{i=1}^r \sum_{j \ne i}^r |C_{ij}| x_i^2 = \sum_{i=1}^r \sum_{j \ne i}^r |C_{ij}| x_j^2
+\ee
+we have
+\bal
+\mx{x}\trans\mx{A}\mx{x} & = \sum_{k=1}^r \Delta_k x_k^2 + \frac{1}{2} \, \sum_{i=1}^r \sum_{j \ne i}^r |C_{ij}| (x_i^2 + x_j^2 - 2 x_i x_j) = \nonumber\\
+ & = \sum_{k=1}^r \Delta_k x_k^2 + \frac{1}{2} \, \sum_{i=1}^r \sum_{j \ne i}^r |C_{ij}| (x_i - x_j)^2 \ge 0
+\eal
+Now, if $\Omega_s$ is bounded then $\Delta_k = 0$ for all $k \in \{1,\dots,r\}$, and if in addition $\Omega_s$ has two or more connected components of boundary $\dd\Omega_s$ then, according to the theorem \ref{tm:nonzeroC}, all $C_{ij} \ne 0$. Thus, under all these assumption, $\mx{x}\trans\mx{A}\mx{x} = 0$ if and only if $x_i = x_j$ for all pairs $i,j \in \{1,\dots,r\}$, or
+\be
+\ker\mx{A} = \left\{ (\lambda,\dots,\lambda) \in \rr^r \mid \lambda \in \rr \right\} \ .
+\ee
+Note that this result is a direct descendant of theorem \ref{tm:CauchyEllipt}. Furthermore, the matrix $\mx{A}'$, obtained by removal of one row and one column from $\mx{A}$, is a regular matrix. In order to prove this, we may start from the decomposition
+\be
+\mx{x}\trans\mx{A}\mx{x} = {\mx{x}'}\trans\mx{A}'\mx{x}' + \left( A_{rr} x_r + 2 \sum_{i=1}^{r-1} x_i A_{ir} \right) x_r \ .
+\ee
+Now, suppose that there is $\mx{x}' \in \rr^{r-1}$, such that ${\mx{x}'}\trans\mx{A}'\mx{x}' = 0$. Here one can simply choose $x_r = 0$, so that $\mx{x} \in \ker\mx{A}$. But, according to result above, this is possible if and only if $\lambda = 0$, that is $\mx{x} = \0$. Thus $\ker\mx{A}'$ is trivial.
+
+\medskip
+
+Finally, it is not too difficult to prove that the block $\mx{C}_\mathrm{e}$ of the capacitance matrix $\mx{C}$, corresponding to the unbounded component $\Omega_\mathrm{e}$, is necessarily regular. Suppose that $\mx{C}_\mathrm{e}\,\mx{x} = \0$. We know that a trivial potential, $\mx{x} = \0$, solves the electrostatic problem in which all the connected components of the boundary of the exterior region are electrically neutral (and the potential is assumed to decay at infinity), and by uniqueness theorems this is also the only one. Hence $\ker\mx{C}_\mathrm{e}$ is trivial and $\mx{C}_\mathrm{e}$ is regular.
+
+\medskip
+
+In the rest of the section we shall discuss several regularization of the capacitance matrix, based on the results obtained above. Regularized capacitance matrix allows one to solve the inverse problem, determination of potential differences from given charges. Before we proceed we shall introduce a slight modification of the notation, which should allow easier following of the discussion. Let $M'$ be a number of bounded connected components of $\Omega$. In another words, $M' = M$ if there is no exterior region $\Omega_{\mathrm{e}}$ and $M' = M-1$ if there is $\Omega_{\mathrm{e}} \ne \emptyset$. Furthermore, if we denote by $r_a$ the number of connected components of $\dd\Omega_a$ (where $\Omega_a$ is bounded) for each $a \in \{1,\dots,M'\}$ and by $f$ the number of connected components of $\dd\Omega_{\mathrm{e}}$, then
+\be
+f + \sum_{a=1}^{M'} r_a = N \ .
+\ee
+Connected components of $\dd\Omega_a$ may be denoted by $\{\mathcal{S}_1^{(a)},\dots,\mathcal{S}_{r_a}^{(a)}\}$ and pertaining potentials by $\{\varphi_1^{(a)},\dots,\varphi_{r_a}^{(a)}\}$, where we follow a convention that the last one $\mathcal{S}_{r_a}^{(a)}$, in case of bounded $\Omega_a$, is a bounding, outermost surface. Accordingly, as the capacitance matrix has block-diagonal form, we may consistently use the notation $C^{(a)}_{ij}$, where the superscript denotes the domain $\Omega_a$, that is a corresponding block.
+
+\medskip
+
+
+
+\emph{Regularization, version 1}. The simplest route to a regularized capacitance matrix relies on the observations made in the first part of this section. Note that for all $a \in \{1,\dots,M'\}$ and $i \in \{1,\dots,r_a\}$ we have
+\be
+Q_i^{(a)} = C^{(a)}_{ir_a} (\varphi_{r_a}^{(a)} - \varphi_\infty) + \sum_{j=1}^{r_a - 1} C^{(a)}_{ij} (\varphi_j^{(a)} - \varphi_\infty) = \sum_{j=1}^{r_a - 1} C^{(a)}_{ij} (\varphi_j^{(a)} - \varphi_{r_a}^{(a)}) \ ,
+\ee
+and for all $i \in \{1,\dots,f\}$
+\be
+Q_i^{(\mathrm{e})} = \sum_{j=1}^f C^{(\mathrm{e})}_{ij} (\varphi_j^{(\mathrm{e})} - \varphi_\infty) \ .
+\ee
+Thus, if we remove a row and a column passing through a $r_a$-th row and $r_a$-th column in each $r_a \times r_a$ block, corresponding to a bounded $\Omega_a$, of the matrix $\mx{C}$, the result will be a $(N - M') \times (N - M')$ regular matrix $\mx{\widehat{C}}$. Simultaneously, this means that each potential difference $\varphi_k^{(a)} - \varphi_\infty$ on surface $\mathcal{S}_k^{(a)}$, part of the boundary $\dd\Omega_a$ which is not its bounding, outermost surface, must be replaced with the potential difference $\varphi_k^{(a)} - \varphi_{r_a}^{(a)}$. One drawback of the matrix $\mx{\widehat{C}}$ is that the charges $Q_{r_a}^{(a)}$ on bounding surfaces are not directly produced by the product $\mx{\widehat{C}}\bm{\varphi}$, but must be calculated separately via
+\be
+Q_{r_a}^{(a)} = -\sum_{i=1}^{r_a - 1} Q_i^{(a)} \ .
+\ee
+Another source of discontent with the matrix $\mx{\widehat{C}}$ is that product $\mx{\widehat{C}}\bm{\varphi}$ does not result in a sum of charges on different boundaries of the same connected conductor $K_p$. This motivates another version of the regularization.
+
+\medskip
+
+
+
+\emph{Regularization, version 2}. Each bounded conductor $K_p$ has an ``outer'' part of the boundary, which it shares with the surrounding part of the domain $\Omega$, and $i_p \ge 0$ ``inner'' parts of the boundary, bounding cavities $\{\Omega_{\kappa(p,1)},\dots,\Omega_{\kappa(p,i_p)}\}$ inside of it (if there are any). In order to obtain the total charge $Q^{\mathrm{tot}}_p$ on $K_p$ we need to sum the charge on the outer boundary with the charges on each of $i_p$ inner boundaries of the conductor $K_p$. This translates to the following recipe for the alteration of the matrix $\mx{\widehat{C}}$: Subtract from a row corresponding to the outer boundary of $K_p$ each row corresponding to a non-outermost connected component of $\dd\Omega_{\kappa(p,j)}$ (here we are relying on the fact that the charge on the outermost boundary of the cavity is minus sum of charges on all inner boundaries of that cavity). The procedure must be performed from the innermost conductors in the system, up to the outermost (that is, in language of the capacitance tree, from leaves back to the root). The resulting matrix, which we shall denote by $\mx{\widetilde{C}}$, will have unaltered determinant, $\det(\mx{\widetilde{C}}) = \det(\mx{\widehat{C}})$, thus it will remain regular. Note that the matrix $\mx{\widetilde{C}}$ is, in general, not diagonal.
+
+\medskip
+
+
+
+\emph{Regularization, version 3}. Still, one might look for another regularized matrix $\mx{\check{C}}$ which combines traits of all the previous matrices, namely the one that remains symmetric (just as the matrix $\mx{\widehat{C}}$) and produces the total charges on connected conductors (just as the matrix $\mx{\widetilde{C}}$) by acting on potential differences $\varphi_i - \varphi_\infty$ (just as the original matrix $\mx{C}$). Such matrix is, indeed, possible to construct, starting from the matrix $\mx{\widetilde{C}}$ with the following recipe: Subtract from a row corresponding to the outer boundary of $K_p$ each column corresponding to a non-outermost connected component of $\dd\Omega_{\kappa(p,j)}$. Essentially, we are making here rearrangement of the matrix, corresponding to the potential decomposition $\varphi_i - \varphi_{r_a} = (\varphi_i - \varphi_\infty) - (\varphi_{r_a} - \varphi_\infty)$. As the procedure treats rows and columns of the capacitance matrix $\mx{C}$ in a symmetric fashion, the result is again a symmetric matrix. Furthermore, the procedure preserves the value of the determinant, so that we have
+\be
+\det(\mx{\check{C}}) = \det(\mx{\widetilde{C}}) = \det(\mx{\widehat{C}}) \ .
+\ee
+The matrix $\mx{\check{C}}$ allows us to write the electrostatic energy $W$ of a system of charged conductors as
+\be
+W = \frac{1}{2} \, \bm{\varphi}\trans \mx{\check{C}} \bm{\varphi} \ ,
+\ee
+with $\bm{\varphi}\trans = (\varphi_1 \cdots \varphi_P)$, so that sum goes over connected conductors. Note that the ``coefficients of capacitance'' $c_{ij}$ from \cite{BT} (equation (3.b.3)) are in fact elements of the matrix $\mx{\check{C}}$.
+
+\medskip
+
+All three versions of a regularized capacitance matrix may be illustrated with a simple example, sketched below. Here we have a conductor with two cavities and in each of them one additional conductor (their surfaces are denoted with numbers 1 to 5).
+
+\medskip
+
+\bc
+\begin{tikzpicture}
+\draw[gray,fill=lightgray] (0,0) ellipse (3 and 2);
+\draw[gray,fill=white] (-1.5,0) circle (1.0);
+\draw[gray,fill=white] (1.5,0) circle (1.0);
+\draw[gray,fill=lightgray] (-1.5,0) circle (0.5);
+\draw[gray,fill=lightgray] (1.5,0) circle (0.5);
+\node at (-1.5,0.45) {\small $\mathbf{1}$};
+\node at (-1.5,1.05) {\small $\mathbf{2}$};
+\node at (1.5,0.45) {\small $\mathbf{3}$};
+\node at (1.5,1.05) {\small $\mathbf{4}$};
+\node at (0,2.05) {\small $\mathbf{5}$};
+\end{tikzpicture}
+\ec
+
+\medskip
+
+\noindent
+The initial capacitance matrix is (for clarity we omit zeros in the matrices)
+\be
+\mx{C} = \begin{pmatrix} C_{11} & -C_{11} & & & \\ -C_{11} & C_{11} & & & \\ & & C_{33} & -C_{33} & \\ & & -C_{33} & C_{33} & \\ & & & & C_{55} \end{pmatrix}
+\ee
+and the corresponding regularized capacitance matrices are 
+\be
+\mx{\widehat{C}} = \begin{pmatrix} C_{11} & & \\ & C_{33} & \\ & & C_{55} \end{pmatrix} \qqd \begin{pmatrix} Q_1 \\ Q_3 \\ Q_5 \end{pmatrix} = \mx{\widehat{C}} \begin{pmatrix} \varphi_1 - \varphi_5 \\ \varphi_3 - \varphi_5 \\ \varphi_5 - \varphi_\infty \end{pmatrix} \ ,
+\ee
+\be
+\mx{\widetilde{C}} = \begin{pmatrix} C_{11} & & \\ & C_{33} & \\ -C_{11} & -C_{33} & C_{55} \end{pmatrix} \qqd \begin{pmatrix} Q^{\mathrm{tot}}_1 \\ Q^{\mathrm{tot}}_3 \\ Q^{\mathrm{tot}}_5 \end{pmatrix} = \mx{\widetilde{C}} \begin{pmatrix} \varphi_1 - \varphi_5 \\ \varphi_3 - \varphi_5 \\ \varphi_5 - \varphi_\infty \end{pmatrix} \ ,
+\ee
+and
+\be
+\mx{\check{C}} = \begin{pmatrix} C_{11} & & -C_{11} \\ & C_{33} & -C_{33} \\ -C_{11} & -C_{33} & C_{11} + C_{33} + C_{55} \end{pmatrix} \qqd \begin{pmatrix} Q^{\mathrm{tot}}_1 \\ Q^{\mathrm{tot}}_3 \\ Q^{\mathrm{tot}}_5 \end{pmatrix} = \mx{\check{C}} \begin{pmatrix} \varphi_1 - \varphi_\infty \\ \varphi_3 - \varphi_\infty \\ \varphi_5 - \varphi_\infty \end{pmatrix} \ .
+\ee
+
+\bigskip
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Charge exchange between the conductors} %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Capacitors serve to separate charges and the elements of the capacitance matrix should in some sense quantify how much is a given system of conductors successful in this respect. A direct insight is given by a simple procedure: One connects a pair of conductors with a thin conducting wire and measures the charge $\Delta Q$ exchanged through the wire. The assumption here is that the wire used in the experiment should be ``thin'' in a sense that it only serves as bridge for the exchange of the charge and that it negligibly perturbs the capacitance matrix during the experiment. Suppose that the initial charges on the pair of conductors were $Q_a$ and $Q_b$, while their potentials were $\varphi_a$ and $\varphi_b$. We claim that $\Delta Q$ is given by
+\be\label{eq:DeltaQ}
+\Delta Q = \frac{\Delta\varphi}{\check{C}_{aa}^{-1} + \check{C}_{bb}^{-1} - 2\check{C}_{ab}^{-1}}
+\ee
+with $\Delta Q = Q_a - Q'_a$ and $\Delta\varphi = \varphi_a - \varphi_b$. In attacking the problem we shall rely on the properties of the matrix $\mx{\check{C}}$, which allows us to start from the potentials expressed with charges. Prior to connecting we have
+\bal
+\varphi_a - \varphi_\infty & = \check{C}_{aa}^{-1} Q_a + \check{C}_{ab}^{-1} Q_b + \sum_{i \ne a,b} \check{C}_{ai}^{-1} Q_i \ ,\\
+\varphi_b - \varphi_\infty & = \check{C}_{ba}^{-1} Q_a + \check{C}_{bb}^{-1} Q_b + \sum_{i \ne a,b} \check{C}_{bi}^{-1} Q_i \ ,
+\eal
+and after the connecting
+\bal
+\varphi'_a - \varphi_\infty & = \check{C}_{aa}^{-1} Q'_a + \check{C}_{ab}^{-1} Q'_b + \sum_{i \ne a,b} \check{C}_{ai}^{-1} Q_i \ ,\\
+\varphi'_b - \varphi_\infty & = \check{C}_{ba}^{-1} Q'_a + \check{C}_{bb}^{-1} Q'_b + \sum_{i \ne a,b} \check{C}_{bi}^{-1} Q_i \ .
+\eal
+Hence
+\bal
+\varphi_a - \varphi'_a & = \check{C}_{aa}^{-1} (Q_a - Q'_a) + \check{C}_{ab}^{-1} (Q_b - Q'_b) \ ,\\
+\varphi_b - \varphi'_b & = \check{C}_{ba}^{-1} (Q_a - Q'_a) + \check{C}_{bb}^{-1} (Q_b - Q'_b) \ .
+\eal
+As $\mx{\check{C}}^{-1}$ is symmetric, $\varphi'_a = \varphi'_b$ and $Q_a + Q_b = Q'_a + Q'_b$, that is $Q_a - Q'_a = Q'_b - Q_b$, by subtracting these relations we get
+\be
+\varphi_a - \varphi_b = (\check{C}_{aa}^{-1} + \check{C}_{bb}^{-1} - 2\check{C}_{ab}^{-1})(Q_a - Q'_a) \ ,
+\ee
+which proves our claim.
+
+\medskip
+
+As a special, more concrete example, we may take a system of two compact disjoint conductors in a vacuum, each with one connected component of the boundary (that is, without cavities). Here we have
+\be
+\mx{\check{C}} = \mx{C} = \begin{pmatrix} C_{aa} & C_{ab} \\ C_{ab} & C_{bb} \end{pmatrix}
+\ee
+with the inverse
+\be
+\mx{C}^{-1} = \frac{1}{C_{aa}C_{bb} - C_{ab}^2} \, \begin{pmatrix} C_{bb} & -C_{ab} \\ -C_{ab} & C_{aa} \end{pmatrix}
+\ee
+so that
+\be
+\Delta Q = \frac{C_{aa}C_{bb} - C_{ab}^2}{C_{aa} + C_{bb} + 2C_{ab}}\,\Delta\varphi \ .
+\ee
+
+\bigskip
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Approximations, series and parallel} %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Calculation of the elements of the capacitance matrix is, except in some special cases, technically highly involved. Bispherical capacitor, featuring subcases of disjoint conducting balls and a conducting ball in a spherical cavity with conducting walls, belongs to a rare class which allows exact solution written in an analytic form. However, difficulties arise even at examples with deceiving geometric simplicity, such as a capacitor consisting of two parallel coaxial discs. History of the latter problem goes back to Maxwell \cite{Maxwell}, over Love, who managed to reduce the corresponding Laplace problem to a solution of a linear integral equation \cite{Love49}, to various modern treatments \cite{Hutson63,Rao05,PCDiLM16,Paffuti17}. Another source of complications arises from the permittivity tensor $\epsilon_{ab}$. Suppose, for example, that a spherical capacitor is filled with anisotropic homogeneous dielectric, such that in a Cartesian coordinate system $\epsilon_{\mu\nu} = \mathrm{diag}\,(\epsilon_1,\epsilon_2,\epsilon_3)$. In such case a simple coordinate rescaling $x'^i = x^i/\sqrt{\epsilon_i}$ reduces the differential equation (\ref{eq:hardie}) to the basic Laplace equation, but spherical boundaries become complicated surfaces of the form $r(\mathbf{\hat{n}}) = a (\hat{\epsilon}_{ij} \hat{n}^i \hat{n}^j)^{-1/2}$. Analytic approaches to such problems range from perturbative techniques \cite{Erma63} to geometric inequalities \cite{PS}.
+
+\medskip
+
+Let us turn to class of capacitors consisting of two closely separated pair of finite conducting plates. A pragmatic, often used, bypassing of the calculation obstacles relies on neglect of the fringing fields (see e.g.~discussion in \cite{SBS86}). In this approximation the corresponding capacitance matrix is, up to the order $O(\delta)$ of the ``regulator'' parameter $\delta > 0$, given by
+\be
+\mx{C} \approx \begin{pmatrix} C_{11} & -(C_{11} - \delta) \\ -(C_{11} - \delta) & C_{11} \end{pmatrix} \ .
+\ee
+Intuitively, $\delta = 0$ corresponds to the capacitance matrix of enclosed system of two conductors, while $\delta > 0$ measures the amount of the charge that has distributed on the ``outer'' sides of the capacitor. We can illustrate this with couple of examples. Suppose that a planar capacitor consists of two parallel plates, each of area $A$, separated by $h$, with space between them filled with dielectric described by the permittivity tensor $\epsilon_{ab}$. We orient the Cartesian coordinate system so that $z$--axis is perpendicular to the plates. Now, assuming that the charge on the ``outer'' side of a capacitor plate is negligible, we have
+\be
+Q_1 \approx -\int \epsilon^{ab} n_a \nab{b} \Phi |_{z=0} \, \df a = -\int \epsilon^{zi}(x,y,0) \, \dd_i \Phi(x,y,0) \, \df a
+\ee
+and
+\be
+\varphi_1 - \varphi_2 = -\int_0^h \dd_z \Phi \, \df z \ .
+\ee
+This allows us to write
+\be
+\frac{C_{11}}{C_0} \approx \frac{\displaystyle{\frac{1}{A} \, \int \hat{\epsilon}^{zi}(x,y,0) \, \dd_i \Phi(x,y,0) \, \df a}}{\displaystyle{\frac{1}{h} \, \int_0^h \dd_z \Phi \, \df z}} \ ,
+\ee
+where we have introduced the abbreviation $C_0 = \epsilon_0 A/h$, approximate capacitance of the vacuum plate capacitor. We may single out several special subcases:
+
+\begin{itemize}
+\item[(a)] isotropic dielectric, homogeneous in $z$--direction: equation (\ref{eq:hardie}) admits a simple solution of the form $\Phi(z) = \alpha z + \beta$, so that
+\be
+\frac{C_{11}}{C_0} \approx \left< \hat{\epsilon} \right> \defeq \frac{1}{A} \, \iint \df x\,\df y\, \hat{\epsilon}(x,y)
+\ee
+
+\item[(b)] isotropic dielectric with $\hat{\epsilon} = \hat{\epsilon}(z)$: equation (\ref{eq:hardie}) admits a solution of the form
+\be
+\Phi(z) = \varphi_1 + \int_0^z \df z' \, \frac{K}{\hat{\epsilon}(z')} \ ,
+\ee
+where the constant $K$ is fixed by the condition $\Phi(h) = \varphi_2$, so that
+\be
+\frac{C_{11}}{C_0} \approx \frac{1}{\left< 1/\hat{\epsilon} \right>} \defeq \frac{1}{\displaystyle{\frac{1}{h} \, \int_0^h \frac{1}{\hat{\epsilon}(z)} \, \df z}}
+\ee
+
+\item[(c)] homogeneous, but not necessarily isotropic dielectric: again, equation (\ref{eq:hardie}) admits a simple solution of the form $\Phi(z) = \alpha z + \beta$, so that
+\be
+\frac{C_{11}}{C_0} \approx \hat{\epsilon}_{zz} \ .
+\ee
+\end{itemize}
+
+\medskip
+
+
+
+Another challenge is to describe a system of capacitors in the lumped-element limit, appearing as a part of an electric circuit. Each capacitor (pair of conducting plates) is represented by the symbol
+
+\bc
+\begin{tikzpicture}
+\draw[very thick] (0,0) -- (1,0);
+\draw[very thick] (1,-0.5) -- (1,0.5);
+\draw[very thick] (1.2,-0.5) -- (1.2,0.5);
+\draw[very thick] (1.2,0) -- (2.2,0);
+\end{tikzpicture}
+\ec
+
+\noindent
+Here we assume that all capacitors are well separated, such that the capacitance matrix may be approximated by a block-diagonal matrix (with each block corresponding to each capacitor). An insight into such an approximation is provided by the bispherical capacitor, mentioned in section 4. Namely, expanding (\ref{eq:bisph}) with respect to the parameter $\eta \defeq \sqrt{a_1 a_2}/b$ up to order $O(\eta^2)$, we get
+\be
+\mx{C} \approx 4\pi \epsilon_0
+\begin{pmatrix}
+a_1 \left(1 + \eta^2 \right) & - \eta \sqrt{a_1 a_2} \\
+- \eta \sqrt{a_1 a_2} & a_2 \left(1 + \eta^2 \right) \ .
+\end{pmatrix}
+\ee
+We see that in the limit when $\eta \to 0$, the capacitance matrix is of block-diagonal form with leading correction term in the off-diagonal elements. Any two elements of an electric circuit may be combined by two elementary types of connection, series and parallel. We shall investigate such combinations, by calculating the effective capacitance defined as a ratio $\Delta Q/\Delta \varphi$, that was introduced and analyzed in the previous section.
+
+\medskip
+
+
+
+\emph{Parallel}. Schematically we have
+
+\medskip
+
+\bc
+\begin{tikzpicture}
+\draw[very thick] (0,0) -- (4,0);
+\draw[very thick,fill=white] (1,-1) rectangle (3,1);
+\draw[very thick,fill=white] (1.9,0.6) rectangle (2.1,1.4);
+\draw[very thick,fill=white] (1.9,-0.6) rectangle (2.1,-1.4);
+\draw[white,fill=white] (1.92,-1.5) rectangle (2.08,1.5);
+\node at (0,0.3) {\small $\varphi$};
+\node at (4,0.35) {\small $\varphi'$};
+\node at (1.6,1.5) {\small $Q_1$};
+\node at (2.4,1.5) {\small $Q'_1$};
+\node at (1.6,-1.5) {\small $Q_2$};
+\node at (2.4,-1.5) {\small $Q'_2$};
+\end{tikzpicture}
+\ec
+
+\medskip
+
+\noindent
+so that effectively the result is again a two-piece capacitor. The total charges on each of the joined plates, under the approximation explained above, are
+\be
+\begin{pmatrix} Q_1 + Q_2 \\ Q'_1 + Q'_2 \end{pmatrix} = \begin{pmatrix} C_1 + C_2 & -(C_1 + C_2 - 2\delta) \\ -(C_1 + C_2 - 2\delta) & C_1 + C_2 \end{pmatrix} \begin{pmatrix} \varphi \\ \varphi' \end{pmatrix}
+\ee
+If one connects the left and right side of circuit, the exchanged charge divided by the potential difference (\ref{eq:DeltaQ}), is
+\be
+\frac{\Delta Q}{\Delta\varphi} = \frac{(C_1+C_2)^2 - (C_1 + C_2 - 2\delta)^2}{4\delta} = C_1 + C_2 - \delta
+\ee
+and in the limit when $\delta \to 0$ we have 
+\be
+\lim_{\delta\to 0} \, \frac{\Delta Q}{\Delta\varphi} = C_1 + C_2 \ .
+\ee
+This is the well-know formula for the total capacitance of the capacitors connected in parallel. 
+
+\medskip
+
+
+
+\emph{Series}. In this case we end with a system of three conductors (see discussion in \cite{JS15}), schematically
+
+\medskip
+
+\bc
+\begin{tikzpicture}[scale=1.5]
+\draw[very thick] (0,0) -- (1,0);
+\draw[very thick] (1,-0.5) -- (1,0.5);
+\draw[very thick] (1.2,-0.5) -- (1.2,0.5);
+\draw[very thick] (1.2,0) -- (2.2,0);
+\draw[very thick] (2.2,-0.5) -- (2.2,0.5);
+\draw[very thick] (2.4,-0.5) -- (2.4,0.5);
+\draw[very thick] (2.4,0) -- (3.4,0);
+\node at (0,-0.25) {\small $\varphi_2$};
+\node at (1.75,-0.25) {\small $\varphi_1$};
+\node at (3.4,-0.2) {\small $\varphi'_2$};
+\node at (0.75,0.5) {\small $Q_2$};
+\node at (1.45,0.5) {\small $Q_1$};
+\node at (2,0.5) {\small $Q'_1$};
+\node at (2.6,0.5) {\small $Q'_2$};
+\end{tikzpicture}
+\ec
+
+\medskip
+
+\noindent
+The total charges on each of the conductors are given by
+\be
+\begin{pmatrix} Q_1 + Q'_1 \\ Q_2 \\ Q'_2 \end{pmatrix} = \begin{pmatrix} C_1 + C_2 & -(C_1 - \delta) & -(C_2 - \delta) \\ -(C_1 - \delta) & C_1 & 0 \\ -(C_2 - \delta) & 0 & C_2 \end{pmatrix} \begin{pmatrix} \varphi_1 \\ \varphi_2 \\ \varphi'_2 \end{pmatrix} \ .
+\ee
+Now, using the same procedure as above, if one connects the left and right side of circuit, the exchanged charge divided by the potential difference, in the limit when $\delta \to 0$, is
+\be
+\frac{\Delta Q}{\Delta\varphi} = \frac{1}{\displaystyle{\frac{1}{C_1} + \frac{1}{C_2}}} \ .
+\ee
+This is the well-know formula for the total capacitance of the capacitors connected in series. 
+
+\bigskip
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Final remarks and open questions} %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+In this paper we have presented a thorough, rigorous analysis of the capacitance matrix. Although some properties, such as the symmetry of the matrix $\mx{C}$ and corresponding non-strict inequalities, are classical results (some going back to Maxwell \cite{Maxwell}), here we have pushed these conclusions one step further. In order to achieve this, we have unearthed many hidden assumptions, both geometric related to properties of the domain $\Omega$ (that is, the shape of conductors) and analytic related to the properties of the permittivity tensor $\epsilon_{ab}$. This has allowed us to prove strict inequalities, identify kernel of the capacitance matrix and propose several procedures for the regularization of this matrix. Utilization of such matrices is illustrated in section 7, with formula for the charge exchanged between the conductors. Also, we have introduced the auxiliary concept of the capacitance tree, a graph associated to a system of charged conductors, which might be a useful pedagogical tool for conceptualization of electrostatic problems. Finally, we have discussed tacit approximations used in standard treatments of the electric circuits, demonstrating how the formulae for the capacitance of capacitors connected in parallel and series may be recovered from the capacitance matrices.
+
+\medskip
+
+The analysis presented here still leaves some open questions, the most important of which we list here:
+
+\begin{itemize}
+\item[(1)] Is it possible to relax the assumption on the analyticity of the permittivity tensor?
+
+\smallskip
+
+Comment. A mild generalization of the results presented in the paper is possible if one assumes that $\hat{\epsilon}_{ab}$ is piecewise analytic in $\Omega$, with boundaries of the subdomains which satisfy the same smoothness assumptions as $\dd\Omega$. Then all the results relying on the theorem \ref{tm:CauchyEllipt} may be inductively proved, moving from one subdomain to a next adjacent subdomain.
+
+
+
+\item[(2)] Is it possible to relax the assumptions about the regularity of the domain $\Omega$, e.g.~with boundary which is merely continuous?
+
+\smallskip
+
+Comment. One could argue that any boundary of a macroscopic conductor may, to a physically reasonable accuracy, be modelled by a piecewise smooth surface. Nevertheless, from a point of view of mathematical physics, it is important to know how robust is our analysis, that is, how irregular could the geometry be, so that the conclusions remain unaltered.  
+
+
+
+\item[(3)] Is it possible to generalize the capacitance matrix for systems consisting of infinite number of conductors, which might serve as a model of some aerosols?
+\end{itemize}
+
+Our hope is that this analysis might stimulate further research on the properties of the capacitance matrix.
+
+\bigskip
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ack
+We would like to thank Edgardo Franzin for thorough reading of the first draft and many comments which helped us to improve the paper. Also, we would like to thank Marko Erceg for several useful remarks. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Existence and uniqueness}%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+Here we discuss the questions of existence and uniqueness of classical solutions, $u \in C^2(\Omega) \cap C^0(\cl{\Omega})$, of the partial differential equation (\ref{eq:hardie}).
+
+\medskip
+
+\emph{Existence}. Obviously, we are dealing with $M$ independent Dirichlet problems, defined on each connected component of the domain $\Omega$. If a component $\Omega_i$ is bounded we have at our disposal well-known existence results (e.g.~section 3.5.3 in \cite{Salsa}, sections 6.3 and 8.10 in \cite{GT}, section 6.3 in \cite{Evans} and broad discussion of problems on nonsmooth domains in \cite{Grisvard}). Here we are relying on smoothness of the tensor $\hat{\epsilon}_{ab}$ and the geometric assumptions, most notably the exterior cone condition, from the definition 2.1 above. For the exterior region $\Omega_{\mathrm{e}}$ we have at least two strategies to prove the existence of solution. 
+
+%%% Theorem 2.30 in Sørensen: Advanced Partial Differential Equations (notes by Marcel Schaub)
+
+One is to use Kelvin transform\footnote{An excellent overview of this technique in the case of the Laplace equation can be found in section 1.6 of \cite{AG}.} which combines geometric inversion in a sphere and the introduction of an auxiliary function on transformed domain. Just for convenience we may first translate and rescale the coordinates so that the unit closed ball centered at the origin is a proper subset of $(\rr^m - \Omega_{\mathrm{e}})^\circ$, and then apply the inversion $x \mapsto x^* = x/||x||^2$ which maps $\Omega_{\mathrm{e}}$ to a bounded open set $\Omega_{\mathrm{e}}^*$. A delicate question are geometric properties of the transformed domain: As angles are preserved by inversion and lines are transformed to either circles (if they do not pass through the center of the inversion sphere) or left invariant (if they pass through the center of the inversion sphere), $\Omega_{\mathrm{e}}^*$ will again satisfy the exterior cone condition (also, see discussion in \cite{MM03}). For a visualization help in the $m=3$ case, one should note that a part of the cone, used in definition of the exterior cone condition, is transformed into a part of Dupin cyclide. Furthermore, following the generalization by Serrin and Weinberger \cite{SW66}, we introduce the function $v(x^*) = c^{1/2} \, u(x(x^*))/g(x(x^*))$, defined on a set $\Omega_{\mathrm{e}}^*$. Here $g$ is a Green's function, associated to equation (\ref{eq:hardie}), such that $||x||^{2-m} \le g(x) \le c||x||^{2-m}$ for $m \ge 3$, with some positive constant $c$. For example, in case of the Laplace equation for $m \ge 3$, we may take $g(x) = ||x||^{2-m}$ and $c = 1$. Serrin and Weinberger have proven that function $v$ is again a solution of an uniformly elliptic partial differential equation. Moreover, given that $g(x) \to 0$ as $||x|| \to \infty$, if $v(x^*)$ is well defined as $x^* \to 0$, then the function $u$ will satisfy the desired asymptotic condition,
+\be
+\lim_{||x|| \to \infty} u(x) = \lim_{x^* \to 0} c^{-1/2} g(x(x^*)) v(x^*) = 0 \ .
+\ee
+
+The other strategy is to solve a sequence of problems on bounded, growing domains. For example, starting from an open ball $B(0,R) \supseteq (\rr^m - \Omega_{\mathrm{e}})$, we may introduce a sequence of domains, $\{O_k \mid k\in\nn\}$, where $O_k = B(0,R+k) - (\rr^m - \Omega_{\mathrm{e}})$. On each of these domains we are solving the equation (\ref{eq:hardie}) with boundary conditions $w_k|_{\dd\Omega_{\mathrm{e}}} = 1$ and $w_k|_{\dd B(0,R+k)} = 0$. Due to maximum principles we know that the sequence $(w_k(x))_k$ is bounded (from above by $1$ and from below by $0$) for each $x$ on which the sequence is defined. Furthermore, we know that this sequence is monotone (differences $\Delta = w_{k+1} - w_k$, defined on $\cl{O_k}$, satisfy $\Delta|_{\dd\Omega_{\mathrm{e}}} = 0$ and $\Delta|_{\dd B(0,R+k)} \ge 0$, whence $\Delta \ge 0$), so that $w(x) = \lim_{n\to\infty} w_n(x)$ is well defined pointwise. Finally, one has to check that this function $w$ is indeed a solution of (\ref{eq:hardie}). This may be done using Harnack's inequality, extended by Moser \cite{Moser61} to the case of uniformly elliptic partial differential equations (see also \cite{GT,Evans}), which implies than that $(w_k)$ uniformly converges to $w$ on any compact subset of the domain (harmonic case is discussed in section 2.6 of \cite{GT} and chapter 3 of \cite{ABR}).
+
+\medskip
+
+We note in passing that Lebesgue gave a famous example \cite{Lebesgue13}, now usually referred to as a Lebesgue spine (see Remark 6.6.17.~in \cite{AG}), of a domain on which Dirichlet problem does not have a solution due to presence of an irregular boundary point. Unfortunately, textbooks on classical electrodynamics are usually silent with respect to problem of existence of solutions and all related issues are swept under the rug (a notable exception is \cite{Bladel}, who mentions the example of Lebesgue spine on page 136).
+
+\medskip
+
+
+
+\emph{Uniqueness}. Again, as with the question of existence, we have two approaches to the proof. One is to apply maximum principles (see e.g.~chapter 2 in \cite{HL}) on difference of solutions (see also theorem 3.8 in \cite{GT}). Note that on the unbounded, exterior region $\Omega_\mathrm{e}$ we rely on the additional assumption that solution $u$ asymptotically vanishes, $u(x) \to 0$ as $||x|| \to \infty$, which implies that $\max_{\cl{\Omega}_\mathrm{e}} |u(x)| = \max_{\dd\Omega_\mathrm{e}} |u(x)|$ (this can be seen by applying the maximum principles on auxiliary bounded domains $O_k$, defined above, for large enough $k > 0$). Other, more elementary approach is based on the identity
+\be\label{eq:idGreen}
+\int_\Omega \hat{\epsilon}^{ab} (\nab{a}\psi)(\nab{b}\psi) \, \vol = \oint_{\dd\Omega} \hat{\epsilon}^{ab} \psi (\nab{a}\psi) n_b \, \df a - \int_\Omega \psi \nab{a} (\hat{\epsilon}^{ab} \psi \nab{b}\psi) \, \vol \ .
+\ee
+Now, supposing that the problem has two solutions, $\Phi_1$ and $\Phi_2$, we may look at $\psi = \Phi_1 - \Phi_2$ which again solves the differential equation (\ref{eq:hardie}), vanishes on $\dd\Omega$ and satisfies asymptotic condition (in case we have exterior region of the domain), so that that both right hand terms in (\ref{eq:idGreen}) vanish. As by assumptions $\hat{\epsilon}^{ab}$ is positive definite, $\psi$ is constant on $\Omega$ and, due to boundary condition, $\psi = 0$ on $\cl{\Omega}$, implying the uniqueness.
+
+\bigskip
+
+
+
+
+
+
+
+
+
+\renewcommand{\thesection}{Appendix \Alph{section}} %%% correction of the Appendix section format 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Consequences of analyticity}%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\thesection}{\Alph{section}}  %%% for proper alphabetic "numbering" of theorems and lemmas 
+
+A well known result implies that classical solutions of the Laplace equation are necessarily smooth. Not only that, but harmonic functions on nonempty open connected set $\Omega \subseteq \rr^m$ are even real analytic on that set (see e.g.~chapter 2.4 in \cite{GT} and chapter 3.3.7 in \cite{Salsa}). More general, for the linear elliptic partial differential equation with \emph{real analytic} coefficients, the solutions are necessarily real analytic (see \cite{MN57,Morrey58} and section 6.6 in \cite{Morrey}). We shall make use of this property in order to prove one important auxiliary result.
+
+%%% https://mathoverflow.net/q/33614/
+%%% https://math.stackexchange.com/q/2412111/
+%%% Hopf maximum principle
+%%% https://en.wikipedia.org/wiki/Hopf_maximum_principle
+
+\medskip
+
+
+
+\blm
+Let $\Omega \subseteq \rr^m$ be a nonempty open set, $f \in C^0(\cl{\Omega})$ and
+\be
+\int_B f \, \vol = 0
+\ee
+for any ball $B \subseteq \Omega$. Then $f = 0$ on $\Omega$.
+\elm
+
+\noindent
+\emph{Proof}. Suppose that there is $x \in \Omega$ such that $f(x) \ne 0$. Without loss of generality we may assume that $f(x) = c > 0$. Let $\veps$ be a real number such that $c > \veps > 0$, and $B$ an open ball, such that $\cl{B} \subseteq f^{-1}(\lb c-\veps, c+\veps \rb)$. Then
+\be
+\int_B f \, \vol > 0 \ ,
+\ee
+in contradiction with the assumption from the theorem. \qed
+
+\medskip
+
+This lemma provides us with a simple test: if $u \in C^2(\Omega)$ satisfies
+\be
+\int_{\dd B} n_a \hat{\epsilon}^{ab} \nab{b} u \, \df a = 0
+\ee
+for any ball $B \subseteq \Omega$, then by the Stokes' theorem
+\be
+\int_B \nab{a} (\hat{\epsilon}^{ab} \nab{b} u) \, \vol = 0
+\ee
+and by the previous lemma it follows that $\nab{a} (\hat{\epsilon}^{ab} \nab{b} u) = 0$ on $\Omega$.
+
+\medskip
+
+
+
+\btm[generalization of Problem 2.2 in \cite{GT}] \label{tm:CauchyEllipt}
+
+Let $u \in C^1(\cl{\Omega}) \cap C^2(\Omega)$ be solution of (\ref{eq:hardie}) with real analytic tensor $\hat{\epsilon}_{ab}$ on a regular connected open set $\Omega \subseteq \rr^m$ and $u = 0 = n_a \hat{\epsilon}^{ab} \nab{b} u$ on some open, smooth subset $S$ of $\dd\Omega$. Then $u = 0$ on whole $\Omega$.
+\etm
+
+\noindent
+\emph{Proof}\footnote{The main idea for this particular version of proof in the special case of the Laplace equation originates from the online discussion at the StackExchange forum, \href{http://math.stackexchange.com/q/482576}{\texttt{http://math.stackexchange.com/q/482576}}}. Let $x \in S$ and $O_x$ an open connected neighbourhood of the point $x$, divided by $S$ in two connected components. We extend the function $u$ from $O_x \cap \cl{\Omega}$ to $O_x$, so that $\tilde{u}$ is zero on $O_x - \cl{\Omega}$. The extension $\tilde{u}$ is immediately of class $C^1$ on $O_x$.
+
+Now we claim that $\tilde{u}$ satisfies $\nab{a}(\hat{\epsilon}^{ab}\nab{b}\tilde{u}) = 0$ on $O_x$. We look at the integral of normal derivative $n_a \hat{\epsilon}^{ab} \nab{b} \tilde{u}$ over a boundary of balls in $O_x$. If such a ball is completely within $O_x \cap \Omega$ or $O_x - \cl{\Omega}$ then this integral is immediately zero. Otherwise, we must look more carefully at the integral,
+\bal
+\oint_{\dd B} \!\! n_a \hat{\epsilon}^{ab}\nab{b}\tilde{u} \, \df a = \int_{\dd B \cap \Omega} \!\! n_a \hat{\epsilon}^{ab}\nab{b} u \, \df a = \nonumber\\
+= \int_{B \cap \Omega} \!\!\! \nab{a}(\hat{\epsilon}^{ab} \nab{b}u) \, \vol - \oint_{B \cap \dd\Omega} \!\!\! n_a \hat{\epsilon}^{ab}\nab{b} u \, \df a = 0 \ .
+\eal
+Whence, by the previous lemma, $\nab{a}(\hat{\epsilon}^{ab}\nab{b}\tilde{u}) = 0$ on $O_x$. Also, by classic results mentioned above, $\tilde{u}$ is also real analytic on $O_x$. Since $\tilde{u}$ is zero on an open subset of $O_x$ (and $O_x$ is by assumption connected), then $\tilde{u}$ is zero on whole $O_x$. Finally, we can extend this argument: Since $u = 0$ on $O_x \cap \Omega$, and $u$ is real analytic on $\Omega$, it follows that $u$ is zero on whole $\Omega$. \qed
+
+
+
+
+
+
+
+\section*{References}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliographystyle{iopart-num}
+\bibliography{CMx}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\end{document}

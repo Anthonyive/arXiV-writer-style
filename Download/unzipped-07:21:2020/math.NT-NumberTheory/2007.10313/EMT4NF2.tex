@@ -1,0 +1,970 @@
+\documentclass[10pt,reqno]{amsart}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{latexsym, wasysym}
+\usepackage{hyperref,subcaption}
+
+
+
+\graphicspath{{IMAGES/}}
+
+%%%%%%%%%%%%%%%%%%%
+\usepackage{enumitem}
+\setlist[itemize]{leftmargin=*}
+\setlist[enumerate]{leftmargin=*}
+\renewcommand{\labelenumi}{(\alph{enumi}) }
+%%%%%%%%%%%%%%%%%%%
+
+
+\usepackage[font=footnotesize,labelfont=bf]{caption}
+\usepackage[font=scriptsize,labelfont=bf]{subcaption}
+
+\usepackage[table]{xcolor}
+\usepackage{cite}
+\usepackage{multicol}
+
+\theoremstyle{plain}
+%\numberwithin{theorem}{section}
+\newtheorem{theorem}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{question}[theorem]{Question}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+
+%\newtheorem{definition}[equation]{Definition}
+%
+%%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{corollary}[thm]{Corollary}
+%\newtheorem{lemma}[thm]{Lemma}
+%\newtheorem{prop}[thm]{Proposition}
+%\newtheorem{ax}{Axiom}
+%\newtheorem{prob}{Problem}
+%\newtheorem{quest}{Question}
+%
+%\theoremstyle{definition}
+%\newtheorem{defn}{Definition}[section]
+%
+%\theoremstyle{remark}
+%\newtheorem{rem}{Remark}[section]
+%\newtheorem*{notation}{Notation}
+%
+%\newtheorem*{remark}{Remark}
+
+\newcommand{\comment}[1]{\marginpar{\color{blue}$\bullet$ \scriptsize #1}}
+\newcommand{\highlight}[1]{{\color{blue} #1}}
+\newcommand{\red}[1]{{\color{red} #1}}
+\newcommand{\purple}[1]{{\color{blue} #1}}
+
+
+%% New Commands
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\K}{\mathbb{K}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\PP}{\mathfrak{p}}
+\renewcommand{\O}{\mathcal{O}}
+\newcommand{\T}{\mathsf{T}}
+\newcommand{\E}{\mathcal{E}}
+\newcommand{\I}{\mathcal{I}}
+\newcommand{\li}{\operatorname{li}}
+\newcommand{\Li}{\operatorname{Li}}
+\newcommand{\Ei}{\operatorname{Ei}}
+
+\renewcommand{\Re}{\operatorname{Re}}
+\renewcommand{\Im}{\operatorname{Im}}
+
+\renewcommand{\pmod}[1]{\,\,(\operatorname{mod}#1)}
+
+\let\oldenumerate=\enumerate
+	\def\enumerate{
+	\oldenumerate
+	\setlength{\itemsep}{5pt}
+	}
+\let\olditemize=\itemize
+	\def\itemize{
+	\olditemize
+	\setlength{\itemsep}{5pt}
+	}
+
+\linespread{1.05}
+
+\allowdisplaybreaks
+
+%%
+%% MAIN DOCUMENT
+%%
+
+\begin{document}
+
+\title[Explicit Mertens' Theorems for Number Fields II]{Explicit Mertens' Theorems for Number Fields and Dedekind Zeta Residue Bounds II: Unconditional Estimates}
+
+	\author[S.R.~Garcia]{Stephan Ramon Garcia}
+	\address{Department of Mathematics, Pomona College, 610 N. College Ave., Claremont, CA 91711} 
+	\email{stephan.garcia@pomona.edu}
+	\urladdr{\url{http://pages.pomona.edu/~sg064747}}
+	
+\author[E.S.~Lee]{Ethan Simpson Lee}
+\address{School of Science, UNSW Canberra at the Australian Defence Force Academy, Northcott Drive, Campbell, ACT 2612} 
+\email{ethan.s.lee@student.adfa.edu.au}
+\urladdr{\url{https://www.unsw.adfa.edu.au/our-people/mr-ethan-lee}}
+	
+\thanks{SRG supported by NSF Grant DMS-1800123.}
+
+\subjclass[2010]{11N32, 11N05, 11N13}
+
+\keywords{Number field, discriminant, Mertens' theorem, prime ideal, prime counting function, Chebotar\"ev density theorem, prime ideal, Dedekind zeta function, residue}
+
+\begin{abstract}
+We obtain unconditional, effective number-field analogues of the three Mertens' theorems, all with explicit constants and valid for $x\geq 2$. To this end, we also state related unconditional bounds, with explicit constants, for the residue of the corresponding Dedekind zeta-function at $s=1$.
+\end{abstract}
+
+\maketitle
+
+
+\section{Introduction}
+
+The following three results are collectively known as Mertens' theorems \cite{Mertens}:
+\begin{align*}
+\sum_{p\leq x} \frac{\log p}{p} &= \log x + O(1), \\
+\sum_{p \leq x} \frac{1}{p} &= \log \log x + M + O\bigg(\frac{1}{\log x} \bigg), \\
+\prod_{p\leq x} \bigg(1 -\frac{1}{p} \bigg) &= \frac{e^{-\gamma}}{\log x} \big(1+o(1) \big).
+\end{align*}
+Here $p$ denotes a prime number, $M = 0.2614\ldots$ is the Meissel--Mertens constant, and $\gamma = 0.5772\ldots$ is the Euler--Mascheroni constant. 
+Assuming the generalized Riemann hypothesis (GRH), 
+the authors obtained in \cite{EMT4NF1} effective number-field analogues of these results, in which the implied constants are explicit.
+We approach the same family of problems here unconditionally; that is, without assuming any unproved conjectures.
+Naturally, our error terms are inferior to those obtained under GRH in \cite{EMT4NF1}, but they are nevertheless completely explicit and widely applicable.
+
+In what follows, let $\K$ denote a number field with ring of algebraic integers $\O_{\K}$,
+let $n_{\K} = [\K : \Q]$ denote the degree of $\K$, let $\Delta_{\K}$ is the absolute value of the discriminant of $\K$,
+and let $N(\mathfrak{a})$ denote the norm of an ideal $\mathfrak{a}\subset\O_{\K}$.
+Our previous GRH-based approach used a conditional estimate due to Greni\'e--Molteni \cite[Cor.~1]{Grenie2019} 
+on the prime-ideal counting function $\pi_{\K}(x) = \sum_{N(\PP)\leq x} 1$;
+here  $\PP$ runs over the prime ideals in $\O_{\K}$.  They proved that
+$\pi_{\K}(x) = \Li(x) + R_{\K}(x)$ for $x \geq 2$,
+in which $R_{\K}(x) = O( x^{1/2}\log x)$ is completely explicit in its dependence on 
+$n_{\K}$ and $\Delta_{\K}$.
+
+Unconditional estimates on $\pi_{\K}(x)$ of strength comparable to Greni\'e--Molteni's are currently unavailable.
+Lagarias--Odlyzko \cite[Thm.~1.1, Thm.~1.3]{LagariasOdlyzko} established 
+an effective Chebotar\"{e}v density theorem,
+a simultaneous generalization of the prime number theorem \cite{de1896fonction, hadamard1896distribution} and Landau's prime ideal theorem \cite{Landau}, both with and without GRH.
+They proved unconditionally that for sufficiently large $x$,
+\begin{equation}\label{eqn:PIT}
+    \pi_{\K}(x) = \Li(x) + \Li(x^\beta) + O\big(x\exp\big(- c {n_{\K}}^{-1/2}(\log{x})^{1/2}\big)\big),
+\end{equation}
+in which $c$ is effectively computable and $\beta\in (0,1)$ is the possible exceptional zero 
+of the corresponding Dedekind zeta-function, defined for $\Re{s} > 1$ by
+\begin{equation}\label{eq:DedekindZeta}
+\zeta_{\K}(s) = \sum_{\mathfrak{a} \subseteq \O_{\K}} \frac{1}{N(\mathfrak{a})^s}
+= \prod_{\PP} \bigg(1 - \frac{1}{N(\PP)^s}\bigg)^{-1}.
+\end{equation}
+See \cite{Winckler} for an explicit version of \eqref{eqn:PIT}, valid for $x \geq \exp(8 n_{\K}( \log(150867\Delta_{\K}^{44/5}))^2$,
+and \cite{Murty,ThornerZaman} for conditional improvements.
+If the exceptional zero $\beta$ does not exist, 
+then one may remove the term $\Li(x^\beta)$ from \eqref{eqn:PIT}
+and other estimates of the same type. 
+Otherwise, one can use the bound \cite[p.~148]{Stark}:
+\begin{equation*}
+\beta \leq 1 - \frac{6}{\pi \Delta_{\K}^{1/n_{\K}}}.
+\end{equation*}
+We also mention a result of Heilbronn \cite{Heilbronn}, 
+which was later generalized by Stark \cite{StarkBS}. 
+If $\mathbb{L}$ is a normal extension of $\K$ and $\K_2$ is the union of all quadratic extensions of $\K$ contained in $\mathbb{L}$,
+then every real simple zero of $\zeta_{\mathbb{L}}(s)$ is a simple zero of $\zeta_{\K_2}(s)$. Thus, if $\mathbb{L}$ has no quadratic subfield, then no exceptional zero exists.
+
+
+The Dedekind zeta-function \eqref{eq:DedekindZeta}
+is analytic on $\Re s > 1$ and extends meromorphically to $\C$ except for a simple pole at $s=1$. 
+The generalized Riemann hypothesis claims that all the zeros of 
+$\zeta_{\K}(s)$ with $\Re s \in (0,1)$ satisfy $\Re s = 1/2$.
+The analytic class number formula asserts
+that the residue of $\zeta_{\K}(s)$ at $s=1$ is
+\begin{equation}\label{eqn:residue_class_ana_form}
+\kappa_{\K} = \frac{2^{r_1}(2\pi)^{r_2}h_{\K}R_{\K}}{w_{\K}\sqrt{\Delta_{\K}}},
+\end{equation}
+in which $r_1$ the number of real places of $\K$, $r_2$ the number of complex places of $\K$,
+$w_{\K}$ the number of roots of unity in $\K$,
+$h_{\K}$ the class number of $\K$, and $R_{\K}$ the regulator of $\K$ \cite{Lang}.
+
+
+We do not wish our error bounds to depend upon the potential exceptional zero $\beta$
+of $\zeta_{\K}$.  Consequently, we must eschew estimates of the form \eqref{eqn:PIT} in favor
+of an alternative.  We use a recent result of  Debaene (see Lemma \ref{Lemma:Debaene}), who obtained an effective estimate for the
+ideal-counting function for $\K$ that does not require information about the zeros of $\zeta_{\K}$ \cite[Cor.~2]{Debaene}. Debaene's proof is a delicate lattice-based argument that employs Schmidt's partition trick, the Selberg sieve in number fields, and Artin reciprocity.  This avoids the exceptional zero issue entirely.
+
+Our overall roadmap follows Diamond--Halberstam \cite[p.~128-9]{DiamondHalberstam}, 
+although significant adaptations and technical lemmas are required to make things completely explicit
+(we encountered some difficulties in attempting to adapt Hardy's classical method \cite{HardyNote1927,HardyNote2935,BardestaniFreiberg}, although such an approach might still be possible).
+
+Our main result is the following effective version of Mertens' theorems for number fields.
+It is unconditional and the constants involved are completely explicit and depend only upon the two
+easily-obtained parameters $n_{\K}$ and $\Delta_{\K}$;
+see Remarks \ref{Remark:Kappa} and \ref{Remark:Regulator}.
+Moreover, our estimates are valid for all $x \geq 2$.
+
+\begin{theorem}\label{Theorem:Main}
+Let $\K$ be a number field with $n_{\K} \geq 2$.  Then for $x \geq 2$,
+\begin{align}
+    \sum_{N(\PP)\leq x}\frac{\log{N(\PP)}}{N(\PP)} &\,=\, \log{x} + A_{\K}(x) ,\label{eq:A1}\tag{A1}\\[5pt]
+    \sum_{N(\PP)\leq x}\frac{1}{N(\PP)} &\,=\, \log\log{x} + M_{\K} + B_{\K}(x),\label{eq:B1} \tag{B1}\\[5pt]
+    \prod_{N(\PP)\leq x}\left(1 - \frac{1}{N(\PP)}\right) &\,=\, \frac{e^{-\gamma}}{\kappa_{\K}\log{x}} \big(1 + C_{\K}(x) \big),\label{eq:C1}\tag{C1}
+\end{align}
+in which
+\begin{align}
+M_{\K} \,&=\, \gamma + \log{\kappa_{\K}} + \sum_{\PP}\left[\frac{1}{N(\PP)} + \log\left(1 - \frac{1}{N(\PP)}\right)\right]\label{eq:M1}\tag{M1},\\
+\Lambda_{\K} &= {n_{\K}}^{10 {n_{\K}}^2}(R_{\K}h_{\K})^{\frac{1}{n_{\K}}}(1 + \log{R_{\K} h_{\K}})^{\frac{(n_{\K}-1)^2}{n_{\K}}}, \label{eq:Lambda} \tag{$\Lambda$}\\
+|A_{\K}(x)| 
+&\leq n_{\K}  + 18.2 \dfrac{\Lambda_{\K}n_{\K}^2}{\kappa_{\K}} + 1,
+%\leq \frac{17.1 \Lambda_{\K}n_{\K}^2 + 2\Lambda_{\K} n_{\K} + \kappa_{\K}(2n_{\K}+1)}{\kappa_{\K}}, 
+\label{eq:A2}\tag{A2}\\[5pt]
+|B_{\K}(x)| &\leq 
+\bigg(n_{\K}  + 18.2 \dfrac{\Lambda_{\K}n_{\K}^2}{\kappa_{\K}} + 1 \bigg) \frac{2}{\log x},
+%\frac{34.2 \Lambda_{\K}n_{\K}^2 + 4\Lambda_{\K} n_{\K} + \kappa_{\K}(4n_{\K}+2)}{\kappa_{\K}\log{x}} ,
+\quad\text{and}\label{eq:B2}\tag{B2}\\[5pt]
+|C_{\K}(x)| &\,\leq\, |E_{\K}(x)|e^{| E_{\K}(x)|} \qquad \text{with}\qquad |E_{\K}(x)| \,\leq\, \frac{n_{\K}}{x-1} + |B_{\K}(x)|.\label{eq:C2}\tag{C2}
+\end{align}
+In particular, $E_{\K}(x) = o(1)$, hence $C_{\K}(x) = o(1)$ as $x \to \infty$.  Furthermore,
+\begin{equation}\label{eq:M2}\tag{M2}
+    \gamma + \log \kappa_{\K} -n_{\K} \,\leq\, M_{\K} \,\leq\,  \gamma + \log \kappa_{\K}.
+\end{equation}
+All quantities above can be effectively bounded, with explicit constants, in terms of $\Delta_{\K}$ and $n_{\K}$ alone;
+see the remarks below.
+\end{theorem}
+
+\begin{remark}
+For $n_{\K} = 1$, that is $\K = \Q$, our approach provides similar estimates.  However,
+these are weaker than the error bounds given by Rosser--Schoenfeld \cite[Thms.~5-7]{Rosser}.
+Since much more is known about the behavior of the Riemann zeta function than
+a generic Dedekind zeta function, this discrepancy is not surprising.
+\end{remark}
+
+\begin{remark}\label{Remark:Kappa}
+Since the residue $\kappa_{\K}$ of the Dedekind zeta function $\zeta_{\K}(s)$ at $s=1$ appears
+in the bound \eqref{eq:M2}, it is of interest to exhibit explicit bounds for it.  
+An elegant upper bound is due to Louboutin \cite{Louboutin00}:
+\begin{equation}\label{eq:LouboutinKappa}\qquad
+    \kappa_{\K} \leq \left(\frac{e\log{\Delta_{\K}}}{2(n_{\K} - 1)}\right)^{n_{\K} - 1}
+    \quad \text{for $n_{\K} \geq 2$}.
+\end{equation}
+At the level of generality we seek, the upper bound \eqref{eq:LouboutinKappa} appears to be the best
+available in the literature.  Given the location (or nonexistence) of an exceptional zero of $\zeta_{\K}$,
+much more can be said \cite{Louboutin01,Louboutin11, Louboutin03};
+we do not discuss the topic further here.  
+
+We also obtain several lower bounds on $\kappa_{\K}$;
+all details can be found in Section \ref{sec:ResidueBounds}.  First, there is the weak, but simple, bound
+\begin{equation*}
+\kappa_{\K} \geq \frac{0.0884}{\sqrt{\Delta_{\K}}}.
+\end{equation*}
+For $n_{\K} \geq 3$, an analysis of Stark's paper \cite{StarkBS} yields
+the asymptotically better bound 
+\begin{equation*}
+    \kappa_{\K} > \frac{0.001448029}{n_{\K} g(n_{\K}){\Delta_{\K}}^{1/n_{\K}}},
+\end{equation*}
+in which $g(n_{\K})=1$ if $\K$ has a normal tower over $\Q$ and 
+$g(n_{\K}) = n_{\K}!$ otherwise.
+Section \ref{sec:ResidueBounds} contains several improvements in various special cases.
+\end{remark}
+
+\begin{remark}\label{Remark:Regulator}
+The product of the class number $h_{\K}$ and regulator $R_{\K}$ that appears in the definition of $\Lambda_{\K}$
+equals $\kappa_{\K}\sqrt{\Delta_{\K}}$ up to constant factors that depend upon $n_{\K}$ in
+an explicit manner \cite[(7), p.~42]{MR2145727}:
+\begin{equation*}
+\frac{ \sqrt{ \Delta_{\K}}}{3^{n_{\K}}} \kappa_{\K}
+\,\leq\, h_{\K} R_{\K} 
+\,\leq\, \frac{4 \sqrt{ \Delta_{\K}}}{\pi} \kappa_{\K}.
+\end{equation*}
+The upper bound above may be combined with \eqref{eq:LouboutinKappa} to replace
+the $R_{\K} h_{\K}$ in \eqref{eq:Lambda} by an explicit quantity involving only $n_{\K}$ and $\Delta_{\K}$.  We leave the details to the reader.
+\end{remark}
+
+
+%%%%%%%%%%%%%%%%%
+\subsection*{Outline of the paper}
+Section \ref{Section:Proof} contains the proof of Theorem \ref{Theorem:Main},
+which occupies the bulk of the paper.
+In Section \ref{sec:ResidueBounds}, we state several unconditional explicit bounds for $\kappa_{\K}$.
+We conclude in Section \ref{Section:Future} with remarks and future questions.
+
+\subsection*{Acknowledgements}
+The authors thank Matteo Bordignon, Tristan Freiberg, Eduardo Friedman, and Tim Trudgian for their feedback and suggestions.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Proof of Theorem \ref{Theorem:Main}}\label{Section:Proof}
+
+We split the proof of Theorem \ref{Theorem:Main} across several subsections.  The proofs of \eqref{eq:A1} and \eqref{eq:A2} are the most involved since they require a series of technical lemmas and computations to ensure that all of the constants produced remain explicit.
+Once \eqref{eq:A1} and \eqref{eq:A2} are established, the rest of the proof falls into place.
+
+In what follows, $f(x) = O^{\star}(g(x))$ means $|f(x)| \leq |g(x)|$ for all $x$ in a pre-defined range (often
+$x \geq 2$).
+This is similar to Landau's big-$O$ notation, except the implied constant is always one.
+To begin, we require some preliminary remarks.
+
+\subsection{Preliminaries}
+
+Fix a number field $\K$ with $n_{\K}\geq 2$ and ring of integers $\O_{\K}$. 
+Let $I_{\K}(n)$ denote the number of ideals with norm $n$, and $P_{\K}(n)$ denote the number of prime ideals in $\O_{\K}$ with norm $n$.
+Borevich--Shafarevich \cite[p. 220]{Borevich} tell us that if $p^k$ is a rational prime power, then $I_{\K}(p^k)\leq (k+1)^{n_{\K}}$.
+The total multiplicativity of the norm means that a non-prime ideal may have norm $p^k$, so one might suspect that a tighter bound
+can be found for $P_{\K}(p^k)$. This expectation is well-founded.
+
+If $\PP\subset\mathcal{O}_{\K}$ is a prime ideal, then it divides exactly one rational prime $p$ and $N(\mathfrak{p}) = p^k$ for some $1\leq k\leq n_{\K}$ \cite[Thm.~5.14c]{StewartTall}.
+Moreover, $p\O_{\K}$ has a unique factorization
+\begin{equation*}
+p\O_{\K} = \PP_1^{e_1} \cdots \PP_r^{e_r}
+\end{equation*}
+into prime ideals $\PP_i$, where $e_i \in \N$ is the ramification index of $\PP_i$.
+The $\PP_i$ are the only prime ideals in $\K$ with norm equal to a power of $p$.
+In fact, $N(\PP_i) = p^{f_i}$, in which the inertia degrees $f_i$ satisfy $f_i\leq n_{\K}$ and
+\begin{equation*}
+e_1 f_1 + \cdots + e_r f_r = n_{\K}.
+\end{equation*}
+In particular, for each rational prime $p$ the corresponding inertia degrees satisfy
+\begin{equation}\label{eq:InertiaSum}
+    {\sum_{f_i}} f_i \leq n_{\K}\quad\text{hence}\quad P_{\K}(p^k)\leq \bigg\lfloor \frac{n_{\K}}{k} \bigg\rfloor \leq \frac{n_{\K}}{k}.
+\end{equation}
+
+We require the following technique to obtain estimates for sums over prime ideals.
+Suppose $g$ is a non-negative arithmetic function and recall that a prime ideal $\PP$ with $N(\PP) \leq x$ lies over exactly one rational prime $p \leq x$.  Then
+\begin{equation*}
+    G(x)
+    = \sum_{N(\PP)\leq x} g(N(\PP))
+    \leq \sum_{p\leq x}{\sum_{f_i}} g(p^{f_i}),
+\end{equation*}
+in which $\sum_{f_i}$ denotes the sum over the inertia degrees $f_i$ of the prime ideals lying over $p$. 
+If one can apply \eqref{eq:InertiaSum}, the previous sum can be simplified.  For example,
+\begin{equation*}
+    \theta_{\K}(x)
+    = \sum_{N(\PP)\leq x} \log{N(\PP)} 
+    \leq \sum_{p\leq x}\sum_{f_i} \log{p^{f_i}}
+    = \sum_{p\leq x}\bigg(\sum_{f_i} f_i\bigg) \log{p}
+    \leq n_{\K}\theta_{\Q}(x),
+\end{equation*}
+in which $\theta_{\Q}$ denotes the Chebyshev theta function and $\theta_{\K}$ its number-field analogue.
+
+Finally, to avoid the problems which might arise from an exceptional zero of $\zeta_{\K}$, we introduce the ideal-counting function 
+\begin{equation*}
+\I_{\K}(x) = \sum_{n\leq x} I_{\K}(n).
+\end{equation*}
+This is the number-field analogue of the integer-counting function $\lfloor x \rfloor$. Our proof relies 
+on the following unconditional result of Debaene \cite[Cor.~2]{Debaene}.
+
+\begin{lemma}[Debaene]\label{Lemma:Debaene}
+For $x \geq 1$, 
+\begin{equation*}
+\I_{\K}(x) = \kappa_{\K} x + O^{\star}(\Lambda_{\K}x^{1-\frac{1}{n_{\K}}}),
+\end{equation*}
+in which
+\begin{equation*}
+\Lambda_{\K} = {n_{\K}}^{10 {n_{\K}}^2}(R_{\K}h_{\K})^{\frac{1}{n_{\K}}}(1 + \log{R_{\K} h_{\K}})^{\frac{(n_{\K}-1)^2}{n_{\K}}}.
+\end{equation*}
+\end{lemma}
+
+\begin{remark}
+If $\K= \Q$, then $\Lambda_{\Q} = 1$ and we have
+$\I_{\Q}(x) = x + O^{\star}(1)$. However, $\I_{\Q}(x) = \lfloor x \rfloor \leq x$ is more precise.
+This is one reason Rosser--Schoenfeld obtain better error estimates in Mertens' theorems for $\K = \Q$ \cite{Rosser};  the fact that the Riemann zeta function has no exceptional zero provides them 
+more options as well.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Preparatory lemmas to prove \eqref{eq:A1} and \eqref{eq:A2}}
+
+Before we establish \eqref{eq:A1} and \eqref{eq:A2} in Section \ref{Section:Proof:A}, we need 
+several technical lemmas to estimate
+\begin{equation*}
+    \sum_{N(\PP)\leq x} \I_{\K} \bigg(\frac{x}{N(\PP)}\bigg) \log{N(\PP)}\qquad\text{and}\qquad\sum_{N(\PP)\leq x} \log{N(\PP)} \sum_{j\geq 2} \I_{\K} \left(\frac{x}{N(\PP^j)}\right).
+\end{equation*}
+We need the following result of Rosser--Schoenfeld \cite[Thm.~9]{Rosser}: 
+\begin{equation}\label{eq:Rosser}
+    \theta(x) = \sum_{p\leq x}\log p  < 1.01624x < 1.1x,
+    \quad \text{for $x>0$}.
+\end{equation}
+A recent improvement on \eqref{eq:Rosser} yields smaller constants
+throughout; see Remark \ref{Remark:Theta}.
+
+\begin{lemma}\label{Lemma:Painful}
+    For $\alpha \geq 0$ and $x \geq 2$, 
+    \begin{equation*}
+        \sum_{p\leq x} \frac{\log p}{p^{\alpha}}
+        <
+        \begin{cases}
+            \dfrac{1.1}{1-\alpha}x^{1-\alpha} & \text{if $0 \leq \alpha \leq 1$},\\[10pt]
+            1.6 \log x & \text{if $\alpha=1$},\\[5pt]
+            \dfrac{1.1\,\alpha}{(\alpha - 1)2^{\alpha-1}}  & \text{if $\alpha > 1$}.
+        \end{cases}
+    \end{equation*}
+\end{lemma}
+
+\begin{proof}
+    For $x \geq 2$, partial summation and \eqref{eq:Rosser} yield 
+    \begin{align*}
+        \sum_{p\leq x} \frac{\log p}{p^{\alpha}}
+        &= \frac{\theta(x)}{x^{\alpha}} + \alpha\int_2^x \frac{\theta(t)}{t^{\alpha+1}}\,dt 
+        < 1.1\left( \frac{1}{x^{\alpha-1}} + \alpha \int_2^x \frac{dt}{t^{\alpha}} \right) \\
+        &=
+        \begin{cases}
+            1.1 \left( x^{1-\alpha} + \dfrac{\alpha}{1-\alpha} \left( x^{1-\alpha} - 2^{1-\alpha} \right) \right)  & \text{if $0<\alpha < 1$},\\[10pt]
+            1.1 (\log x - \log 2 + 1) & \text{if $\alpha=1$},\\[5pt]
+            1.1 \left(\dfrac{1}{x^{\alpha-1}} + \dfrac{\alpha}{\alpha - 1} \left( \dfrac{1}{2^{\alpha-1}} - \dfrac{1}{x^{\alpha-1}} \right) \right)  & \text{if $\alpha > 1$},\\
+        \end{cases}
+    \end{align*}
+    which implies the desired result.
+\end{proof}
+
+The preceding lemma and some computation yields the next lemma.
+
+\begin{lemma}\label{Lemma:Multipart}
+    For $j \in \N$, $n_{\K}\geq 2$ and $x \geq 2$,
+    \begin{equation*}
+        x^{1 - \frac{1}{n_{\K}}} \!\!\! \sum_{N(\PP)\leq x} \frac{\log N(\PP)}{N(\PP)^{j (1- \frac{1}{n_{\K}})}}
+        <
+        \begin{cases}
+       1.1 n_{\K}^2 x & \text{if $j =1$},\\[5pt] 
+%       1.1 n_{\K}^2 x & \text{if $n_{\K}=1$, or $n_{\K}\geq 2$ and $j =1$},\\[5pt] 
+        1.6n_{\K}x^{ \frac{1}{2} }  \log x & \text{if $n_{\K}=j =2$},\\[5pt]
+        \dfrac{8.8n_{\K} x^{1 - \frac{1}{n_{\K}}} }{2^{j /2}} & \text{otherwise}.
+    \end{cases}
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+First observe that \eqref{eq:InertiaSum} implies
+\begin{align}
+\sum_{N(\PP)\leq x} \frac{\log N(\PP)}{N(\PP)^{j (1- \frac{1}{n_{\K}})}}
+&\leq \sum_{p\leq x} \sum_{f_i} \frac{\log (p^{f_i}) }{ p^{f_i j (1- \frac{1}{n_{\K}} )} }  \nonumber \\
+&\leq \sum_{p\leq x} \sum_{f_i} f_i \frac{\log p }{ p^{j (1- \frac{1}{n_{\K}}) } }  \nonumber \\
+&\leq n_{\K} \sum_{p\leq x}\frac{\log p }{ p^{j (1- \frac{1}{n_{\K}}) } } \label{eq:ContinueBound}
+ \end{align}
+in which $\sum_{f_i}$ denotes the sum over the inertia degrees $f_i$ of the prime ideals lying over the
+rational prime $p$. Next substitute 
+\begin{equation*}
+\alpha = j  \bigg(1- \frac{1}{n_{\K}} \bigg)
+\end{equation*}
+into Lemma \ref{Lemma:Painful}
+and multiply through by $x^{1 - \frac{1}{n_{\K}}}$.
+
+First, if $j =1$, then $0 < \alpha < 1$ since $n_{\K}\geq 2$ and \eqref{eq:ContinueBound} can be bounded from above by the first case of Lemma \ref{Lemma:Painful}:
+\begin{equation*}
+n_{\K} x^{1 - \frac{1}{n_{\K}}} \sum_{p\leq x} \frac{\log p}{p^{j (1- \frac{1}{n_{\K}})}}
+< n_{\K}  x^{1 - \frac{1}{n_{\K}}} \frac{1.1}{1 - (1- \frac{1}{n_{\K}})} x^{1 - (1- \frac{1}{n_{\K}})}
+= 1.1 n_{\K}^2x.
+\end{equation*}
+Next, if $n_{\K} = j  = 2$, then $\alpha = 1$ and the second case of Lemma \ref{Lemma:Painful} immediately yields the desired upper bound.
+Finally, suppose that $n_{\K} \geq 3$ and $j  \geq 2$, or $n_{\K} =2$ and $j  \geq 3$. We first maximize
+\begin{equation*}
+f(\alpha) = \frac{\alpha}{\alpha -1}
+\qquad \text{when $n_{\K} \geq 3$ and $j  \geq 2$, or when $n_{\K} =2$ and $j  \geq 3$}.
+\end{equation*}
+Under these conditions, 
+\begin{equation*}
+\alpha= j \left(1 - \frac{1}{n_{\K}} \right) \geq \min\left\{ 2\left(1 - \frac{1}{3}\right), 3\left(1- \frac{1}{2}\right) \right\} = \min\left\{\frac{4}{3}, \frac{3}{2} \right\} = \frac{4}{3},
+\end{equation*}
+and hence $f(\alpha) \leq 4$ since $f$ is decreasing on $(1,\infty)$.
+In particular, the third case of Lemma \ref{Lemma:Painful} permits us to bound \eqref{eq:ContinueBound}
+from above as follows:
+\begin{align*}
+n_{\K}x^{1 - \frac{1}{n_{\K}}} \sum_{p\leq x} \frac{\log p}{p^{j (1- \frac{1}{n_{\K}})}} < \dfrac{1.1n_{\K} \alpha x^{1 - \frac{1}{n_{\K}}}}{ \big(\alpha - 1 \big)2^{j (1- \frac{1}{n_{\K}})-1}} 
+&\leq \dfrac{4.4n_{\K}x^{1 - \frac{1}{n_{\K}}}}{ 2^{j (1- \frac{1}{n_{\K}})-1}} 
+\leq \frac{8.8n_{\K} x^{1 - \frac{1}{n_{\K}}} }{2^{j /2}}. \qedhere
+\end{align*}
+\end{proof}
+
+Our next two lemmas are estimates obtained with the aid of Lemma \ref{Lemma:Multipart}.
+The first one is rather straightforward, but the second is much more involved.
+
+\begin{lemma}\label{Lemma:FirstPower}
+For $x\geq2$,
+\begin{equation*}
+\sum_{N(\PP)\leq x} \I_{\K} \bigg(\frac{x}{N(\PP)}\bigg) \log{N(\PP)} 
+= \kappa_{\K} x \sum_{N(\PP)\leq x} \frac{\log{N(\PP)}}{N(\PP)} 
++ 1.1 \Lambda_{\K}n_{\K}^2 O^{\star} (x) .
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+Lemma \ref{Lemma:Debaene} and Lemma \ref{Lemma:Multipart} with $j  = 1$ imply
+\begin{align*}
+&\sum_{N(\PP)\leq x} \I_{\K} \bigg(\frac{x}{N(\PP)}\bigg) \log{N(\PP)}\\
+&\qquad= \sum_{N(\PP)\leq x} \Bigg( \kappa_{\K}  \bigg(\frac{x}{N(\PP)}\bigg) 
++ O^{\star}\bigg(\Lambda_{\K} \bigg(\frac{x}{N(\PP)}\bigg)^{1-\frac{1}{n_{\K}}} \Bigg) \log N(\PP)  \\
+&\qquad= \kappa_{\K} x \!\!  \sum_{N(\PP)\leq x} \frac{\log{N(\PP)}}{N(\PP)} 
++ \Lambda_{\K} O^{\star}\Bigg(x^{1 - \frac{1}{n_{\K}}}\sum_{N(\PP)\leq x}  
+\frac{ \log N(\PP)}{N(\PP)^{1-\frac{1}{n_{\K}}} } \Bigg)  \\
+&\qquad= \kappa_{\K} x \!\!  \sum_{N(\PP)\leq x} \frac{\log{N(\PP)}}{N(\PP)} 
++ 1.1 \Lambda_{\K}n_{\K}^2 O^{\star} (x)  .\qedhere
+\end{align*}
+\end{proof}
+
+
+\begin{lemma}\label{Lemma:HigherPowers}
+For $x\geq 2$,
+\begin{equation*}
+\sum_{N(\PP)\leq x} \log{N(\PP)} \sum_{j\geq 2} \I_{\K} \left(\frac{x}{N(\PP^j)}\right) 
+\,\leq\, \Xi_{\K}(x),
+\end{equation*}
+in which
+\begin{equation}\label{eq:Xi}
+\Xi_{\K}(x)=
+\begin{cases}
+\kappa_{\K} n_{\K} x + \Lambda_{\K} O^{\star}( 6.4\,x^{ \frac{1}{2} }\log x +42.5\,x^{\frac{1}{2}}  )  & \text{if $n_{\K} = 2$}, \\[5pt]
+\kappa_{\K} n_{\K} x + 15.1 \,\Lambda_{\K} O^{\star}( n_{\K}^2 x^{1 - \frac{1}{n_{\K}}}  )  & \text{if $n_{\K} \geq 3$}. 
+\end{cases}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Lemma \ref{Lemma:Debaene} and the total multiplicativity of the norm imply that
+\begin{align}
+&\sum_{N(\PP)\leq x} \log{N(\PP)} \sum_{j\geq 2} \I_{\K} \left(\frac{x}{N(\PP^j)}\right) \label{eq:Quantity}\\
+&\qquad= \sum_{N(\PP)\leq x} \log{N(\PP)} \sum_{j\geq 2} \Bigg( \frac{\kappa_{\K} x}{N(\PP^j)} 
++ O^{\star}\bigg( \Lambda_{\K}\bigg(\frac{x}{N(\PP^j)}\bigg)^{1 - \frac{1}{n_{\K}}}  \bigg) \Bigg) \nonumber \\
+&\qquad= \kappa_{\K} x  \underbrace{ \sum_{N(\PP)\leq x} \sum_{j\geq 2} \frac{\log{N(\PP)}}{N(\PP)^j}  }_{\text{Term 1}}
++ \Lambda_{\K}  O^{\star} \Bigg(
+\underbrace{ x^{1 - \frac{1}{n_{\K}}} \sum_{N(\PP)\leq x}\sum_{j\geq 2} \frac{\log{N(\PP)} }{N(\PP)^{j(1 - \frac{1}{n_{\K}})}}  }_{\text{Term 2}}
+ \Bigg) .\label{eq:Terms}
+\end{align}
+
+\medskip\noindent\textsc{Term 1.}
+First use \eqref{eq:InertiaSum} and obtain
+\begin{align}
+    \sum_{N(\PP)\leq x} \sum_{j\geq 2} \frac{\log{N(\PP)}}{N(\PP)^j}
+    &\leq  \sum_{p\leq x} \sum_{f_i} \sum_{j\geq 2} \frac{\log (p^{f_i})}{(p^{f_i})^j} \nonumber\\
+    &\leq  \sum_{p\leq x} \sum_{j\geq 2} \bigg(\sum_{f_i}f_i\bigg) \frac{\log{p}}{p^{j}} \nonumber\\
+    &\leq  n_{\K}  \sum_{p\leq x} \sum_{j\geq 2} \frac{\log{p}}{p^{j}}, \label{eq:Pause1}
+\end{align}
+in which $\sum_{f_i}$ denotes the sum over the inertia degrees $f_i$ of the prime ideals lying over the
+rational prime $p$. We have\footnote{\texttt{Mathematica} gives the value
+$2 \sum_{p\leq x} \frac{\log{p}}{p^2} \approx 0.986182$.}%
+\begin{equation}\label{eq:Barely}
+\sum_{p\leq x} \sum_{j\geq 2} \frac{\log{p}}{p^j}
+= \sum_{p\leq x} \frac{\log{p}}{p^2}\sum_{j\geq 0}\frac{1}{p^j} 
+\leq \sum_{p\leq x} \frac{\log{p}}{p^2}\sum_{j\geq 0}\frac{1}{2^j} 
+ =2 \sum_{p\leq x} \frac{\log{p}}{p^2} 
+< 1,
+\end{equation}
+because $(\log x)/x^2$ decreases for $x\geq e^{1/2}\approx 1.65$ and  
+\begin{equation*}
+2 \sum_{p\leq x} \frac{\log{p}}{p^2} \leq 2\bigg(\sum_{p\leq 1009} \frac{\log p}{p^2} + \int_{1009}^{\infty} \frac{\log t}{t^2}\,dt\bigg) \leq 0.999907 < 1.
+\end{equation*}
+Thus, \eqref{eq:Pause1} and \eqref{eq:Barely} imply
+\begin{equation*}
+     \sum_{N(\PP)\leq x} \sum_{j\geq 2} \frac{\log{N(\PP)}}{N(\PP)^j}
+    < n_{\K}.
+\end{equation*}
+
+\medskip\noindent\textsc{Term 2.}
+Apply Lemma \ref{Lemma:Multipart} and \eqref{eq:InertiaSum} and obtain
+\begin{align*}
+&x^{1 - \frac{1}{n_{\K}}}\sum_{N(\PP)\leq x}  \sum_{j\geq 2} \frac{\log{N(\PP)} }{N(\PP)^{j(1 - \frac{1}{n_{\K}})}}  \\
+&\qquad \leq x^{1 - \frac{1}{n_{\K}}}\sum_{p\leq x} \sum_{f_i} \sum_{j\geq 2}
+\frac{\log (p^{f_i}) }{(p^{f_i})^{j(1 - \frac{1}{n_{\K}})}} \\
+%&\qquad \leq  x^{1 - \frac{1}{n_{\K}}}\sum_{p \leq x}\sum_{j\geq 2} \bigg( \sum_{f_i}f_i \bigg)\frac{\log p}{p^{j(1 - \frac{1}{n_{\K}})}}  \\
+&\qquad \leq n_{\K}\sum_{j\geq 2} \bigg( x^{1 - \frac{1}{n_{\K}}}\sum_{p \leq x} \frac{\log p}{p^{j(1 - \frac{1}{n_{\K}})}}\bigg) \\
+&\qquad \leq 
+\begin{cases}
+ \displaystyle n_{\K}\Bigg( 1.6n_{\K}x^{ \frac{1}{2} }\log x +\sum_{j\geq 3}\dfrac{8.8n_{\K} x^{1 - \frac{1}{n_{\K}}} }{2^{j/2}}  \Bigg)
+ & \text{if $n_{\K} = 2$}, \\
+ n_{\K} \displaystyle\sum_{j\geq 2}\dfrac{8.8n_{\K} x^{1 - \frac{1}{n_{\K}}} }{2^{j/2}}  
+ & \text{if $n_{\K} \geq 3$},
+\end{cases}
+ \\
+&\qquad \leq 
+\begin{cases}
+ \displaystyle 4x^{\frac{1}{2}} \bigg( 1.6\log x +8.8  \sum_{j\geq 3}2^{-j/2}  \bigg)
+ & \text{if $n_{\K} = 2$}, \\[5pt]
+ \displaystyle 8.8 n_{\K}^2 x^{1 - \frac{1}{n_{\K}}}\sum_{j\geq 2}2^{-j/2}
+ & \text{if $n_{\K} \geq 3$},
+\end{cases}
+ \\
+&\qquad \leq 
+\begin{cases}
+ \displaystyle 6.4\,x^{ \frac{1}{2} }\log x +42.5\,x^{\frac{1}{2}}   
+ & \text{if $n_{\K} = 2$}, \\[3pt]
+ \displaystyle 15.1 \,n_{\K}^2 x^{1 - \frac{1}{n_{\K}}}
+ & \text{if $n_{\K} \geq 3$}.
+\end{cases}
+\end{align*}
+Return to \eqref{eq:Terms} and bound the quantity \eqref{eq:Quantity} using the estimates above.
+\end{proof}
+
+\subsection{Proof of \eqref{eq:A1} and \eqref{eq:A2}}\label{Section:Proof:A}
+
+Consider
+\begin{equation*}
+T_{\K}(x) = \log\bigg(\prod_{N(\mathfrak{a})\leq x}N(\mathfrak{a})\bigg) = \sum_{n\leq x} I_{\K}(n)\log{n},
+\end{equation*}
+in which $\mathfrak{a}\subset\O_{\K}$ runs over the integral ideals of $\K$.
+In the next two lemmas, we approximate $T_{\K}(x)$ in two different ways.  Comparing the resulting expressions will complete the proof of \eqref{eq:A1}. 
+The following lemma is an explicit version of Weber's theorem, which states $T_{\K}(x) = \kappa_{\K} x \log x + O(x)$ \cite[p.~128]{DiamondHalberstam}.
+
+\begin{lemma}\label{Lemma:FirstBound}
+For $x \geq 2$,
+\begin{equation*}
+T_{\K}(x) =  \kappa_{\K} x\log x + (2\Lambda_{\K} n_{\K} +\kappa_{\K})O^{\star}(x).
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+Partial summation and Lemma \ref{Lemma:Debaene} imply 
+\begin{align}
+T_{\K}(x)
+&= \sum_{n\leq x}I_{\K}(n)\log{n} = \sum_{2\leq n\leq x}I_{\K}(n)\log{n}\nonumber\\
+&= \I_{\K}(x)\log{x} - \int_{2}^{x}\frac{\I_{\K}(t)}{t}dt\nonumber\\
+&= \big(\kappa_{\K} x + O^{\star}(\Lambda_{\K}x^{1-\frac{1}{n_{\K}}})\big) \log{x} 
++O^{\star}\bigg( \int_{2}^{x}\frac{\kappa_{\K} t}{t}\,dt + \int_{2}^{x}\frac{\Lambda_{\K}t^{1-\frac{1}{n_{\K}}}}{t}\,dt \bigg).\label{eqn:comebacktome}
+\end{align}
+Since $\log{x} < n_{\K} x^{1/n_{\K}}$, it follows that
+\begin{align*}
+    \big(\kappa_{\K} x + O^{\star}(\Lambda_{\K}x^{1-\frac{1}{n_{\K}}})\big) \log{x}
+    = \kappa_{\K} x \log{x} + \Lambda_{\K} n_{\K}O^{\star}(x).
+\end{align*}
+Next observe that
+\begin{equation*}
+    \int_2^x t^{-\frac{1}{n_{\K}}}dt
+     =\left.\frac{n_{\K}}{n_{\K} - 1}t^{\frac{n_{\K}-1}{n_{\K}}}\right|_{2}^{x} 
+     < \frac{n_{\K}}{n_{\K} - 1}x^{\frac{n_{\K}-1}{n_{\K}}} 
+     < \frac{n_{\K}}{n_{\K} - 1}x \leq 2x,
+\end{equation*}
+since $\log x < x$ there and $n_{\K} \geq 2$.
+The previous inequality yields
+\begin{equation*}
+    O^{\star}\bigg(  \int_{2}^{x}\frac{\kappa_{\K} t}{t}\,dt +\int_{2}^{x}\frac{\Lambda_{\K}t^{1-\frac{1}{n_{\K}}}}{t}\,dt \bigg)
+    = \left(\kappa_{\K} + 2 \Lambda_{\K} \right)O^{\star}(x).
+\end{equation*}
+Apply these observations to \eqref{eqn:comebacktome} with $n_{\K} \geq 2$
+to complete the proof.
+\end{proof}
+
+Now, we derive a second explicit approximation for $T_{\K}(x)$.
+
+\begin{lemma}\label{Lemma:SecondBound}
+For $x \geq 2$,
+\begin{equation*}
+T_{\K}(x) = \kappa_{\K} x \sum_{N(\PP)\leq x} \frac{\log{N(\PP)}}{N(\PP)} + 1.1 \Lambda_{\K}n_{\K}^2 O^{\star} (x) + O^{\star}(\Xi_{\K}(x)),
+\end{equation*}
+in which $\Xi_{\K}(x)$ is given by \eqref{eq:Xi}.
+\end{lemma}
+
+\begin{proof}
+We require the ideal analogue of the Legendre--Chebyshev identity\footnote{Diamond--Halberstam \cite[p.~128]{DiamondHalberstam}
+inform us that Landau calls this the ``Poincar\'e identity.''} \cite{Legendre},
+\begin{equation*}
+\prod_{N(\mathfrak{a})\leq x}N(\mathfrak{a}) = \prod_{N(\PP)\leq x}
+\prod_{j\geq 1}N(\PP)^{\I_{\K} ( x / N(\PP^j) )}.
+\end{equation*}
+Lemma \ref{Lemma:Debaene} and Lemma \ref{Lemma:Multipart} with $j  = 1$ imply
+\begin{align*}
+&T_{\K}(x)
+= \log\bigg(\prod_{N(\mathfrak{a})\leq x}N(\mathfrak{a})\bigg) 
+= \log\bigg(\prod_{N(\PP)\leq x} \prod_{j\geq 1}N(\PP)^{\I_{\K} ( x / N(\PP^j) )} \bigg) \\
+&\,\,=\sum_{N(\PP)\leq x} \log{N(\PP)} \sum_{j\geq 1} \I_{\K} \bigg(\frac{x}{N(\PP^j)}\bigg)\\
+&\,\,=\sum_{N(\PP)\leq x} \I_{\K} \bigg(\frac{x}{N(\PP)}\bigg) \log{N(\PP)}  +\sum_{N(\PP)\leq x} \log{N(\PP)} \sum_{j\geq 2} \I_{\K} \left(\frac{x}{N(\PP^j)}\right)  \\
+&\,\,= \underbrace{\kappa_{\K} x \sum_{N(\PP)\leq x} \frac{\log{N(\PP)}}{N(\PP)} + 1.1 \Lambda_{\K}n_{\K}^2 O^{\star} (x) }_{\text{Lemma \ref{Lemma:FirstPower}}}+
+\underbrace{O^{\star}(\Xi_{\K}(x))}_{\text{Lemma \ref{Lemma:HigherPowers}}} . \qedhere
+\end{align*}
+\end{proof}
+
+Equating the two expressions for $T_{\K}(x)$ from Lemmas \ref{Lemma:FirstBound} and \ref{Lemma:SecondBound} yields
+\begin{align*}
+\kappa_{\K} x\log x &+ (2\Lambda_{\K} n_{\K} +\kappa_{\K})O^{\star}(x)\\
+&= \kappa_{\K} x \sum_{N(\PP)\leq x} \frac{\log{N(\PP)}}{N(\PP)} + 1.1 \Lambda_{\K}n_{\K}^2 
+%{\color{red} + \kappa_{\K} n_{\K} }
+ O^{\star} (x) + O^{\star}(\Xi_{\K}(x)).
+\end{align*}
+Divide by $\kappa_{\K} x$ and simplify to get
+\begin{equation*}
+\sum_{N(\PP)\leq x} \frac{\log{N(\PP)}}{N(\PP)}
+= \log x + \frac{2\Lambda_{\K} n_{\K} +\kappa_{\K}}{\kappa_{\K}}O^{\star}(1)
++ \frac{1.1 \Lambda_{\K}n_{\K}^2 
+%+ \kappa_{\K} n_{\K}
+}{\kappa_{\K}} O^{\star} (1) + O^{\star}\bigg(\frac{\Xi_{\K}(x)}{\kappa_{\K}x}\bigg).
+\end{equation*}
+Now observe that
+\begin{align*}
+\frac{\Xi_{\K}(x)}{\kappa_{\K}x} 
+&=
+\begin{cases}
+n_{\K}  + \dfrac{\Lambda_{\K}}{\kappa_{\K}} O^{\star} \big(6.4 x^{-\frac{1}{2}}\log x + 42.5 x^{ -\frac{1}{2} }   \big)  & \text{if $n_{\K} = 2$}, \\[5pt]
+n_{\K}  + 15.1\, \dfrac{\Lambda_{\K}}{\kappa_{\K}} O^{\star}( n_{\K}^2 x^{ - \frac{1}{n_{\K}}}  )  & \text{if $n_{\K} \geq 3$}. 
+\end{cases}
+\\
+&\leq n_{\K}+
+\begin{cases}
+\dfrac{\Lambda_{\K}}{\kappa_{\K}} O^{\star} \big(6.4 x^{-\frac{1}{2}}\log x + 42.5 x^{ -\frac{1}{2} }   \big)  & \text{if $n_{\K} = 2$}, \\[5pt]
+15.1\, \dfrac{\Lambda_{\K} n_{\K}^2 }{\kappa_{\K}} O^{\star}( x^{ - \frac{1}{n_{\K}}}  )  & \text{if $n_{\K} \geq 3$}. 
+\end{cases}
+\\
+&\leq n_{\K}+
+\begin{cases}
+33.2\dfrac{\Lambda_{\K}}{\kappa_{\K}}  & \text{if $n_{\K} = 2$}, \\[5pt]
+15.1\, \dfrac{\Lambda_{\K}n_{\K}^2}{\kappa_{\K}}   & \text{if $n_{\K} \geq 3$}. 
+\end{cases}
+\\
+&\leq n_{\K} + 15.1 \,  \dfrac{\Lambda_{\K}n_{\K}^2}{\kappa_{\K}} .
+\end{align*}
+Putting this all together, we get
+\begin{align*}
+\left|\sum_{N(\PP)\leq x} \frac{\log{N(\PP)}}{N(\PP)} - \log x\right|
+&\leq 
+ \frac{2\Lambda_{\K} n_{\K} +\kappa_{\K}}{\kappa_{\K}}
++ \frac{1.1 \Lambda_{\K}n_{\K}^2 }{\kappa_{\K}} 
++
+n_{\K} + 15.1 \dfrac{\Lambda_{\K}n_{\K}^2}{\kappa_{\K}}\\
+&\leq  n_{\K}  + 18.2 \dfrac{\Lambda_{\K}n_{\K}^2}{\kappa_{\K}} + 1.
+\end{align*}
+This yields the desired bound \eqref{eq:A2}.\qed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Proofs of \eqref{eq:B1}, \eqref{eq:B2}, and \eqref{eq:M1}}\label{Section:Proof:B}
+For $x \geq 2$, partial summation yields
+\begin{align*}
+    \sum_{N(\PP)\leq x}&\frac{1}{N(\PP)}
+    = \sum_{N(\PP)\leq x}\frac{\log{N(\PP)}}{N(\PP)}\frac{1}{\log{N(\PP)}}\\
+    &= \frac{1}{\log{x}} \sum_{N(\PP)\leq x}\frac{\log{N(\PP)}}{N(\PP)} + \int_2^x \bigg(\sum_{N(\PP)\leq t}\frac{\log{N(\PP)}}{N(\PP)}\bigg)\frac{dt}{t(\log t)^2}\\
+    &= \frac{1}{\log{x}} \big(\log{x} + A_{\K}(x)\big) + \int_2^x \big(\log{t} + A_{\K}(t)\big)\frac{dt}{t(\log t)^2}\\
+    &= 1 + \frac{A_{\K}(x)}{\log{x}} + \int_2^x \frac{dt}{t\log t} + \int_2^x \frac{A_{\K}(t)}{t(\log t)^2}dt\\
+    &= \log\log{x} - \log\log{2}  + 1 + \frac{A_{\K}(x)}{\log{x}} + \int_2^x \frac{A_{\K}(t)}{t(\log t)^2}dt\\
+    &= \log\log{x} + \underbrace{1- \log\log{2}  + \int_2^\infty \frac{A_{\K}(t)}{t(\log t)^2}dt}_{M_{\K}} 
+    +  \underbrace{ \frac{A_{\K}(x)}{\log{x}} - \int_x^\infty \frac{A_{\K}(t)}{t(\log t)^2}dt }_{B_{\K}(x)},
+\end{align*}
+in which \eqref{eq:A2} ensures that the integral that defines $M_{\K}$ converges and
+\begin{align*}
+    |B_{\K}(x)|
+    &\leq \frac{|A_{\K}(x)|}{\log{x}} + \int_x^\infty \frac{|A_{\K}(t)|}{t(\log t)^2}dt\\
+    &\leq  \bigg(  n_{\K}  + 18.2 \dfrac{\Lambda_{\K}n_{\K}^2}{\kappa_{\K}} + 1  \bigg)
+     \bigg( \frac{1}{\log x} + \int_x^\infty \frac{dt}{t(\log t)^2}\bigg)\\
+    &= 2 \bigg(  n_{\K}  + 18.2 \dfrac{\Lambda_{\K}n_{\K}^2}{\kappa_{\K}} + 1  \bigg) \frac{1}{\log x}
+\end{align*}
+
+This proves \eqref{eq:B1} and \eqref{eq:B2}.
+The proof of \eqref{eq:M1} is identical to that in \cite{EMT4NF1}, which followed
+Ingham's approach \cite{Ingham}. Hence, we present an abbreviated version.
+
+For $\Re s > 1$, partial summation and \eqref{eq:B1} provide
+\begin{align}
+\sum_{\PP}&\frac{1}{N(\PP)^s}
+= \lim_{x\to\infty} \bigg( \sum_{N(\PP)\leq x}\frac{1}{N(\PP)^s} \bigg)
+= \lim_{x\to\infty} \bigg( \sum_{N(\PP)\leq x}\frac{1}{N(\PP)^{s-1} N(\PP)} \bigg) \nonumber\\
+&= \lim_{x\to\infty} \bigg(\frac{1}{x^{s - 1}}\sum_{N(\PP)\leq x}\frac{1}{N(\PP)}\bigg) + (s-1) \int_{2}^{\infty}\bigg(\sum_{N(\PP)\leq t}\frac{1}{N(\PP)}\bigg) \frac{dt}{t^{s}}\nonumber\\
+&=(s-1) \int_{2}^{\infty}\bigg(\sum_{N(\PP)\leq t}\frac{1}{N(\PP)}\bigg) \frac{dt}{t^{s}}\nonumber\\
+&=   (s-1)\int_{2}^\infty\frac{M_{\K}}{t^{s}}\,dt
++ (s-1)\int_{2}^\infty\frac{B_{\K}(t)}{t^{s}} \,dt 
++ (s-1)\int_{2}^\infty\frac{\log\log t}{t^{s}}\,dt.\label{eqn:refmel8er}
+\end{align}
+Let $s \to 1^+$, then the first integral tends to $M_{\K}$, the second tends to zero and the substitution $t^{s-1} = e^y$ converts the third integral into
+\begin{equation*}
+(s-1)\int_{2}^{\infty}\frac{\log\log{t}}{t^{s}}\,dt
+= \int_{\log(2^{s-1})}^{\infty} e^{-y} \log y \, dy - 2^{1-s} \log(s-1),
+\end{equation*}
+which tends to $- \gamma- \log(s-1)$.  As $s \to 1^+$, the Euler product formula yields
+\begin{align}
+M_{\K} &-\gamma \nonumber\\
+&=\log(s-1) + \sum_{\PP}\left[ \frac{1}{N(\PP)^s} + \log\left(1 - \frac{1}{N(\PP)^s}\right) \right] - \sum_{\PP}  \log\left(1 - \frac{1}{N(\PP)^s}\right) \nonumber \\
+&= \log\big((s-1)\zeta_{\K}(s)\big) + \sum_{\PP}\left[ \frac{1}{N(\PP)^s} + \log\left(1 - \frac{1}{N(\PP)^s}\right) \right] \nonumber \\
+&= \log \kappa_{\K} + \sum_{\PP}\left[\frac{1}{N(\PP)} + \log\left(1 - \frac{1}{N(\PP)}\right)\right], \label{eq:MKGo1}
+\end{align}
+which converges by comparison with $\sum_{\PP} N(\PP)^{-2}$.   \qed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Proofs of \eqref{eq:C1} and \eqref{eq:C2}}
+The proof is identical to that in \cite{EMT4NF1} so we merely sketch it here for the sake of completeness.
+From \eqref{eq:MKGo1} obtain
+\begin{equation}\label{eq:refmelastX}
+    -\gamma - \log{\kappa_{\K}} + M_{\K} 
+    = \sum_{N(\PP) \leq x}\left[\frac{1}{N(\PP)} + \log\left(1 - \frac{1}{N(\PP)}\right)\right] + F_{\K}(x).
+\end{equation}
+Since $0 \leq -y -\log(1-y) \leq  y^2(1-y)^{-1}$, it follows that
+\begin{align}
+| F_{\K}(x)|
+&=- \sum_{N(\PP) > x}\left[\frac{1}{N(\PP)} + \log\left(1 - \frac{1}{N(\PP)}\right)\right] 
+\leq \sum_{N(\PP) > x}\frac{1}{N(\PP) (N(\PP) - 1)} \nonumber \\
+&\leq \sum_{p > x}\sum_{f_i}\frac{1}{p^{f_i} (p^{f_i} - 1)} 
+< n_{\K}\sum_{m > x}\frac{1}{m (m - 1)}  
+\leq \frac{n_{\K}}{ x-1 }. \label{eq:FKx}
+\end{align}
+Then \eqref{eq:B1} and \eqref{eq:refmelastX} imply
+\begin{equation*}
+-\gamma - \log{\kappa_{\K}} + M_{\K} =  \sum_{N(\PP) \leq x} \log\left(1 - \frac{1}{N(\PP)}\right) + \log\log{x} + M_{\K} +
+\underbrace{B_{\K}(x) + F_{\K}(x)}_{E_{\K}(x)}.
+\end{equation*}
+Exponentiate and simplify to get
+\begin{equation*}
+    \prod_{N(\PP) \leq x} \left(1 - \frac{1}{N(\PP)}\right) 
+    = \frac{e^{- \gamma}}{\kappa_{\K} \log{x}} e^{-E_{\K}(x)}
+    = \frac{e^{- \gamma}}{\kappa_{\K} \log{x}}\big(1 + C_{\K}(x) \big),
+\end{equation*}
+where $|C_{\K}(x)| \leq  |E_{\K}(x)| e^{ |E_{\K}(x)|}$ since
+$|e^t - 1|  \leq |t| e^{|t|}$ for $t \in \R$. \qed
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Proof of \eqref{eq:M2}}
+From \eqref{eq:refmelastX}, 
+$M_{\K} = \gamma + \log\kappa_{\K} + F_{\K}(2-\delta)$ for $\delta \in (0,1)$.  Then
+\eqref{eq:FKx} yields
+$$- n_{\K} \leq \liminf_{\delta\to0^+}F_{\K}(2-\delta) \leq \limsup_{\delta\to0^+}F_{\K}(2-\delta)\leq 0,$$
+which proves \eqref{eq:M2}.\qed
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Explicit lower bounds for the Dedekind-zeta residue}\label{sec:ResidueBounds}
+For a number field $\K$, recall that $\kappa_{\K}$ denotes the residue of the Dedekind zeta function
+$\zeta_{\K}(s)$ at $s=1$.  If $\K = \Q$, then $\kappa_{\K} = 1$.  Consequently, we assume 
+that $n_{\K} \geq 2$. Although $\kappa_{\K}$ can be computed directly from the analytic class 
+number formula \eqref{eqn:residue_class_ana_form}, it is worth investigating bounds 
+that are given only in terms of the absolute value of the discriminant $\Delta_{\K}$
+and the degree $n_{\K}$ of $\K$.
+
+Since $n_{\K} = r_1 + 2r_2\geq 2$, it follows that $0.46r_1 + 0.1r_2 \geq 0.1$ and hence Zimmert's estimate \cite{Zimmert} (see also \cite[Thm.~7, p.~273]{Lang}) provides
+\begin{equation*}
+    \frac{R_{\K}}{w_{\K}} \geq 0.02 e^{0.46r_1 + 0.1 r_2} \geq 0.02 e^{0.1} > 0.0221.
+\end{equation*}
+Moreover, $2^{r_1}(2\pi)^{r_2} \geq 2^{2}(2\pi)^{0} = 4$ and hence we obtain the lower bound
+\begin{equation}\label{eqn:kapp_bound_Zimmert}
+    \kappa_{\K} \geq \frac{2^{r_1}(2\pi)^{r_2}R_{\K}}{w_{\K}\sqrt{\Delta_{\K}}} > \frac{4\times 0.0221}{\sqrt{\Delta_{\K}}} = \frac{0.0884}{\sqrt{\Delta_{\K}}}.
+\end{equation}
+We thank Eduardo Friedman for suggesting this argument to us.
+
+Another approach is based on Stark's estimate
+\begin{equation}\label{eqn:kappd_bound_Stark}
+    \kappa_{\K} > \frac{c}{n_{\K} g(n_{\K}){\Delta_{\K}}^{1/n_{\K}}},
+\end{equation}
+in which
+\begin{equation*}
+    g(n_{\K}) = \begin{cases}
+    1 &\text{if }\K\text{ has a normal tower over }\Q,\\
+    n_{\K} ! &\text{otherwise,}
+    \end{cases}
+\end{equation*}
+and $c$ is an effectively computable constant \cite{StarkBS}. The denominator in \eqref{eqn:kappd_bound_Stark} can be replaced by $g(n_{\K})\log{\Delta_{\K}}$ if $\K$ has no quadratic subfield. We establish here that $c = 0.001448029$ is unconditionally admissible in \eqref{eqn:kappd_bound_Stark}, with improvements available in some cases. If $n_{\K} > 2$, then \eqref{eqn:kappd_bound_Stark} is generally preferred over \eqref{eqn:kapp_bound_Zimmert}.
+
+In what follows, we adhere to Stark's notation so that the reader may, if they wish,
+confirm our calculations \cite{StarkBS}.
+Stark proves the existence of effectively computable constants $c_4$ and $c_8$ such that
+\begin{equation}
+    \kappa_{\K} > {c_4}^{-1}\min\left\{\frac{1}{\alpha(n_{\K})\log{\Delta_{\K}}}, \frac{1}{c_8{\Delta_{\K}}^{1/n_{\K}}}\right\},
+\end{equation}
+in which
+\begin{equation*}
+    \alpha(n_{\K})=
+    \begin{cases}
+    4&\text{if }\K\text{ is normal over }\Q,\\
+    16&\text{if }\K\text{ has a normal tower over }\Q,\\
+    4n_{\K}!&\text{otherwise.}
+    \end{cases}
+\end{equation*}
+Moreover, $\kappa_{\K} > 1/(c_4\alpha(n_{\K})\log{\Delta_{\K}})$ if $\K$ does not have a quadratic subfield. Therefore, in the case $\K$ does not have a quadratic subfield, 
+\begin{align*}
+    \kappa_{\K}
+    &> \frac{1}{c_4c_8 {\Delta_{\K}}^{1/n_{\K}}} \min\left\{\frac{c_8{\Delta_{\K}}^{1/n_{\K}}}{\alpha(n_{\K})\log{\Delta_{\K}}}, 1\right\}\\
+    &\geq \frac{1}{c_4c_8 {\Delta_{\K}}^{1/n_{\K}}} \min\left\{\frac{e c_8}{n_{\K}\alpha(n_{\K})}, 1\right\},
+\end{align*}
+since $e^x \geq x e$ for $x>0$ implies that 
+$${\Delta_{\K}}^{1/n_{\K}} = \exp((1/n_{\K})\log{\Delta_{\K}}) \geq (e/n_{\K})\log{\Delta_{\K}}.$$ 
+We find admissible constants $c_4$ and $c_8$ by tracking the 
+choices made in \cite{StarkBS}. First,
+\begin{equation*}
+    c_4 = 2c_3 = 2e^{\frac{21}{8} + \frac{c_1}{2} - \frac{c_2}{8}\frac{\Gamma'}{\Gamma}\left(\frac{1}{2}\right)},
+\end{equation*}
+in which $c_1 = 0$ and $c_2 = 2/\log{3}$ are admissible options \cite[Lemma 4]{StarkBS}. Hence, $c_4 \approx 43.162115 < 43.2$ is admissible. 
+Stark claims somewhat mysteriously that ``it is likely from a remark in Bateman and Grosswald \cite[p.~188]{batemanGrosswald} that $c_8 = \pi/6$ will suffice"; see Remark \ref{Remark:Pintz}.
+If one proceeds with $c_8 = \pi/6$, then 
+\begin{equation*}
+    \kappa_{\K}
+    > \frac{1}{c_4c_8 {\Delta_{\K}}^{1/n_{\K}}} \min\left\{\frac{ec_8}{n_{\K}\alpha(n_{\K})}, 1\right\}
+    = \frac{e/c_4}{n_{\K}\alpha(n_{\K}){\Delta_{\K}}^{1/n_{\K}}}
+    > \frac{0.06297842}{n_{\K}\alpha(n_{\K}){\Delta_{\K}}^{1/n_{\K}}},
+\end{equation*}
+since $(ec_8)/(n_{\K}\alpha(n_{\K})) \leq (ec_8)/8 < 0.178 < 1$. It follows that
+\begin{equation*}
+    \kappa_{\K} >
+    \begin{cases}
+    \frac{0.015744605}{n_{\K}g(n_{\K}){\Delta_{\K}}^{1/n_{\K}}}&\text{if $\K$ is normal over $\Q$},\\[5pt]
+    \frac{0.003936151}{n_{\K}g(n_{\K}){\Delta_{\K}}^{1/n_{\K}}}&\text{if $\K$ has a normal tower over $\Q$},\\[5pt]
+    \frac{0.015744605}{n_{\K}g(n_{\K}){\Delta_{\K}}^{1/n_{\K}}}&\text{otherwise}.
+    \end{cases}
+\end{equation*}
+Moreover, if $\K$ does not have a quadratic subfield, then
+\begin{equation*}
+    \kappa_{\K}
+    > \frac{1/c_4}{\alpha(n_{\K})\log{\Delta_{\K}}}
+    > \begin{cases}
+    \frac{0.005792116}{g(n_{\K})\log{\Delta_{\K}}}&\text{if $\K$ is normal over $\Q$},\\[5pt]
+    \frac{0.001448029}{g(n_{\K})\log{\Delta_{\K}}}&\text{if $\K$ has a normal tower over $\Q$},\\[5pt]
+    \frac{0.005792116}{g(n_{\K})\log{\Delta_{\K}}}&\text{otherwise}.
+    \end{cases}
+\end{equation*}
+In summary, $c = 0.001448029$ is admissible in \eqref{eqn:kappd_bound_Stark} unconditionally; 
+$c = 0.005792116$ is admissible if $\K$ is normal over $\Q$ or $\K$ does not have a normal tower over $\Q$. Moreover, if $\K$ does have a quadratic subfield, then $c = 0.003936151$ is admissible in \eqref{eqn:kappd_bound_Stark} unconditionally and $c = 0.015744605$ is admissible if $\K$ is normal over $\Q$ or $\K$ does not have a normal tower over $\Q$.
+
+
+\begin{remark}\label{Remark:Pintz}
+Stark suggests that $c_8 = \pi/6$ is admissible in \cite[Lem.~11]{StarkBS}.
+Pintz \cite[Thm.~3]{Pintz76} proved that $c_8 = \pi/12+  o(1)$ works.  
+This suggests that Stark's $c_8 = \pi / 6$ is indeed acceptable. 
+Schinzel, a referee of Pintz's paper, improved the value of $c_8$ in a footnote to Pintz' paper \cite[p.~277]{Pintz76}.
+For each $\varepsilon > 0$ and $\Delta_{\K}$
+sufficiently large, he proved that $c_8 = (16/\pi - \varepsilon)^{-1}$ is admissible \cite[p.~277]{Pintz76}.
+\end{remark}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Remarks and Open Problems}\label{Section:Future}
+
+\begin{remark}\label{Remark:Theta}
+The estimate $\theta(x) < 1.01624x$ from \eqref{eq:Rosser} has been substantially improved over the years.
+The current record appears to be due to Broadbent, Kadiri, Lumley, Ng, and Wilk \cite{Broadbent}, who proved that 
+\begin{equation*}
+\theta(x) < (1+1.93378 \times 10^{-8})x.
+\end{equation*}
+This bound results in a slight improvement to the constants in
+Theorem \ref{Theorem:Main}.
+\end{remark}
+
+
+\begin{question}
+Tenenbaum \cite{Tenenbaum} recently proved a generalization of Mertens' second theorem.
+Following similar arguments \textit{mutatis mutandis} it may be possible to write
+\begin{equation*}
+    \mathcal{S}_{\K}(k,x) = \sum_{N(\PP_1\PP_2\cdots\PP_k)}\frac{1}{N(\PP_1\PP_2\cdots\PP_k)} = P_{\K}(k,\log\log{x}) + O\left(\frac{(\log\log{x})^{k-1}}{\log{x}}\right),
+\end{equation*}
+for $x\geq 3$, in which $P_{\K}(k,X) = \sum_{0\leq j\leq k} \lambda_{j,k} X^j$ and $\lambda_{j,k}$ are defined as in \cite[Thm.~1]{Tenenbaum}.
+Can one make the implied constant explicit in terms of $n_{\K}$ and $\Delta_{\K}$?
+\end{question}
+
+
+\begin{question}
+In the case $\K = \Q$, Mertens' third theorem asserts
+\begin{equation*}
+    \prod_{p\leq x} \left(1 - \frac{1}{p}\right)^{-1} \,\sim\,\,\,e^\gamma \log{x} .
+\end{equation*}
+Rosser--Schoenfeld \cite{Rosser} observed that the product is less than $e^\gamma \log{x}$ for $x\leq 108$ and
+they wondered if the two expressions took turns exceeding the other.
+Diamond--Pintz proved that this is the case \cite{DiamondPintz}. In fact, the difference 
+is at least as large as $O(\log\log\log{x}/\sqrt{x})$ infinitely often.
+Does a similar phenomenon occur for $\K \neq \Q$?
+\end{question}
+
+
+
+\bibliographystyle{amsplain}
+\bibliography{EMT4NF2}
+
+\end{document}

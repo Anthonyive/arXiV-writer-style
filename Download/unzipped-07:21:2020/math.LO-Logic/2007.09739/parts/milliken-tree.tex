@@ -1,0 +1,1004 @@
+
+We now turn to the computability-theoretic analysis of the product and non-product versions Milliken's tree theorem, the base cases of which we already studied through the Halpern-Lauchli theorem in the previous chapter. As the product version obviously implies the non-product, we formulate our upper bounds in terms of the former and our lower bounds in terms of the latter. More specifically, we obtain the following.
+%This section is divided into three parts:
+In \Cref{subsect:proof-pmt-aca}, we provide an inductive proof of the product version of Milliken's tree theorem in $\ACA_0$, using the notion of prehomogeneous tree. Using standard methods, it is easy to obtain a reversal for (even the non-product version of) Milliken's tree theorem for height at least $3$. For height $1$, we already saw in the previous chapter that the product version of Milliken's tree theorem for height 1 is computably true, and hence does not imply $\ACA_0$. This leaves the situation for trees of height $2$, which we address in \Cref{subsect:cone-avoidance-pmt2}. Since Milliken's tree theorem for height two implies Ramsey's theorem for pairs, it is not computably true, but we show that the product version admits cone avoidance, and so is strictly weaker than $\ACA_0$. Finally, in \Cref{subsect:thin-milliken}, we study a weakening of Milliken's tree theorem that allows more than one color in the solutions. We prove that the product version of Milliken's tree theorem for height 3, but where up to two colors are allowed in the solution, admits cone avoidance, and hence does not imply $\ACA_0$. We will make use of this result in our discussion of Devlin's theorem in \Cref{sec:devlin}.
+
+\section{A proof of $\PMT{n}{}$ in $\ACA_0$}\label{subsect:proof-pmt-aca}
+
+%Fix $n\in\NN$,  a collection of finitely branching trees with no leaves $T_0, \dots, T_{d-1}$ and a coloring $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$.
+Given a tree $F$ of height $\alpha \leq \omega$ and an a number $n < \alpha$,  we write $F \uh n$ \index{$\uh$} for the subtree of $F$ of height $n$.
+
+
+\begin{definition}\index{prehomogeneous!product tree condition}\index{prehomogeneous!tuple}\index{product tree condition!prehomogeneous}
+	%[Prehomogeneity]
+	Fix $n\in\NN$,  a collection of trees with no leaves $T_0, \dots, T_{d-1}$ and a coloring $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$.
+	\begin{enumerate}
+		\item A tuple $(S_0, \dots, S_{d-1}) \in \Subtree{\omega}{T_0, \dots, T_{d-1}}$ is \emph{prehomogeneous} for $f$ if the color of every $(E_0, \dots, E_{d-1}) \in \Subtree{n+1}{S_0, \dots, S_{d-1}}$ depends only on $(E_0 \uh n, \dots, E_{d-1} \uh n)$.
+		\item A product tree condition $(F_0, \dots, F_{d-1}, X_0, \dots,X_{d-1})$ is \emph{prehomogeneous} for $f$  if the color of every
+		\[
+		(E_0, \dots, E_{d-1}) \in \Subtree{n+1}{F_0 \cup X_0, \dots, F_{d-1} \cup X_{d-1}}
+		\]
+		%\benoit{do you mean $\mathcal{S}_{n+1}$  ?}
+		depends only on $( E_0 \uh n, \dots, E_{d-1} \uh n )$ whenever $E_j \uh n \subseteq F_j$ for every $j < d$.
+	\end{enumerate}
+\end{definition}
+
+%\begin{definition}
+%A product tree condition $(F_0, \dots, F_{d-1}, X_0, \dots,X_{d-1})$ is \emph{prehomogeneous} for $f$  if the color of every
+%$$
+%(E_0, \dots, E_{d-1}) \in \Subtree{n+1}{F_0 \cup X_0, \dots, F_{d-1} \cup X_{d-1}}
+%$$
+%%\benoit{do you mean $\mathcal{S}_{n+1}$  ?}
+%depends only on $( E_0 \uh n, \dots, E_{d-1} \uh n )$ whenever $E_j \uh n \subseteq F_j$ for every $j < d$.
+%\end{definition}
+
+\noindent In particular, note that the product tree condition $(\emptyset, \dots, \emptyset, T_0, \dots,T_{d-1})$ is prehomogeneous for a given $f$ as above.
+
+We add several other useful definitions.
+
+\begin{definition}
+	Fix a collection of infinite trees with no leaves $T_0, \dots, T_{d-1}$. A product tree condition $c = (F_0, \dots, F_{d-1}, X_0, \dots,X_{d-1})$ is \emph{computable} if $X_0, \dots, X_{d-1}$ are all computable and computably bounded. An \emph{index} of $c$ is a finite tuple  $(F_0, \dots, F_{d-1}, e_0, \dots,e_{d-1})$ such that $\Phi_{e_j} = X_j$ for every $j < d$.\index{product tree condition!index}\index{index!product tree condition}\index{product tree condition!computable}
+\end{definition}
+
+%We will call product tree condition $c = (F_0, \dots, F_{d-1}, X_0, \dots,X_{d-1})$ \emph{computable}
+%if $X_0, \dots, X_{d-1}$ are all computable and computably bounded. An \emph{index} of $c$ is a finite tuple 
+%$(F_0, \dots, F_{d-1}, e_0, \dots,e_{d-1})$ such that $\Phi_{e_j} = X_j$ for every $j < d$.
+%Assume from now on that the coloring $f$ is computable.
+
+%We shall use the following notation for the remainder of the paper.
+
+\begin{definition}\label{def:subtreeleaves}\index{$\SubtreeLeaves{n}{}$!tree}\index{$\SubtreeLeaves{n}{}$!product}
+  If $n\geq 1$ and $T$ is a finite tree, then%define the following notation for subtrees that keep the leaves:
+  % Given a finite tree $T$ of height $h$ and an embedding type $\embfont e$ of height $n$,
+   \[
+     \SubtreeLeaves{n}{T} = \{S\in\Subtree{n}{T}: \leaves(S)\subseteq \leaves(T)\}.
+   \]
+   % And if $\embfont e$ is a product embedding type: %
+   More generally, if {$T_0, \dots, T_{d-1}$} are finite trees, then
+  % trees.
+  % \todo{If we speak about product of trees more than just here, we need to define $\Subtree{\embfont e}{T_0,\dots,T_{d-1}}$ in the intro on trees.}
+  \[
+    \SubtreeLeaves{n}{T_0,\dots,T_{d-1}} = \{(S_0,\dots, S_{d-1})\in\Subtree{n}{T_0,\dots,T_{d-1}}: (\forall i<d)[S_i\in \SubtreeLeaves{n}{T_i}]\}.
+  \]
+%  \benoit{wait, what ? what is $\mathcal{S}_n^l(T_i)$ ? From the latex file, it seems that these are the subtrees whose leaves are the leaves of $T_i$. Is that correct ? in this case $T_i$ should be introduced as finite.}
+\end{definition}
+
+The main combinatorial result of this section is the following density lemma.
+
+\begin{lemma}\label{thm:milliken-prehomogeneous-one-step}
+Fix $n \in \NN$, a collection of computable, computably bounded trees with no leaves $T_0, \dots, T_{d-1}$, and a computable coloring $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$. For every computable product tree condition $c = (F_0, \dots, F_{d-1}, X_0, \dots,X_{d-1})$ which is prehomogeneous (for $f$), there is a computable prehomogeneous product tree condition
+$\hat{c} = (\hat{F}_0, \dots, \hat{F}_{d-1}, \hat{X}_0, \dots, \hat{X}_{d-1})$ extending $c$
+such that $F_j \subsetneq \hat{F}_j$ for every $j < d$. Moreover, an index of $d$ can be found uniformly $\emptyset''$-computably from an index of $c$.
+\end{lemma}
+\begin{proof}
+By definition of a product tree condition (\Cref{def:product-tree-condition}), for every $j < d$ and every leaf $\sigma$ of $F_j$,
+$\roots(X_j)$ is $(t+1)$-$\sigma$-dense with respect to $T_j$, where $t$ is the level of the leaves of $F_j$ within $T_j$.
+For every $j < k$, let $\hat{F}_j$ be $F_j$ augmented by the roots of $X_j$ extending the leaves of $F_j$. By \Cref{remark:product-tree-condition-roots}, we can assume that $(\hat{F}_0, \dots, \hat{F}_{d-1}) \in \Subtree{<\omega}{T_0, \dots, T_{d-1}}$.  Let 
+\[
+( E^0_0, \dots, E^0_{d-1} ), \dots, ( E^{p-1}_0, \dots, E^{p-1}_{d-1} )
+\]
+be the (finite) enumeration of all the tuples in $\SubtreeLeaves{n}{\hat{F}_0, \dots, \hat{F}_{d-1}}$, meaning tuples of strong subtrees $( E_0, \dots, E_{d-1} )$ such that the leaves of $E_j$ are among the leaves of $\hat{F}_j$, i.e., belong to $X_j(0)$.
+
+We inductively define a finite sequence of $d$-tuples of computable forests
+$$
+( Y^0_0, \dots, Y^0_{d-1} ), \dots, ( Y^p_0, \dots, Y^p_{d-1} )
+$$
+such that for every $s < p$:
+\begin{enumerate}
+	\item $Y^{s+1}_0, \dots, Y^{s+1}_{d-1}$ are infinite strong subforests of $Y^s_0, \dots, Y^s_{d-1}$, respectively, with common level function;
+	\item $(\hat{F}_0 \cup Y^{s+1}_0, \dots, \hat{F}_{d-1} \cup Y^{s+1}_{d-1}) \in \Subtree{\omega}{T_0, \dots, T_{d-1}}$;
+	\item there is some color $i < k$ such that for every level $\ell \in \NN$, every $j < d$, and every $H_j \subseteq Y^{s+1}_j(\ell)$ for which $( E^s_0 \cup H_0, \dots, E^s_{d-1} \cup H_{d-1} ) \in \Subtree{n+1}{T_0, \dots, T_{d-1}}$,
+		$f( E^s_0 \cup H_0, \dots, E^s_{d-1} \cup H_{d-1} ) = i$.
+\end{enumerate}
+Let $Y^0_0, \dots, Y^0_{d-1}$ be $X_0, \dots, X_{d-1}$, respectively, trimmed by their first levels.
+Assume $Y^s_0, \dots, Y^s_{d-1}$ is defined for $s < p$. Let $m$ be the common level of the leaves of $\hat{F}_0, \dots, \hat{F}_{d-1}$ in $T_0, \dots, T_{d-1}$, respectively. For every $j < d$, let $R_j = \roots(Y^s_j)$, and for every $\rho \in R_j$, let $Y_{j,\rho} = Y^s_j \uh \rho$.
+We can see $Y^s_0, \dots, Y^s_{d-1}$ as a tuple $( Y_{j,\rho}: j < d, \rho \in R_j )$ of trees.
+
+%$G_j = E^s_j \cup \{\sigma_{j,\rho} \in Y_{j,\rho}: \rho \in U_j\}$.
+%$G_j = E^s_j \cup \bigcup_{\rho \in U_j} Y_{j,\rho}$.
+Define a coloring $g$ of%\benoit{the variable $n$ is already used globally}
+$$
+		\bigcup_m  \left( \prod_{\rho \in R_0} Y_{0, \rho}(m) \right) \times \dots \times \left( \prod_{\rho \in R_{d-1}} Y_{d-1,\rho}(m) \right)
+$$
+as follows. For every $j < d$, let $U_j = \{\rho \in R_j: (\exists \mu \in \leaves(E^s_j)) [\rho \succeq \mu ] \}$, and note that $( E^s_0 \cup U_0, \dots, E^s_{d-1} \cup U_{d-1} ) \in \Subtree{n+1}{T_0, \dots, T_{d-1}}$. Now, given $\pi = \{\sigma_{j,\rho} \in Y_{j,\rho}: j < d, \rho \in R_j\}$ in the domain of $g$, let
+\[
+	G_j = E^s_j \cup \{\sigma_{j,\rho}: \rho \in U_j\}.
+\]
+for each $j$. So $( G_0, \dots G_{d-1} ) \in \Subtree{n+1}{T_0, \dots, T_{d-1}}$. Set $g(\pi) = f(G_0,\ldots,G_{d-1})$.
+% $g(\{\sigma_{j,\rho} \in Y_{j,\rho}: j < d, \rho \in R_j\}) = f(G_0, \dots, G_{d-1})$. %\benoit{I don't think $H_i$ is a tree of height $n+1$. Maybe none of them are because the product over all the roots maybe too big, as we may have many roots. I think this is annoying to write properly: the products of root we select should depend on each $E^s_j$. }\ludovic{Do you maintain this claim with this new proof?}
+%defined for every $j < d$ by $U_j = \{\rho \in R_j: \exists \mu \in \leaves(E^s_j) \rho \succeq \mu\}$ and $G_j = E^s_j \cup \{\sigma_{j,\rho}: \rho \in U_j\}$.
+%Note that $\langle E^s_0 \cup U_0, \dots, E^s_{d-1} \cup U_{d-1} \rangle \in \Subtree{n+1}{T_0, \dots, T_{d-1}}$,
+%hence  $\langle G_0, \dots G_{d-1} \rangle \in \Subtree{n+1}{T_0, \dots, T_{d-1}}$.
+
+Since the Halpern-La\"{u}chli theorem is computably true%(\Cref{thm:halpern-lauchli-computably-true})
+, there is a computable tuple $( Z_{j,\rho}: j < d, \rho \in R_j )$ of strong subtrees of $( Y_{j,\rho}: j < d, \rho \in R_j )$, respectively, with common level function, together with a color $i < k$
+such that for every $\ell \in \NN$, every $j < k$, if $H_j \subseteq \prod_{\rho \in R_j} Z_{j,\rho}(\ell)$ is such that $E^s_j \cup H_j \in \mathcal{S}_{n+1}(T_0, \dots, T_{d-1})$ then $f( E^s_0 \cup H_0, \dots, E^s_{d-1} \cup H_{d-1} ) = i$.
+For every $j < k$, let $Y^{s+1}_j = \bigcup_{\rho \in R_j} Z_{j,\rho}(\ell)$. This completes the construction of the sequence.
+
+
+Let $\hat{c} = (\hat{F}_0, \dots, \hat{F}_{d-1}, Y^p_0, \dots, Y^p_{d-1})$. By items 1 and 2, 
+$\hat{c}$ is a computable product tree condition extending $c$.
+Moreover, by item 3 and the fact that $c$ is prehomogeneous for $f$, so is $\hat{c}$. 
+
+One can $\emptyset''$-computably search for a finite tuple $(E_0, \dots, E_{d-1}, e_0, \dots, e_{d-1})$
+such that for every $j < d$, $\Phi_{e_j}$ is total, and  $(E_0, \dots, E_{d-1}, \Phi_{e_0}, \dots, \Phi_{e_{d-1}})$ is a product tree condition extending $c$ and prehomogeneous for $f$. Indeed, being a strong subforest of $T_j$ is $\Pi^0_2$ since $T_j$ is computable and computably bounded. Thus, being a product tree condition is $\emptyset''$-decidable. Moreover, being prehomogeneous is $\Pi^0_1$ since $f$ is computable, and being an extension of a product tree condition is also $\Pi^0_2$. Since we prove the existence of such an extension, an exhaustive search will always terminate, and the procedure is $\emptyset''$-computable, uniformly in an index of $c$.
+This completes the proof of \Cref{thm:milliken-prehomogeneous-one-step}.
+\end{proof}
+
+\begin{lemma}\label{thm:milliken-prehomogeneous}
+Fix $n \in \NN$, a collection of computable, computably bounded trees with no leaves $T_0, \dots, T_{d-1}$, and a computable coloring $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$. There is a $\Delta^0_3$ sequence $S_0, \dots, S_{d-1}$ of strong subtrees of $T_0, \dots,\allowbreak T_{d-1}$, respectively, with common level function, such that the tuple $( S_0, \dots, S_{d-1} )$ is prehomogeneous for~$f$.
+\end{lemma}
+\begin{proof}
+By iterating \Cref{thm:milliken-prehomogeneous-one-step},
+build a $\Delta^0_3$ descending sequence of computable prehomogeneous product tree conditions
+$c_0 \geq c_1 \geq \dots$ where 
+$$
+c_s = (F^s_0, \dots, F^s_{d-1}, X^s_0, \dots, X^s_{d-1})
+$$
+and such that  $F^s_j \subsetneq F^{s+1}_j$ for every $j < d$ and $s \in \NN$.
+For every $j < d$, let $S_j = \bigcup_s F^s_j$. Since the $F^s_j$ are strictly increasing in $s$, it follows by definition of a product tree condition that $S_0, \dots, S_{d-1}$ are strong subtrees of $T_0, \dots,\allowbreak T_{d-1}$, respectively, with common level function.
+Moreover, $S_0, \dots, S_{d-1}$ are $\Delta^0_3$, and by definition of a prehomogeneous condition, $( S_0, \dots, S_{d-1})$ is prehomogeneous for~$f$.
+\end{proof}
+
+\begin{theorem}\label{thm:milliken-arithmetic}
+For every $n \geq 1$ and every set $X$, every $X$-computable instance of the product version of Milliken's tree theorem for height $n$ admits a $\Delta^{0,X}_{2n-1}$ solution.
+\end{theorem}
+\begin{proof}
+By induction on $n$. For $n = 1$, the product version of Milliken's tree theorem for height 1 is the Halpern-La\"{u}chli theorem, which is computably true by \Cref{thm:halpern-lauchli-computably-true}.
+
+Suppose the property holds for $n$, and fix a set $X$,
+and an $X$-computable sequence of $X$-computably bounded trees with no leaves $T_0, \dots, T_{d-1} \subseteq \baire$. 
+Let $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$ be an $X$-computable coloring.
+By \Cref{thm:milliken-prehomogeneous}, relativized to $X$, there is a $\Delta^{0,X}_3$ tuple $(S_0, \dots, S_{d-1}) \in \Subtree{\omega}{T_0, \dots,\allowbreak T_{d-1}}$ prehomogeneous for~$f$.
+Let $g: \Subtree{n}{S_0, \dots, S_{d-1}} \to k$ be defined by
+$g( E_0, \dots, E_{d-1} ) = f( E_0 \cup H_0, \dots, E_{d-1} \cup H_{d-1} )$ for any $H_0 \subseteq S_0(n), \dots, H_{d-1} \subseteq S_{d-1}(n)$
+such that $( E_0 \cup H_0, \dots, E_{d-1} \cup H_{d-1} ) \in \Subtree{n+1}{S_0, \dots, S_{d-1}}$. Such a coloring is well defined by prehomogenenity.
+The coloring $g$ can be seen as a $\Delta^{0,X''}_1$ instance of the product version of Milliken's tree theorem for height $n$.
+By induction hypothesis, there is a $\Delta^{0, X''}_{2n-1}$ (hence $\Delta^{0,X}_{2(n+1)-1}$) solution to $g$, which is by prehomogeneity also a solution to $f$. This completes the proof of \Cref{thm:milliken-arithmetic}.
+\end{proof}
+
+
+\begin{corollary}\label{thm:milliken-aca}
+  For every $n \geq 1$, the product version of Milliken's tree theorem for height $n$ is provable in
+  $\ACA_0$, and the product version of Milliken's tree theorem itself is provable in $\ACA'_0$.
+\end{corollary}
+\begin{proof}
+The proof of \Cref{thm:milliken-arithmetic} is formalizable in $\ACA_0$.
+The induction on $n$ can then be carried out in $\ACA'_0$.
+\end{proof}
+
+
+%\todo[inline]{``Unbury'' this theorem?}
+
+\begin{theorem}\label{thm:milliken-rt}
+  Milliken's tree theorem for height $n$ implies $\RT{n}{}$.
+\end{theorem}
+\begin{proof}
+Let $f: [\NN]^n \to k$ be an instance of $\RT{n}{}$.
+Let $T = 1^{<\omega} = \{\epsilon, 0, 00, \dots \}$ be the unary finitely branching tree with no leaves. Define $g: \Subtree{n}{T} \to k$ by $g(\sigma_0, \dots, \sigma_{n-1}) = f(|\sigma_0|, \dots, |\sigma_{d-1}|)$. 
+Now if $S$ is a strong subtree of $T$ such that $\Subtree{n}{S}$
+is monochromatic for~$g$ then $H = \{|\sigma|: \sigma \in S \}$ is homogeneous for~$f$.
+\end{proof}
+
+\begin{corollary}
+  For every $n\geq 3$, $\PMT n{}$ and $\MT n{}$ are equivalent to $\ACA_0$ over
+  $\RCA_0$. Moreover the product version of Milliken's tree theorem and Milliken's tree theorem are equivalent to $\ACA'_0$.
+\end{corollary}
+\begin{proof}
+For every $n \geq 3$, by \Cref{thm:milliken-aca}, $\ACA_0$ implies $\PMT n{}$,
+which generalizes $\MT n{}$. By \Cref{thm:milliken-rt}, $\MT n{}$ imples $\RT{n}{}$,
+and by formalization of a result of Jockusch~\cite[Theorem 5.7]{Jockusch1972Ramseys} (as formalized e.g. in~\cite{Simpson2009Subsystems}, Lemma III.7.5), $\RT{n}{}$ implies $\ACA_0$.
+Moreover, by \Cref{thm:milliken-aca}, $\ACA'_0$ implies $(\forall n)\PMT n{}$
+which generalizes $(\forall n)\MT n{}$. By \Cref{thm:milliken-rt}, $(\forall n)\MT n{}$ implies $(\forall n)\RT{n}{}$,
+which is itself known to imply $\ACA'_0$ (see~Hirschfeldt~\cite{Hirschfeldt2015Slicing}, Theorem 6.27, for a proof).
+\end{proof}
+
+
+\section{Cone avoidance of $\PMT{2}{}$}\label{subsect:cone-avoidance-pmt2}
+
+This section is devoted to the proof of cone avoidance of the product version of Milliken's tree theorem for height 2. As in the proof of cone avoidance for Ramsey's theorem for pairs (see Cholak, Jockusch and Slaman~\cite{Cholak2001strength}, Sections 3 and 4) the proof of \Cref{thm:cone-avoidance-MTT2} will be decomposed into two steps, using the notion of stability.
+
+\begin{definition}\index{stable!coloring}\index{coloring!stable}
+%[Stability]
+Fix $n \geq 1$ and a collection of trees with no leaves $T_0, \dots, T_{d-1}$. A coloring $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$ is \emph{stable} if
+for every $( F_0, \dots, F_{d-1} ) \in \Subtree{n}{T_0, \dots, T_{d-1}}$, there is a threshold $t \in \NN$ and a color $i < k$ such that for every level $\ell \geq t$ and all $E_0 \subseteq T_0(\ell), \dots, E_{d-1} \subseteq T_{d-1}(\ell)$
+for which $( F_0 \cup E_0, \dots, F_{d-1} \cup E_{d-1} ) \in \Subtree{n+1}{T_0, \dots, T_{d-1}}$, $f( F_0 \cup E_0, \dots, F_{d-1} \cup E_{d-1} ) = i$.
+\end{definition}
+
+We refer to the $i < k$ above as the \emph{limit color} of the tuple $( F_0, \dots, F_{d-1} )$. Any stable coloring $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$ induce{s}
+a coloring 
+$$
+g: \Subtree{n}{T_0, \dots, T_{d-1}} \to k
+$$
+which to $( F_0, \dots, F_{d-1} ) \in \Subtree{n}{T_0, \dots, T_{d-1}}$ associates its limit color $i < k$.
+We shall call $g$ the \emph{limit coloring} of $f$\index{coloring!limit}. Note that $g$ is $\Delta^0_2$ in $f$ and the sequence $T_0, \dots, T_{d-1}$. The notion of stability is therefore as bridge between computable instances of $\PMT{n+1}{}$ and arbitrary instances of $\PMT{n}{}$. This gives rise to a two step proof of cone avoidance of $\PMT{2}{}$.
+
+The first step consists of proving that for every instance of the product version of Milliken's tree theorem for height 2 there exist cone avoiding strong subtrees on which the coloring is stable. We will actually prove a more general theorem for products of trees, and subtrees of arbitrary height.% embedding types \benoit{embedding types has never been mentioned so far} of arbitrary height. 
+
+The second step consists of applying \emph{strong} cone avoidance of the product version of Milliken's tree theorem for height 1, which is just a particular case of the Halpern-La\"{u}chli theorem, and then computably thinning out the result to obtain a solution to the original instance of the product version of Milliken's tree theorem of height 2.
+
+%The proof of cone avoidance of the existence of stable subdomain for every coloring uses cone avoidance of the Halpern-La\"{u}chli theorem. Since the Halpern-La\"{u}chli theorem admits strong cone avoidance, we can prove an actually stronger statement:
+
+We begin with the first step.
+
+\begin{theorem}\label{thm:cmtt-admits-strong-cone-avoidance}
+Fix sets $C,Z \subseteq \NN$ with $C \nTred Z$, an $n \geq 1$, a 
+%Fix $n \geq 1$, Fix two sets $C$ and $Z$ such that $C \nTred Z$.
+$Z$-computable collection of $Z$-computably bounded trees with no leaves $T_0, \dots, T_{d-1}$, and a coloring $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$. 
+%For every coloring $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$,
+There exists $(S_0, \dots,\allowbreak S_{d-1}) \in\Subtree{\om}{T_0, \dots, T_{d-1}}$ such that $f$ is stable on $\Subtree{n+1}{S_0, \dots, S_{d-1}}$ and such that $C \nTred S_0 \oplus \dots \oplus S_{d-1} \oplus Z$.
+\end{theorem}
+
+The proof of \Cref{thm:cmtt-admits-strong-cone-avoidance} will employ a refinement of the forcing with product tree conditions. We will require some definitions and preliminary lemmas.
+%To this end, assume $C$, $Z$, and the $T_i$ are fixed.
+%, and $f$ are fixed.
+
+%From now on, fix $C$, $Z$, and $T_0, \dots, T_{d-1}$. Also fix $n\geq 1$ and a coloring $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$.
+
+\begin{definition}\index{product tree condition!cone avoiding}\index{product tree condition!stable} \index{stable!product tree condition}
+	Fix sets $C,Z \subseteq \NN$ with $C \nTred Z$, an $n \geq 1$, a 
+	%Fix $n \geq 1$, Fix two sets $C$ and $Z$ such that $C \nTred Z$.
+	$Z$-computable collection of $Z$-computably bounded trees with no leaves $T_0, \dots, T_{d-1}$, and a coloring $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$. Let $c = (F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$ be a product tree condition (with respect to the $T_i$).
+	\begin{enumerate}
+		\item $c$ is \emph{cone avoiding} if $C \nTred X_0 \oplus \dots \oplus X_{d-1} \oplus Z$.
+		\item $c$ is \emph{stable} for $f$ if for every tuple $( E_0, \dots, E_{d-1} ) \in \Subtree{n}{F_0, \dots, F_{d-1}}$, there is a color $i < k$ such that for every level $\ell \in \NN$ and every $H_0 \subseteq X_0(\ell), \dots, H_{d-1} \subseteq X_{d-1}(\ell)$ for which $( E_0 \cup H_0, \dots, E_{d-1} \cup H_{d-1} ) \in \Subtree{n+1}{T_0, \dots, T_{d-1}}$, $f( E_0 \cup H_0, \dots, E_{d-1} \cup H_{d-1} ) =~i$.
+	\end{enumerate}
+%A product tree condition $(F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$ is \emph{cone avoiding} if $C \nTred X_0 \oplus \dots \oplus X_{d-1} \oplus Z$. 
+%It is \emph{stable} for $f$  if for every $\langle E_0, \dots, E_{d-1} \rangle \in \Subtree{n}{F_0, \dots, F_{d-1}}$, there is a color $i < k$ such that for every level $\ell \in \NN$ and every $H_0 \subseteq X_0(\ell), \dots, H_{d-1} \subseteq X_{d-1}(\ell)$
+%such that $\langle E_0 \cup H_0, \dots, E_{d-1} \cup H_{d-1} \rangle \in \Subtree{n+1}{T_0, \dots, T_{d-1}}$, $f(\langle E_0 \cup H_0, \dots, E_{d-1} \cup H_{d-1} \rangle) =~i$.
+\end{definition}
+
+%For the remainder of the section, let $n \geq 1$ and $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$ be fixed. Let $\Pb$ be the partial order of all stable cone avoiding product tree conditions (with respect to $f$ and $Z$).
+%As explained in \Cref{subsect:product-tree-forcing}, every $\Pb$-filter $\Uc$ induces a $d$-tuple of (finite or infinite) strong subtrees $G^\Uc_0, \dots, G^\Uc_{d-1}$ of $T_0, \dots, T_{d-1}$, respectively, with common level function. 
+
+
+% The following lemma is useless by \Cref{lem:product-tree-genericity-implies-infinity}.
+%\begin{lemma}\label{thm:mtt2-stable-one-step}
+%For every $\Pb$-condition $c = (F_0, \dots, \allowbreak F_{d-1}, X_0, \dots,X_{d-1})$, there is a $\Pb$-condition
+%$d = (\hat{F}_0, \dots, \hat{F}_{d-1}, \hat{X}_0, \dots, \hat{X}_{d-1})$ extending $c$
+%such that $F_j \subsetneq \hat{F}_j$ for every $j < d$. 
+%\end{lemma}
+%\begin{proof}
+%The proof is exactly the same as \Cref{thm:milliken-prehomogeneous-one-step}.
+%Indeed, given a cone avoiding stable product tree condition, the proof of \Cref{thm:milliken-prehomogeneous-one-step} yields a stable product tree condition whose forests are computable from the former condition, hence cone avoiding.
+%\end{proof}
+
+Making progress in satisfying the cone avoidance requirements will demand the use of a computable function dominating the levels of a tuple of strong subtrees with certain nice combinatorial properties. %We need the following definition:
+
+% Recall that strong subtrees preserve the number of direct extension, therefore the leaves of a strong subtree $S$ of a tree $T$ must be included in the leaves of $T$. However, this might not be the case for level-closed subtrees, justifying the definition $\SubtreeLeaves{\cdot}{\cdot}$. 
+
+For now, we will take for granted the following technical result, which is a finite version of Milliken's tree theorem where all subtrees are assumed to keep the leaves and the level function is bounded. For a given tree $T$, recall the notation $\SubtreeLeaves{n}{T}$ from \Cref{def:subtreeleaves} which denotes the collection of strong subtrees of $T$ of height $n$ whose leaves are among those of $T$.
+
+%\begin{restatable}{theorem}{widget}
+%  \label{thm:main-widget-theorem}
+%  Fix a number of colors $k\in\Nb$, heights $N,n\geq 1$, a function $b:\om\to\om$ and a level $\ell\in\Nb$. Then there exists $h=\fwidg(N,\ell,n+1,k,d,b)$ as follows. If $T_0,\dots, T_{d-1}$ is a sequence of finite $b$-bounded trees of height $h$, and
+%  %$f$ is any coloring
+%  \[f:\SubtreeLeaves{n+1}{T_0,\dots,T_{d-1}}\to k\]
+%  is any coloring where $f(F_0,\dots, F_{d-1})$ depends only on $(F_0\uh n,\dots, F_{d-1}\uh n)$ whenever $F_{i}\uh n\subseteq T_i\uh \ell$ for every $i$,  then there exists $(S_0, \dots, S_{d-1}) \in\SubtreeLeaves{\ell+N+1}{T_0,\dots, T_{d-1}}$ such that:
+%  \begin{enumerate}
+%  \item\label{item:stems-widget} $S_i\uh \ell = T_i\uh \ell$;
+%  \item\label{item:hbound-widget} for any $i<d$, the level function of $S_i$ as a subset of $T_i$ is bounded by the function defined by $x\mapsto\fwidg(x,\ell, n+1,k,d, b)$ if $x>\ell$, and $x\mapsto x$ if $x\leq\ell$;
+%  \item\label{item:monochr-widget}
+%    the color of $(F_0,\dots, F_{d-1})\in \SubtreeLeaves{n+1}{S_0,\dots,S_{d-1}}$ depends only on $(F_0\uh n,\dots, F_{d-1}\uh n)\in \Subtree{n}{S_0,\dots,S_{d-1}}$.
+%  \end{enumerate}
+%\end{restatable}
+
+\begin{restatable}{theorem}{widget}
+  \label{thm:main-widget-theorem}
+	%There exists a function $\fwidg: \NN^6 \to \NN$ as follows.
+	Fix a level $\ell \in \NN$, a height $n \geq 1$, a number of colors $k \in \NN$, an arity $d \geq 1$, and a function $b:\om\to\om$. There exists a function $N \mapsto \fwidg(N,\ell,n+1,k,d,b)$, uniformly $b$-computable in $\ell$, $n$, $k$, and $d$, as follows. If $U_0,\dots, U_{d-1}$ is a sequence of finite $b$-bounded trees of height $h = \fwidg(N,\ell,n+1,k,d,b)$ for some fixed $N \in \NN$, and
+  %$f$ is any coloring
+  \[\chi:\SubtreeLeaves{n+1}{U_0,\dots,U_{d-1}}\to k\]
+  is any coloring where $\chi(F_0,\dots, F_{d-1})$ depends only on $(F_0\uh n,\dots, F_{d-1}\uh n)$ whenever $F_{i}\uh n\subseteq U_i\uh \ell$ for every $i$,  then there exists $(V_0, \dots, V_{d-1}) \in\SubtreeLeaves{\ell+N+1}{U_0,\dots, U_{d-1}}$ such that:
+  \begin{enumerate}
+  \item\label{item:stems-widget} $V_i\uh \ell = U_i\uh \ell$ for each $i < d$;
+  \item\label{item:hbound-widget} for any $i<d$, the level function of $V_i$ as a subset of $U_i$ is bounded by the function defined by $x\mapsto\fwidg(x,\ell, n+1,k,d, b)$ if $x>\ell$, and $x\mapsto x$ if $x\leq\ell$;
+  \item\label{item:monochr-widget}
+    the color of $(F_0,\dots, F_{d-1})\in \SubtreeLeaves{n+1}{V_0,\dots,V_{d-1}}$ depends only on $(F_0\uh n,\dots, F_{d-1}\uh n)\in \Subtree{n}{V_0,\dots,V_{d-1}}$.
+  \end{enumerate}
+\end{restatable}
+ 
+To help understand the statement of \Cref{thm:main-widget-theorem},
+suppose $S_0, \dots, S_{d-1}$ are infinite, computable and computably bounded trees with no leaves. Also fix a coloring $g: \Subtree{n+1}{S_0, \dots, S_{d-1}} \to k$.
+Consider a product tree condition $(E_0, \dots, E_{d-1}, X_0, \dots, X_{d-1})$ for these $S_i$ which is stable for $g$. Say the $E_i$ are of height $\ell$. One would like to extend the stems with $N$ new levels in one step, so that the resulting stems are of height $\ell+N$, while keeping the resulting product tree condition stable for $g$. 
+\Cref{thm:main-widget-theorem} provides a sufficient bound $h = \fwidg(N,\ell,n+1,k,d,b)$ depending on the number $N$ of new levels we would like to add, on the height $\ell$ of the stems, the parameters $n+1$ and $k$ of the coloring $g$,
+%$g: \Subtree{n+1}{S_0, \dots, S_{d-1}} \to k$,
+on the number $d$ of trees in the product tree condition, and on the computable bound $b$ over the trees $E_0 \cup X_0, \dots, E_{d-1} \cup X_{d-1}$,
+ 	so that one can always find such an extension of the stems where the new elements are taken among the first $h$ first levels of  $E_0 \cup X_0, \dots, E_{d-1} \cup X_{d-1}$.
+ 	
+ In the statement of \Cref{thm:main-widget-theorem}, the finite trees $U_0, \dots, U_{d-1}$
+ correspond to the trees $E_0 \cup X_0, \dots, E_{d-1} \cup X_{d-1}$ up to level $h$, respectively. 
+  Let $Y_0, \dots, Y_{d-1}$ be the forests obtained from the trees $E_0 \cup X_0, \dots, E_{d-1} \cup X_{d-1}$ by removing their first $h-1$ many levels.
+ For each $j < d$, the tree $U_j$ therefore has three parts. First, we have the first $\ell$ levels, which correspond to to the stem $E_j$. Second, we have the levels up to the one before the leaves, which will serve to extend the stem $E_j$. Very few of these levels will be kept, but $h$ is chosen large enough so that we can always extend with $N$ new levels. Last, the leaves of $U_j$ correspond to the roots of the forest $Y_j$.
+ 
+Fixing strong subtrees $(F_0, \dots, F_{d-1}) \in \SubtreeLeaves{n+1}{U_0, \dots, U_{d-1}}$ of height $n+1$ should actually be understood as fixing strong subtrees $(F_0 \uh n, \dots, F_{d-1} \uh n)$ of height $n$ from the trees $U_0, \dots, U_{d-1}$ trimmed from their leaves,
+and then picking a set of roots from $Y_0, \dots, Y_{d-1}$ (or equivalently picking a set of leaves from $U_0, \dots, U_{d-1}$). This induces a product coloring of the nodes in $Y_0, \dots, Y_{d-1}$ pointwise extending the product of the roots chosen, by considering which color the function $g$ assigns to the strong subtrees $(F_0 \uh n, \dots, F_{d-1} \uh n)$ augmented by these nodes. Multiple applications of the Halpern-Lauchli theorem yield subforests $Z_0, \dots, Z_{d-1}$ of $Y_0, \dots, Y_{d-1}$ with the same set of roots such that the induced coloring has a limit color on products of nodes from the $Z_i$.
+%, and on which each induced function has a limit color.
+This limit color therefore depends only on the choice of element from $\SubtreeLeaves{n+1}{U_0, \dots, U_{d-1}}$. This is how we define the limit function $\chi: \SubtreeLeaves{n+1}{U_0, \dots, U_{d-1}}$.
+
+%It is important to keep in mind, in the statement of \Cref{thm:main-widget-theorem}, that $f$ is not the local value of the strong subtrees in $\SubtreeLeaves{n+1}{U_0, \dots, U_{d-1}}$, but the limit color of these strong subtrees when we replace their leaves by any pointwise extension in the reservoirs $Z_0, \dots, Z_{d-1}$.
+
+
+%\benoit{I find suspicious that we need such complex combinatorics to prove 4.10. Let $f$ be a computable $2$-color on elements of $\mathcal{S}_{n+1}(T_0, \dots, T_{d-1})$. Given a condition 
+%
+%$(F_0, \dots, F_{d-1}, Y_{0}, \dots, Y_{d-1})$ 
+%
+%and given a tree $T \in \mathcal{S}_n(T_0, \dots, T_{d-1})$, we can define $g$ on 
+%
+%$\bigcup_{n} \Pi_{j < d, \rho \in \roots(Y_j)} (Y_j \upharpoonright {\rho}) (n)$ (roughly)
+%
+%to be $g(H) = f(T \cup H)$ if $T \cup H$ belongs to $\mathcal{S}_{n+1}(T_0, \dots, T_{d-1})$ and a third color otherwise. By applying HL on the reservoirs we make the color stable for $T$ on our generic (maybe by making that no finite subtree of height $n+1$ starts with $T$). Why cannot we mix this for every $T \in \mathcal{S}_{n}(T_0, \dots, T_{d-1})$ with the forcing conditions for cone avoidance ?}
+
+The proof of \Cref{thm:main-widget-theorem} requires some rather heavy combinatorial development, and so we postpone it to the next section. Instead, we first show how to use the theorem to obtain \Cref{thm:cmtt-admits-strong-cone-avoidance}.
+
+
+\begin{lemma}\label{thm:cmtt-admits-strong-cone-avoidance-req}
+Fix sets $C,Z \subseteq \NN$ with $C \nTred Z$, an $n \geq 1$, a 
+	%Fix $n \geq 1$, Fix two sets $C$ and $Z$ such that $C \nTred Z$.
+	$Z$-computable collection of $Z$-computably bounded trees with no leaves $T_0, \dots, T_{d-1}$, and a coloring $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$. Let $\Pb$ be the partial order of all stable cone avoiding product tree conditions (with respect to the givens). For every $\Pb$-condition $c$ and every Turing functional $\Gamma$, there is a $\Pb$-condition $c'$ extending $c$ such that $c' \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$.
+\end{lemma}
+\begin{proof}
+Fix $c = (F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$. By \Cref{remark:product-tree-condition-roots}, we can assume that $(F_0 \cup X_0, \dots, F_{d-1} \cup X_{d-1}) \in \Subtree{\omega}{T_0, \dots, T_{d-1}}$. Let $b: \NN \to \NN$ be a $Z$-computable function bounding the trees $F_0 \cup X_0, \dots, F_{d-1} \cup X_{d-1}$,
+	and let $\ell$ be the height of $F_0, \dots, F_{d-1}$.
+
+
+Let $W$ be the set of all pairs $(x, v) \in \NN \times \{0,1\}$ such that for every $d$-tuple of strong subforests $Y_0, \dots, Y_{d-1}$ of $X_0, \dots, X_{d-1}$, respectively, with common level function dominated by $N \mapsto \fwidg(N,\ell,n+1,k,d, b)$, and such that for every $j < d$, every root of $X_j$ is extended by a root of $Y_j$, there is some $d$-tuple $H_0 \subseteq Y_0, \dots, H_{d-1} \subseteq Y_{d-1}$
+	with $(F_0 \cup H_0, \dots, F_{d-1} \cup H_{d-1}) \in \Subtree{<\omega}{T_0, \dots, T_{d-1}}$ and
+$$
+\Gamma^{(F_0 \cup H_0) \oplus \dots \oplus (F_{d-1} \cup H_{d-1}) \oplus Z}(x)\downarrow = v.
+$$
+By compactness, the set $W$ is $X_0 \oplus \dots \oplus X_{d-1} \oplus Z$-c.e. We have three cases.
+
+\case{1}{$(x, 1-C(x)) \in W$ for some $x \in \NN$.} By compactness, there is some height $N_0 \in \NN$ such that the property holds for every $d$-tuple
+%$V_0, \dots, V_{d-1}$
+of strong subforests of $X_0, \dots, X_{d-1}$, respectively, of height $N_0$ with common level function dominated by $N \mapsto \fwidg(N,\ell,n+1,k,d, b)$.
+Let $U_0, \dots, U_{d-1}$ be the finite trees obtained by restricting $F_0 \cup X_0, \dots, F_{d-1} \cup X_{d-1}$, respectively, to their first $\fwidg(N_0,\ell,n+1,k,d, b)$ many levels.
+In particular, $U_0, \dots, U_{d-1}$ are $b$-bounded trees of height $\fwidg(N_0,\ell,n+1,k,d, b)$.
+
+Fixing a tuple $(E_0, \dots, E_{d-1}) \in \SubtreeLeaves{n+1}{U_0, \dots, U_{d-1}}$,
+the coloring $f$ induces a function 
+$$
+g: \bigcup_m \prod_{j < d} \prod_{\rho \in \leaves(E_j)} (X_j \uh \rho)(m) \to k
+$$
+define for all tuples $\pi = (\sigma^\rho_j \in (X_j \uh \rho)(m): j < d, \rho \in \leaves(E_j))$ by
+\[
+	g(\pi) = f(\{ (E_j \uh n) \cup \{\sigma^\rho_j\:\  \rho \in \leaves(E_j)\}:  j < d\}).
+\]
+Thus, by iteratively applying strong cone avoidance of the Halpern-La\"{u}chli theorem (\Cref{thm:hl-strong-cone-avoidance}), there exists a $d$-tuple of strong subforests $Y_0, \dots, Y_{d-1}$ of $X_0, \dots, X_{d-1}$, respectively, with common level function, such that:
+\begin{itemize}
+	\item[(a)] for every $j < d$, every leaf of $U_j$ is extended by exactly one root of $Y_j$;
+	\item[(b)] for every $(E_0, \dots, E_{d-1}) \in \SubtreeLeaves{n+1}{U_0, \dots, U_{d-1}}$, there is a color $i < k$ such that for every $( \sigma^\rho_j: j < d, \rho \in \leaves(E_j) ) \in \bigcup_m \prod_{\rho \in \leaves(E_j)} (Y_j \uh \rho)(m)$, $f(\{ (E_j \uh n) \cup \{\sigma^\rho_j\:\  \rho \in \leaves(E_j)\}:  j < d\}) = i$;
+	\item[(c)] $C \nTred Y_0 \oplus \dots \oplus Y_{d-1} \oplus Z$.
+\end{itemize}
+Item (b) induces a coloring $\chi: \SubtreeLeaves{n+1}{U_0,\dots,U_{d-1}}\to k$
+which to $(E_0, \dots, E_{d-1})$ associates the unique color $i < k$ as specified there.
+By \Cref{thm:main-widget-theorem}, there are finite strong subtrees $V_0, \dots, V_{d-1}$ of $U_0, \dots, U_{d-1}$, respectively, of height $N_0 + \ell$ with common level function, such that for every $j < d$, $V_j \uh \ell = F_j$, the level function of $V_j$ is bounded by $N \mapsto \fwidg(N,\ell,n+1, k,d, b)$ if $N > \ell$, and the color of $(E_0, \dots, E_{d-1}) \in \SubtreeLeaves{n+1}{V_0,\dots,V_{d-1}}$ with respect to $\chi$ depends only on $(E_0 \uh n, \dots, E_{d-1} \uh n)$. By choice of $N_0$, there are some $H_0 \subseteq V_0, \dots, H_{d-1} \subseteq V_{d-1}$
+	such that $F_0 \cup H_0, \dots, F_{d-1} \cup H_{d-1}$ are finite strong subtrees of $T_0, \dots, T_{d-1}$, respectively, with common level function, and such that
+$$
+\Gamma^{(F_0 \cup H_0) \oplus \dots \oplus (F_{d-1} \cup H_{d-1}) \oplus Z}(x)\downarrow = v.
+$$
+The tuple $c' = (F_0 \cup H_0, \dots, F_{d-1} \cup H_{d-1}, Y_0, \dots, Y_{d-1})$
+	is therefore a cone avoiding stable product tree condition extending $c$ that satisfies
+$$
+c' \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C.
+$$
+
+\case{2}{$(x, C(x)) \not \in W$ for some $x \in \NN$.} Let $\Cc$ be the class of all strong subforests $Y_0, \dots, Y_{d-1}$ of $X_0, \dots, X_{d-1}$, respectively, with common level function dominated by $N \mapsto \fwidg(N,\ell,n+1,k,d, b)$ such that for every $j < d$, every root of $X_j$ is extended in a root of $Y_j$, and for every $d$-tuple $H_0 \subseteq Y_0, \dots, H_{d-1} \subseteq Y_{d-1}$
+	for which $F_0 \cup H_0, \dots, F_{d-1} \cup H_{d-1}$ are finite strong subtrees of $T_0, \dots, T_{d-1}$, respectively, again with common level function, we have
+$$
+\Gamma^{(F_0 \cup H_0) \oplus \dots \oplus (F_{d-1} \cup H_{d-1}) \oplus Z}(x) \uparrow \text{ or } \Gamma^{(F_0 \cup H_0) \oplus \dots \oplus (F_{d-1} \cup H_{d-1}) \oplus Z}(x) \downarrow \neq v.
+$$
+%where inequality means either divergence, or halting on a different value.
+Since the trees $T_0, \dots, T_{d-1}$ are $Z$-computably bounded and the level function of $Y_0, \dots, Y_{d-1}$ is dominated by the $Z$-computable function $\fwidg$, it follows that $\Cc$ is  a $\Pi^0_1$ class relative to $X_0 \oplus \dots \oplus X_{d-1} \oplus Z$. Moreover, by assumption, $\Cc$ is non-empty.
+
+By the cone avoidance basis theorem, there is some $( Y_0, \dots, Y_{d-1}) \in \Cc$ such that $C \nTred Y_0 \oplus \dots \oplus Y_{d-1} \oplus Z$. The tuple $c' = (F_0, \dots, F_{d-1}, Y_0, \dots, Y_{d-1})$ is then a $\Pb$-condition extending $c$ such that
+$$
+c' \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C.
+$$
+
+\case{3}{otherwise.} Then we have that $(x,y) \in W$ if and only if $C(x) = y$, so $C \Tred X_0 \oplus \cdots \oplus X_{d-1} \oplus Z$.
+%Then $W$ is an $X_0 \oplus \dots \oplus X_{d-1} \oplus Z$-c.e.\ graph of the characteristic function of $C$, hence $C \leq X_0 \oplus \dots \oplus X_{d-1} \oplus Z$. Contradiction.
+\end{proof}
+
+
+\begin{proof}[Proof of \Cref{thm:cmtt-admits-strong-cone-avoidance}]
+Fix two sets $C$ and $Z$ such that $C \nTred Z$.
+Also fix a $Z$-computable collection of $Z$-computably bounded trees with no leaves $T_0, \dots,\allowbreak T_{d-1} \subseteq \baire$.
+ Let $n\geq 1$ and $f: \Subtree{n+1}{T_0, \dots, T_{d-1}} \to k$ be a coloring. Let $\Pb$ be the partial order of all cone avoiding product tree conditions which are stable for $f$, and let $\Uc$ be a sufficiently generic $\Pb$-filter.
+Let $G^\Uc_0, \dots, G^\Uc_{d-1}$ be the strong subtrees of $T_0, \dots, T_{d-1}$ induced by $\Uc$. By \Cref{thm:cmtt-admits-strong-cone-avoidance-req},
+for every Turing functional $\Gamma$, there is some $\Pb$-condition $c \in \Uc$
+such that $c \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$.
+Hence, $C \nTred G^\Uc_0 \oplus \dots \oplus G^\Uc_{d-1} \oplus Z$.
+Moreover, by \Cref{lem:product-tree-genericity-implies-infinity}, $G^\Uc_0, \dots, G^\Uc_{d-1}$ are all infinite. And finally, since $\Uc$ contains only stable conditions, $f$ is stable on $\Subtree{n}{G_0, \dots, G_{d-1}}$.
+This completes the proof of \Cref{thm:cmtt-admits-strong-cone-avoidance}.
+\end{proof}
+
+We are ready to prove cone avoidance of $\PMT{2}{}$.
+
+\begin{theorem}\label{thm:cone-avoidance-MTT2}
+  The product version of Milliken's tree theorem for height 2 admits cone avoidance.
+\end{theorem}
+\begin{proof}
+Fix two sets $C$ and $Z$ such that $C \nTred Z$.
+Also fix a $Z$-computable collection of $Z$-computably bounded trees with no leaves $T_0, \dots,\allowbreak T_{d-1} \subseteq \baire$ and a $Z$-computbale coloring $f: \Subtree{2}{T_0, \dots, T_{d-1}} \to k$.
+ 
+By \Cref{thm:cmtt-admits-strong-cone-avoidance}, there are strong subtrees $S_0, \dots, S_{d-1}$ of $T_0, \dots, T_{d-1}$, respectively, with common level function, such that $f$ is stable on $\Subtree{2}{S_0, \dots, S_{d-1}}$, and such that $C \nTred S_0 \oplus \dots \oplus S_{d-1} \oplus Z$. By stability, the coloring $f$ induces a $k$-partition $A_0 \sqcup \dots \sqcup A_{k-1} = \bigcup_n S_0(n) \times \dots \times S_{d-1}(n)$ by letting
+$A_i$ be the set of tuples $(\sigma_0, \dots, \sigma_{d-1}) \in \bigcup_n S_0(n) \times \dots \times S_{d-1}(n)$ such that for all but finitely many levels $\ell \in \NN$,
+whenever $(\{\sigma_0\} \cup H_0, \dots, \{\sigma_{d-1}\} \cup H_{d-1}) \in \Subtree{2}{S_0, \dots, S_{d-1}}$
+%where $H_j \subseteq S_j(\ell)$ for each $j < d$,
+then $f( \{\sigma_0\} \cup H_0, \dots, \{\sigma_{d-1}\} \cup H_{d-1} ) = i$.
+
+By \Cref{thm:hl-strong-cone-avoidance}, there is some color $i < k$
+and some strong subtrees $U_0, \dots, U_{d-1}$ of $S_0, \dots, S_{d-1}$, respectively, with common level function, such that $\bigcup_n U_0(n) \times \dots \times U_{d-1}(n) \subseteq A_i$ and $C \nTred U_0 \oplus \dots \oplus U_{d-1} \oplus Z$.
+By $U_0 \oplus \dots \oplus U_{d-1} \oplus Z$-computably thinning out the set of levels,
+we can obtain a tuple of strong subtrees $V_0, \dots, V_{d-1}$ of $U_0, \dots, U_{d-1}$, respectively, with common level function, such that
+$\Subtree{2}{V_0,\dots, V_{d-1}}$ is monochromatic for color $j$ with respect to $f$.
+In particular, by transitivity of the strong subtree relation, $V_0, \dots, V_{d-1}$ are strong 
+subtrees of $T_0, \dots, T_{d-1}$ with common level function, and $C \nTred V_0 \oplus \dots \oplus V_{d-1} \oplus Z$.
+This completes the proof.
+\end{proof}
+
+\begin{corollary}
+$\RCA_0 \wedge \PMT 2{}\not\vdash\ACA_0$.
+\end{corollary}
+\begin{proof}
+Immediate by \Cref{thm:cone-avoidance-MTT2} and \Cref{lem:cone-avoidance-not-aca}.
+\end{proof}
+
+%The remainder of this section is devoted to the proof of \Cref{thm:main-widget-theorem}.
+%\bigskip
+
+\section{Proof of \Cref{thm:main-widget-theorem}}
+
+We now prove the main technical result used in the preceding section. We shall restate it in full below for convenience. First, we have the following lemma.
+%\smallskip
+%\subsubsection{Finite bounded MTT for perfect binary trees}
+%We prove here Theorem~\ref{thm:main-widget-theorem}, a finite version of Milliken's tree theorem where all subtrees have their leaves included in their parent tree. Moreover, we have a bound on the level function of the subtrees witnessing the theorem.
+%the level function is bounded. 
+%In what follows, fix a product embedding type $\embfont e$, and a sequence of computably bounded trees $T_0,\dots, T_{d-1}$. Note that the function defined in \cref{lem:finitary-strong-hl-tuple,def:h-widg,def:iter-fhl} depend on $\embfont e$ and the trees $T_0,\dots, T_{d-1}$, more precisely in the branching number of the nodes of the trees.
+%\todo[inline]{In the definition of $\fhl(N,d,k)$ given by the next Lemma, the value $N$ is the length of the resulting tree, $d$ is the number of trees in the product, and $k$ is the number of colors.}
+%In this section, toward a finite Milliken's tree theorem, we will be dealing with finite trees, and especially with bounds on the height of these trees. These bounds highly depend on how much the tree is branching.
+% \begin{definition}
+%   Let $T$ be a tree, and $b:\om\to\om$. We say that $T$ is $b$-bounded if $\forall n$, $\forall \sigma\in T(n)$, $\exists k\leq b(n)$ such that $\sigma$ is $k$-branching. We say that $T$ is computably bounded if there exists a computable $b$ such that $T$ is $b$-bounded.
+% \end{definition}
+%The following lemma states the existence of a threshold $h = \fhl(N, d, k, b)$ such that for every $k$-coloring of the $d$-tuples of leaves of finite $b$-bounded trees of height $h$, one can find strong subtrees of height $N$ with their leaves included in the original trees, whose set of leaves yield a monochromatic product. %The lemma actually proves a more general form about colorings of products of leaves for a finite collection of trees.
+\begin{lemma}[Finitary Halpern-La\"{u}chli theorem for leaves]\label{lem:finitary-strong-hl-tuple}
+	Fix a number of colors $k \in \NN$, an arity $d \geq 1$, and a function $b:\om\to\om$. There exists a function $N \mapsto \fhl(N, k, d, b)$, uniformly $b$-computable in $k$ and $d$ as follows.
+  %There exists a computable function $\fhl(N, d, k, b)$ such that
+  If $U_0,\dots, U_{d-1}$ is a sequence of finite $b$-bounded trees of height $h=\fhl(N,k,d,b)$ for some fixed $N \geq 1$, and
+  %for any finite coloring of tuple of leaves
+  \[g:\exleavesprodtree{U}{d}{h}\to k\]
+  is any coloring of the $d$-tuples of leaves from this sequence, then there exists % finite perfect strong subtrees
+  $(V_0,\dots,V_{d-1})\in\SubtreeLeaves{N}{U_0,\dots, U_{d-1}}$, % of respectively $T_0,\dots, T_{d-1}$ with a common level function and height
+  % \footnote{We require the resulting tree to be of height $N+1$ as we are interested in the height of the tree without the leaves, which is $N$.}
+%  $N$,
+  such that $g$ is constant on the product of the leaves
+%  \begin{enumerate}
+%  \item $S_0$ and $S_1$ are of height $N$,
+%  \item the leaves of $S_m$ are included in the leaves of $T_m$, that is, $S_m(N-1)\subseteq T_m(h-1)$ for any $m<d$,
+%\item
+  %the product of the leaves
+  \[\exleavesprodtree V d N.\]
+  %is monochromatic for $f$.
+%  \end{enumerate}
+\end{lemma}
+%Recall that as $S_i$ is a strong subtree of $T_i$, the leaves of $S_i$ are included in the leaves of $T_i$, so $S_i(N-1)\subseteq T_i(h-1)$ for $i<d$.
+\begin{proof}
+  % \todo[inline]{  By compacity, the strong Halpern-La\"{u}chli theorem and the ``normalization coloring''. }
+  %Fix $k$ and $d$ in $\Nb$.
+  Let $\Cc$ be the space of all functions
+%  By the compactness of the space
+  \[
+    %\left\{
+    f: \bigcup_n T_0(n)\times\dots\times T_{d-1}(n) \to k
+    %T_0,\dots,T_{d-1}\text{ $b$-bounded trees}\right\}
+  \]
+  where $T_0,\dots,T_{d-1}$ are $b$-bounded trees. By compactness of $\Cc$,
+%  of colorings into $k$ colors of product of nodes from $b$-bounded trees at the same level \benoit{I think this should be rephrased: If I understand the compactness theorem is applied to both the space of trees and the space of coloring, for a unique level function fixed in advance},
+  the Halpern-La\"{u}chli theorem (\Cref{th:strong-hl}) yields the existence of a function $\fhl(\cdot,k,d, b):\Nb\to\Nb$ such that for any $N$, any collections of $b$-bounded trees $T_0,\dots, T_{d-1}$ of height $\fhl(N,k,d,b)$, and any $f: \bigcup_{n<\fhl(N,k,d,b)} {T}_0(n) \times \dots \times {T}_{d-1}(n) \to k$, there exists $(S_0,\dots,S_{d-1}) \in \Subtree{N}{T_0,\ldots,T_{d-1}}$ such that $f$ is constant on $\bigcup_{n<N} {S}_0(n) \times \dots \times {S}_{d-1}(n)$.
+  
+  Now, consider the given trees $U_0,\ldots,U_{d-1}$ of height $h = \fhl(N,k,d,b)$, and the given coloring $g$.
+%  The function $\fhl$ will be a witness of the lemma. However, we are not yet done, as the strong subtrees are not required to include the leaves of the initial trees. Consider any collections of perfect trees $T_0,\dots, T_{d-1}$ of height $h=\fhl(N,d,k,b)$, and a coloring $f$ of, this time, the product of \emph{leaves}: \[f:{T}_0(h-1) \times \dots \times {T}_{d-1}(h-1)\to k.\]% into $k$ colors.
+  Define
+  \[
+  	f: \bigcup_{n<h} {U}_0(n) \times \dots \times {U}_{d-1}(n) \to k
+  \]
+  by $f(\sigma_0,\ldots,\sigma_{d-1}) = g(l_{\sigma_0},\dots, l_{\sigma_{d-1}})$,
+  where $l_\sigma$ for each $\sigma \in U_i$ denotes a choice of leaf extending $\sigma$. 
+  
+%  $g$ of the product of \emph{nodes} in order to apply the property of $\fhl$. For any node $\sigma$ of a tree $T_i$ for some $i<d$, let $l_\sigma\in T_i(h-1)$ be a leaf extending $\sigma$, for instance the leftmost one. Then,
+ % \[
+ %   g\colon
+ %   \begin{array}{rcl} 
+ %     \bigcup_{n<h} {T}_0(n) \times \dots \times {T}_{d-1}(n) &\to& k \\ 
+ %     (\sigma_0,\dots,\sigma_{d-1}) &\mapsto& f(l_{\sigma_0},\dots, l_{\sigma_{d-1}})
+ %   \end{array}
+ % \]
+  
+  By the property of $\fhl$, let $S_0,\dots S_{d-1}$ be strong subtrees of $T_0,\dots, T_{d-1}$ of height $N$ and with a common level function such that $f$ is constant on $\bigcup_{n<N} {S}_0(n) \times \dots \times {S}_{d-1}(n)$. For $i<d$, set
+  %define $V_i$ by replacing the last level by their extension chosen by $l$, that is,
+  \[V_i=\bigcup_{n<N-1}S_i(n)\cup\{l_\sigma:\sigma\in S_i(N-1).\}\]
+  Thus, $(V_0,\ldots,V_{d-1}) \in \SubtreeLeaves{N}{U_0,\dots, U_{d-1}}$, and as $f$ is constant on $S_0(N-1)\times\dots\times S_{d-1}(N-1)$ it follows that $g$ is constant on $V_0(N-1)\times\dots\times V_{d-1}(N-1)$. (Note that by definition of the $V_i$ and the $l_\sigma$, $V_0(N-1)\times\dots\times V_{d-1}(N-1)$ is a subset of $T_0(h-1)\times\dots\times T_{d-1}(h-1)$, the domain of $g$.)
+%  The collection $\hat{S}_0,\dots,\hat{S}_{d-1}$ consists of strong subtrees of $T_0,\dots,T_{d-1}$ of height $N$ and with a common level function. Moreover, as $S_0(N-1)\times\dots\times S_{d-1}(N-1)$ is monochromatic for $g$, the set $\hat{S}_0(N-1)\times\dots\times\hat{S}_{d-1}(N-1)$ is a monochromatic for $f$. Note that by definition of $\hat S_i(N-1)$ and $l_\sigma$, $\hat{S}_0(N-1)\times\dots\times\hat{S}_{d-1}(N-1)$ is a subset of $T_0(h-1)\times\dots\times T_{d-1}(h-1)$, the domain of $f$.
+\end{proof}
+
+We are now ready to prove \Cref{thm:main-widget-theorem} stated earlier. Recall that it is a finitary version of Milliken's tree theorem for $\SubtreeLeaves{n+1}{\cdot}$, meaning that we color strong subtrees of a certain height that also preserve the leaves. We recall the full statement.
+
+\widget*
+
+We begin by giving the definition of the function $H$.
+
+\begin{definition}
+	Fix a level $\ell \in \NN$, a height $n \geq 1$, a number of colors $k \in \NN$, an arity $d \geq 1$, and a function $b:\om\to\om$. Define a function $N \mapsto \hat{H}(N,\ell,n,k,d,b)$ inductively as follows:
+	\begin{enumerate}
+		\item $\hat\fwidg(0,\ell,n,k,d,b)=0$;
+		\item if $\hat\fwidg(N-1,\ell, n,k,d,b) = H_{N-1}$ is defined, then
+		\[
+   			\hat\fwidg(N,\ell,n,k,b)= \hat\fwidg(N-1,\ell,n,k,d,b) + \fhl(2, K, D, B),
+  		\]
+  		where
+  		\begin{itemize}
+  			\item $K$ is the cardinality of the set of all $k$-valued functions defined on
+  			\[
+  			\Pc(U_0 \uh H_N) \times \cdots \times \Pc(U_{d-1} \uh H_N) \times \Pc(U_0(H_N)) \times \cdots \times \Pc(U_{d-1}(H_N))
+ 			 \]
+  			for some $b$-bounded trees $T_0,\ldots,T_{d-1}$;
+  			%\item $K$ is the cardinality of the set of finite functions with domain the product of $\Pc(T_0\uh H_{N-1})\times\dots\times \Pc(T_{d-1}\uh H_{N-1})$ and $T_0(H_{N-1})\times\dots\times T_{d-1}(H_{N-1})$;
+  			\item $D=d\times\prod_{i<\ell}b(i)\prod_{i<H_{N-1}}b(\ell+i)$;
+  			\item $B$ is the function $n \mapsto b(n+H_{N-1})$.
+  		\end{itemize}
+	\end{enumerate}
+	Define $\fwidg$ by
+	\[
+		\fwidg(N,\ell, n,k,d,b)= \ell+\hat\fwidg(N,\ell,n,k,d,b).
+	\] 
+\end{definition}
+
+Note that $D$ corresponds to a bound on the number of leaves of $d$ many $b$-bounded trees of height $\ell+H_{N-1}$, and that $B$ is a bounding function for subtrees of a $b$-bounded tree that contains all the level{s} starting from $H_{N-1}$. \Cref{fig:widget} helps shed light on some of the parameters given to $\fhl$ in the definition of $\fwidg$.
+%They are chosen so we can apply \Cref{lem:finitary-strong-hl-tuple} to the collections of subtrees of $b$-bounded trees that extend some node at level $H_{N-1}$.
+
+
+%In the above definition, we recall that $\Pc(T_i\uh H_{N-1})$ consists of the set of nodes of $T_i$ with level less than $H_{N-1}$, while $T_i(H_{N-1})$ denotes the set of nodes of $T_i$ at level $H_{N-1}$.
+
+%\bigskip
+%\bigskip
+%\bigskip
+
+%\begin{definition}\label{def:h-widg}
+%%  In the following definition, $N$ will be used as for length of the resulting trees, $n$ for the length of the tuple for the coloring, $k$ for the number of colors and $d$ for the number of tree in the product.
+%  
+%  First define $\hat\fwidg$ inductively as follows: Fix a level $\ell$, a height $n\geq 1$, a number of color $k$, a number of trees $d$ and a tree-bounding function $b:\om\to\om$. Then:
+%  \[    \hat\fwidg(0,\ell,n,k,d,b)=0\]
+%%  \[    \fwidg(1,n,k,d,b)=1\]
+%  Now, suppose that $H_{N-1}=\hat\fwidg(N-1,\ell, n,k,d,b)$ is defined. Then,
+%  \[
+%    % \begin{array}[t]{rll}
+%    \hat\fwidg(N,\ell,n,k,b)= \hat\fwidg(N-1,\ell,n,k,d,b) + \fhl(2, D, K, B).
+%  \]
+%  with
+%  \begin{itemize}
+%  \item $D=d\times\prod_{i<\ell}b(i)\prod_{i<H_{N-1}}b(\ell+i)$, which corresponds to a bound to the number of leaves of $d$ $b$-bounded trees of height $\ell+H_{N-1}$.
+%  \item $K$ is the cardinality of the set of finite functions with:
+%    \begin{itemize}
+%    \item domain the product of $\Pc(T_0\uh H_{N-1})\times\dots\times \Pc(T_{d-1}\uh H_{N-1})$ and $T_0(H_{N-1})\times\dots\times T_{d-1}(H_{N-1})$. Recall that $\Pc(T_i\uh H_{N-1})$ consists of the set of nodes of $T_i$ with level less than $H_{N-1}$, while $T_i(H_{N-1})$ denotes the set of nodes of $T_i$ at level $H_{N-1}$;
+%    \item range $k$, for some $b$-bounded trees.
+%    \end{itemize}
+%%     \benoit{What is $\mathcal{P}$ anyway ?}, and whose 
+%  \item $B=b\circ(n\mapsto n+H_{N-1})$ is a bounding function for subtrees of a $b$-bounded tree, that contains all the level{s} starting from $H_{N-1}$.
+%  \end{itemize}
+%Now, define $\fwidg$ by
+%\[    \fwidg(N,\ell, n,k,d,b)= \ell+\hat\fwidg(N,\ell,n,k,d,b)\]
+%
+%\end{definition}
+%\benoit{I don't know if it is normal, but one parameter is missing.}
+%Having a look at  \Cref{fig:widget} helps to understand some parameters given to $\fhl$ in the definition of $\fwidg$. They are chosen so that one can apply \Cref{lem:finitary-strong-hl-tuple} to the collection of subtrees of $b$-bounded trees that extend a node at level $H_{N-1}$, for a big number of color.
+
+%The following theorem is in some way a ``block extension'' in the construction of a homogeneous strong subtree.
+%\benoit{blablabla, We are now ready to prove Theorem 4.13 stated above, and that we restate here for convenience, blablabla}
+
+%We are now ready to prove \Cref{thm:main-widget-theorem} stated above. Recall that it is a finitary version of Milliken's tree theorem for $\SubtreeLeaves{n+1}{\cdot}$, meaning that we color strong subtrees of a certain height that also preserve the leaves. %Moreover, the level function of the resulting subtree is bounded by $\fwidg$, allowing us to use compacity as in Case 1 of \Cref{thm:cmtt-admits-strong-cone-avoidance-req}. We restate \Cref{thm:main-widget-theorem} here for convenience.
+
+%The following theorem is a finitary version of Milliken's tree theorem for $\SubtreeLeaves{\embfont e}{\cdot}$, that is, where the colors are given to strong subtrees of a certain embedding type \benoit{do embedding types still exists ?} that preserve the leaves. Moreover, the level function of the resulting subtree is bounded by $\fwidg$.
+
+%Fix $n\geq 1$. \benoit{$n$ is introduced in the theorem}
+
+\begin{proof}[Proof of \Cref{thm:main-widget-theorem}]
+  %ix $n,k,d$.
+  We proceed by induction on $N$, starting with $N=0$. The base case holds by taking any $(V_0,\dots, V_{d-1}) \in\SubtreeLeaves{\ell+1}{U_0,\dots,U_{d-1}}$ with $V_i \uh \ell = U_i \uh \ell$ for all $i < d$.
+  %$(V_0\uh\ell,\dots, V_{d-1}\uh\ell) = (U_0\uh \ell,\dots U_{d-1}\uh \ell)$.
+  These trees satisfy \Cref{item:stems-widget,item:hbound-widget} by construction. Moreover, by assumption on $\chi$, they also satisfy \Cref{item:monochr-widget}.
+
+
+
+%  for any collection of trees $T_0,\dots, T_{d-1}$ of height $\fwidg(N,2^n,k,d)$, a witness of the theorem can be any $(S_0,\dots, S_{d-1})\in \SubtreeLeaves{\embfont e_N}{T_0}\times\dots\times \SubtreeLeaves{\embfont e_N}{T_{d-1}}$ with an $\fwidg$-bounded level function, as $\SubtreeLeaves{\embfont e_n}{S_0}\times\dots\times \SubtreeLeaves{\embfont e_n}{S_{d-1}}$  is a singleton: there is only one perfect subtree of height $n$ included in a tree of height $N$ when $N=n$.
+
+  % one can find the set $[T_0(0)]^n\times\dots\times [T_{d-1}(0)]^n$ is either empty or a singleton, and therefore monochromatic.
+
+  Now, suppose the result is true for some $N\geq 0$.
+  To simplify notation, define $H_{N}=\fwidg(N,\ell,n+1,k,d, b)$ and $H_{N+1}=\fwidg(N+1,\ell,n+1,k,d, b)$. The construction of the solution $V_0,\dots, V_{d-1}$ is divided into three steps, summarized as follows.
+  \begin{enumerate}
+  \item We apply \Cref{lem:finitary-strong-hl-tuple} to the collection of trees $U_i^\sigma = U_i \uh \sigma$ for $\sigma \in U_i(H_N)$
+  %\item and $T_i^\sigma=\{\tau\in T_i:\tau\succeq\sigma\}$,
+  and a certain coloring with a large number of colors. This will yields strong subtrees $V_i^\sigma$ of $U_i^\sigma$ of height $2$ with a common level function. In turn, these will induce a coloring of $\SubtreeLeaves{n+1}{U_0\uh H_N,\dots, U_{d-1}\uh H_N}$.
+  \item We apply the inductive hypothesis to $U_0\uh H_N,\dots, U_{d-1}\uh H_N$ and the induced coloring, obtaining strong subtrees $\hat V_0,\dots, \hat V_{d-1}$.
+  \item For each $i < d$, we replace the leaves of $\hat V_i$ by $V_i^\sigma$ to get $V_i$.
+  \end{enumerate}
+  % Let $T_0,\dots, T_{d-1}$ be perfect trees of height $H_N$.
+  We now give the details of each step of the construction.
+  
+  \construction
+  
+  \medskip
+  \noindent \textbf{Step 1.} We define a coloring
+  \[
+  	g:\prod_{i<d}\prod_{\sigma\in U_i(H_N)}\leaves({U_i^\sigma})\to K,
+  \]
+  where $K$ is the finite set of all functions
+  \[
+  	\zeta: \Pc(U_0 \uh H_N) \times \cdots \times \Pc(U_{d-1} \uh H_N) \times \Pc(U_0(H_N)) \times \cdots \times \Pc(U_{d-1}(H_N)) \to k.
+  \]
+  Let $\pi$ be an element of the domain of $g$, meaning a tuple $((\tau_i^\sigma)_{\sigma\in U_i(H_N)})_{i<d}$ consisting of one leaf $\tau^\sigma_i$ from each tree $U_i^\sigma$. Then $g(\pi)$ is the function $\zeta$ defined as follows. Given $F_i \subseteq U_i \uh H_N$ and $G_i \subseteq U_i(H_N)$ for each $i < d$,
+  \[
+  	\zeta(F_0,\ldots,F_{d-1},G_0,\ldots,G_{d-1}) = \chi((F_i ~\cup~\{ \tau_i^\sigma: \sigma \in G_i\})_{i < d})
+  \]
+  if $(F_i \cup \{ \tau_i^\sigma: \sigma \in G_i\})_{i < d} \in \SubtreeLeaves{n+1}{U_0,\ldots,U_{d-1}}$, and
+  \[
+  	\zeta(F_0,\ldots,F_{d-1},G_0,\ldots,G_{d-1}) = 0
+  \]
+  otherwise. So in particular, $g(\pi)$ records the values of $\chi$ on all strong subtrees of height $n+1$ that have leaves in $\pi$ and all other nodes below level $H_N$ in $U_0,\ldots,U_{d-1}$.
+
+  By \Cref{lem:finitary-strong-hl-tuple} applied to the collection of $U_i^\sigma$ with the coloring $g$, using the fact that the height, $H_{N+1}-H_N$, of the trees is sufficiently large by definition of $H$, we obtain strong subtrees $V_i^\sigma$ of $U_i^\sigma$ of height 2 and with common level function such that $g$ is constant on the product of the leaves of the $V_i^\sigma$. Call the value assumed by $g$ on this product $\zeta_0 \in K$.
+  
+  \medskip
+  \noindent \textbf{Step 2.} The function $\zeta_0$ naturally induces a coloring
+  \[
+  	\chi_N: \SubtreeLeaves{n+1}{U_0 \uh H_N+1,\ldots,U_{d-1} \uh H_N+1} \to k
+  \]
+  as follows. Given $(F_0,\ldots,F_{d-1})$ in the domain of $\chi_N$, let
+  \[
+  	\chi_N(F_0,\ldots,F_{d-1}) = \zeta_0(F_0 \uh n,\ldots,F_{d-1} \uh n,\leaves(F_0),\ldots,\leaves(F_{d-1})).
+  \]
+  Note that by choice of the $V^\sigma_i$, if $((\tau_i^\sigma)_{\sigma\in U_i(H_N)})_{i<d}$ is any tuple consisting of one leaf $\tau^\sigma_i$ from each tree $V_i^\sigma$, then $(F_i \uh n~\cup~\{ \tau_i^\sigma: \sigma \in \leaves(F_i)\})_{i < d} \in \SubtreeLeaves{n+1}{U_0,\ldots,U_{d-1}}$, so by definition we also have
+  \[
+  	\chi_N(F_0,\ldots,F_{d-1}) = \chi((F_i \uh n~\cup~\{ \tau_i^\sigma: \sigma \in \leaves(F_i)\})_{i < d}).
+  \]
+  By assumption on $\chi$, it follows that if $F_i \uh \ell \subseteq (U_i \uh H_N +1) \uh \ell = U_i \uh \ell$ for all $i < d$, then $\chi_N(F_0,\ldots,F_{d-1})$ depends only on $(F_0 \uh n,\ldots,F_{d-1} \uh n)$. We may thus apply the induction hypothesis to $\chi_N$ and the trees $U_0 \uh H_N+1,\ldots,U_{d-1} \uh H_N+1$ to obtain a tuple of strong subtrees $(\hat V_0,\dots, \hat V_{d-1}) \in \SubtreeLeaves{\ell + N+ 1}{U_0 \uh H_N+1,\ldots,U_{d-1} \uh H_N+1}$.
+  
+  \medskip
+  \noindent \textbf{Step 3.} Finally, we glue the trees $\hat V_i$ to the trees $V_i^\sigma$ to finish the construction of the solution. More precisely, we let
+  \[
+  	V_i = \hat V_i \setminus \leaves(\hat V_i)~\cup~{\bigcup_{\sigma \in \leaves(\hat V_i)} V^\sigma_i}.
+  \]
+  Note that the height of $V_i$ is $\ell + N + 2$, as desired. This completes the construction.
+  
+  \verification We now prove that the collection of $V_i$ is a solution. \Cref{item:stems-widget} is satisfied since it is satisfied by $\hat V_i$. This is because $V_i$ extends $\hat V_i\setminus\leaves(\hat V_i)$, and the height of $\hat{V_i}$ is at least $\ell + 1$, so we have ${V_i \uh \ell} = (\hat V_i\setminus\leaves(\hat V_i)) \uh \ell = {\hat V_i \uh \ell} = U_i \uh \ell$.
+  
+  \Cref{item:hbound-widget} is satisfied by construction.
+  
+  It remains to verify \Cref{item:monochr-widget}. Suppose $(F_0,\dots, F_{d-1}) \in \SubtreeLeaves{n+1}{V_0,\dots, V_{d-1}}$. We consider two cases.
+  
+  \case{1}{$F_i(n-1) \subseteq V_i(\ell+N)$ for each $i < d$.} Since $F_i \in \SubtreeLeaves{n+1}{V_i}$ for each $i < d$ and there is only one level in $V_i$ above $\ell+N$, the elements of $F_i(n) = \leaves(F_i)$ are uniquely determined by those of $F_i(n-1)$. Namely, $F_i(n) = \{\sigma \in V_i(\ell + n + 1): (\exists \tau \in F_i(n-1))[\tau \prec \sigma]\}$. Thus, $F_i$ is completely determined by $F_i \uh n$, and so also $\chi(F_0,\ldots,F_{d-1})$ depends only on $(F_0 \uh n,\ldots,F_{d-1} \uh n)$.
+  
+  \case{2}{$F_i(n-1) \subseteq V_i\uh \ell+N$ for each $i < d$.} In this case, we have $F_i \uh n \subseteq \hat{V}_i \setminus \leaves(\hat{V}_i) \subseteq U_i \uh H_N$. So, if we define
+  \[
+  	\hat F_i = F_i \uh n \cup \{ \sigma \in U_i(H_N): (\exists \tau \in \leaves(F_i))[\sigma \prec \tau]\}
+  \]
+  then $(\hat F_0,\ldots,\hat F_{d-1}) \in \SubtreeLeaves{n+1}{\hat{V}_0,\ldots,\hat{V}_{d-1}}$. By choice of the $\hat V_i$, we know that $\chi_N(\hat{F}_0,\ldots,\hat F_{d-1})$ depends only on $(\hat{F}_0 \uh n,\ldots,\hat{F}_{d-1} \uh n) = (F_0 \uh n,\ldots,F_{d-1} \uh n)$.
+  
+  Separately, by definition of $\chi_N$ and choice of the $V^\sigma_i$, we have that if $((\tau_i^\sigma)_{\sigma\in U_i(H_N)})_{i<d}$ is any tuple consisting of one leaf $\tau^\sigma_i$ from each tree $V_i^\sigma$, then 
+  \[
+  	\begin{array}{lll}
+  		\chi_N(\hat{F}_0,\ldots,\hat F_{d-1}) & = &  \chi((\hat F_i \uh n~\cup~\{ \tau_i^\sigma: \sigma \in \leaves(\hat F_i)\})_{i < d})\\
+  		& = & \chi((F_i \uh n~\cup~\{ \tau_i^\sigma: \sigma \in \leaves(\hat F_i)\})_{i < d}).
+  	\end{array}
+  \]
+  Since the leaves of $F_0,\ldots,F_{d-1}$ form precisely such a tuple $((\tau_i^\sigma)_{\sigma\in U_i(H_N)})_{i<d}$ and $F_i \uh n \cup \leaves(F_i) = F_i$ for each $i < d$, we conclude
+  \[
+  	\chi_N(\hat{F}_0,\ldots,\hat F_{d-1}) = \chi(F_0,\ldots,F_{d-1}).
+  \]
+  
+  Combining the previous two paragraphs, we find that $\chi(F_0,\ldots,F_{d-1})$ depends only on $(F_0 \uh n,\ldots,F_{d-1} \uh n)$, as was to be shown.
+\end{proof} 
+
+\begin{figure}[h!]
+  \begin{center}
+    %\input{figures/widget2.pdf_t}\\
+    \begin{tikzpicture}[scale=1.5]
+		\tikzset{
+			empty node/.style={circle,inner sep=0,outer sep=0,fill=none},
+			solid node/.style={circle,draw,inner sep=1.5,fill=black},
+			hollow node/.style={circle,draw,inner sep=1.5,fill=white},
+			gray node/.style={circle,draw={rgb:black,1;white,4},inner sep=1,fill={rgb:black,1;white,4}}
+		}
+		\tikzset{snake it/.style={decorate, decoration=snake, line cap=round}}
+		\tikzset{gray line/.style={line cap=round,thick,color={rgb:black,1;white,4}}}
+		\tikzset{gray thin line/.style={line cap=round,color={rgb:black,1;white,4}}}
+		\tikzset{thick line/.style={line cap=round,rounded corners=0.1mm,thick}}
+		\tikzset{thin line/.style={line cap=round,rounded corners=0.1mm}}
+		\node (a)[empty node] at (0.5,-2) {};
+		\node (a')[empty node] at (0,-0.4) {};
+		\node (sigma0)[empty node] at (0-0.45,0.8) {};
+		\node (sigma1)[empty node] at (0+0.2,0.8) {};
+		\node (sigma2)[empty node] at (0+1.45,0.8) {};
+		\node (b0)[solid node] at (0-0.45,1.7) {};
+		\node (b1)[solid node] at (0+0.2,1.7) {};
+		\node (b2)[solid node] at (0+1.45,1.7) {};
+		\node (c0)[empty node] at (0-0.45,1.1) {};
+		\node (c1)[empty node] at (0+0.2,1.1) {};
+		\node (c2)[empty node] at (0+1.45,1.1) {};
+		\node (b00)[solid node] at (0.13-0.45,2.45) {};
+		\node (b01)[solid node] at (-0.15-0.45,2.45) {};
+		\node (b10)[solid node] at (0.13+0.2,2.45) {};
+		\node (b11)[solid node] at (-0.15+0.2,2.45) {};
+		\node (b20)[solid node] at (0.13+1.45,2.45) {};
+		\node (b21)[solid node] at (-0.15+1.45,2.45) {};
+		\begin{pgfonlayer}{background}
+		\draw[gray thin line] (-1.4,1.7) to (2.4,1.7);
+		\draw[gray thin line] (-1.4,1.9) to (2.4,1.9);
+		\draw[gray thin line] (-1.4,0.8) to (2.4,0.8);
+		\draw[gray thin line] (-1.4,2.45) to (2.4,2.45);
+		\draw[thick line] (a.center) to (2.3,2.7);
+		\draw[thick line] (a.center) to (-1.3,2.7);
+		\draw[thick line,decorate,decoration={snake,amplitude=-.3mm,segment length=2.5mm,pre length=3mm}] (b0.center) to (0.13-0.45,2.45);
+		\draw[thick line,decorate,decoration={snake,amplitude=.3mm,segment length=2.5mm,pre length=3mm}] (b0.center) to (-0.15-0.45,2.45);
+		\draw[thick line,decorate,decoration={snake,amplitude=-.3mm,segment length=2.5mm,pre length=3mm}] (b1.center) to (0.13+0.2,2.45);
+		\draw[thick line,decorate,decoration={snake,amplitude=.3mm,segment length=2.5mm,pre length=3mm}] (b1.center) to (-0.15+0.2,2.45);
+		\draw[thick line,decorate,decoration={snake,amplitude=-.3mm,segment length=2.5mm,pre length=3mm}] (b2.center) to (0.13+1.45,2.45);
+		\draw[thick line,decorate,decoration={snake,amplitude=.3mm,segment length=2.5mm,pre length=3mm}] (b2.center) to (-0.15+1.45,2.45);
+		\draw[gray line] (sigma0.center) to (0.3-0.45,2.45);
+		\draw[gray line] (sigma0.center) to (-0.3-0.45,2.45);
+		\draw[gray line] (sigma1.center) to (0.3+0.2,2.45);
+		\draw[gray line] (sigma1.center) to (-0.3+0.2,2.45);
+		\draw[gray line] (sigma2.center) to (0.3+1.45,2.45);
+		\draw[gray line] (sigma2.center) to (-0.3+1.45,2.45);
+		\draw[thick line,decorate,decoration={snake,amplitude=.3mm,segment length=2.5mm}] (sigma0) to (b0.center);
+		\draw[thick line,decorate,decoration={snake,amplitude=.3mm,segment length=2.5mm}] (sigma1) to (b1.center);
+		\draw[thick line,decorate,decoration={snake,amplitude=.3mm,segment length=2mm,post length=0.01mm}] (sigma2) to (b2.center);
+		\node(dots)[empty node,fill=white] at (0.85,1.7) {$\,\cdots\,$};
+		\node(S0)[empty node,label=right:{$H_{N+1}$}] at (2.45,2.45) {};
+		\node(S0)[empty node,label=right:{$H_N$}] at (2.45,0.8) {};
+		\end{pgfonlayer}
+	\end{tikzpicture}
+    \caption{The construction of a tree in Theorem~\ref{thm:main-widget-theorem} when $d=1$.
+    % As illustrated by Figure~\ref{fig:widget} (where $d=1$),
+      Given a tree $T$ of height $H_N$, cutting at level $H_{N}$ yields a collection of finite perfect trees whose roots are nodes at level $H_{N}$. A finite coloring of $\SubtreeLeaves{n+1}{T}$ yields a coloring of product of leaves from the collection, by merging the colors of all possible closure into a tree of height $n+1$. The level $H_{N+1}$ is chosen large enough above $H_{N}$ so that on can apply Lemma~\ref{lem:finitary-strong-hl-tuple} to obtain strong subtrees of height 2, represented in bold.
+      As explained in the proof, this yields a coloring of $\SubtreeLeaves{n}{T\uh H_{N}}$, and one can apply the induction hypothesis. % iterate the argument to obtain a collection of subtrees of height 2, in each interval between $\fwidg(i-1)$ and $\fwidg(i)$. A strong perfect tree of height $N$ satisfying Theorem~\ref{thm:main-widget-theorem} can be extracted from this collection. The leaves of this tree will be included in the leaves of the last level, while its branching nodes will be included in the branching nodes of the height 2 subtrees, the nodes represented with higher radius in the figure.% and which allow to extract the tree satisfying Theorem~\ref{thm:main-widget-theorem}, represented in bold.
+      %The number of levels $\fwidg(N,n,k,d)$ is large enough so one can apply Lemma~\ref{lem:widget-one-level} on all subtrees rooted at level $\fwidg(N-1)$ and whose leaves are at level $\fwidg(N)$% in between level $\fwidg(N-1,n,k,d)$ and $\fwidg(N,n,k,d)$
+      % , to get strong subtrees with one level in addition to the leaves. This yields a coloring of nodes at level $\fwidg(N-1,n,k,d)$, allowing to iterate $N$ times.
+    }
+    \label{fig:widget}
+\end{center}
+\end{figure}
+
+
+\section{Milliken's tree theorem with more colors}\label{subsect:thin-milliken}
+
+As we have seen in the preceding sections, there is a computably detectable difference between Milliken's tree theorem for heights 2 and 3 that parallels that for Ramsey's theorem for pairs and triples. More specifically, Milliken's tree theorem for height 2 admits cone avoidance while the version for height 3 does not. In the case of Ramsey's theorem, more can be said.
+%Although Ramsey's theorem for pairs admits cone avoidance
+% (see Seetapun and Slaman~\cite{Seetapun1995strength}),
+%when considering larger tuples, this is not anymore the case (see Jockusch~\cite{Jockusch1972Ramseys}). In particular, there exists a computable coloring of $[\NN]^3$ such that every solution computes the halting set. Like Ramsey's theorem, the product version of Milliken's tree theorem for height 2 admits cone avoidance (\Cref{thm:cone-avoidance-MTT2}) while even Milliken's tree theorem for height 3 does not, since it implies Ramsey's theorem for triples.
+Wang~\cite[Theorem 3.2]{Wang2014Some}
+%surprisingly
+proved the surprising result that if we weaken Ramsey's theorem for $n$-tuples to permit a larger number $\ell$ of colors in the solution (instead of just one, which is to say, requiring the solutions to be homogeneous sets), and if $\ell$ is sufficiently large relative to $n$, then
+ %whenever this number of colors $\ell$ is sufficiently large with respect to the size $n$ of the colored tuples,
+the resulting statement admits strong cone avoidance. More recently, Cholak and Patey~\cite[Corollary 4.17]{Cholak2019Thin} gave explicit bounds on the relationship between $\ell$ and $n$, proving that cone avoidance holds so long as $\ell$ is at least as large as the $n$th Catalan number.
+
+\begin{statement}[Ramsey's theorem for $n$-tuples and $k$ colors]\index{statement!$\RT{n}{k, \ell}$}
+  $\RT{n}{k, \ell}$ is the statement: ``For any coloring $f: [\Nb]^n \to k$, there exists an infinite set $H\subseteq\Nb$ such that $f$ uses at most $\ell$ colors on $[H]^n$''.
+\end{statement}
+
+ 
+In this section, we prove a similar result for the product version of Milliken's tree theorem for height 2. More precisely, we show that whenever the number of colors in the solutions is allowed to be at least 2, then the resulting statement for height 2 admits strong cone avoidance (\Cref{thm:pmtt2k2-strong-cone-avoidance}), while the statement for height 3 admits cone avoidance (\Cref{thm:pmtt3k2-cone-avoidance}).
+
+The notion of level-homogeneous coloring sets a bridge between Ramsey's theorem and Milliken's tree theorem. Let $T_0, \dots, T_{d-1} \subseteq \baire$ be finitely branching trees with no leaves. Recall that the level function witnessing a strong subtree is the function mapping the levels of the strong subtree to the levels in the original tree (see \Cref{def:strong-subtree}).
+
+
+\begin{definition}\index{coloring!level-homogeneous}\index{level-homogeneous!coloring}\index{product tree condition!level-homogeneous}\index{level-homogeneous!product tree condition}
+A coloring $f: \Subtree{n}{T_0, \dots, T_{d-1}} \to k$ is \emph{level-homogeneous}
+if the color of $(E_0, \dots, E_{d-1}) \in \Subtree{n}{T_0, \dots, T_{d-1}}$ depends only on its level function. A product tree condition $(F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$ is \emph{level-homogeneous} for $f$ if for every $(E_0, \dots, E_{d-1}) \in \Subtree{n}{F_0 \cup X_0, \dots, F_{d-1} \cup X_{d-1}}$ such that $E_j \uh 1 \subseteq F_j$ for every $j < d$,
+the color of  $( E_0, \dots, E_{d-1} )$ depends only on its level function.
+\end{definition}
+
+\noindent Note that the notion of level-homogeneous here extends that in \Cref{def:levhom3}, which is the particular case when $n = 1$ and $f$ is the function mapping a tuple in $\Subtree{1}{T_0, \dots, T_{d-1}}$ to the unique $i < k$ such that $A_i$ contains this tuple.
+
+Any level-homogeneous coloring $f:\Subtree{n}{T_0, \dots, T_{d-1}}\to k$
+induce{s} a coloring $g: [\NN]^n \to k$ which to some $F \in [\NN]^n$ associates 
+the color of any element of $\Subtree{n}{T_0, \dots, T_{d-1}}$ whose level 
+function has range $F$. This coloring $g$ is well-defined by level-homogeneity of $f$,
+and for every homogeneous set $H \subseteq \NN$ for $g$, the \emph{principal function} \index{principal function} $p_H: \NN \to \NN$, which to $x$ associates the ($x+1$)st element of $H$ in natural order, is the level function of a solution to $f$. 
+
+\begin{theorem}\label{thm:pmtt2-level-homogeneous-strong-cone-avoidance}
+Fix two sets $C$ and $Z$ such that $C \nTred Z$.
+Also fix a $Z$-computable collection of $Z$-computably bounded trees with no leaves $T_0, \dots,\allowbreak T_{d-1}$.
+Let $f: \Subtree{2}{T_0, \dots, T_{d-1}} \to k$ be a coloring.
+Then, there exist strong
+  subtrees $(S_0, \dots, S_{d-1}) \in \Subtree{\omega}{T_0, \dots, T_{d-1}}$ over which $f$ is level-homogeneous, and such that
+  $C \nTred S_0 \oplus \dots \oplus S_{d-1} \oplus Z$.
+\end{theorem}
+
+\begin{proof}
+%We now prove \Cref{thm:pmtt2-level-homogeneous-strong-cone-avoidance}.
+Fix $C$, $Z$, $T_0, \dots, T_{d-1}$ and $f$.
+By \Cref{thm:cmtt-admits-strong-cone-avoidance}, there are strong subtrees $(U_0, \dots, U_{d-1}) \in \Subtree{\omega}{T_0, \dots, T_{d-1}}$ on which  $f$ is stable, and such that $C \nTred U_0 \oplus \dots \oplus U_{d-1} \oplus Z$.
+%Let $g: \Subtree{1}{S_0, \dots, S_{d-1}}$ be the limit coloring induced by stability of $f$. By strong cone avoidance of $\PMT{2}{k,2}$ (\Cref{thm:pmtt2k2-strong-cone-avoidance}),
+%there is some color $i_{\mathtt{lim}} < k$
+%and some strong subtrees $(U_0, \dots, U_{d-1}) \in \Subtree{\omega}{S_0, \dots, S_{d-1}}$ on which $g$ is monochromatic for color $i_{\mathtt{lim}}$, and $C \nTred U_0 \oplus \dots \oplus U_{d-1} \oplus Z$.
+
+We build strong subtrees $(G_0, \dots, G_{d-1}) \in \Subtree{\omega}{U_0, \dots, U_{d-1}}$  on which $f$ is level-homogeneous, and such that $C \nTred G_0 \oplus \dots \oplus G_{d-1} \oplus Z$. These sets will be constructed by forcing with product tree conditions. Recall that a product tree condition $c = (F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$ is \emph{cone avoiding} (with respect to the given set $C$) if $C \nTred X_0 \oplus \dots \oplus X_{d-1} \oplus Z$ (see \Cref{def:levhom3}).
+Let $\Pb$ be the collection of all cone avoiding product tree conditions which are level-homogeneous for~$f$.
+
+The proof of the following lemma is very similar to {the proof of}~\Cref{lem:hl-sca-density-below-a-cone}. In particular, we need again that condition extensions cannot remove roots of forests (see \Cref{def:strong-product-tree-extension}).
+
+\begin{lemma}\label{lem:pmtt2-level-homogeneous-density-below-a-cone}
+There is some condition $c \in \Pb$
+such that for every Turing functional $\Gamma$, the set of conditions $c' \in \Pb$
+such that $c' \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$
+is $\Pb$-dense below $c$.
+\end{lemma}
+\begin{proof}
+Assume for the sake of contradiction that for every condition $c \in \Pb$,
+there is a Turing functional $\Gamma$ and some extension, every further extension of which $c'$ satisfies $c' \not\Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$.
+
+As in \Cref{lem:hl-sca-density-below-a-cone}, we build (non-effectively) a $d$-tuple $S_0, \dots, S_{d-1}$ of infinite subsets of $T_0, \dots, T_{d-1}$, respectively, together with three functions:
+\begin{itemize}
+	\item[1.] $\operatorname{sets}: \NN \to \Pc(\baire) \times \dots \times \Pc(\baire)$ which to a level $\ell \in \NN$
+	associates a $d$-tuple $X_0, \dots, X_{d-1}$ of infinite strong subforests of $T_0, \dots, T_{d-1}$, respectively, with common level function, such that $C \nTred X_0 \oplus \dots \oplus X_{d-1} \oplus Z$ and such that for every $j < d$, $S_j(\ell+1) = \roots(X_j)$;
+	\item[2.] $\operatorname{stems}: \exprodtree{S}{d} \to \Subtree{<\omega}{T_0, \dots, T_{d-1}}$, which to a $\pi \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$ associates a tuple $(F_0, \dots, F_{d-1})$ whose roots pointwise extend $\pi$, and such that $(F_0, \dots, F_{d-1}, \operatorname{sets}(\ell))$ is a $\Pb$-condition;
+	\item[3.] $\operatorname{req}: \exprodtree{S}{d} \to \NN$, which to a $\pi \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$ associates an index $e$ of a Turing functional $\Phi_e$
+	such that for every $\Pb$-extension $c'$ of $(\operatorname{stems}(\pi), \operatorname{sets}(\ell))$,
+	$c' \nVdash \Phi_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$.
+\end{itemize}
+Moreover, we require that for every level $\ell \in \NN$,
+$\operatorname{sets}(\ell+1)$ are strong subforests of $\operatorname{sets}(\ell)$
+with common level function.
+% \pelliot{maybe there should be a picture here? I needed to draw one to understand better.}
+
+\bigskip
+\noindent
+The construction is now exactly the same as in the proof \Cref{lem:hl-sca-density-below-a-cone}.
+Moreover, the following fact still holds:
+
+\begin{fact}\label{fact:pmtt2-level-homogeneous-density-below-a-cone-condition-extension}
+For every $\ell_0 < \ell_1$ and every $\pi \in S_0(\ell_0) \times \dots \times S_{d-1}(\ell_0)$, 
+the tuple $(\operatorname{stems}(\pi), \operatorname{sets}(\ell_1))$ is a $\Pb$-extension of $(\operatorname{stems}(\pi), \operatorname{sets}(\ell_0))$. 
+\end{fact}
+
+
+By \Cref{thm:combinatorial-finite-hapern-lauchli}, there is a level $N \in \NN$
+such that for every coloring $h: S_0(N) \times \dots \times S_{d-1}(N) \to k$,
+there is some $\ell < N$, some $\pi \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$
+and some $(\ell+1)$-$\pi$-dense matrix $M \subseteq S_0(N) \times \dots \times S_{d-1}(N)$
+monochromatic for~$h$. 
+Fix such an $N$. Let $(X_0, \dots, X_{d-1}) = \operatorname{sets}(N-1)$. In particular, for every $j < d$, $S_j(N) = \roots(X_j)$.
+
+Let $W$ be the set of pairs $(x, v) \in \NN \times \{0,1\}$ such that for every $k$-coloring $g: \Subtree{2}{X_0, \dots, X_{d-1}} \to k$, there is some $\ell < N$, some $\pi \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$, and for every $j < d$, there is a finite set $H_j \subseteq X_j$ such that, letting $(F_0, \dots, F_{d-1}) = \operatorname{stems}(\pi)$, the following holds
+\begin{itemize}
+	\item[(a)] $(F_0 \cup H_0, \dots, F_{d-1} \cup H_{d-1}) \in \Subtree{<\omega}{U_0, \dots, U_{d-1}}$;
+	\item[(b)] $g$ restricted to $\Subtree{2}{H_0, \dots, H_{d-1}}$ is monochromatic for some $i < k$;
+	\item[(c)] $\Phi_e^{(F_0 \cup H_0) \oplus \dots \oplus (F_{d-1} \cup H_{d-1}) \oplus Z}(x)\downarrow = v$, where $e = \operatorname{req}(\pi)$.
+\end{itemize}
+By compactness, the set $W$ is $X_0 \oplus \dots \oplus X_{d-1} \oplus Z$-c.e.\ There are three cases:
+
+\case{1}{$(x, 1-C(x)) \in W$ for some $x \in \NN$.} For $i < k$, let $g$ be the restriction of $f$ to $\Subtree{2}{X_0, \dots, X_{d-1}}$. Let $\ell < N$, $\pi = (F_0, \dots, F_{d-1})$ and $H_0, \dots, H_{d-1}$ witness that $(x, 1-C(x)) \in W$ for $g$.
+	Let $\ell_1$ be a level large enough to witness stability of $f$ for every level of $H_j$, and let $\hat{X}_j = X_j \setminus \bigcup_{\ell_0 \leq \ell_1} X_j(\ell_0)$. Then $c' = (F_0 \cup H_0, \dots, F_{d-1} \cup H_{d-1}, \hat{X}_0, \dots, \hat{X}_{d-1})$ is a $\Pb$-extension of $(F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$ which, by \Cref{fact:pmtt2-level-homogeneous-density-below-a-cone-condition-extension},
+		is a $\Pb$-extension of $(\operatorname{stems}(\pi), \operatorname{sets}(\ell))$.
+		Moreover
+		$$
+			c' \Vdash \Phi_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C
+		$$
+		where $e = \operatorname{req}(\pi)$. This contradicts item 3, 
+		according to which $c$ has no such $\Pb$-extension.
+
+\case{2}{$(x, C(x)) \not\in W$ for some $x \in \NN$.} Let $\Cc$ be the $\Pi^{0,X_0 \oplus \dots \oplus X_{d-1} \oplus Z}_1$ class of all colorings  $g: \Subtree{2}{X_0, \dots, X_{d-1}} \to k$ such that for every $\ell < N$, every $\pi \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$ and every $H_0 \subseteq X_0, \dots, H_{d-1} \subseteq X_{d-1}$, one of (a), (b) or (c) fails for the pair $(x, C(x))$.
+	By assumption, $\Cc \neq \emptyset$. 
+	
+
+	By the cone avoidance basis theorem, there is some $g \in \Cc$ such that $C \nTred g \oplus X_0 \oplus \dots \oplus X_{d-1} \oplus Z$. 
+	For every $j < d$, recall that $S_j(N) = \roots(X_j)$.
+	We can see $X_0, \dots, X_{d-1}$ as a tuple $( X_j \uh \rho: j < d, \rho \in S_j(N) )$ of trees.
+	For every $\theta = ( \rho_0, \dots, \rho_{d-1}) \in S_0(N) \times \dots \times S_{d-1}(N)$, we let $g_\theta$ be the restriction of $g$ over
+	$$
+		\Subtree{2}{X_0 \uh \rho_0, \dots, X_{d-1} \uh \rho_{d-1}} \to k
+	$$
+	By successive applications of cone avoidance of $\PMT{2}{}$ (\Cref{thm:cone-avoidance-MTT2}) applied to $g_\theta$ for each  $\theta \in S_0(N) \times \dots \times S_{d-1}(N)$,
+	there is a tuple of infinite strong subtrees $( Y_{j,\rho}: j < d, \rho \in S_j(N) )$ of $( X_j \uh \rho: j < d, \rho \in S_j(N) )$ with common level function, together with a coloring $h: S_0(N) \times \dots \times S_{d-1}(N) \to k$,
+		such that for every  $\theta = ( \rho_0, \dots, \rho_{d-1}) \in S_0(N) \times \dots \times S_{d-1}(N)$,
+		 $g_\theta$ restricted to $\Subtree{2}{X_0 \uh \rho_0, \dots, X_{d-1} \uh \rho_{d-1}}$ is monochromatic for color $h(\theta)$. 
+		
+	By choice of $N$, there is some $\ell < N$, some $\pi = (\nu_0, \dots, \nu_{d-1}) \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$ and some $(\ell+1)$-$\pi$-dense matrix $M \subseteq S_0(N) \times \dots \times S_{d-1}(N)$ monochromatic for~$h$. Say $M = M_0 \times \dots \times M_{d-1}$ and $i < k$ is the color of monochromaticity.
+	For every $j < d$, let $P_j$ be the set of nodes in $S_j(N)$ which are not extensions of $\nu_j$. For every $j < k$, let $\hat{Y}_j = \bigcup_{\rho \in M_j \cup P_j} Y_{j,\rho}$.
+	
+	\begin{fact}\label{fact:pmtt2-level-homogeneous-case2-exts}
+	$c' = (\operatorname{stems}(\pi), \hat{Y}_0, \dots, \hat{Y}_{d-1})$
+	is a $\Pb$-extension of $(\operatorname{stems}(\pi), \operatorname{sets}(\ell))$.
+	\end{fact}
+	\begin{proof}
+	Let $(\hat{X}_0, \dots, \hat{X}_{d-1}) = \operatorname{sets}(\ell)$.
+	By item 1, for every $j < k$, $\roots(\hat{X}_j) = S_j(\ell+1)$. In particular, every root of $\hat{X}_j$ is extended by a root of $\hat{Y}_j$.
+	\end{proof}
+	
+	In particular, by \Cref{fact:pmtt2-level-homogeneous-density-below-a-cone-condition-extension} and item 3, $c' \nVdash \Phi_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$ where $e = \operatorname{req}(\pi)$.
+	Moreover, since the forcing relation depends only on part of the reservoirs extending the roots of the stems, the following fact holds.
+	
+	\begin{fact}\label{fact:pmtt2-level-homogeneous-case2-force-diag}
+	$c' \Vdash \Phi_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$, where $e = \operatorname{req}(\pi)$.
+	\end{fact}
+	\begin{proof}
+	We claim that $c' \Vdash \Phi_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z}(x) \neq C(x)$,
+	where as usual the inequality includes the possibility that the left side diverges. For every $j < d$, let $H_j \subseteq \hat{Y}_j$ be such that 
+	$F_0 \cup H_0, \dots, F_{d-1} \cup H_{d-1}$ are finite strong subtrees of $T_0, \dots, T_{d-1}$, respectively, with common level function. In particular, 
+	for every $j < d$, $H_j \subseteq  \bigcup_{\rho \in M_j} Y_{j,\rho}$,
+	so $g$ restricted to $\Subtree{2}{H_0, \dots, H_{d-1}}$ is monochromatic for color $i$, hence since $g \in \Cc$, $\Phi_e^{(F_0 \cup H_0) \oplus \dots \oplus (F_{d-1} \cup H_{d-1}) \oplus Z}(x)$ either diverges, or is different from $C(x)$.
+	This means  $c' \Vdash \Phi_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z}(x) \neq C(x)$, as needed.
+	\end{proof}
+	
+	\Cref{fact:pmtt2-level-homogeneous-case2-force-diag} contradicts \Cref{fact:pmtt2-level-homogeneous-case2-exts} and item 3 of the construction, according to which $c$ has no such $\Pb$-extension. This completes Case 2.
+
+\case{3}{otherwise.} Then $W$ is an $X_0 \oplus \dots \oplus X_{d-1} \oplus Z$-c.e.\ graph of the characteristic function of $C$, hence $C \leq X_0 \oplus \dots \oplus X_{d-1} \oplus Z$. Contradiction.
+\end{proof}
+
+We are now ready to complete the proof \Cref{thm:pmtt2-level-homogeneous-strong-cone-avoidance}.
+By \Cref{lem:pmtt2-level-homogeneous-density-below-a-cone}, there is some cone avoiding level-homogeneous product tree condition $c$ below which, for every Turing functional $\Gamma$, the set 
+$$
+D_\Gamma = \{ c' \in \Pb: c' \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C \}
+$$
+is $\Pb$-dense.
+Let $\Uc$ be a $\Pb$-filter which intersects every set $D_\Gamma$.
+Then by definition of a product tree condition, $G^\Uc_0, \dots, G^\Uc_{d-1}$ are strong subtrees of $T_0, \dots, T_{d-1}$. Moreover, since all conditions in $\Pb$ are level-homogeneous, so are $G^\Uc_0, \dots, G^\Uc_{d-1}$. Since  $\Uc$ intersects every set $D_\Gamma$, we have $C \nTred G^\Uc_0 \oplus \dots \oplus G^\Uc_{d-1} \oplus Z$.
+Lastly, by \Cref{lem:product-tree-genericity-implies-infinity}, $G^\Uc_0, \dots, G^\Uc_{d-1}$ are all infinite.
+This completes the proof of \Cref{thm:pmtt2-level-homogeneous-strong-cone-avoidance}.
+\end{proof} %END OF PROOF OF THE THEOREM
+
+\begin{statement}\index{statement!$\PMT{n}{k,\ell}$}
+	For all $n,k,\ell \geq 1$, $\PMT{n}{k,\ell}$ is the following statement. Let $T_0,\ldots,T_{d-1}$ be infinite trees with no leaves. For all $f: \Subtree{n}{T_0,\ldots,T_{d-1}} \to k$ there exists $(S_0,\ldots,S_{d-1}) \in \Subtree{\omega}{T_0,\ldots,T_{d-1}}$ such that $f$ takes at most $\ell$ values on $\Subtree{n}{S_0,\ldots,S_{d-1}}$.\end{statement}
+
+\begin{theorem}\label{thm:pmtt2k2-strong-cone-avoidance}
+For every $k \in \NN$, $\PMT{2}{k,2}$ admits strong cone avoidance.
+\end{theorem}
+\begin{proof}
+Fix two sets $C$ and $Z$ such that $C \nTred Z$.
+Also fix a $Z$-computable collection of $Z$-computably bounded trees with no leaves $T_0, \dots,\allowbreak T_{d-1} \subseteq \baire$.
+Let $f: \Subtree{2}{T_0, \dots, T_{d-1}} \to k$ be a coloring.
+By \Cref{thm:pmtt2-level-homogeneous-strong-cone-avoidance}, there exist strong
+  subtrees $(S_0, \dots, S_{d-1}) \in \Subtree{\omega}{T_0, \dots, T_{d-1}}$ on which $f$ is level-homogeneous, and such that
+  $C \nTred S_0 \oplus \dots \oplus S_{d-1} \oplus Z$.
+
+Let  $g: [\NN]^2 \to k$ which to some $\{x_0 < x_1\} \in [\NN]^2$ associates 
+the color of any element of $\Subtree{2}{S_0, \dots, S_{d-1}}$ whose level 
+function has for range $\{x_0, x_1\}$. By strong cone avoidance of $\RT{2}{k,2}$ (see Wang~\cite{Wang2014Some}, Theorem 3.2, or Cholak and Patey~\cite{Cholak2019Thin}, Corollary 4.17),
+there exists an infinite set $H \subseteq \NN$ such that $g$ restricted to $[H]^2$
+uses at most 2 colors. Using $H$, one can compute strong subtrees $(U_0, \dots, U_{d-1}) \in \Subtree{\omega}{S_0, \dots, S_{d-1}}$ whose level function is the principal function of $H$.
+By definition of $g$, $f$ uses at most 2 colors over $\Subtree{2}{U_0, \dots, U_{d-1}}$.
+And by transitivity of the strong subtree relation, $(U_0, \dots, U_{d-1}) \in \Subtree{\omega}{T_0, \dots, T_{d-1}}$. 
+This completes the proof of \Cref{thm:pmtt2k2-strong-cone-avoidance}.
+\end{proof}%fembeddin\benoit{I agree}
+
+
+\begin{theorem}\label{thm:pmtt3k2-cone-avoidance}
+$(\forall k)\PMT{3}{k,2}$ admits cone avoidance.
+\end{theorem}
+\begin{proof}
+Fix two sets $C$ and $Z$ such that $C \nTred Z$.
+Also fix a $Z$-computable collection of $Z$-computably bounded trees with no leaves $T_0, \dots,\allowbreak T_{d-1} \subseteq \baire$.
+Let $f: \Subtree{3}{T_0, \dots, T_{d-1}} \to k$ be a $Z$-computable coloring.
+ 
+By \Cref{thm:cmtt-admits-strong-cone-avoidance}, there are strong subtrees $(S_0, \dots, S_{d-1}) \in \Subtree{\omega}{T_0, \dots, T_{d-1}}$ on which $f$ is stable, and such that $C \nTred S_0 \oplus \dots \oplus S_{d-1} \oplus Z$.
+Let $g: \Subtree{2}{S_0, \dots, S_{d-1}}$ be the limit coloring induced by stability of $f$. By strong cone avoidance of $\PMT{2}{k,2}$ (\Cref{thm:pmtt2k2-strong-cone-avoidance}),
+there are strong subtrees $(U_0, \dots, U_{d-1}) \in \Subtree{\omega}{S_0, \dots, S_{d-1}}$ on which $g$ uses at most 2 colors, and $C \nTred U_0 \oplus \dots \oplus U_{d-1} \oplus Z$.
+By $U_0 \oplus \dots \oplus U_{d-1} \oplus Z$-computably thinning out the set of levels,
+we can obtain a tuple of strong subtrees $(V_0, \dots, V_{d-1}) \in \Subtree{\omega}{U_0, \dots, U_{d-1}}$, on which $f$ uses at most 2 colors. In particular, by transitivity of the strong subtree relation, $(V_0, \dots, V_{d-1}) \in \Subtree{\omega}{T_0, \dots, T_{d-1}}$.
+Last, $C \nTred V_0 \oplus \dots \oplus V_{d-1} \oplus Z$.
+This completes the proof of \Cref{thm:pmtt3k2-cone-avoidance}.
+\end{proof}
+
+\begin{corollary}
+$(\forall k)\PMT{3}{k,2}$ does not imply $\ACA_0$ over $\RCA_0$.
+\end{corollary}
+\begin{proof}
+Immediate by \Cref{thm:pmtt3k2-cone-avoidance} and \Cref{lem:cone-avoidance-not-aca}.
+\end{proof}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../embryon"
+%%% End:

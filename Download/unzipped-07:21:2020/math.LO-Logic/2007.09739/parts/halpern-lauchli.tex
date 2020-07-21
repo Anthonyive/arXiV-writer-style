@@ -1,0 +1,854 @@
+We begin our analysis of Milliken's tree theorem by studying the computable content of the Halpern-La\"{u}chli theorem (\Cref{th:strong-hl}). The two main theorems of this chapter are \Cref{thm:halpern-lauchli-computably-true}, that the Halpern-La\"{u}chli theorem is computably true, and \Cref{thm:hl-strong-cone-avoidance}, that it admits strong cone avoidance. The first result will be used in the proof that the product version of Milliken's tree theorem admits arithmetical solutions. The second result will be used to prove that the product version of Milliken's tree theorem for colorings of strong subtrees of height 2 admits cone avoidance, in the same way that strong cone avoidance of the pigeonhole principle can be used to prove cone avoidance of Ramsey's theorem for pairs (see, e.g., Hirschfeldt~\cite{Hirschfeldt2015Slicing}, Section 6.7).
+\index{Halpern-La\"{u}chli theorem}
+\section{An effective proof of the Halpern-La\"{u}chli theorem}
+
+Our effectivization of the the Halpern-La\"{u}chli theorem is based on the proof of that theorem given in Todorcevic \cite{Todorcevic2010Ramsey}, where it appears as Theorem 3.2. We include that proof here largely in full, emphasizing the effective analysis when it shows up, with the exception of one technical lemma that we present first. For trees $T_0,\ldots,T_{d-1}$ and a tuple $\pi \in T_0(n) \times \cdots \times T_{d-1}(n)$ for some $n \in \NN$, we call $n$ the \emph{level} of $\pi$.
+
+%\begin{lemma}
+%	Let $T_0,\ldots,T_{d-1}$ be infinite trees with no leaves. For all $k \geq 1$ and all $f: \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n) \to k$ there is a tuple $\pi \in \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n)$ such that for every $m$ larger than the level of $\pi$ there is an $m$-$\pi$-dense matrix $P \subseteq \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n)$ on which $f$ is constant.
+%\end{lemma}
+
+%\noindent The proof of this lemma can be found at the beginning of the proof of Theorem 3.2 in \cite{Todorcevic2010Ramsey}. It is worth remarking that the account there deals with trees that are not necessarily closed under meets, but this only means that the content of the above lemma is proved in a more general form than we will need here.
+
+%For trees $T_0,\ldots,T_{d-1}$ and a tuple $\pi \in T_0(n) \times \cdots \times T_{d-1}(n)$ for some $n$, we call $n$ the \emph{level} of $\pi$.
+
+\begin{lemma}[Halpern and La\"{u}chli \cite{HalperbLauchli1966}, Theorem 1]\label{lem:HLuneven}
+	Let $T_0,\ldots,T_{d-1}$ be infinite tree with no leaves. For all $k \geq 1$ and all $g:T_0 \times \cdots \times T_{d-1} \to k$ there is a $\pi \in \bigcup_n T_0(n) \times \cdots \times T_{d-1}(n)$, an $m$ larger than the level of $\pi$, and an $m$-$\pi$-dense matrix $P$ for $T_0,\ldots,T_{d-1}$ on which $g$ is constant.
+\end{lemma}
+
+\noindent Nota bene that the coloring $g$ above is defined on the full product $T_0 \times \cdots \times T_{d-1}$, rather than the level product $\bigcup_{n} T_0(n) \times \cdots T_{d-1}(n)$. However, we can obtain a level version, as follows.
+
+\begin{lemma}\label{lem:HLlevel}
+	Let $T_0,\ldots,T_{d-1}$ be infinite trees with no leaves. For all $k \geq 1$ and all $f: \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n) \to k$ there is a $\pi \in \bigcup_n T_0(n) \times \cdots \times T_{d-1}(n)$, an $m$ larger than the level of $\pi$, and an $m$-$\pi$-dense matrix $P \subseteq \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n)$ on which $f$ is constant.
+\end{lemma}
+
+\begin{proof}[Proof (from \cite{Todorcevic2010Ramsey}, proof of Theorem 3.2)]
+	Fix $T_0,\ldots,T_{d-1}$. By compactness, for every $k \geq 1$ there is an $n_k \geq 1$ such that for every coloring $g:T_0 \times \cdots \times T_{d-1} \to k$ we can find a $\pi$, an $m$, and an $m$-$\pi$-dense matrix $P = P_0 \times \cdots \times P_{d-1}$ as in \Cref{lem:HLuneven} with $P_i \subseteq \bigcup_{n < n_k} T_i(n)$ for all $i < d$.
+
+	Consider now $f: \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n) \to k$. We define $g: T_0 \times \cdots \times T_{d-1} \to k$ as follows. First, for each $\sigma \in \bigcup_{n < n_k} T_i(n)$ fix an extension $\hat{\sigma} \in T_i(n_k)$. Now for all $(\sigma_0,\ldots,\sigma_{d-1}) \in T_0 \times \cdots \times T_{d-1}$, set
+	\[
+		g(\sigma_0,\ldots,\sigma_{d-1}) =
+		\begin{cases}
+			f(\hat{\sigma}_0,\ldots,\hat{\sigma}_{d-1}) & \text{if } \sigma_i \in \bigcup_{n < n_k} T_i(n) \text{ for all } i < d,\\
+			0 & \text{otherwise.}
+		\end{cases}
+	\]
+	By choice of $n_k$ there is a $\pi \in \bigcup_n T_0(n) \times \cdots \times T_{d-1}(n)$, an $m$ larger than the level of $\pi$, and an $m$-$\pi$-dense matrix $Q = Q_0 \times \cdots \times Q_{d-1}$ such that $Q_i \subseteq \bigcup_{n < n_k} T_i(n)$ for all $i < d$ and $g$ is constant on $Q$. For each $i < d$, let $P_i = \{\hat{\rho}: \rho \in Q\}$, so that now $P_i \subseteq T_i(n_k)$. By definition of $g$, we have that $f$ is constant on $P = P_0 \times \cdots \times P_{d-1}$. Thus, $\pi$, $m$, and $P$ are as desired.
+\end{proof}
+
+One final critical lemma for us is the following, which is a consequence of the previous one. We include the proof for completeness.
+
+\begin{lemma}\label{lem:HLdensity}
+	Let $T_0,\ldots,T_{d-1}$ be infinite trees with no leaves. For all $k \geq 1$ and all $f: \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n) \to k$ there is a tuple $\pi \in \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n)$ such that for every $m$ larger than the level of $\pi$ there is an $m$-$\pi$-dense matrix $P \subseteq \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n)$ on which $f$ is constant.
+\end{lemma}
+
+\begin{proof}[Proof (from \cite{Todorcevic2010Ramsey}, proof of Theorem 3.2)]
+	Suppose otherwise. Then for every $\seq{\sigma_0,\ldots,\sigma_{d-1}} \in \bigcup_n T_0(n) \times \cdots \times T_{d-1}(n)$ there is an $m \geq 1$ such that $f$ is not constant on any $m$-$\pi$-dense matrix $P \subseteq \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n)$. Let $m_\pi$ be the least such $m$. Then choose $m_0 < m_1 < \cdots$ so that $m_0 = 0$ and for all $s \geq 0$, $m_\pi < m_{s+1}$ for all tuples $\pi \in \bigcup_{n \leq m_s} T_0(n) \times \cdots \times T_{d-1}(n)$. For each $i < d$, define $S_i = \bigcup_s T_i(m_s)$, and note that the structure $(S_i,\preceq)$ is isomorphic to a tree, so $S_0 \times \cdots \times S_{d-1}$ can be regarded as a product of trees. Using Remark \ref{rem:pseudotrees}, apply Lemma \ref{lem:HLlevel} to the restriction of $f$ to $S_0 \times \cdots \times S_{d-1}$ to get a tuple $\pi \in \bigcup_n S_0(n) \times \cdots \times S_{d-1}(n)$, an $m$ larger than the level of $\pi$ in this product, and an $m$-$\pi$-dense matrix $P \subseteq \bigcup_n S_0(n) \times \cdots \times S_{d-1}(n)$ on which $f$ is constant. But by construction, the level of $\pi$ must be equal to $m_s$ for some $s$, and $m$ must be equal to $m_t$ for some $t > s$. So $f$ cannot, in fact, be constant on $P$, which is a contradiction.
+\end{proof}
+
+We now come to proving our first main theorem of this chapter.
+
+\begin{theorem}\label{thm:halpern-lauchli-computably-true}
+ The Halpern-La\"{u}chli theorem is computably true (i.e., every instance computes a solution for itself).
+\end{theorem}
+
+\begin{proof}
+	Fix an instance of the Halpern-La\"{u}chli theorem, which is to say, infinite trees $T_0,\ldots,T_{d-1}$ with no leaves (and which, recall, we take to be presented with an explicit bound) and a coloring $f: \bigcup_n T_0(n) \times \cdots \times T_{d-1}(n) \to k$ for some $k \geq 1$. We exhibit an $(f \oplus T_0 \oplus \cdots \oplus T_{d-1})$-computable solution, i.e., $(S_0,\ldots,S_{d-1}) \in \Subtree{\omega}{T_0,\ldots,T_{d-1}}$ such that $f$ is constant on $\bigcup_n S_0(n) \times \cdots \times S_{d-1}(n)$.
+
+	Fix, non-effectively, a $\pi = (\sigma_0,\ldots,\sigma_{d-1}) \in \bigcup_n T_0(n) \times \cdots \times T_{d-1}(n)$ as in Lemma \ref{lem:HLdensity}, and say $m_0$ is the level of $\pi$. By the pigeonhole principle, we can also fix a $j < k$ such that for every $m > m_0$ there is an $m$-$\pi$-dense matrix $P \subseteq \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n)$ such that $f(\tau_0,\ldots,\tau_{d-1}) = j$ for all $(\tau_0,\ldots,\tau_{d-1}) \in P$. Call such a $P$ \emph{good above $m$}.
+
+	Notice that given $m  > m_0$ and a set $P \subseteq \bigcup_{n} T_0(n) \times \cdots \times T_{d-1}(n)$, it is computable in $f$ and the $T_i$ whether or not $P$ is good above $n$. Hence, we can $(f \oplus T_0 \oplus \cdots \oplus T_{d-1})$-computably define sequences of numbers $m_1 < m_2 < \cdots$ and sets $P_1,P_2,\ldots$ such that $m_0 < m_1$ and each $P_s$ is good above $m_s$. Now, for each $i < d$, define $S_i \subseteq T_i$ inductively as follows: add $\sigma_i$ to $S_i$, and having added $\tau \succeq \sigma_i$ choose the least $s$ such that $P_s$ contains an extension of each direct extension of $\tau$ in $T_i$, and add these extensions to $S_i$. Then $(S_0,\ldots,S_{d-1}) \in \Subtree{\omega}{T_0,\ldots,T_{d-1}}$, and $f(\tau_0,\ldots,\tau_{d-1}) = j$ for all $(\tau_0,\ldots,\tau_{d-1}) \in \bigcup_n S_0(n) \times \cdots \times S_{d-1}(n)$. Clearly, $(S_0,\ldots,S_{d-1})$ is computable from the $T_i$ and the sequences of $m_s$ and $P_s$, hence from $f$ and the $T_i$, as desired.
+\end{proof}
+
+In the next section, we will design a good notion of forcing for building infinite strong subtrees, and use this to give more effective proofs of Milliken's tree theorem and its product version. We will need a forest version of the Halpern-La\"{u}chli theorem.
+
+\begin{theorem}[Halpern-La\"{u}chli theorem for forests]\label{lem:hl-forest}
+  Let $T_0,\dots, T_{d-1}$ be infinite trees with no leaves, and $X_0,\dots, X_{d-1} \subseteq \baire$ be forests such that for each $i<d$, $X_i$ is a strong subforest of $T_i$ of height $\omega$, with common level function. For all $k \geq 1$ and all $f:\bigcup_n T_0(n)\times\dots\times T_{d-1}(n)\to k$ there exist strong subforests $Y_0,\ldots,Y_{d-1}$ of $X_0,\ldots,X_{d-1}$, respectively, with common level function, such that:
+  \begin{enumerate}
+  	\item for each $i < d$, every root of $X_i$ is extended by some root of $Y_i$;
+  	%\item there exists a coloring $g:\roots(X_0)\times\dots\times \roots(X_{d-1})\to k$ such that for all\[(\sigma_0,\ldots,\sigma_{d-1}) \in \roots(X_0) \times \cdots \times \roots(X_{d-1})\] and all \[(\tau_0,\ldots,\tau_{d-1}) \in \bigcup_n~(Y_0 \uh \sigma_0)(n) \times \cdots \times (Y_{d-1} \uh \sigma_{d-1})(n)\]we have $f(\tau_0,\ldots,\tau_{d-1}) = g(\sigma_0,\ldots,\sigma_{d-1})$.
+  	\item for each $(\sigma_0,\ldots,\sigma_{d-1}) \in \roots(X_0) \times \cdots \times \roots(X_{d-1})$, $f$ is constant on $\bigcup_n~(Y_0 \uh \sigma_0)(n) \times \cdots \times (Y_{d-1} \uh \sigma_{d-1})(n)$.
+  \end{enumerate}
+\end{theorem}
+
+\noindent In other words, the lemma asserts that no part of any of the forests $X_i$ above any given root is wholly omitted in passing to the subforest $Y_i$, and the color under $f$ of a tuple in $\bigcup_n Y_0(n)\times\dots\times Y_{d-1}(n)$ depends only on which roots of $X_0,\dots, X_{d-1}$ the elements of the tuple extend.
+
+As with the ordinary Halpern-La\"{u}chli theorem, our interest will be more in an effective version, which we now prove using \Cref{thm:halpern-lauchli-computably-true} above.
+
+\begin{theorem}\label{lem:hl-forest-computably-true}
+  \Cref{lem:hl-forest} is computably true.
+\end{theorem}
+\begin{proof}
+  Fix a collection of trees $T_0,\dots,T_{d-1}$ and strong subforests $X_0,\dots, X_{d-1}$ with a common level function, and a finite coloring $f:\bigcup_n T_0(n)\times\dots\times T_{d-1}(n)\to k$. For every $i<d$ and $\sigma\in\roots(X_i)$, the set
+  %$T_i^{\sigma}=T_i\upharpoonright\sigma$
+  $T_i^\sigma = X_i \uh \sigma$ is a tree. The result will come from an application of \Cref{thm:halpern-lauchli-computably-true} to the collection of $T_i^\sigma$ for $i<d$ and $\sigma\in\roots(X_i)$. Define a coloring  \[h:
+        % g\colon
+    % \begin{array}{rcl}
+      \bigcup_n \prod_{\substack{i<d, \\ \sigma\in \roots(X_i)}}T_i^\sigma(n)\to k^{|\roots(T_0)|\times\dots\times|\roots(T_{d-1})|}
+%      \bigcup_{n} T_0(n) \times \dots \times T_{d-1}(n) &\to& 2\\
+      % \bigcup_{n<h} {T}_0(n) \times \dots \times {T}_{d-1}(n) &\to& k \\
+%      \langle \tau_i^\sigma\rangle_{\sigma\in\roots(X_i)}&\mapsto&\langle f(\tau_0^{\sigma_0},\dots,\tau_{d-1}^{\sigma_{d-1}})
+%      (\sigma_0,\dots, \sigma_{d-1})&\mapsto& f((e(\sigma_0),\dots, e(\sigma_{d-1})))
+%      (\sigma_0,\dots,\sigma_{d-1}) &\mapsto& f(l_{\sigma_0},\dots, l_{\sigma_{d-1}})
+%    \end{array}
+    \]
+%   \benoit{It should be $g:\bigcup_n\prod_{i \leq d, \sigma\in \roots(X_i)}T_i^\sigma(n)\to K$}
+	%where $K=k^{|\roots(T_0)|\times\dots\times|\roots(T_{d-1})|}$, and
+	such that to a tuple $\pi=(\tau_i^{\sigma} \in T^\sigma_i: i \leq d, \sigma\in \roots(X_i))$, $h$ associates the tuple of all values that $f$ can take on the elements of $\pi$. That is,
+    \[
+      % g:t\mapsto \langle f(\tau_0,\dots,\tau_{d-1})\rangle_{(\tau_0,\dots,\tau_{d-1})\in t\cap T_0\times\dots\times t\cap T_{d-1}}
+      h(\pi) = \seq{f(\tau_0^{\sigma_0},\dots,\tau_{d-1}^{\sigma_{d-1}}):  (\sigma_0, \dots, \sigma_{d-1}) \in \roots(X_0) \times \dots \times \roots(X_{d-1})}.
+    \]
+%    \benoit{I would write $g(t) = \langle f(\tau_0^{\sigma_0},\dots,\tau_{d-1}^{\sigma_{d-1}})\rangle_{(\sigma_0, \dots, \sigma_{d-1}) \in \roots(X_0) \times \dots \times \roots(X_{d-1})}$}
+	Note that $h$ is computable from $f$ and the $T_i^\sigma$, hence from $f$, the $T_i$, and the $X_i$.
+
+    Apply \Cref{thm:halpern-lauchli-computably-true} to define a sequence of strong subtrees $S_i^\sigma$ of $T_i^\sigma$, for $i<d$ and $\sigma\in \roots(X_i)$, with a common level function, and computable from $h$ and the $T_i^\sigma$. For $i<d$, define $Y_i=\bigcup_{\sigma\in\roots(X_i)}S_i^\sigma$, so that $S^\sigma_i = Y_i \uh \sigma$. It is clear that each $Y_i$ is a strong subforest of $X_i$, and that every root of $X_i$ has an extension in $Y_i$. Moreover,
+    if $(\tau_0,\ldots,\tau_{d-1})$ and $(\tau'_0,\ldots,\tau'_{d-1})$ both belong to $\bigcup_n S_0^{\sigma_0}(n) \times \cdots \times \ S_{d-1}^{\sigma_{d-1}}(n)$ for some $(\sigma_0,\ldots,\sigma_{d-1}) \in \roots(X_0) \times \cdots \times \roots(X_{d-1})$, then we must have $f(\tau_0,\ldots,\tau_{d-1}) = f(\tau'_0,\ldots,\tau'_{d-1})$ since $h$ is monochromatic on $\bigcup_n \prod_{\substack{i<d, \sigma\in \roots(X_i)}}S_i^\sigma(n)$.
+\end{proof}
+
+\section{Product tree forcing}\label{subsect:product-tree-forcing}
+
+We now design the main notion of forcing for building strong subtrees. Variants of this notion of forcing will be used throughout the manuscript.
+Fix a collection of finitely branching trees with no leaves $T_0, \dots,\allowbreak T_{d-1}$.
+
+\begin{definition}\label{def:product-tree-condition}\index{product tree condition}\index{condition!product tree}\index{forcing!product tree}
+A \emph{product tree condition} is a tuple $(F_0, \dots, F_{d-1}, X_0, \dots,X_{d-1})$ as follows:
+	\begin{enumerate}
+		\item $(F_0, \dots, F_{d-1}) \in \Subtree{n}{T_0, \dots, T_{d-1}}$, for some $n \in \NN$;
+		\item  $X_0, \dots, X_{d-1}$ are infinite strong subforests of $T_0, \dots, T_{d-1}$, respectively, with a common level function;
+		\item for every $j < d$ and every leaf $\sigma$ of $F_j$, say at level $k$ in $T_j$, $\roots(X_j)$ is $(k+1)$-$\sigma$-dense in $T_j$.
+	\end{enumerate}
+\end{definition}
+
+\noindent Thus, the last condition asserts that every node $\tau \in T_j(k+1)$ extending $\sigma$ has an extension in $\roots(X_j)$.
+
+For instance, let $d = 1$ and $T_0 = \cantor$,
+with $F_0 = \{01, 01001, 01100\}$ and $X_0$ any strong subforest of $\cantor$
+such that $\roots(X_0) = \{ 0100100110, 0100110101,\allowbreak 0110000010, 0110011100 \}$.
+Then $(F_0, X_0)$ is a product tree condition. The leaves of $F_0$ are $01001$ and $01100$
+and are at level 5 in $\cantor$. The roots $0100100110$ and $0100110101$ of $X_0$ witness $(5+1)$-$\sigma$-density of $\roots(X_0)$ for $\sigma = 01001$, since the extensions of $\sigma$ at level 6 in $\cantor$ are $010010$ and $010011$.
+
+\begin{definition}\label{def:product-tree-extension}\index{product tree condition!extension}\index{extension!product tree condition}
+A product tree condition $d = (\hat{F}_0, \dots \hat{F}_{d-1}, \hat{X}_0, \dots, \hat{X}_{d-1})$ \emph{extends} $c = (F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$, written $d \leq c$,  if for every $j < d$, $F_j \subseteq \hat{F}_j$, $\hat{X}_j \subseteq X_j$ and $\hat{F}_j \setminus F_j \subseteq X_j$.
+\end{definition}
+
+\begin{remark}\label{remark:product-tree-condition-roots}
+Given a product tree condition $c = (F_0, \dots, F_{d-1}, X_0, \dots,X_{d-1})$,
+it is not necessarily the case that $F_0 \cup X_0, \dots, F_{d-1} \cup X_{d-1}$ are strong subtrees of $T_0, \dots, T_{d-1}$, respectively, as witnessed by the same level function.
+Indeed, the forests may have extra roots unrelated to the finite trees.
+However, by removing some roots of the forests, one can always obtain an extension
+$d = (F_0, \dots, F_{d-1}, Y_0, \dots, Y_{d-1})$ for which it is the case. We can therefore assume this when convenient. However, in the proof of strong cone avoidance of the Halpern-Lauchli theorem (\Cref{thm:hl-strong-cone-avoidance}), we will use the degree of freedom of being able to have extra roots for {the} construction {of} multiple product tree conditions all sharing the same forests.
+\end{remark}
+
+We now define a forcing relation for product tree conditions. We follow a standard approach to forcing in arithmetic, using strong forcing; see, e.g., Shore \cite[Chapter 3]{Shore-2016} for a complete introduction. We use $\Vdash$ (``forces'') for the forcing relation irrespective of the underlying forcing notion, as no confusion will arise in our treatment. As is usual, we write $\cdots \not\Vdash \cdots$ (``$\cdots$ does not force $\cdots$'') as an abbreviation $\neg ( \cdots \forces \cdots)$. Throughout, we work in the language of second-order arithmetic. We follow the usual convention that for a $\Delta^{0,Z}_0$ formula $\varphi(G)$ with a free set parameter $G$, if $\varphi(F)$ holds for a finite set $F$, then so does $\varphi(F \cup E)$ for every finite set $E$ such that $\min E \setminus F > \max F$. We also assume our pairing function is such that if $\sigma,\tau \in \baire$ and $|\tau| > |\sigma|$ then the code for $\tau$ is larger than the code for $\sigma$. So for example, if $F$ is viewed as a subset of Baire and the length of $\tau \in \baire$ is larger than the length of every string  in $F$, then the code of $\tau$ is larger than $\max F$. In particular, if every string in $E \setminus F$ is longer than every string in $F$ and $\varphi(F)$ holds then so does $\varphi(F \cup E)$.
+
+\begin{definition}\label{def:product-tree-forcing-relation}\index{$\Vdash$!product tree condition}
+Let $c = (F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$ be a product tree condition, $Z \subseteq \NN$ a set, and $\varphi(G_0, \dots, G_{d-1}, x)$ a $\Delta^{0,Z}_0$ formula with a free set parameters $G_0, \dots, G_{d-1}$ and a free integer parameter $x$.
+\begin{enumerate}
+	\item\label{force:exists} $c \Vdash (\exists x)\varphi(G_0, \dots, G_{d-1}, x)$ if $\varphi(F_0, \dots, F_{d-1}, x)$ holds for some $x \in \NN$.
+	\item\label{force:forall} $c \Vdash (\forall x)\varphi(G_0, \dots, G_{d-1}, x)$ if $\varphi(F_0 \cup E_0, \dots, F_{d-1} \cup E_{d-1}, x)$ holds for all $x \in \NN$ and all finite subsets $E_0,\ldots,E_{d-1}$ of $X_0,\ldots,X_{d-1}$, respectively, such that $F_0 \cup E_0, \dots, F_{d-1} \cup E_{d-1}$ are finite strong subtrees of $T_0, \dots, T_{d-1}$, respectively, with a common level function.
+\end{enumerate}
+\end{definition}
+
+\noindent Of course, \Cref{force:forall} should abstractly be defined as there being no $d$ extending $c$ such that  $d \Vdash (\exists x) \varphi(G_0,\ldots,G_{d-1},x)$, but this is easily seen to be equivalent to the given formulation. We give it explicitly in the definition since we will make frequent use of it.
+
+Every filter $\Uc$ on the set of product tree conditions
+induce{s} a $d$-tuple of (finite or infinite) strong subtrees $G^\Uc_0, \dots, G^\Uc_{d-1}$ of $T_0, \dots, T_{d-1}$, respectively, with common level function. Moreover, if $c \Vdash (\exists x)\varphi(G_0, \dots, G_{d-1}, x)$ or $c \Vdash (\forall x)\varphi(G_0, \dots, G_{d-1}, x)$
+for some condition $c \in \Uc$ and $\Delta^{0,Z}_0$ formula $\varphi$, then $(\exists x)\varphi(G_0^{\Uc}, \dots, \allowbreak G_{d-1}^\Uc, x)$ holds or $(\forall x)\varphi(G_0^{\Uc}, \dots, G_{d-1}^\Uc, x)$ holds, respectively.
+
+Given a Turing functional $\Gamma$, sets $C,Z \subseteq \NN$, and a condition $c$, we write $c \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$
+if there is an $x \in \NN$ such that either $c \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z}(x)\uparrow$ or $c \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z}(x)\downarrow \neq C(x)$. (Note that $C(x)$ is a definite value, so $C$ is not a parameter in the latter formula.) The following lemma states that given a filter $\Uc$ on the set of product tree conditions,
+if for every Turing functional $\Gamma$ there is a condition $c \in \Uc$
+such that $c \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$, then $G^\Uc_0, \dots, G^\Uc_{d-1}$ are all infinite.
+
+
+
+\begin{lemma}\label{lem:product-tree-genericity-implies-infinity}
+For every $n \in \NN$, and all sets $C,Z \subseteq \NN$, there is a Turing functional $\Gamma$ such that
+if $c = (F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$ is any product tree condition satisfying
+$$
+c \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C
+$$
+then $F_0, \dots, F_{d-1}$ all have height at least $n$.
+\end{lemma}
+\begin{proof}
+Let $\Gamma$ be the Turing functional such that for all sets $F_0,\ldots,F_{d-1}$ coding strong subtrees, if the height of each $F_j$ is not at least $n$ then $\Gamma^{F_0 \oplus \dots \oplus F_{d-1} \oplus Z}(x) \uparrow$ for all $x \in \NN$ and $Z \subseteq \NN$, and otherwise $c \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z}(x) \downarrow = 0$ for all $x$ and $Z$.
+
+Now suppose $c \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$. If $c \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z}(x)\downarrow \neq C(x)$ for some $x \in \NN$, then by \Cref{def:product-tree-forcing-relation}(1), $\Gamma^{F_0 \oplus \dots \oplus F_{d-1} \oplus Z}(x)\downarrow \neq C(x)$, so by choice of $\Gamma$, $F_0, \dots, F_{d-1}$ must all have height at least $n$.
+
+If $c \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z}(x)\uparrow$ for some $x \in \NN$, then by \Cref{def:product-tree-forcing-relation}(2), we must have that $\Gamma^{(F_0 \cup E_0) \oplus \dots \oplus (F_{d-1} \cup E_{d-1}) \oplus Z}(x)\uparrow$ for all finite subsets $E_0,\ldots,E_{d-1}$ of $X_0,\ldots,X_{d-1}$, respectively, such that $F_0 \cup E_0, \dots, F_{d-1} \cup E_{d-1}$ are finite strong subtrees of $T_0, \dots, T_{d-1}$ with a common level function. But since $X_0, \dots, X_{d-1}$ are infinite, we can find some such $E_0, \dots, E_{d-1}$ with $F_0 \cup E_0, \dots, F_{d-1} \cup E_{d-1}$ all of height at least $n$, contradicting the definition of $\Gamma$.
+\end{proof}
+
+\begin{remark}
+	The definition of product tree condition is made with respect to our particular choice of trees $T_0,\ldots,T_{d-1}$. We will always work with a single such choice at any given time, and so do not decorate our conditions by these trees explicitly. In particular, when a product tree condition is mentioned it should be understood as being with respect to whichever trees $T_0,\ldots,T_{d-1}$ are currently under discussion.
+\end{remark}
+
+
+\section{Strong cone avoidance of $\MT{1}{}$}\label{sec:sca_mt1}
+
+Before proving strong cone avoidance of the product version of Milliken's tree theorem,
+we prove a similar result for its non-product version. The proof is simpler and is actually sufficient to prove cone avoidance of the non-product version of Milliken's tree theorem for height 2. The techniques involved are a variation of the notion of \emph{$k$-hierarchy} of Chong et al~\cite[Section 4]{Chong2019Strengthb}. The theorem proven in this section will not be used in the remainder of the monograph, but can be seen as an instructive warm-up to the proof of \Cref{thm:hl-strong-cone-avoidance}.
+
+
+\begin{theorem}\label{thm:mtt1-strong-cone-avoidance}
+  $\MT{1}{}$ admits strong cone avoidance.
+\end{theorem}
+
+In what follows, fix two sets $C,Z \subseteq \NN$ such that $C \nTred Z$. Also fix an infinite $Z$-computable $Z$-computably bounded tree $T$ with no leaves and an arbitrary 2-partition $A_0 \sqcup A_1 = T$ representing an instance of $\MT{1}{2}$. Our task is to exhibit an $\MT{1}{}$-solution to whose join with $Z$ still does not compute $C$.
+
+%Call a tree condition $(F, X)$ \emph{cone avoiding} if $C \nTred X \oplus Z$.
+
+Given a finite strong subtree $F$ of
+%an infinite perfect binary tree
+$T$,
+a \emph{cover} of $F$ is a set $E \subseteq T$ such that
+for every leaf $\sigma$ of $F$, every immediate extension of $\sigma$ in $T$
+has an extension in~$E$.
+
+\begin{definition}\index{condition!tree}\index{tree condition}\index{tree!condition}\index{forcing!tree}
+\
+%Given a finitely branching tree with no leaves $T \subseteq \baire$, a
+\begin{enumerate}
+	\item A \emph{tree condition} is a pair $(F, X)$ such that $F$ is a finite strong subtree of $T$, $X$ is an infinite strong subforest of $T$, and $\roots(X)$ is a cover of $F$.
+	\item A tree condition $(\hat{F}, \hat{X})$ \emph{extends} $(F, X)$, written $(\hat{F}, \hat{X}) \leq (F, X)$, if $F \subseteq \hat{F}$, $\hat{X} \subseteq X$ and $\hat{F} \setminus F \subseteq X$.
+	\item $(F,X)$ is \emph{cone avoiding} if $C \nTred X \oplus Z$.
+\end{enumerate}
+\end{definition}
+
+\noindent Note that a tree condition is nothing but a product tree condition (\Cref{def:product-tree-condition}) relative to the $1$-tuple $T$.
+
+A tree condition inherits the forcing relation
+%for for $\Sigma^{0,Z}_1$ and $\Pi^{0,Z}_1$ formulas
+from the one for product tree conditions (\Cref{def:product-tree-forcing-relation}).
+
+\begin{definition}\label{def:mtt1-sca-forcing-relation}\index{$\Vdash$!tree condition}
+Let $(F, X)$ be a tree condition and $\varphi(G, x)$ a $\Delta^{0,Z}_0$ formula with a free set parameter $G$ and a free integer parameter $x$.
+\begin{itemize}
+	\item[1.] $(F, X) \Vdash (\exists x)\varphi(G, x)$ if $\varphi(F, x)$ holds for some $x \in \NN$.
+	\item[2.] $(F, X) \Vdash (\forall x)\varphi(G, x)$ if $\varphi(F \cup E, x)$ holds for all $x \in \NN$ and all finite $E \subseteq X$ such that $F \cup E$ is a finite strong subtree of $T$.
+\end{itemize}
+\end{definition}
+
+Every filter $\Uc$ on the set of tree conditions
+induces a (finite or infinite) strong subtree $G_\Uc$ of $T$.
+Moreover, if $(F, X) \Vdash (\exists x)\varphi(G, x)$ or $(F, X) \Vdash (\forall x)\varphi(G, x)$
+for some tree condition $(F, X) \in \Uc$ and $\Delta^{0,Z}_0$ formula $\varphi$, then $(\exists x)\varphi(G_\Uc, x)$ or $(\forall x)\varphi(G_\Uc, x)$ holds, respectively.
+
+Given a Turing functional $\Gamma$, we write $(F, X) \Vdash \Gamma^{G \oplus Z} \neq C$
+if there is an $x \in \NN$ such that either $(F, X) \Vdash \Gamma^{G \oplus Z}(x)\uparrow$ or $(F, X) \Vdash \Gamma^{G \oplus Z}(x)\downarrow \neq C(x)$. We have the following analogue of Lemma \ref{lem:product-tree-genericity-implies-infinity}, which is proved in the same way.
+
+\begin{lemma}\label{lem:mtt1-sca-genericity-implies-infinity}
+For every $n \in \NN$, there is a Turing functional $\Gamma$ such that
+for every tree condition $(F, X)$, if $(F, X) \Vdash \Gamma^{G \oplus Z} \neq C$
+then $F$ has height at least $n$.
+\end{lemma}
+
+\begin{definition}\index{condition!compound tree condition}\index{compound tree condition}\index{compound tree condition!cone avoiding}
+A \emph{compound tree condition} is a tuple $(F, \Fc, X)$ such that $(F, X)$ is a tree condition with $F \subseteq A_0$, and $\Fc$ is a finite collection of finite sets as follows:
+\begin{enumerate}
+	%\item[1.] $(F, X)$ is a tree condition such that $F \subseteq A_0$;
+	\item for every $E \in \Fc$, $(E, X)$ is a tree condition with $E \subseteq A_1$;
+	%\item the set of roots of the trees in $\Fc$ form a cover of $F$.
+	\item $\bigcup_{E \in \Fc} \roots(E)$ is a cover of $F$.
+\end{enumerate}
+A compound tree condition $(F, \Fc, X)$ is \emph{cone avoiding} if $C \nTred X \oplus Z$.
+\end{definition}
+
+\noindent Equivalently, $(F, \Fc, X)$ is cone avoiding if $(F, X)$ is cone avoiding as a tree condition, and so is $(E, X)$ for every $E \in \Fc$. Note that we do not require the finite strong subtrees in $\Fc$ to be witnessed by the same level function.
+
+\begin{lemma}\label{lem:mtt1-sca-compound-creator}\
+\begin{itemize}
+	\item[1.] For every tree condition $(F, X)$ with $F \subseteq A_0$, and every level $\ell \in \NN$ such that $X(\ell) \cap A_1$ is a cover of $F$, $(F, \Fc, Y)$ is a compound tree condition, where $\Fc = \{ \{ \rho \}: \rho \in X(\ell) \cap A_1 \}$ and $Y = X \setminus \bigcup_{s \leq \ell} X(s)$.
+	\item[2.] For every compound tree condition $(F, \Fc, X)$, every  $E \in \Fc$, and every extension $(\hat{E}, \hat{X}) \leq (E, X)$ with
+	$\hat{E} \setminus E \subseteq A_1$ and such that every root of $X$ is extended by a root of $\hat{X}$, $(F, \hat{\Fc}, \hat{X})$ is a compound tree condition, where $\hat{\Fc} = \{\hat{E}\} \cup (\Fc \setminus \{E\})$.
+\end{itemize}
+\end{lemma}
+
+\begin{proof}
+	Immediate from the definitions.	
+\end{proof}
+
+
+\begin{lemma}\label{lem:mtt1-sca-existence-colored-cover}
+Suppose there is no infinite strong perfect subtree $S \subseteq T$ such that $S \subseteq A_0$ and $C \nTred S \oplus Z$.
+Then for every cone avoiding tree condition $(F, X)$, there is a level $\ell \in \NN$ such that $X(\ell) \cap A_1$ is a cover of $F$.
+\end{lemma}
+\begin{proof}
+Suppose first there is some level $\ell$ such that every root $\rho$ of $X$ has an extension $\sigma \in X(\ell) \cap A_1$. Since $\roots(X)$ is a cover of $F$, then so is $X(\ell) \cap A_1$.
+
+So now suppose that for every level $\ell$, there is some root $\rho$ of $X$ all of whose extensions $\sigma \in X(\ell)$ belong to $A_0$. We claim there is an infinite strong  subtree $S \subseteq T$ such that $S \subseteq A_0$ and $C \nTred S \oplus Z$, contrary to the hypothesis of the lemma. Let $f: \NN \to \roots(X)$ be the function which to $\ell$ associates such a root $\rho$. By strong cone avoidance of $\RT{1}{2}$ (\cite{Dzhafarov2009Ramseys}, Lemma 3.2), there is an infinite set of levels $H$ which is $f$-homogeneous for some root $\rho$ of $X$ and such that $C \nTred H \oplus X \oplus Z$. In particular, for every level $\ell \in H$ and every node $\sigma$ at level $\ell$ in $X$ extending $\rho$ we have $\sigma \in A_0$. But now we can $H \oplus X$-computably build an infinite strong subtree $S \subseteq T$ among these $\sigma$. Then $S \subseteq A_0$, and since $S \Tred H \oplus X$ we also have $C \nTred S \oplus Z$.
+\end{proof}
+
+
+%The following lemma states that cone avoiding tree conditions can always be properly extended within any part of the 2-partition, assuming there is no cone avoiding solution to the $\MT{1}{2}$-instance $A_0 \sqcup A_1 = T$.
+%
+%\begin{lemma}
+%Assume there is no infinite strong perfect subtree $S \subseteq T$ such that $S \subseteq A_{1-i}$ and $C \nTred S \oplus Z$.
+%For every cone avoiding tree condition $(F, X)$, there is a cone avoiding extension $(E, Y) \leq (F, X)$ such that $F \subsetneq E$ and $E \setminus F \subseteq A_i$.
+%\end{lemma}
+%\begin{proof}
+%Suppose first there is some level $\ell$ such that for every root $\rho$ of $X$, there is
+%a descendant $\sigma \in X(\ell) \cap A_i$. We claim there is an extension $(E, Y)$ satisfying the lemma.
+%Let $Y$ be obtained from $X$ by removing all the nodes from $X$ at levels lesser or equal than $\ell$. In particular, $Y \Tred X$, so $C \nTred Y \oplus Z$.
+%By definition of a tree condition, for every leaf $\mu$ of $F$, there are two roots $\rho_0, \rho_1$ of $X$ such that $\rho_0 \meet_T \rho_1 = \mu$. Let $\sigma^\mu_0$ and $\sigma^\mu_1$ be nodes in $X(\ell) \cap A_i$ extending $\rho_0$ and $\rho_1$, respectively. Then the set $E = F \cup \{ \sigma^\mu_0, \sigma^\mu_1: \rho \in \leaves(F) \}$ is a strong perfect subtree of $T$ and $E \setminus F \subseteq A_i$. Last, since $X$ is a perfect strong subforest of $T$, every node in $X$ is branching. Every leaf $\sigma^\rho_j$ of $E$ belongs to $X(\ell)$, so has two children in $X(\ell+1)$. Since $X(\ell+1) = Y(0)$, $\roots(Y)$ is a cover of $E$.
+%Thus $(E, Y)$ is a cone avoiding tree condition extending $(F, Y)$ and satisfying the lemma.
+%
+%Suppose now that for every level $\ell$, there is some root $\rho$ of $X$ such that for every descendant $\sigma \in X(\ell)$, $\sigma \in A_{1-i}$. We claim there is an infinite strong perfect subtree $S \subseteq T$ such that $S \subseteq A_{1-i}$ and $C \nTred S \oplus Z$. Let $f: \NN \to \roots(X)$ be the function which to $\ell$ associates such a root $\rho$. By strong cone avoidance of $\RT{1}{2}$ (see Dzhafarov and Jockusch~\cite{Dzhafarov2009Ramseys}), there is an infinite set of levels $H$ which is $f$-homogeneous for some root $\rho$ of $X$ and such that $C \nTred H \oplus X \oplus Z$. In other words, for every level $\ell \in H$ and every node $\sigma$ at level $\ell$ in $X$ extending $\rho$, $\sigma \in A_{1-i}$.
+%One can $H \oplus X$-compute an infinite strong perfect subtree $S \subseteq T$ among those nodes, so that $S \subseteq A_{1-i}$. Moreover, since $S \Tred H \oplus X$, then $C \nTred S \oplus Z$. This contradicts the hypothesis of our lemma.
+%\end{proof}
+
+\begin{lemma}\label{lem:mtt1-sca-forcing-requirement}
+For every cone avoiding compound tree condition $(F, \Fc, X)$ and every tuple of Turing functionals $\langle \Gamma_F, \Gamma_E: E \in \Fc \rangle$, one of the following holds:
+\begin{itemize}
+	\item[1.] There is a cone avoiding extension $(\hat{F}, \hat{X}) \leq (F, X)$
+	such that $(\hat{F}, \hat{X}) \Vdash \Gamma^{G \oplus Z}_F \neq C$ and $\hat{F} \setminus F \subseteq A_0$ ;
+	\item[2.] There is a cone avoiding extension $(\hat{E}, \hat{X}) \leq (E, X)$ for some $E \in \Fc$
+	such that $(\hat{E}, \hat{X}) \Vdash \Gamma^{G \oplus Z}_E \neq C$ and $\hat{E} \setminus E \subseteq A_1$ and every root of $X$ is extended by a root of $\hat{X}$.
+\end{itemize}
+\end{lemma}
+\begin{proof}
+Let $W$ be the set of pairs $(x, v) \in \NN \times \{0,1\}$ such that for every 2-partition $B_0 \sqcup B_1 = X$ one of the following holds:
+\begin{itemize}
+	\item[(a)] there is a finite set $H \subseteq X \cap B_0$ such that $F \cup H$ is a finite strong subtree of $T$ and $\Gamma_F^{(F \cup H) \oplus Z}(x)\downarrow = v$;
+	\item[(b)] there is some $E \in \Fc$ and a finite set $H_E \subseteq X \cap B_1$ such that $E \cup H_E$ is a finite strong subtree of $T$ and $\Gamma_E^{(E \cup H_E) \oplus Z}(x)\downarrow = v$.
+\end{itemize}
+By compactness, the set $W$ is $X \oplus Z$-c.e.\ There are three cases:
+
+\case{1}{$(x, 1-C(x)) \in W$ for some $x \in \NN$.} Let $B_0 = X \cap A_0$ and $B_1 = X \cap A_1$. If (a) holds with witness $H$, then let $\ell$ be the level of the leaves of $F \cup H$ in $X$, and $\hat{X} = X \setminus \bigcup_{s \leq \ell} X(s)$. Now $(F \cup H, \hat{X})$ is a tree condition satisfying item 1 of the lemma.
+If (b) holds for some $E \in \Fc$ with witness $H_E$, then let $\ell$ be the level of the leaves of $E \cup H_E$ in $X$, and $\hat{X} = X \setminus \bigcup_{s \leq \ell} X(s)$. Now $(E \cup H_E, \hat{X})$ is a tree condition satisfying item 2 of the lemma.
+
+\case{2}{$(x, C(x)) \not\in W$ for some $x \in \NN$.} Let $\Cc$ be the $\Pi^{0,X \oplus Z}_1$ class of all sets $B_0 \oplus B_1$ such that $B_0 \sqcup B_1 = X$ and neither (a) nor (b) holds for the pair $(x, C(x))$. By assumption, $\Cc \neq \emptyset$.
+	By the cone avoidance basis theorem (\cite{Jockusch1972Degrees}, Corollary 2.11), there is a $B_0 \oplus B_1 \in \Cc$ such that $C \nTred B_0 \oplus B_1 \oplus X \oplus Z$. For $\sigma \in X$, write $B(\sigma)$ for the unique $i < 2$ such that $\sigma \in B_i$.
+	Let $I = \roots(X)$.
+	By \Cref{thm:halpern-lauchli-computably-true} applied to the finite $I$-tuple of infinite trees $\langle X \uh \rho: \rho \in I \rangle$ and the coloring $g$ defined on $\bigcup_n \prod_{\rho \in I} (X \uh \rho)(n)$ by $g(\sigma_\rho: \rho \in I) = (B(\sigma_\rho): \rho \in I)$, 
+	%(\langle \sigma_\rho: \rho \in I \rangle) = \langle B(\sigma_\rho): \rho \in I \rangle$,
+	there is a $B_0 \oplus B_1 \oplus X$-computable finite tuple of infinite strong subtrees $( Y_\rho: \rho \in I )$ of $( X \uh \rho: \rho \in I )$ with common level function, together with a tuple of colors $( i_\rho  \in \{0,1\}: \rho \in I )$ such that $Y_\rho \subseteq B_{i_\rho}$ for every $\rho \in I$. For every $E \in \Fc$, let $I_E$ be the set of nodes in $I$ extending the root of $E$. By assumption, $I_E$ is a cover of $E$.
+
+
+	If $I_E \subseteq \{ \rho \in I: i_\rho = 1 \}$ for some $E \in \Fc$, then $(E, \bigcup_{\rho \in I} Y_\rho)$ is a cone avoiding extension of $(E, X)$ such that every root of $X$ is extended by a root of $\bigcup_{\rho \in I} Y_\rho$, and
+	forcing $\Gamma^{G \oplus Z}_E(x) \uparrow$ or $\Gamma^{G \oplus Z}_E(x) \downarrow \neq C(x)$.
+
+	If $I_E \cap \{ \rho \in I: i_\rho = 0 \} \neq \emptyset$ for every $E \in \Fc$, then in particular, every root of every $E \in \Fc$ has an extension in $\{ \rho \in I: i_\rho = 0 \}$. Since the set of roots of the trees in $E$ form a cover of $F$, then $\{ \rho \in I: i_\rho = 0 \}$ is a cover of $F$. Thus, $(F, \bigcup_{i_\rho = 0} Y_\rho)$ is a cone avoiding extension of $(F, X)$
+	forcing $\Gamma^{G \oplus Z}_F(x) \uparrow$ or $\Gamma^{G \oplus Z}_F(x) \downarrow \neq C(x)$.
+
+\case{3}{otherwise.} Then for $x,y \in \NN$ we have $(x,y) \in W$ if and only if $y = C(x)$. But as $W$ is $X \oplus Z$-c.e., this implies that $C \Tred X \oplus Z$, which is a contradiction.
+\end{proof}
+
+%The following lemma states that given a filter $\Uc$ of tree conditions,
+%if for every Turing functional $\Gamma$ there is a tree condition $(F, X) \in \Uc$
+%such that $(F, X) \Vdash \Gamma^{G \oplus Z} \neq C$, then $G_\Uc$ is infinite.
+%
+%\begin{lemma}\label{lem:mtt1-sca-genericity-implies-infinity}
+%For every $n \in \NN$, there is a Turing functional $\Gamma$ such that
+%for every tree condition $(F, X)$, if $(F, X) \Vdash \Gamma^{G \oplus Z} \neq C$
+%then $F$ has height at least $n$.
+%\end{lemma}
+%\begin{proof}
+%Let $\Gamma^{F \oplus Z}$ be the 0-constant function if $F$ has height at least $n$. Otherwise $\Gamma^{F \oplus Z}$ is the nowhere defined function. Suppose $(F, X) \Vdash \Gamma^{G \oplus Z} \neq C$. If $(F, X) \Vdash \Gamma^{G \oplus Z}(x)\downarrow \neq C(x)$ for some $x \in \NN$, then by \Cref{def:mtt1-sca-forcing-relation}(1), $\Gamma^{F \oplus Z}(x)\downarrow \neq C(x)$, so by choice of $\Gamma$, $F$ has height at least~$n$. If $(F, X) \Vdash \Gamma^{G \oplus Z}(x)\uparrow$ for some $x \in \NN$, then by \Cref{def:mtt1-sca-forcing-relation}(2), $\Gamma^{(F \cup E) \oplus Z}(x)\uparrow$ for every set $E \subseteq X$ such that $F \cup E$ is a finite strong subtree of $T$. Since $X$ is infinite, one can find some $E$ such that $F \cup E$ has height at least $n$, contradicting $\Gamma^{(F \cup E) \oplus Z}(x)\uparrow$.
+%\end{proof}
+
+We are now ready to prove strong cone avoidance of Milliken's tree theorem for height 1.
+
+\begin{proof}[Proof of \Cref{thm:mtt1-strong-cone-avoidance}]
+Suppose first there is a filter $\Uc$ of cone avoiding tree conditions such that
+$F \subseteq A_0$ for every $(F, X) \in \Uc$, and such that
+for every Turing functional $\Gamma$ there is a tree condition $(F, X) \in \Uc$
+with $(F, X) \Vdash \Gamma^{G \oplus Z} \neq C$.
+Then by definition of a tree condition, $G_\Uc$ is a strong subtree of $T$.
+Moreover, by assumption, $G_\Uc \subseteq A_0$ and $C \nTred G_\Uc \oplus Z$.
+Last, by \Cref{lem:mtt1-sca-genericity-implies-infinity}, $G_\Uc$ is infinite, thus $G_\Uc$ satisfies the statement of the theorem.
+
+Suppose now there is no such filter. Then there is a cone avoiding tree condition $(F, X)$
+such that $F \subseteq A_0$ and a Turing functional $\Gamma_F$ such that
+for every cone avoiding extension $(\hat{F}, \hat{X})$ with $\hat{F} \setminus F \subseteq A_0$ we have $(\hat{F}, \hat{X}) \nVdash \Gamma_F^{G \oplus Z} \neq C$.
+
+Assume there is no infinite strong subtree $S \subseteq T$ such that $S \subseteq A_0$ and $C \nTred S \oplus Z$, otherwise we are done. By \Cref{lem:mtt1-sca-existence-colored-cover}, there is a level $\ell \in \NN$
+such that $X(\ell) \cap A_1$ is a cover of $F$. Let $I = X(\ell) \cap A_1$.
+
+We claim there exists an infinite sequence of cone avoiding compound tree conditions
+\[
+	(F, \Fc_0, X_0), (F, \Fc_1, X_1), \dots
+\]
+such that for every $s \in \NN$, letting $s = \langle \Gamma_\rho: \rho \in I \rangle$, the following holds:
+\begin{enumerate}
+	\item $\Fc_s  = \{ E_{s, \rho}: \rho \in I \}$;
+	\item $X_s \subseteq X$;
+	\item $\Fc_{s+1} \setminus \{E_{s+1,\rho}\} = \Fc_s \setminus \{E_{s, \rho}\}$
+	for some $\rho \in I$ such that $(E_{s+1, \rho}, X_{s+1}) \leq (E_{s, \rho}, X_s)$
+	and  $(E_{s+1, \rho}, X_{s+1}) \Vdash \Gamma_\rho^{G \oplus Z} \neq C$.
+\end{enumerate}
+
+By \Cref{lem:mtt1-sca-compound-creator}(1), letting $\Fc_0 = \{ \{\rho \}: \rho \in I\}$ and $X_0 = X \setminus \bigcup_{t \leq \ell} X(t)$, the tuple $(F, \Fc_0, X_0)$ is a cone avoiding compound tree condition. Given a compound tree condition $(F, \Fc_s, X_s)$ and letting $s = \langle \Gamma_\rho: \rho \in I \rangle$, by \Cref{lem:mtt1-sca-forcing-requirement},
+either there is a cone avoiding extension $(\hat{F}, \hat{X}) \leq (F, X)$
+	such that $(\hat{F}, \hat{X}) \Vdash \Gamma^{G \oplus Z}_F \neq C$ and $\hat{F} \setminus F \subseteq A_0$, or there some $\rho \in I$ and a cone avoiding extension $(E_{s+1,\rho}, X_{s+1}) \leq (E_{s,\rho}, X_s)$
+	such that $(E_{s+1, \rho}, X_{s+1}) \Vdash \Gamma_\rho^{G \oplus Z} \neq C$ and $E_{s+1,\rho}  \setminus E_{s,\rho} \subseteq A_1$ and every root of $X_s$ extends in a root of $X_{s+1}$. The former case cannot happen, so the latter case holds, and we can define $(F, \Fc_{s+1}, X_{s+1})$ accordingly by \Cref{lem:mtt1-sca-compound-creator}(2). This proves our claim.
+
+By a pairing argument, there is a $\rho \in I$ such that for every Turing functional $\Gamma$ there is an $s \in \NN$ such that $(E_{s,\rho}, X_s) \Vdash \Gamma^{G \oplus Z} \neq C$. By construction, the conditions $(E_{s,\rho}, X_s)$ for this fixed $\rho$ are compatible for all $s$. Thus, we can fix a filter $\Uc$ containing all of them.
+%Let $\Uc$ be the smallest filter containing the set of tree conditions $\{ (E_{s,\rho}, X_s): s \in \NN \}$.
+Again, by definition of a tree condition, $G_\Uc$ is a strong subtree of $T$. By assumption, $G_\Uc \subseteq A_1$ and $C \nTred G_\Uc \oplus Z$.
+Last, by \Cref{lem:mtt1-sca-genericity-implies-infinity}, $G_\Uc$ is infinite, thus $G_\Uc$ satisfies the statement of the theorem. This completes the proof of \Cref{thm:mtt1-strong-cone-avoidance}.
+\end{proof}
+
+\section{Strong cone avoidance of the Halpern-La\"{u}chli theorem}\label{sec:sca_hl}
+
+We now prove that the Halpern-La\"{u}chli theorem admits strong cone avoidance. This will be used in multiple parts of the rest of the manuscript, to prove that the product version of Milliken's tree theorem for height 2 admits cone avoidance (\Cref{thm:hl-strong-cone-avoidance}) and hence does not imply $\ACA_0$ over $\RCA_0$, and also to prove the same for the product version of Milliken's tree theorem for height 3, but where at most 2 colors are allowed in the solution (\Cref{thm:pmtt3k2-cone-avoidance}).
+
+\begin{theorem}\label{thm:hl-strong-cone-avoidance}
+The Halpern-La\"{u}chli theorem admits strong cone avoidance.
+\end{theorem}
+
+%
+%\begin{definition}[Forest]
+%A \emph{forest} is a non-empty set $X \subseteq \cantor$. A node $\sigma \in X$ is a \emph{root} of $X$ if it has no prefix in $X$.   We write $X(n)$ for the set of nodes of $X$ such that $|\{\tau\in X:\tau\prec\sigma\}|=n$. The \emph{level} of a node is the number $n$ such that $\sigma\in X(n)$. A node $\sigma\in X$ is \emph{branching} iff $\exists\tau_0,\tau_1\in X(n+1)$ with $\sigma\prec\tau_0, \tau_1$ and $\tau_0\incomp\tau_1$. A non-branching node is either a \emph{leaf} with no extension, or has exactly one extension at the next level. The \emph{meet in $X$} of two nodes $\sigma,\tau\in X$, if it exists, is the common predecessor of $\sigma$ and $\tau$ with the largest level in $X$, written $\sigma\meet_X\tau$.  A forest $X$ is \emph{perfect} if every node is either a leaf or branching, and every leaves are at the same level.
+%\end{definition}
+%
+%Given a forest $X$ and a node $\sigma \in X$, we let $X \uh \sigma = \{ \tau \in X: \tau \succeq \sigma \}$. In particular, whenever $\sigma \in X$, $X \uh \sigma$ is a tree rooted by $\sigma$.
+%Let $\roots(X)$ and $\leaves(X)$ and be the sets of roots and leaves of $X$, respectively. Note that $X$ is a tree if and only if $\roots(X)$ is a singleton.
+%
+%
+%\begin{definition}
+%  A subforest $Y$ of a forest $X$ is \emph{$\meet$-closed} if for every $\sigma,\tau\in Y$,
+%  such that $\sigma \meet_Y \tau$ exists, $\sigma\meet_Y\tau = \sigma\meet_X\tau$.
+%  A forest $Y$ is a \emph{strong subforest} of a tree $X$ if it is $\meet$-closed tree and there exists a function $f:\om\to\om$ mapping levels to levels, such that $\forall n\forall \sigma\in Y(n), \sigma\in X(f(n))$. We shall later refer to this function as the \emph{level function}.
+%\end{definition}
+%
+%Given a finite strong perfect subtree $F$ of an infinite perfect tree $T$,
+%a \emph{cover} of $F$ is a set $E \subseteq T$ such that every
+%leaf $\sigma$ of $F$ has two extensions $\tau_0, \tau_1 \in E$ such
+%that $\tau_0 \meet_T \tau_1 = \sigma$.
+%
+
+The meta-analysis of a theorem sometimes requires the use of the classical version of the theorem itself. In order to prove \Cref{thm:hl-strong-cone-avoidance}, we need the following version of the Halpern-La\"{u}chli theorem:
+
+\begin{theorem}\label{thm:combinatorial-finite-hapern-lauchli}
+	Let $T_0,\ldots,T_{d-1}$ be infinite trees with no leaves. For all $k \geq 1$, there is an $N \in \NN$ such that for every $f: T_0(N) \times \cdots \times T_{d-1}(N) \to k$ there is an $\ell < N$, a $\pi \in T_0(\ell) \times \cdots T_{d-1}(\ell)$, and an $(\ell+1)$-$\pi$-dense matrix $P \subseteq T_0(N) \times \cdots \times T_{d-1}(N)$ on which $f$ is constant.
+%For every tuple of finitely branching trees with no leaves $T_0, \dots,\allowbreak T_{d-1}$ and every number of colors $k \geq 1$,
+%there is a level $N \in \NN$ such that for every coloring $f: T_0(N) \times \dots \times T_{d-1}(N) \to k$, there is some $\ell < N$, some $\pi \in T_0(\ell) \times \dots \times T_{d-1}(\ell)$ and some $(\ell+1)$-$\pi$-dense matrix $M \subseteq T_0(N) \times \dots \times T_{d-1}(N)$ monochromatic for $f$.
+\end{theorem}
+\begin{proof}
+  Fix $k$. The Halpern-La\"{u}chli thoerem (\Cref{th:strong-hl}) implies that for every $k$-coloring of $\bigcup_n T_0(n)\times\dots\times T_{d-1}(n)$ there exists an $N \in \NN$ and a tuple of strong subtrees $(S_0,\ldots,S_{d-1}) \in \Subtree{2}{T_0,\ldots,T_{d-1}}$ with level function bounded by $N$ such that $f$ is constant on $\bigcup_{n<2}S_0(n)\times\dots\times S_{d-1}(n)$. By compactness of the space of $k$-colorings of $\bigcup_n T_0(n)\times\dots\times T_{d-1}(n)$, we can choose a single such $N$ that works for all $k$-colorings: that is, for every $k$-coloring, the trees $S_0,\dots, S_{d-1}$ can be taken as strong subtrees of $\bigcup_{n<N} T_0(n),\dots,\bigcup_{n<N} T_{d-1}(n)$, respectively. The claim is that this $N$ also witnesses the theorem.
+
+  Let $f: T_0(N) \times \dots \times T_{d-1}(N) \to k$ be a coloring. For any $i<d$, $n\in\NN$ and $\sigma\in T_i(n)$, let $e(\sigma)$ be any element of $T_i(N)$ compatible with $\sigma$: either an extension, or a prefix. Define the coloring $g: \bigcup_{n} T_0(n) \times \dots \times T_{d-1}(n) \to k$ by $g(\sigma_0,\ldots,\sigma_{d-1}) = f(e(\sigma_0),\ldots,e(\sigma_{d-1}))$ for all $(\sigma_0,\ldots,\sigma_{d-1})$.
+  %\[
+  %  g\colon
+  %  \begin{array}{rcl}
+  %    \bigcup_{n} T_0(n) \times \dots \times T_{d-1}(n) &\to& k\\
+  %    % \bigcup_{n<h} {T}_0(n) \times \dots \times {T}_{d-1}(n) &\to& k \\
+  %    (\sigma_0,\dots, \sigma_{d-1})&\mapsto& f((e(\sigma_0),\dots, e(\sigma_{d-1})))
+% %     (\sigma_0,\dots,\sigma_{d-1}) &\mapsto& f(l_{\sigma_0},\dots, l_{\sigma_{d-1}})
+  %  \end{array}
+  %\]
+%  $g: \bigcup_{n} T_0(n) \times \dots \times T_{d-1}(n) \to 2$ by $g((\sigma_0,\dots, \sigma_{d-1}))=f((e(\sigma_0),\dots, e(\sigma_{d-1})))$.
+  By choice of $N$, we can find $(S_0,\ldots,S_{d-1}) \in \Subtree{2}{T_0,\ldots,T_{d-1}}$ with level function bounded by $N$ so that $g$ is constant on $S_0(1)\times\dots\times S_{d-1}(1)$. Thus, $f$ is constant on $P = e(S_0(1))\times\dots\times e(S_{d-1}(1))$. Moreover, if we let $\ell$ be the (common) first level of the $S_i$ in $T_i$, and let $\pi$ be the unique element of $S_0(0) \times \cdots \times S_{d-1}(0)$, then $P$ is an $(\ell+1)$-$\pi$-dense matrix.
+  %Moreover, if $\ell$ is the first level of $S_0$ in $T_0$, then the unique $\pi\in S_0(0)\times\dots\times S_{d-1}(0)$ is such that $P$ is a $(\ell+1)$-$\pi$-dense matrix.
+% \todo[inline]{This can be obtained from Theorem 3.9 page 53 in the book about Ramsey spaces, using compactness and the level normalization trick.}
+\end{proof}
+
+%\begin{definition}\label{def:product-tree-extension}
+%A product tree condition $d = (\hat{F}_0, \dots \hat{F}_{d-1}, \hat{X}_0, \dots, \hat{X}_{d-1})$ \emph{extends} $c = (F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$, written $d \leq c$,  if for every $j < d$, $F_j \subseteq \hat{F}_j$, $\hat{X}_j \subseteq X_j$ and $\hat{F}_j \setminus F_j \subseteq X_j$.
+%\end{definition}
+
+In what follows, fix two sets $C$ and $Z$ such that $C \nTred Z$.
+Also fix a tuple of infinite $Z$-computable $Z$-computably bounded trees with no leaves $T_0, \dots, T_{d-1}$ and an arbitrary $k$-partition $A_0 \sqcup \dots \sqcup A_{k-1} = \exprodtree{T}{d}$ representing an instance of the Halpern-La\"{u}chli theorem (for $k$-colorings).
+
+For this section, we will need to strengthen the extension relation for product tree conditions (relative to these $T_i$).
+
+\begin{definition}\label{def:strong-product-tree-extension}\index{product tree condition!strong extension}
+Let $T_0,\ldots,T_{d-1}$ be infinite trees with no leaves. A product tree condition $d = (\hat{F}_0, \dots \hat{F}_{d-1}, \hat{X}_0, \dots, \hat{X}_{d-1})$ (relative to these $T_i$) \emph{extends} $c = (F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$, written $d \leq c$,  if for every $j < d$, $F_j \subseteq \hat{F}_j$, $\hat{X}_j \subseteq X_j$ and $\hat{F}_j \setminus F_j \subseteq X_j$, and moreover, every root of $X_j$ is extended by a root of $\hat{X}_j$.
+\end{definition}
+
+\begin{definition}\label{def:levhom3}\index{product tree condition!cone avoiding}\index{product tree condition!level homogeneous}
+A product tree condition $(F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$ is \emph{cone avoiding} if $C \nTred X_0 \oplus \dots \oplus X_{d-1} \oplus Z$. It is \emph{level-homogeneous} if for every $n$, there is some color $i < k$ such that $F_0(n) \times \dots \times F_{d-1}(n) \subseteq A_i$.
+\end{definition}
+
+\noindent In particular, if $d$ extends $c$ in the sense of \Cref{def:strong-product-tree-extension},
+then $d$ extends $c$ in the sense of \Cref{def:product-tree-extension}.
+
+Any product tree condition of the form
+$$
+(\{\rho_0\}, \dots, \{\rho_{d-1}\}, X_0,  \dots, X_{d-1})
+$$
+is level-homogeneous. Let $\Pb$ be the set of cone avoiding level-homogeneous product tree conditions, ordered by the stronger relation of \Cref{def:strong-product-tree-extension}.
+The following lemma is the core of the argument. The proof of \Cref{lem:hl-sca-density-below-a-cone} shows that the witnessed condition $c$ can actually be chosen so that its stems are singletons.
+% \pelliot{What you really prove is that $c$ can be taken of the form $(\{\rho_0\}, \dots, \{\rho_{d-1}\}, X^s_0, \dots, X^s_{d-1})$ which is obviously level-homogeneous. I don't know, but it might be clearer to state it like this, as I was wondering where exactly you used the ``level-homogeneous'' thing}
+
+\begin{lemma}\label{lem:hl-sca-density-below-a-cone}
+There is a condition $c \in \Pb$
+such that for every Turing functional $\Gamma$, the set of conditions $c' \in \Pb$
+satisfying $c' \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$
+is $\Pb$-dense below $c$.
+\end{lemma}
+\begin{proof}
+Assume for the sake of contradiction that for every condition $c \in \Pb$,
+there is a Turing functional $\Gamma$ and a $\Pb$-extension, every further $\Pb$-extension $c'$ of which satisfies $c' \not\Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$.
+
+We build non-effectively a $d$-tuple of subsets $S_0, \dots, S_{d-1}$ of $T_0, \dots, T_{d-1}$, respectively. Formally, these sets will not be trees, as specified in \Cref{def:trees}, since they will not be closed under $\meet$. However, the prefix relation induces a tree structure, and seen as such, the $S_j$ will be finitely branching trees with no leaves. (In fact, the $S_j$ will have a common level function.) We may thus use Remark \ref{rem:pseudotrees} to think of the $S_j$ as trees, and in particular, we may apply \Cref{thm:combinatorial-finite-hapern-lauchli} to them.
+%Recall that $\Pc(X)$ denotes the power set of a set $X$.
+
+Along with $S_0, \dots, S_{d-1}$, we define the following functions:
+\begin{enumerate}
+	\item $\operatorname{sets}: \NN \to \Pc(\baire) \times \dots \times \Pc(\baire)$ which to a level $\ell \in \NN$
+	associates a $d$-tuple $X_0, \dots, X_{d-1}$ of infinite strong subforests of $T_0, \dots, T_{d-1}$, respectively, with a common level function, such that $C \nTred X_0 \oplus \dots \oplus X_{d-1} \oplus Z$ and for every $j < d$, $S_j(\ell+1) = \roots(X_j)$;
+	\item $\operatorname{stems}: \exprodtree{S}{d} \to \Subtree{<\omega}{T_0, \dots, T_{d-1}}$, which to a $\pi \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$ associates a tuple $(F_0, \dots, F_{d-1})$ whose roots pointwise extend $\pi$, and such that $(F_0, \dots, F_{d-1}, \operatorname{sets}(\ell))$ is a $\Pb$-condition;
+	\item $\operatorname{req}: \exprodtree{S}{d} \to \NN$, which to a $\pi \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$ associates the index $e \in \NN$ of a Turing functional $\Phi_e$
+	such that for every $\Pb$-extension $c'$ of the condition $(\operatorname{stems}(\pi), \operatorname{sets}(\ell))$,
+	$c' \nVdash \Gamma_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$.
+\end{enumerate}
+Moreover, we ensure that for every level $\ell \in \NN$,
+$\operatorname{sets}(\ell+1)$ is a tuple of strong subforests of $\operatorname{sets}(\ell)$ with common level function.
+% \pelliot{maybe there should be a picture here? I needed to draw one to understand better.}
+\begin{figure}[h!]
+  \begin{center}
+    %\input{figures/scaHL.pdf_t}\\
+    \begin{tikzpicture}[scale=1.5]
+		\tikzset{
+			empty node/.style={circle,inner sep=0,outer sep=0,fill=none},
+			solid node/.style={circle,draw,inner sep=1.5,fill=black},
+			hollow node/.style={circle,draw,inner sep=1.5,fill=white},
+			gray node/.style={circle,draw={rgb:black,1;white,4},inner sep=1,fill={rgb:black,1;white,4}}
+		}
+		\tikzset{snake it/.style={decorate, decoration=snake, line cap=round}}
+		\tikzset{gray line/.style={line cap=round,thick,color={rgb:black,1;white,4}}}
+		\tikzset{thick line/.style={line cap=round,rounded corners=0.1mm,thick}}
+		\tikzset{thin line/.style={line cap=round,rounded corners=0.1mm}}
+		\node (a)[empty node] at (0,-0.5) {};
+		\node (a')[empty node] at (0,-0.4) {};
+		\node (sigma0)[solid node] at (0,1) {};
+		\node (b)[empty node] at (0,1.5) {};
+		\node ()[solid node] at (-0.25,2.15) {};
+		\node ()[solid node] at (-0.5,2.15) {};
+		\node ()[solid node] at (-0.75,2.15) {};
+		\node ()[solid node] at (-1,2.15) {};
+		\node ()[solid node] at (0,2.15) {};
+		\node ()[solid node] at (0.25,2.15) {};
+		\node ()[solid node] at (0.5,2.15) {};
+		\node ()[solid node] at (0.76,2.15) {};
+		\node ()[solid node] at (1,2.15) {};
+		\draw[thick line,decorate,decoration={snake,amplitude=.3mm,segment length=2mm,post length=0.01mm}] (sigma0) to (b.center);
+		\begin{pgfonlayer}{background}
+		\draw[thick line] (a) to (a'.center);
+		\draw[thick,snake it] (a'.center) to (sigma0);
+		\draw[thick line] (a.center) to (1.5,2.7);
+		\draw[thick line] (a.center) to (-1.5,2.7);
+		\draw[thick line] (b.center) to (0.14,1.9);
+		\draw[thick line] (b.center) to (-0.14,1.9);
+		\draw[gray line] (sigma0.center) to (0.37,2.15);
+		\draw[gray line] (sigma0.center) to (-0.37,2.15);
+		\draw[thin line,thick] (0,2.15) to (-0.1,2.55);
+		\draw[thin line,thick] (0,2.15) to (0.1,2.55);
+		\draw[thin line,thick] (0.25,2.15) to (-0.1+.25,2.55);
+		\draw[thin line,thick] (0.25,2.15) to (0.1+.25,2.55);
+		\draw[thin line,thick] (0.5,2.15) to (-0.1+.5,2.55);
+		\draw[thin line,thick] (0.5,2.15) to (0.1+.5,2.55);
+		\draw[thin line,thick] (0.75,2.15) to (-.1+.75,2.55);
+		\draw[thin line,thick] (0.75,2.15) to (.1+0.75,2.55);
+		\draw[thin line,thick] (1,2.15) to (-0.1+1,2.55);
+		\draw[thin line,thick] (1,2.15) to (0.1+1,2.55);
+		\draw[thin line,thick] (-0.25,2.15) to (-0.1-.25,2.55);
+		\draw[thin line,thick] (-0.25,2.15) to (0.1-.25,2.55);
+		\draw[thin line,thick] (-0.5,2.15) to (-0.1-.5,2.55);
+		\draw[thin line,thick] (-0.5,2.15) to (0.1-.5,2.55);
+		\draw[thin line,thick] (-0.75,2.15) to (-.1-.75,2.55);
+		\draw[thin line,thick] (-0.75,2.15) to (.1-0.75,2.55);
+		\draw[thin line,thick] (-1,2.15) to (-0.1-1,2.55);
+		\draw[thin line,thick] (-1,2.15) to (0.1-1,2.55);
+		\draw[thin line] (-1.4,1) to (1.4,1);
+		\draw[thin line] (-1.4,2.15) to (1.4,2.15);
+		\node(dots)[empty node] at (0,2) {$\cdots$};
+		\node(F0)[empty node] at (0.3,1.65) {$F_0$};
+		\node(sigma0label)[empty node] at (0.2,0.85) {$\sigma_0$};
+		\node(X0)[empty node] at (0,2.9) {$X_0$};
+		\node(S0)[empty node] at (1.8,2.15) {$S_0(1)$};
+		\node(S0)[empty node] at (1.8,1) {$S_0(0)$};
+		\node(brace)[empty node] at (0,2.7) {$\overbrace{\hspace{35mm}}$};
+		\end{pgfonlayer}
+	\end{tikzpicture}
+	\hspace{5mm}
+	\begin{tikzpicture}[scale=1.5]
+		\tikzset{
+			empty node/.style={circle,inner sep=0,outer sep=0,fill=none},
+			solid node/.style={circle,draw,inner sep=1.5,fill=black},
+			hollow node/.style={circle,draw,inner sep=1.5,fill=white},
+			gray node/.style={circle,draw={rgb:black,1;white,4},inner sep=1,fill={rgb:black,1;white,4}}
+		}
+		\tikzset{snake it/.style={decorate, decoration=snake, line cap=round}}
+		\tikzset{gray line/.style={line cap=round,thick,color={rgb:black,1;white,4}}}
+		\tikzset{thick line/.style={line cap=round,rounded corners=0.1mm,thick}}
+		\tikzset{thin line/.style={line cap=round,rounded corners=0.1mm}}
+		\node (a)[empty node] at (0,-0.5) {};
+		\node (a')[empty node] at (0,-0.4) {};
+		\node (sigma0)[solid node] at (0,1) {};
+		\node (b)[empty node] at (0,1.5) {};
+		\node ()[solid node] at (-0.25,2.15) {};
+		\node ()[solid node] at (-0.5,2.15) {};
+		\node ()[solid node] at (-0.75,2.15) {};
+		\node ()[solid node] at (-1,2.15) {};
+		\node ()[solid node] at (0,2.15) {};
+		\node ()[solid node] at (0.25,2.15) {};
+		\node ()[solid node] at (0.5,2.15) {};
+		\node ()[solid node] at (0.76,2.15) {};
+		\node ()[solid node] at (1,2.15) {};
+		\draw[thick line,decorate,decoration={snake,amplitude=.3mm,segment length=2mm,post length=0.01mm}] (sigma0) to (b.center);
+		\begin{pgfonlayer}{background}
+		\draw[thick line] (a) to (a'.center);
+		\draw[thick,snake it] (a'.center) to (sigma0);
+		\draw[thick line] (a.center) to (1.5,2.7);
+		\draw[thick line] (a.center) to (-1.5,2.7);
+		\draw[thick line] (b.center) to (0.14,1.9);
+		\draw[thick line] (b.center) to (-0.14,1.9);
+		\draw[gray line] (sigma0.center) to (0.37,2.15);
+		\draw[gray line] (sigma0.center) to (-0.37,2.15);
+		\draw[thin line,thick] (0,2.15) to (-0.1,2.55);
+		\draw[thin line,thick] (0,2.15) to (0.1,2.55);
+		\draw[thin line,thick] (0.25,2.15) to (-0.1+.25,2.55);
+		\draw[thin line,thick] (0.25,2.15) to (0.1+.25,2.55);
+		\draw[thin line,thick] (0.5,2.15) to (-0.1+.5,2.55);
+		\draw[thin line,thick] (0.5,2.15) to (0.1+.5,2.55);
+		\draw[thin line,thick] (0.75,2.15) to (-.1+.75,2.55);
+		\draw[thin line,thick] (0.75,2.15) to (.1+0.75,2.55);
+		\draw[thin line,thick] (1,2.15) to (-0.1+1,2.55);
+		\draw[thin line,thick] (1,2.15) to (0.1+1,2.55);
+		\draw[thin line,thick] (-0.25,2.15) to (-0.1-.25,2.55);
+		\draw[thin line,thick] (-0.25,2.15) to (0.1-.25,2.55);
+		\draw[thin line,thick] (-0.5,2.15) to (-0.1-.5,2.55);
+		\draw[thin line,thick] (-0.5,2.15) to (0.1-.5,2.55);
+		\draw[thin line,thick] (-0.75,2.15) to (-.1-.75,2.55);
+		\draw[thin line,thick] (-0.75,2.15) to (.1-0.75,2.55);
+		\draw[thin line,thick] (-1,2.15) to (-0.1-1,2.55);
+		\draw[thin line,thick] (-1,2.15) to (0.1-1,2.55);
+		\draw[thin line] (-1.4,1) to (1.4,1);
+		\draw[thin line] (-1.4,2.15) to (1.4,2.15);
+		\node(dots)[empty node] at (0,2) {$\cdots$};
+		\node(F0)[empty node] at (0.3,1.65) {$F_1$};
+		\node(sigma0label)[empty node] at (0.2,0.85) {$\sigma_1$};
+		\node(X0)[empty node] at (0,2.9) {$X_1$};
+		\node(S0)[empty node] at (1.8,2.15) {$S_1(1)$};
+		\node(S0)[empty node] at (1.8,1) {$S_1(0)$};
+		\node(brace)[empty node] at (0,2.7) {$\overbrace{\hspace{35mm}}$};
+		\end{pgfonlayer}
+	\end{tikzpicture}
+    \caption{A representation of the construction of $S_0$, $S_1$, and the functions $\operatorname{sets}$ and $\operatorname{stems}$. If $\pi=(\sigma_0,\sigma_1)$, then $\operatorname{stems}(\pi)=(F_0, F_1)$ and $\operatorname{sets}(1)=(X_0, X_1)$.}\label{fig:S3Constr}
+    \label{fig:sca-HL}
+\end{center}
+\end{figure}
+
+\construction We define $S_0, \dots, S_{d-1}$ and the functions $\operatorname{sets}$, $\operatorname{stems}$ and  $\operatorname{req}$ level by level. For convenience of notation, let $\operatorname{sets}(-1) = (T_0, \dots, T_{d-1})$.
+At level $\ell \geq 0$, assume $\operatorname{sets}(\ell-1)$ is already defined.
+Say $(Y_0, \dots, Y_{d-1}) = \operatorname{sets}(\ell-1)$.
+For every $j < d$, let $S_j(\ell) = \roots(Y_j)$.
+Now let $\pi_0, \dots, \pi_{r-1}$ be a finite listing of all the elements in  $S_0(\ell) \times \dots \times S_{d-1}(\ell)$. We define  $\operatorname{stems}(\pi_s)$ and $\operatorname{req}(\pi_s)$ successively for each $s < r$, together with a decreasing sequence of $d$-tuples of cone avoiding strong subforests $(X^0_0, \dots, X^0_{d-1}), \dots, (X^r_0, \dots, X^r_{d-1})$. Then $\operatorname{sets}(\ell) = (X^r_0, \dots, X^r_{d-1})$.
+Initially, let $(X^0_0, \dots, X^0_{d-1})$ be the tuple $(Y_0 \setminus Y_0(0), \dots, Y_{d-1} \setminus Y_{d-1}(0))$.
+At stage $s < r$, assume $(X^s_0, \dots, X^s_{d-1})$ is defined.
+Say $\pi_s = (\rho_0, \dots, \rho_{d-1})$.
+In particular,
+$$
+(\{\rho_0\}, \dots, \{\rho_{d-1}\}, X^s_0, \dots, X^s_{d-1})
+$$
+is a $\Pb$-condition. By assumption, this has a $\Pb$-extension $(F_0, \dots, F_{d-1}, X^{s+1}_0, \allowbreak \dots, X^{s+1}_{d-1})$ for which there is a Turing functional $\Phi_e$
+such that every further $\Pb$-extension $c'$ satisfies $c' \not\Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$. So we have $(X^{s+1}_0, \allowbreak \dots, X^{s+1}_{d-1})$, and we set $\operatorname{stems}(\pi_s) = (F_0, \dots, F_{d-1})$ and $\operatorname{req}(\pi_s) = e$. Now if $s < r-1$, proceed to $s+1$.
+This finishes the construction. (See \Cref{fig:S3Constr}.)
+
+%\benoit{From the construction, the trees $S_i \subseteq T_i$ are not strong subtrees of $T_i$: It is clear why from the picture above. In fact I now agree with the rest of the proof and its redaction. We just need to find a way to make $S_i$ matches condition of Theorem 3.21 (they are not even meet-closed trees): I suggest some encoding so that every node of level $l+1$ extending $\sigma$ of level $l$ are of the form $\sigma n$ for some $n \in \NN$.}
+
+\verification
+
+\begin{claim}\label{fact:hl-sca-density-below-a-cone-condition-extension}
+For every $\ell_0 < \ell_1$ and every $\pi \in S_0(\ell_0) \times \dots \times S_{d-1}(\ell_0)$,
+the tuple $(\operatorname{stems}(\pi), \operatorname{sets}(\ell_1))$ is a $\Pb$-extension of $(\operatorname{stems}(\pi), \operatorname{sets}(\ell_0))$.
+%In particular, $d \nVdash \Gamma_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$ where $e = \operatorname{req}(\pi)$.
+\end{claim}
+\begin{proof}
+Say $\operatorname{sets}(\ell_0) = (X_0, \dots, X_{d-1})$ and $\operatorname{sets}(\ell_1) = (Y_0, \dots, Y_{d-1})$. By an immediate induction, $\operatorname{sets}(\ell_1)$ is a tuple of strong subforests of $\operatorname{sets}(\ell_0)$ with common level function.
+By construction, for all $j < d$ we have $S_j(\ell_0+1) = \roots(X_j)$ and  $S_j(\ell_1+1) = \roots(Y_j)$, and since we are dealing with extension in $\Pb$ here, this implies that every root of $X_j$ is extended by a root of $Y_j$.
+It follows that $d = (\operatorname{stems}(\pi), \operatorname{sets}(\ell_1))$ is a $\Pb$-extension of $(\operatorname{stems}(\pi), \operatorname{sets}(\ell_0))$.
+\end{proof}
+
+From the preceding fact, it follows that the $S_j$ are as claimed. The rest of Properties 1--3 above are evident from the construction.
+
+
+By \Cref{thm:combinatorial-finite-hapern-lauchli}, there is a level $N \in \NN$
+such that for every coloring $h: S_0(N) \times \dots \times S_{d-1}(N) \to k$,
+there is some $\ell < N$, some $\pi \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$
+and some $(\ell+1)$-$\pi$-dense matrix $M \subseteq S_0(N) \times \dots \times S_{d-1}(N)$
+on which $h$ is constant.
+Fix such an $N$. Let $(X_0, \dots, X_{d-1}) = \operatorname{sets}(N-1)$. In particular, for every $j < d$, $S_j(N) = \roots(X_j)$.
+
+Let $W$ be the set of pairs $(x, v) \in \NN \times \{0,1\}$ such that for every $k$-partition $B_0 \sqcup \dots \sqcup B_{k-1} = \bigcup_n X_0(n) \times \dots \times X_{k-1}(n)$, there is some $\ell < N$, some $\pi \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$, and for every $j < d$, a finite set $H_j \subseteq X_j$ such that if $ (F_0, \dots, F_{d-1}) = \operatorname{stems}(\pi)$ then the following hold:
+\begin{itemize}
+	\item[(a)] $(F_0 \cup H_0, \dots, F_{d-1} \cup H_{d-1}) \in \Subtree{<\omega}{T_0, \dots, T_{d-1}}$;
+	\item[(b)] $\bigcup_n H_0(n) \times \dots \times H_{d-1}(n) \subseteq B_i$ for some $i < k$;
+	\item[(c)] $\Phi_e^{(F_0 \cup H_0) \oplus \dots \oplus (F_{d-1} \cup H_{d-1}) \oplus Z}(x)\downarrow = v$, where $e = \operatorname{req}(\pi)$.
+\end{itemize}
+Note that although the trees $S_0, \dots, S_{d-1}$ and the functions $\operatorname{sets}$, $\operatorname{stems}$ and $\operatorname{req}$ are built non-effectively, only their restrictions to the height $N$ are used. Therefore, since every finite object is computable, they do not add to the complexity of the set $W$. By compactness, the set $W$ is $X_0 \oplus \dots \oplus X_{d-1} \oplus Z$-c.e. We break into three cases.
+
+
+\case{1}{$(x, 1-C(x)) \in W$ for some $x \in \NN$.} For $i < k$, let $B_i = A_i \cap \bigcup_n X_0(n) \times \dots \times X_{d-1}(n)$. Let $\ell<N$, $\pi = (F_0, \dots, F_{d-1})$ and $H_0, \dots, H_{d-1}$ witness that $(x, 1-C(x)) \in W$ for the partition    $B_0, \dots, B_{k-1}$.
+	Let $\ell_1$ be the common level of the leaves of $F_j \cup H_j$ in $X_j$, and $\hat{X}_j = X_j \setminus \bigcup_{\ell_0 \leq \ell_1} X_j(\ell_0)$. Then $c' = (F_0 \cup H_0, \dots, F_{d-1} \cup H_{d-1}, \hat{X}_0, \dots, \hat{X}_{d-1})$ is a $\Pb$-extension of the condition $(F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$ which, by \Cref{fact:hl-sca-density-below-a-cone-condition-extension},
+		is a $\Pb$-extension of $(\operatorname{stems}(\pi), \operatorname{sets}(\ell))$ since $\ell_1 \geq \ell$.
+		Moreover
+		$$
+			c' \Vdash \Phi_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C
+		$$
+		where $e = \operatorname{req}(\pi)$. This contradicts Property 3 above,
+		according to which $(\operatorname{stems}(\pi), \operatorname{sets}(\ell))$ has no such $\Pb$-extension.
+
+\case{2}{$(x, C(x)) \not\in W$ for some $x \in \NN$.} Let $\Cc$ be the $\Pi^{0,X_0 \oplus \dots \oplus X_{d-1} \oplus Z}_1$ class of all sets $B_0 \oplus \dots \oplus B_{k-1}$ such that $B_0 \sqcup \dots \sqcup B_{k-1} = \bigcup_n X_0(n) \times \dots \times X_{d-1}(n)$ and such that for every $\ell < N$, every $\pi \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$ and every $H_0 \subseteq X_0, \dots, H_{d-1} \subseteq X_{d-1}$, one of (a), (b) or (c) in the definition of $W$ fails for the pair $(x, C(x))$.
+	By assumption, $\Cc \neq \emptyset$.
+
+	By the cone avoidance basis theorem, there is some $B_0 \oplus \dots \oplus B_{k-1} \in \Cc$ such that $C \nTred B_0 \oplus \dots \oplus B_{k-1} \oplus X_0 \oplus \dots \oplus X_{d-1} \oplus Z$. For $\pi \in \bigcup_n X_0(n) \times \dots \times X_{d-1}(n)$, write $B(\pi)$ for the unique $i < k$ such that $\pi \in B_i$. Recall that for every $j < d$, $S_j(N) = \roots(X_j)$.
+	We define a finite coloring $g$ on $\bigcup_n X_0(n) \times \dots \times X_{d-1}(n)$ by
+	%$$
+	%	\bigcup_n  \prod_{j < d} X_j(n)
+	%$$
+	by
+	\[
+		g(\sigma_0,\ldots,\sigma_{d-1}) = B(\sigma_0, \dots,\sigma_{d-1}).
+	\]
+	By \Cref{lem:hl-forest-computably-true} applied to $g$,
+	there is a $B_0 \oplus \dots B_{k-1} \oplus X_0 \oplus \dots \oplus X_{d-1}$-computable tuple of infinite strong subtrees $( Y_{j,\rho}: j < d, \rho \in S_j(N))$ of $( X_j \uh \rho: j < d, \rho \in S_j(N))$ with common level function, together with a coloring $h: S_0(N) \times \dots \times S_{d-1}(N) \to k-1$,
+		such that
+		$$
+			\bigcup_n Y_{0,\rho_0}(n) \times \dots \times Y_{d-1,\rho_{d-1}}(n)  \subseteq B_{h(\pi), }
+		$$
+		for every $\pi = (\rho_0, \dots, \rho_{d-1}) \in S_0(N) \times \dots \times S_{d-1}(N)$.
+
+	By choice of $N$, there is some $\ell < N$, some $\pi = (\nu_0, \dots, \nu_{d-1}) \in S_0(\ell) \times \dots \times S_{d-1}(\ell)$ and some $(\ell+1)$-$\pi$-dense matrix $M \subseteq S_0(N) \times \dots \times S_{d-1}(N)$ on which $h$ is constant. Say $M = M_0 \times \dots \times M_{d-1}$ and let $i < k$ be the color of $h$ on this matrix.
+	For every $j < d$, let $P_j$ be the set of nodes in $S_j(N)$ which are not extensions of $\nu_j$. For every $j < k$, let $\hat{Y}_j = \bigcup_{\rho \in M_j \cup P_j} Y_{j,\rho}$.
+
+	\begin{claim}\label{fact:hl-sca-case2-exts}
+	$(\operatorname{stems}(\pi), \hat{Y}_0, \dots, \hat{Y}_{d-1})$
+	is a $\Pb$-extension of $(\operatorname{stems}(\pi), \operatorname{sets}(\ell))$.
+	\end{claim}
+	\begin{proof}
+	Let $(\hat{X}_0, \dots, \hat{X}_{d-1}) = \operatorname{sets}(\ell)$. Since $\ell < N$ and since $\operatorname{sets}(N-1) = (X_0,\ldots,X_{d-1})$, it follows by \Cref{fact:hl-sca-density-below-a-cone-condition-extension} that the $X_j$ are strong subtrees of the $\hat{X}_j$ with common level function. Hence, so are the $Y_j$. Furthermore, by Property 1, for every $j < k$ we have that $\roots(\hat{X}_j) = S_j(\ell+1)$. So every root of $\hat{X}_j$ is extended by a root of $\hat{Y}_j$.
+	\end{proof}
+
+	It follows by
+	%\Cref{fact:hl-sca-density-below-a-cone-condition-extension} and
+	Property 3 that $(\operatorname{stems}(\pi), \hat{Y}_0, \dots, \hat{Y}_{d-1}) \nVdash \Phi_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$ where $e = \operatorname{req}(\pi)$. Now, since the forcing relation depends only on part of the reservoirs extending the roots of the stems, the following fact holds. However, we have the following contradictory fact:
+
+	\begin{claim}\label{fact:hl-sca-case2-force-diag}
+	$(\operatorname{stems}(\pi), \hat{Y}_0, \dots, \hat{Y}_{d-1}) \Vdash \Phi_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$, where $e = \operatorname{req}(\pi)$.
+	\end{claim}
+	\begin{proof}
+	%We claim that $d \Vdash \Gamma_e^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z}(x) \neq C(x)$,
+	%where the inequality means that either the left part diverges, or halts and is different.
+	For every $j < d$, let $H_j \subseteq \hat{Y}_j$ be such that
+	$F_0 \cup H_0, \dots, F_{d-1} \cup H_{d-1}$ are finite strong subtrees of $T_0, \dots, T_{d-1}$, respectively, with common level function. Since the rots of the $F_j$ pointwise extend $\pi$, so do the nodes of each of the $H_j$. In particular, for every $j < d$, $H_j \subseteq  \bigcup_{\rho \in M_j} Y_{j,\rho}$. It follows that $\bigcup_n H_0(n) \times \dots \times H_{d-1}(n) \subseteq B_i$. But $B_0 \oplus  \dots \oplus B_{k-1} \in \Cc$, so $\Phi_e^{(F_0 \cup H_0) \oplus \dots \oplus (F_{d-1} \cup H_{d-1}) \oplus Z}(x)$ either diverges or is different from $C(x)$.
+	Since the $H_j$ were arbitrary, the claim is proved.
+	\end{proof}
+
+	The contradiction completes Case 2.
+
+\case{3}{otherwise.} Then $(x,y) \in W$ if and only if $y = C(x)$, which, since $W$ is $X_0 \oplus \dots \oplus X_{d-1} \oplus Z$-c.e., implies $C \Tred X_0 \oplus \dots \oplus X_{d-1} \oplus Z$, a contradiction.
+\end{proof}
+
+We are now ready to prove strong cone avoidance of the Halpern-La\"{u}chli theorem.
+
+\begin{proof}[Proof of \Cref{thm:hl-strong-cone-avoidance}]
+Fix two sets $C$ and $Z$ such that $C \nTred Z$.
+Also fix a tuple of infinite $Z$-computable $Z$-computably bounded trees with no leaves $T_0, \dots, T_{d-1} \subseteq \baire$ and an arbitrary $k$-partition $A_0 \sqcup \dots \sqcup A_{k-1} = \exprodtree{T}{d}$. Let $\Pb$ be the set of cone avoiding level-homogeneous product tree conditions (relative to these givens).
+
+
+By \Cref{lem:hl-sca-density-below-a-cone}, there is some $c \in \Pb$ below which, for every Turing functional $\Gamma$, the set
+\[
+D_\Gamma = \{ c' \in \Pb: c' \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C \}
+\]
+is $\Pb$-dense.
+Let $\Uc$ be a $\Pb$-filter which intersects every set $D_\Gamma$.
+Then by definition of a product tree condition, $G^\Uc_0, \dots, G^\Uc_{d-1}$ are strong subtrees of $T_0, \dots, T_{d-1}$. Moreover, since all conditions in $\Pb$ are level-homogeneous, so are $G^\Uc_0, \dots, G^\Uc_{d-1}$. Since  $\Uc$ intersects every set $D_\Gamma$, then $C \nTred G^\Uc_0 \oplus \dots \oplus G^\Uc_{d-1} \oplus Z$.
+Last, by \Cref{lem:product-tree-genericity-implies-infinity}, $G^\Uc_0, \dots, G^\Uc_{d-1}$ are all infinite.
+
+
+Let $f: \NN \to k$ be the function which on level $\ell$ associates the color $i < k$
+such that $G^\Uc_0(\ell) \times \dots \times G^\Uc_{d-1}(\ell) \subseteq A_i$.
+By strong cone avoidance of $\RT{1}{k}$, there is an infinite set of levels $H \subseteq \NN$ on which $f$ is constant and
+%$f$-homogeneous for some color $i < k$ and such that
+$C \nTred H \oplus G^\Uc_0 \oplus \dots \oplus G^\Uc_{d-1} \oplus Z$. Say $f$ takes the color $i < k$ on $H$. In particular, for every $\ell \in H$, $G^\Uc_0(\ell) \times \dots \times G^\Uc_{d-1}(\ell) \subseteq A_i$, so we can $H \oplus G^\Uc_0 \oplus \dots \oplus G^\Uc_{d-1} \oplus Z$-computably thin out to infinite strong subtrees $S_0, \dots, S_{d-1}$
+of  $G^\Uc_0, \dots, G^\Uc_{d-1}$ with common level function,
+and such that $\bigcup_n S_0(n) \times \dots \times S_{d-1}(n) \subseteq A_i$.
+In particular, $C \nTred S_0 \oplus \dots \oplus S_{d-1} \oplus Z$.
+This completes the proof of \Cref{thm:hl-strong-cone-avoidance}.
+\end{proof}
+
+%
+%Assume there is no cone avoiding solution to $T_0, \dots, T_{d-1}$, otherwise we are done.
+%
+%\begin{claim}\label{fact:hl-strong-cone-avoidance-1}
+%There is an $A_0$-colored proper cone avoiding condition.
+%\end{claim}
+%\begin{proof}
+%If $\bigcup_n T_0(n) \times \dots \times T_{d-1}(n) \subseteq A_1$, then $T_0, \dots, T_{d-1}$ is already a solution monochromatic for color $A_1$ and such that $C \nTred T_0 \oplus \dots \oplus T_{d-1} \oplus Z$, contradicting our assumption. Therefore, there is a level $\ell \in \NN$ and a tuple $\langle \sigma_0, \dots, \sigma_{d-1}\rangle \in A_0 \cap \bigcup_n T_0(\ell) \times \dots \times T_{d-1}(\ell)$. The tuple $c_0 = (\{\sigma_0\}, \dots, \{\sigma_{d-1}\}, X_0, \dots, X_{d-1})$ defined by for each $j < d$ by $X_j = T_j \setminus \bigcup_{t \leq \ell} T_j(t)$, is an $A_0$-colored proper cone avoiding condition.
+%\end{proof}
+%
+%\begin{claim}\label{fact:hl-strong-cone-avoidance-2}
+%There is an $A_0$-colored proper cone avoiding condition $c$
+%and a Turing functional $\Gamma$ such that
+%for every $A_0$-colored cone avoiding condition $d \leq c$,
+%$d \nVdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$.
+%\end{claim}
+%\begin{proof}
+%Suppose for the contradiction it is not the case.
+%Then by \Cref{fact:hl-strong-cone-avoidance-1}, one can construct a filter $\Uc$
+%of $A_0$-colored cone avoiding conditions such that for every Turing functional $\Gamma$,
+%there is a condition $c \in \Uc$ such that $c \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$.
+%Then by definition of a condition, $G^\Uc_0, \dots, G^\Uc_{d-1}$ are (finite or infinite) strong perfect subtree of $T_0, \dots, T_{d-1}$. Moreover, by assumption, $C \nTred G^\Uc_0 \oplus \dots \oplus G^\Uc_{d-1} \oplus Z$ and $\bigcup_n G^\Uc_0(n) \times \dots \times G^\Uc_{d-1}(n) \subseteq A_0$.
+%Last, by \Cref{lem:product-tree-genericity-implies-infinity}, $G^\Uc_0, \dots, G^\Uc_{d-1}$ are all infinite, so this contradicts the assumption that there is no cone avoiding solution to $T_0, \dots, T_{d-1}$.
+%\end{proof}
+%
+%Let $c = (F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})$ be an $A_0$-colored proper cone avoiding condition satisfying \Cref{fact:hl-strong-cone-avoidance-2}. Let
+%$$
+%I = \{ \langle \nu_0, \dots, \nu_{d-1} \rangle: (\forall j < d)\nu_j \in X_j(0) \}
+%$$
+%Note that $I$ is a matrix cover of $F_0, \dots, F_{d-1}$.
+%We will construct an infinite sequence of cone avoiding compound conditions
+%$$
+%(F_0, \dots, F_{d-1}, I, \Fc^0, X^0_0, \dots, X^0_{d-1}), (F_0, \dots, F_{d-1}, I, \Fc^1, X^1_0, \dots, X^1_{d-1}), \dots
+%$$
+%such that for every $s \in \NN$, letting $s = \langle \Gamma_\pi: \pi \in I \rangle$, the following holds:
+%\begin{itemize}
+%	\item[1.] %$\Fc^{s+1} = \{ \langle \pi, E^s_{0, \pi}, \dots, E^s_{d-1, \pi}\rangle: \pi \in I \}$ ;
+%	$X^{s+1}_j \subseteq X^s_j \subseteq X_j$ for every $j < d$ ;
+%	\item[2.] $\Fc^{s+1} \setminus \{\langle \pi, \hat{E}_0 \dots, \hat{E}_{d-1} \rangle\} = \Fc^s \setminus \{\langle \pi, E_0, \dots, E_{d-1} \rangle\}$
+%	for some $\pi \in I$ such that, letting $d = (\hat{E}_0 \dots, \hat{E}_{d-1}, X^{s+1}_0, \dots, X^{s+1}_{d-1})$,
+%	$$.
+%		d \leq (E_0, \dots, E_{d-1}, X^s_0, \dots, X^s_{d-1})
+%		\mbox{ and }
+%		d \Vdash \Gamma_\pi^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C
+%	$$
+%\end{itemize}
+%
+%By \Cref{lem:hl-sca-compound-creator}(1), letting $\Fc^0 = \{ \langle \pi, \emptyset, \dots, \emptyset \rangle: \pi \in I\}$ and for every $j < d$, $X^0_j = X_j \setminus X_j(0)$, the tuple $(F_0, \dots, F_{d-1}, I, \Fc^0, X^0_0, \dots, X^0_{d-1})$ is a cone avoiding compound condition. Given a compound condition
+%$$
+%(F_0, \dots, F_{d-1}, I, \Fc^s, X^s_0, \dots, X^s_{d-1})
+%$$
+%and letting $s = \langle \Gamma_\pi: \pi \in I \rangle$, by \Cref{lem:hl-sca-forcing-requirement},
+%either there is an $A_0$-colored cone avoiding condition
+%$$
+%d = (\hat{F}_0, \dots, \hat{F}_{d-1}, \hat{X}_0, \dots, \hat{X}_{d-1}) \leq (F_0, \dots, F_{d-1}, X_0, \dots, X_{d-1})
+%$$
+%	such that $d \Vdash \Gamma^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$, or there is some $\langle \pi, E_0, \dots, E_{d-1} \rangle \in \Fc^s$ and an $A_1$-colored cone avoiding $\pi$-condition
+%$$
+%d = (\hat{E}_0, \dots, \hat{E}_{d-1}, X^{s+1}_0, \dots,  X^{s+1}_{d-1}) \leq  (E_0, \dots, E_{d-1}, X^s_0, \dots,  X^s_{d-1})
+%$$
+%	such that $d \Vdash \Gamma_\pi^{G_0 \oplus \dots \oplus G_{d-1} \oplus Z} \neq C$
+%	and for every $j < d$, every  root of $X^s_j$ is extended by a root of $X^{s+1}_j$. The former case cannot happen, so the latter case holds, and we can define $(F_0, \dots, F_{d-1}, I, \Fc^{s+1}, X^{s+1}_0, \dots, X^{s+1}_{d-1})$ accordingly by \Cref{lem:hl-sca-compound-creator}(2). This proves the existence of the sequence of cone avoiding compound conditions.
+%
+%
+%By a pairing argument, there is some $\pi \in I$ such that for every Turing functional $\Gamma$ there is some $s \in \NN$ such that, letting $\langle \pi, E_0, \dots, E_{d-1} \rangle \in \Fc^s$,
+%$$
+%(E_0, \dots, E_{d-1}, X^s_0, \dots,  X^s_{d-1}) \Vdash \Gamma^{G \oplus Z} \neq C
+%$$
+%Let $\Uc$ be the smallest filter containing the set of $A_1$-colored conditions
+%$$
+%\{ (E_0, \dots, E_{d-1}, X^s_0, \dots,  X^s_{d-1}): s \in \NN, \langle \pi, E_0, \dots, E_{d-1} \rangle \in \Fc^s \}
+%$$
+%Again, by definition of a condition, $G^\Uc_0, \dots, G^\Uc_{d-1}$ are (finite or infinite) strong perfect subtree of $T_0, \dots, T_{d-1}$. Moreover, by assumption, $C \nTred G^\Uc_0 \oplus \dots \oplus G^\Uc_{d-1} \oplus Z$ and $\bigcup_n G^\Uc_0(n) \times \dots \times G^\Uc_{d-1}(n) \subseteq A_1$.
+%Last, by \Cref{lem:product-tree-genericity-implies-infinity}, $G^\Uc_0, \dots, G^\Uc_{d-1}$ are all infinite, so $G^\Uc_0, \dots, G^\Uc_{d-1}$ is cone avoiding solution to $T_0, \dots, T_{d-1}$. This completes the proof of \Cref{thm:hl-strong-cone-avoidance}.
+%\end{proof}
+
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../embryon"
+%%% End:

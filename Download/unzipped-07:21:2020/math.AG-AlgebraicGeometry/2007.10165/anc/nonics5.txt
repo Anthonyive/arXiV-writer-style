@@ -1,0 +1,65 @@
+nonics5.txt
+--- This code implements an algorithm (see sub-section 5.2 - An unidentifiable case) to determine the second decomposition B of lenght 18 of the ternary nonic T3 (see also nonics3.txt)
+
+k = QQ;
+R = k[x,y,z];
+A = sub(matrix{{1,1,1},{0,1,2},{-1,2,1},{1,2,3},{1,-2,0},{2,1,4},
+{4,2,-3},{1,5,1},{5,2,3},{6,2,3},{1,7,7},{1,7,3},{6,5,4},
+{-7,2,3},{3,7,4},{2,-5,1},{6,3,-4},{-7,6,6}},R);
+I1 = ideal(A_(0,1)*x-A_(0,0)*y,A_(0,2)*y-A_(0,1)*z);
+I2 = ideal(A_(1,1)*x-A_(1,0)*y,A_(1,2)*y-A_(1,1)*z);
+I3 = ideal(A_(2,1)*x-A_(2,0)*y,A_(2,2)*y-A_(2,1)*z);
+I4 = ideal(A_(3,1)*x-A_(3,0)*y,A_(3,2)*y-A_(3,1)*z);
+I5 = ideal(A_(4,1)*x-A_(4,0)*y,A_(4,2)*y-A_(4,1)*z);
+I6 = ideal(A_(5,1)*x-A_(5,0)*y,A_(5,2)*y-A_(5,1)*z);
+I7 = ideal(A_(6,1)*x-A_(6,0)*y,A_(6,2)*y-A_(6,1)*z);
+I8 = ideal(A_(7,1)*x-A_(7,0)*y,A_(7,2)*y-A_(7,1)*z);
+I9 = ideal(A_(8,1)*x-A_(8,0)*y,A_(8,2)*y-A_(8,1)*z);
+I10 = ideal(A_(9,1)*x-A_(9,0)*y,A_(9,2)*y-A_(9,1)*z);
+I11 = ideal(A_(10,1)*x-A_(10,0)*y,A_(10,2)*y-A_(10,1)*z);
+I12 = ideal(A_(11,1)*x-A_(11,0)*y,A_(11,2)*y-A_(11,1)*z);
+I13 = ideal(A_(12,1)*x-A_(12,0)*y,A_(12,2)*y-A_(12,1)*z);
+I14 = ideal(A_(13,1)*x-A_(13,0)*y,A_(13,2)*y-A_(13,1)*z);
+I15 = ideal(A_(14,1)*x-A_(14,0)*y,A_(14,2)*y-A_(14,1)*z);
+I16 = ideal(A_(15,1)*x-A_(15,0)*y,A_(15,2)*y-A_(15,1)*z);
+I17 = ideal(A_(16,1)*x-A_(16,0)*y,A_(16,2)*y-A_(16,1)*z);
+I18 = ideal(A_(17,1)*x-A_(17,0)*y,A_(17,2)*y-A_(17,1)*z);
+IA=intersect(I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13,I14,
+I15,I16,I17,I18); 
+D=res(IA);
+dim IA 
+degree IA 
+M=D.dd_2; 
+MM = transpose(M);
+coe = sub(matrix{{14307,13416,11657,9248,8324,-13193,-1403,12171,
+7694,12549,-12983,538,11728,743,-12966,12870}},R)
+N = matrix{{1*x+coe_(0,0)*y+coe_(0,1)*z,coe_(0,2)*x
++coe_(0,3)*y+coe_(0,4)*z,coe_(0,5)*x+coe_(0,6)*y+coe_(0,7)*z,
+0},{0*x+coe_(0,8)*y+coe_(0,9)*z,coe_(0,10)*x+coe_(0,11)*y
++coe_(0,12)*z,coe_(0,13)*x+coe_(0,14)*y+coe_(0,15)*z,1}}||MM; --- Hilbert-Burch matrix of IB
+IB = minors(4,N); 
+dim IB --- 1
+degree IB --- 18
+IB' = IB+ideal(matrix{{x-1_k}})
+dim IB' --- 0
+degree IB' --- 18
+S = R/IB';
+B = basis S; 
+BB = sub(B,R);
+y = sub(y,R);
+z = sub(z,R);
+
+compy = sub(contract(transpose BB,(BB_(0,0))*y%IB'),{y=>0_k,z=>0_k});
+for i from 1 to 17 do 
+compy=compy|sub(contract(transpose BB,(BB_(0,i))*y%IB'),{y=>0_k,z=>0_k}); 
+compy;
+compy = sub(compy, RR); 
+eigenvectors compy
+
+compz = sub(contract(transpose BB,(BB_(0,0))*z%IB'),{y=>0_k,z=>0_k});
+for i from 1 to 17 do 
+compz=compz|sub(contract(transpose BB,(BB_(0,i))*z%IB'),{y=>0_k,z=>0_k}); 
+compz;
+compz = sub(compz, RR); 
+eigenvectors compz
+

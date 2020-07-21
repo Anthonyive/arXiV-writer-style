@@ -1,0 +1,347 @@
+\chapter{Ultralimits}
+
+Ultralimits provide a very general way to pass to a limit that always works.
+It use a set-theoretical construction --- the so called ulrafilter.
+
+In geometry, ultralimits are used only as a canonical way to pass to a convergent subsequence.
+It is useful thing in the proofs where one needs to repeat ``pass to convergent subsequence'' too many times.
+
+This lecture is based on the introduction to the paper of Bruce Kleiner and Bernhard Leeb \cite{kleiner-leeb}.
+
+\section{Ultrafilters}
+
+Recall that $\NN$ denotes the set of natural numbers, $\NN=\{1,2,\dots\}$
+
+\begin{thm}{Definition}
+A finitely additive measure $\omega$ 
+on  $\NN$ 
+is called an \index{ultrafilter}\emph{ultrafilter} if it satisfies 
+\begin{subthm}{}
+$\omega(S)=0$ or $1$ for any subset $S\subset \NN$.
+\end{subthm}
+An ultrafilter $\omega$ is called 
+\emph{nonprinciple}\index{ultrafilter!nonprinciple ultrafilter}\index{nonprinciple ultrafilter} if in addition 
+\begin{subthm}{}
+$\omega(F)=0$ for any finite subset $F\subset \NN$.
+\end{subthm}
+\end{thm}
+
+If $\omega(S)=0$ for some subset $S\subset \NN$,
+we say that $S$ is \index{$\omega$-small}\emph{$\omega$-small}. 
+If $\omega(S)=1$, we say that $S$ contains \index{$\omega$-almost all}\emph{$\omega$-almost all} elements of $\NN$.
+
+\parbf{Classical definition.}
+More commonly, a nonprinciple ultrafilter is defined as a collection, say $\mathfrak{F}$, of sets in $\NN$ such that
+\begin{enumerate}
+\item\label{filter:supset} if $P\in \mathfrak{F}$ and $Q\supset P$, then $Q\in \mathfrak{F}$,
+\item\label{filter:cap} if $P, Q\in \mathfrak{F}$, then $P\cap Q\in \mathfrak{F}$,
+\item\label{filter:ultra} for any subset $P\subset\NN$, either $P$ or its complement is an element of $\mathfrak{F}$.
+\item\label{filter:non-prin} if $F\subset \NN $ is finite, then $F\notin \mathfrak{F}$.
+\end{enumerate}
+Setting $P\in\mathfrak{F}\Leftrightarrow\omega(P)=1$ makes these two definitions equivalent.
+
+A nonempty collection of sets $\mathfrak{F}$ that does not include the empty set and satisfies only conditions \ref{filter:supset} and \ref{filter:cap} is called a \index{filter}\emph{filter}; 
+if in addition $\mathfrak{F}$ satisfies Condition~\ref{filter:ultra} it is called an \index{ultrafilter}\emph{ultrafilter}.
+From Zorn's lemma, it follows that every filter contains an ultrafilter.
+Thus there is an ultrafilter $\mathfrak{F}$ contained in the filter of all complements of finite sets; clearly this $\mathfrak{F}$ is nonprinciple.
+
+
+\parbf{Stone--\v{C}ech compactification.}
+Given a set $S\subset \NN$, consider subset $\Omega_S$ of all ultrafilters $\omega$ such that $\omega(S)=1$.
+It is straightforward to check that the sets $\Omega_S$ for all $S\subset \NN$ form a topology on the set of ultrafilters on $\NN$. 
+The obtained space is called \index{Stone--\v{C}ech compactification}\emph{Stone--\v{C}ech compactification} of $\NN$;
+it is usually denoted as $\beta\NN$.
+
+Let $\omega_n$ denotes the principle ultrafilter such that $\omega_n(\{n\})=1$; that is, $\omega_n(S)=1$ if and only if $n\in S$.
+Note that $n\mapsto\omega_n$ defines a natural embedding $\NN\hookrightarrow\beta\NN$. 
+Using the described embedding, we can (and will) consider $\NN$ as a subset of $\beta\NN$.
+
+The space $\beta\NN$ is the maximal compact Hausdorff space that contains $\NN$  as an everywhere dense subset.
+More precisely, for any compact Hausdorff space $\spc{X}$ 
+and a map $f\:\NN\to \spc{X}$ there is unique continuous map $\bar f\:\beta\NN\to X$ such that the restriction $\bar f|_\NN$ coincides with $f$. 
+
+\section{Ultralimits of points}
+\label{ultralimits}\index{ultralimit}
+
+Further we will need the existence of a nonprinciple  ultrafilter $\omega$,
+which we fix once and for all.
+
+Assume $(x_n)$ is a sequence of points in a metric space $\spc{X}$. 
+Let us define the \index{$\omega$-limit}\emph{$\omega$-limit} of $(x_n)$ as the point $x_\omega$ 
+such that for any $\eps>0$, $\omega$-almost all elements of $(x_n)$ lie in $\oBall(x_\omega,\eps)$; 
+that is,
+\[\omega\set{n\in\NN}{\dist{x_\omega}{x_n}{}<\eps}=1.\]
+In this case, we will write 
+\[x_\omega=\lim_{n\to\omega} x_n
+\ \ \text{or}\ \ 
+x_n\to x_\omega\ \text{as}\ n\to\omega.\]
+
+For example if $\omega$ is the principle ultrafilter such that $\omega(\{n\})=1$ for some $n\in\NN$, then
+$x_\omega=x_n$.
+
+Alternatively, the sequence $(x_n)$ can be regarded as a map $\NN\to\spc{X}$.
+In this case the map $\NN\to\spc{X}$ can be extended to a continuous map $\beta\NN\to\spc{X}$ from the Stone--\v{C}ech compactification of $\NN$.
+Then the $\omega$-limit $x_\omega$ can be regarded as the image of $\omega$.
+
+Note that $\omega$-limits of a sequence and its subsequence may differ.
+For example, in general
+\[\lim_{n\to\omega}x_n
+\ne
+\lim_{n\to\omega}x_{2\cdot n}.\] 
+
+\begin{thm}{Proposition}\label{prop:ultra/partial}
+Let $\omega$ be a nonprinciple ultrafilter.
+Assume $(x_n)$ is a sequence of points in a metric space $\spc{X}$
+and $x_n\to  x_\omega$ as $n\to\omega$.
+Then $x_\omega$ is a partial limit of the sequence $(x_n)$;
+that is, there is a subsequence $(x_n)_{n\in S}$ that converges to $x_\omega$ in the usual sense.
+\end{thm}
+
+\parit{Proof.}
+Given $\eps>0$, 
+set $S_\eps=\set{n\in\NN}{\dist{x_n}{x_\omega}{}<\eps}$.
+
+Note that $\omega(S_\eps)=1$ for any $\eps>0$.
+Since $\omega$ is nonprinciple, the set $S_\eps$ is infinite.
+Therefore we can choose an increasing sequence $(n_k)$
+such that $n_k\in S_{\frac1k}$ for each $k\in \NN$.
+Clearly $x_{n_k}\to x_\omega$ as $k\to\infty$.
+\qeds
+
+The following proposition 
+is analogous to the statement that any sequence in a compact metric space 
+has a convergent subsequence;
+it can be proved the same way.
+
+\begin{thm}{Proposition}\label{prop:ultra/compact}
+Let $\spc{X}$ be a compact metric space.
+Then
+any sequence of points $(x_n)$ in $\spc{X}$ has unique $\omega$-limit $x_\omega$.
+
+In particular, a bounded sequence of real numbers has a unique $\omega$-limit.
+\end{thm}
+
+The following lemma is an ultralimit analog of Cauchy convergence test.
+
+\begin{thm}{Lemma}\label{lem:X-X^w}
+Let $(x_n)$ be a sequence of points in a complete space $\spc{X}$. 
+Assume for each subsequence $(y_n)$ of $(x_n)$, 
+the $\omega$-limit 
+\[y_\omega=\lim_{n\to\omega}y_{n}\in \spc{X}\]
+is defined and does not depend on the choice of subsequence, 
+then the sequence $(x_n)$ converges in the usual sense.
+\end{thm}
+
+\parit{Proof.} If $(x_n)$ is not a Cauchy sequence,
+then for some $\eps>0$, there is a subsequence $(y_n)$ of $(x_n)$ such that $\dist{x_n}{y_n}{}\ge\eps$ for all $n$.
+
+It follows that $\dist{x_\omega}{y_\omega}{}\ge \eps$, a contradiction.\qeds
+
+
+\section{Ultralimits of spaces}\label{sec:Ultralimit of spaces}
+
+Recall that $\omega$ denotes a nonprinciple ultrafilter on the set of natural numbers.
+
+Let $\spc{X}_n$ be a sequence of metric spaces.
+Consider all sequences of points $x_n\in \spc{X}_n$.
+On the set of all such sequences,
+define a pseudometric by
+\[\dist{(x_n)}{(y_n)}{}
+=
+\lim_{n\to\omega} \dist{x_n}{y_n}{\spc{X}_n}.
+\eqlbl{eq:olim-dist}\]
+Note that the $\omega$-limit on the right hand side is always defined 
+and takes a value in $[0,\infty]$. 
+
+Set $\spc{X}_\omega$ to be the corresponding metric space; 
+that is, the underlying set of $\spc{X}_\omega$ is formed by classes of equivalence of sequences of points $x_n\in\spc{X}_n$ 
+defined by 
+\[(x_n)\sim(y_n)
+\ \Leftrightarrow\ 
+\lim_{n\to\omega} \dist{x_n}{y_n}{}=0\]
+and the distance is defined by \ref{eq:olim-dist}.
+
+The space $\spc{X}_\omega$ is called \index{$\omega$-limit space}\emph{$\omega$-limit} of $\spc{X}_n$.
+Typically  $\spc{X}_\omega$ will denote the  
+$\omega$-limit of sequence $\spc{X}_n$;
+we may also write  
+\[\spc{X}_n\to\spc{X}_\omega\ \ \text{as}\ \  n\to\omega\ \ \text{or}\ \ \spc{X}_\omega=\lim_{n\to\omega}\spc{X}_n.\]
+
+Given a sequence $x_n\in \spc{X}_n$,
+we will denote by $x_\omega$ its equivalence class which is a point in $\spc{X}_\omega$;
+equivalently we will write
+\[x_n\to x_\omega \ \ \text{as}\ \  n\to\omega\ \ \text{or}\ \ x_\omega=\lim_{n\to\omega} x_n.\]
+
+\begin{thm}{Observation}\label{obs:ultralimit-is-complete}
+The $\omega$-limit of any sequence of metric spaces is complete. 
+\end{thm}
+
+\parit{Proof.}
+Let $\spc{X}_n$ be a sequence of metric spaces and $\spc{X}_n\to\spc{X}_\omega$ as $n\to\omega$.
+
+Fix a Cauchy sequence $x_{m}\in \spc{X}_\omega$.
+Passing to a subsequence we can assume that $\dist{x_m}{x_{m-1}}{\spc{X}_\omega}<\tfrac1{2^m}$ for any $m$.
+
+Let us choose double sequence $x_{n,m}\in \spc{X}_n$ such that for any fixed $m$ we have $x_{n,m}\to x_m$ as $n\to\omega$.
+Note that $\dist{x_{n,m}}{x_{n,m-1}}{}<\tfrac1{2^m}$ for $\omega$-almost all $n$.
+It follows that we can choose a nested sequence of sets 
+\[\NN= S_1\supset S_2\supset\dots\] 
+such that 
+\begin{itemize}
+\item $\omega(S_m)=1$ for each $m$, 
+\item $k\ge m$ for any $k\in S_m$, and
+\item if $n\in S_m$, then 
+\[\dist{x_{n,m}}{x_{n,m-1}}{}<\tfrac1{2^m}\]
+\end{itemize}
+
+Consider the sequence $y_n=x_{n,m(n)}$, where $m(n)$ is the largest value such that $m(n)\in S_{m}$.
+Denote by $y\in \spc{X}_\omega$ its $\omega$-limit.
+
+Observe that by construction $x_n\to y$ as $n\to \infty$.
+Hence the statement follows.
+\qeds
+
+\begin{thm}{Observation}\label{obs:ultralimit-is-geodesic}
+The $\omega$-limit of any sequence of length spaces is geodesic. 
+\end{thm}
+
+\parit{Proof.}
+If $\spc{X}_n$ is a sequence length spaces, then for any sequence of pairs $x_n, y_n\in X_n$ there is a sequence of $\tfrac1n$-midpoints $z_n$.
+
+Let $x_n\to x_\omega$, $y_n\to y_\omega$ and $z_n\to z_\omega$ as $n\to \omega$.
+Note that $z_\omega$ is a midpoint of $x_\omega$ and $y_\omega$ in $\spc{X}^\omega$.
+
+By Observation~\ref{obs:ultralimit-is-complete}, $\spc{X}^\omega$ is complete.
+Applying Lemma~\ref{lem:mid>geod} we get the statement.
+\qeds
+
+
+\begin{thm}{Exercise}\label{ex:lim(tree)}
+Show that an ultralimit of metric trees is a metric tree. 
+\end{thm}
+
+\section{Ultrapower}
+
+If all the metric spaces in the sequence are identical $\spc{X}_n=\spc{X}$, 
+its $\omega$-limit 
+$\lim_{n\to\omega}\spc{X}_n$
+is denoted by $\spc{X}^\omega$
+and called $\omega$-power of $\spc{X}$.
+
+
+
+\begin{thm}{Exercise}\label{ex:ultrapower}
+For any point $x\in \spc{X}$, consider the constant sequence $x_n=x$
+and set $\iota(x)=\lim_{n\to\omega}x_n\in\spc{X}^\omega$.
+
+\begin{subthm}{ex:ultrapower:a}
+Show that $\iota\:\spc{X}\to\spc{X}^\omega$ is distance-preserving embedding. (So we can and will consider $\spc{X}$ as a subset of $\spc{X}^\omega$.)
+\end{subthm}
+
+\begin{subthm}{ex:ultrapower:compact} 
+Show that $\iota$ is onto if and only if $\spc{X}$ compact.
+\end{subthm}
+
+\begin{subthm}{ex:ultrapower:proper} 
+Show that if $\spc{X}$ is proper, then $\iota(\spc{X})$ forms a metric component of $\spc{X}^\omega$; that is, a subset of $\spc{X}^\omega$ that lie on finite distance from a given point.
+\end{subthm}
+
+\end{thm}
+
+\begin{thm}{Observation}\label{obs:ultrapower-is-geodesic}
+Let $\spc{X}$ be a complete metric space. 
+Then $\spc{X}^\omega$ is geodesic space if and only if $\spc{X}$ is a length space.
+\end{thm}
+
+\parit{Proof.}
+Assume $\spc{X}^\omega$ is geodesic space.
+Then any pair of points $x,y\in \spc{X}$ has a midpoint $z_\omega\in\spc{X}^\omega$.
+Fix a sequence of points $z_n\in  \spc{X}$ such that $z_n\to z_\omega$ as $n\to \omega$.
+
+Note that 
+$\dist{x}{z_n}{\spc{X}}\to \tfrac12\cdot \dist{x}{y}{\spc{X}}$
+and 
+$\dist{y}{z_n}{\spc{X}}\to \tfrac12\cdot \dist{x}{y}{\spc{X}}$
+as 
+$n\to\omega$.
+In particular, for any $\eps>0$, the point $z_n$ is an $\eps$-midpoint of $x$ and $y$ for $\omega$-almost all $n$.
+It remains to apply \ref{lem:mid>geod}.
+
+The ``if''-part follows from \ref{obs:ultralimit-is-geodesic}.
+\qeds
+
+\begin{thm}{Exercise}\label{ex:two-geodesics-in-ultrapower}
+Assume $\spc{X}$ is a complete length space 
+and $p,q\in\spc{X}$ cannot be joined by a geodesic in $\spc{X}$.  
+Then there are at least two distinct geodesics between $p$ and $q$ 
+in the ultrapower $\spc{X}^\omega$.
+\end{thm}
+
+\begin{thm}{Exercise}
+ Construct a proper metric space $\spc{X}$ such that $\spc{X}^\omega$ is not proper; that is, there is a point $p\in \spc{X}^\omega$ and $R<\infty$ such that the closed ball $\cBall[p,R]_{\spc{X}^\omega}$ is not compact.
+\end{thm}
+
+\section{Tangent and asymptotic spaces}
+
+Choose a space $\spc{X}$ and a sequence of $\lambda_n>0$.
+Consider the sequence of scalings $\spc{X}_n=\lambda_n\cdot\spc{X}=(\spc{X},\lambda_n\cdot\dist{*}{*}{\spc{X}})$.
+
+Choose a point $p\in \spc{X}$ and denote by $p_n$ the corresponding point in $\spc{X}_n$.
+Consider the $\omega$-limit $\spc{X}_\omega$ of $\spc{X}_n$ (one may denote it by $\lambda_\omega\cdot \spc{X}$);
+set $p_\omega$ to be the $\omega$-limit of $p_n$.
+
+If $\lambda_n\to 0$ as $n\to\omega$, then the metric component of $p_\omega$ in $\spc{X}_\omega$ is called \index{$\omega$-tangent space}\emph{$\omega$-tangent space} at $p$ and denoted by $\T_p^{\lambda_\omega}\spc{X}$ (or $\T_p^{\omega}\spc{X}$ if $\lambda_n=n$).\label{page:ultratangent space}
+
+If $\lambda_n\to \infty$ as $n\to\omega$, then the metric component of $p_\omega$ in called \index{$\omega$-asymptotic space}\emph{$\omega$-asymptotic space}\footnote{Often it is called \emph{asymptotic cone} despite that it is not a cone in general; this name is used since in good cases it has a cone structure.}  and denoted by $\Asym\spc{X}$ or $\Asym^{\lambda_\omega}\spc{X}$.
+Note that the space $\Asym\spc{X}$ and its point $p_\omega$ does not depend on the choice of $p\in \spc{X}$.
+
+In general, the tangent and asymptotic spaces depend the sequence $\lambda_n$ and an nonprinciple ultrafiler $\omega$.
+For nice spaces different choices may give the same space.
+
+\begin{thm}{Exercise}\label{ex:ultraT}
+Construct a metric space $\spc{X}$ with a point $p$ such that the tangent space
+$\T_p^{\lambda_\omega}\spc{X}$ depends on the sequence $\lambda_n$ and/or ultrafilter $\omega$.
+\end{thm}
+
+
+\begin{thm}{Exercise}\label{ex:Asym(Lob)}
+Let $\spc{L}$ be the Lobachevsky plane; $\spc{T}=\Asym\spc{L}$.
+
+\begin{subthm}{ex:Asym(Lob):metric-tree}
+Show that $\spc{T}$ is a complete metric tree.
+\end{subthm}
+
+\begin{subthm}{ex:Asym(Lob):continuum}
+Show that $\spc{T}$ has {}\emph{continuum degree} at any point;
+that is, for any point $t\in \spc{T}$ the set of connected components of the complement $\spc{T}\backslash\{t\}$ has cardinality continuum.
+\end{subthm}
+
+\begin{subthm}{ex:Asym(Lob):homogeneous}
+Show that $\spc{T}$ is homogeneous; that is given two points $s,t\in \spc{T}$ there is an isometry of $\spc{T}$ that maps $s$ to $t$.
+\end{subthm}
+
+\begin{subthm}{ex:Asym(Lob):others}
+Prove \ref{SHORT.ex:Asym(Lob):metric-tree}--\ref{SHORT.ex:Asym(Lob):homogeneous} if $\spc{L}$ is Lobachevsky space and/or for the infinite 3-regular%
+\footnote{that is, degree of any vertex is 3.}
+tree with unit edge. 
+\end{subthm}
+
+
+\end{thm}
+
+As it shown in \cite{dyubina-polterovich}, the properties \ref{SHORT.ex:Asym(Lob):metric-tree} and \ref{SHORT.ex:Asym(Lob):continuum} describe the tree $\spc{T}$ up to isometry.
+In particular, the asymptotic space of Lobachevsky plane does not depend on the choice of ultrafilter and the sequence $\lambda_n\to \infty$.
+
+
+\section{Remarks}
+
+A nonprinciple ultrafilter $\omega$ is called 
+\emph{selective}\index{ultrafilter!selective ultrafilter}\index{selective ultrafilter} if for any partition of $\NN$ into sets $\{C_\alpha\}_{\alpha\in\IndexSet}$ such that $\omega(C_\alpha)\z=0$ for each $\alpha$, 
+there is a set $S\subset \NN$ such that $\omega(S)=1$ and $S\cap C_\alpha$ is a one-point set for each $\alpha\in\IndexSet$.
+
+The existence of a selective ultrafilter follows from the continuum hypothesis;
+it was proved by Walter Rudin \cite{rudin}.
+
+For a selective ultrafilter $\omega$, there is a stronger version of Proposition~\ref{prop:ultra/partial};
+namely we can assume that the subsequence $(x_n)_{n\in S}$ can be chosen so that $\omega(S)=1$.
+So, if needed, one may assume that the ultrafilter $\omega$ is chosen to be selective and use this stronger version of the proposition.
