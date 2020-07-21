@@ -1,0 +1,985 @@
+\documentclass[12pt,journal,onecolumn]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{epsfig,rotating,setspace,latexsym,amsmath,epsf,amssymb,amsfonts,bm,theorem,cite,algorithm,graphicx,epsf,authblk,epstopdf,color,algpseudocode,bbm,subcaption}
+
+\newtheorem{remark}{Remark}
+\newtheorem{assumption}{Assumption}
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newenvironment{Proof}[1]{\medskip\par\noindent{\bf Proof:\,}\,#1}{{\mbox{\,$\blacksquare$}\par}}
+
+\doublespacing
+
+\allowdisplaybreaks
+
+
+
+\textwidth 6.5 in
+\oddsidemargin 0.0 in
+\evensidemargin  0.0 in
+\textheight 9.6 in
+\topmargin -0.7 in
+
+
+
+\begin{document}
+
+\title{Sample, Quantize and Encode:\\Timely Estimation Over Noisy Channels\thanks{Ahmed Arafa is with the Department of Electrical and Computer Engineering, University of North Carolina at Charlotte, USA. Email: {\it aarafa@uncc.edu}.}\thanks{Karim Banawan is with the Department of Electrical Engineering, Alexandria University, Egypt. Email: {\it kbanawan@alexu.edu.eg}.}\thanks{Karim G. Seddik is with the Electronics and Communications Engineering Department, American University in Cairo, Egypt. Email: {\it kseddik@aucegypt.edu}.}\thanks{H. Vincent Poor is with the Electrical Engineering Department, Princeton University, USA. Email: {\it poor@princeton.edu}.}}
+
+\author{Ahmed Arafa,~\IEEEmembership{Member,~IEEE}, Karim Banawan,~\IEEEmembership{Member,~IEEE}, Karim G. Seddik,~\IEEEmembership{Senior Member,~IEEE}, and H. Vincent Poor,~\IEEEmembership{Fellow,~IEEE}}
+
+
+
+\maketitle
+
+
+
+\vspace{-.5in}
+%================================
+\begin{abstract}
+The effects of {\it quantization} and {\it coding} on the estimation quality of Gauss-Markov processes are considered, with a special attention to the Ornstein-Uhlenbeck process. Samples are acquired from the process, quantized, and then encoded for transmission using either {\it infinite incremental redundancy} (IIR) or {\it fixed redundancy} (FR) coding schemes. A fixed {\it processing} time is consumed at the receiver for decoding and sending feedback to the transmitter. Decoded messages are used to construct a minimum mean square error (MMSE) estimate of the process as a function of time. This is shown to be an increasing functional of the {\it age-of-information} (AoI), defined as the time elapsed since the sampling time pertaining to the latest successfully decoded message. Such (age-penalty) functional depends on the quantization bits, codewords lengths and receiver processing time. The goal, for each coding scheme, is to optimize sampling times such that the long-term average MMSE is minimized. This is then characterized in the setting of {\it general increasing age-penalty functionals,} not necessarily corresponding to MMSE, which may be of independent interest in other contexts. 
+
+The solution is first shown to be a {\it threshold} policy for IIR, and a {\it just-in-time} policy for FR. {\it Enhanced} transmissions schemes are then developed in order to exploit the processing times to make new data available at the receiver sooner. For both IIR and FR, it is shown that there exists an optimal number of quantization bits that balances AoI and quantization errors. It is also shown that for longer receiver processing times, the relatively simpler FR scheme outperforms IIR.
+\end{abstract}
+
+\begin{keywords}
+Ornstein-Uhlenbeck process, general age-penalty functional, infinite incremental redundancy, fixed redundancy, receiver processing time.
+\end{keywords}
+
+
+
+%================================
+\section{Introduction}
+
+Recent works have drawn connections between remote estimation of a time-varying process and the {\it age-of-information} (AoI) metric, which assesses the timeliness and freshness of the estimated data. While most works focus on transmitting {\it analog} samples for the purpose of estimation, this work focuses on using {\it quantized} and {\it coded} samples in that regard. We present optimal sampling methods that minimize the long-term average minimum mean square error (MMSE) of a Gauss-Markov, namely Ornstein-Uhlenbeck (OU), process under specific coding schemes, taking into consideration receiver {\it processing} times consumed in decoding and sending feedback. 
+
+AoI, or merely age, is defined as the time elapsed since the latest useful data has reached its destination. An increasing number of works have used AoI as a latency performance metric in various contexts, including queuing analysis, scheduling in networks and optimization under different constraints, see, e.g., the general body of works in \cite{yates_age_1, ephremides_age_random, yates_age_eh,  ephremides_age_management, ephremides_age_non_linear, modiano-age-bc, sun-age-mdp, jing-age-online, himanshu-age-source-coding, baknina-updt-info, zhou-age-iot, yates-age-mltpl-src, zhang-arafa-aoi-pricing-wiopt, batu-aoi-multihop, bacinoglu-aoi-eh-finite-gnrl-pnlty, sun-cyr-aoi-non-linear, leng-aoi-eh-cog-radio, bedewy-aoi-multihop, talak-aoi-delay, arafa-aoi-compute, inoue-aoi-general-formula-fcfs, arafa-age-online-finite, yang-arafa-aoi-fl, zou-waiting-aoi, soysal-aoi-gg11, tang-aoi-power-multi-state}.
+
+There are two main lines of research in the AoI literature that relate to this work. The first, is the one pertaining to coding over noisy channels for age minimization, as in, e.g., \cite{parag-age-coding, najm-age-mg11-harq, yates-age-erase-code, baknina-age-coding, ceran-age-harq, sac-age-mg1-harq, simeone-age-finite-code, feng-age-rateless-codes, chen-aoi-coding-bc, arafa-aoi-coding, wang-aoi-coding-fbit, feng-coding-aoi-bc, najm-age-erasure-coding, javani-aoi-erasure}. These works analyze AoI under various channel conditions, with special attention to (rateless) infinite incremental redundancy (IIR), fixed redundancy (FR) and hybrid ARQ (HARQ) coding schemes. One main theme in the findings of these works is that optimal codes should strike a balance between using long codewords to minimize channel errors and using short ones to minimize age. Our work in this paper primarily focuses on evaluating the performances of using IIR and FR coding schemes, {\it yet with the additional presence of fixed non-zero receiver processing times.}
+
+The second line of research related to this work is that pertaining to evaluating the role of AoI in remote estimation, as in, e.g., \cite{chakravorty-distortion-gauss-markov, gao-estimation-ltd-measurements, yun-monitoring-comm-cost, ayan-aoi-voi-cntrl, mitra-estimation-graphs-aoi, roth-mse-aoi-finite-blocklength, chakravorty-estimation-pckt-drop-markov, sun-weiner, ornee-aoi-estimation-ou, huang-estimation-harq-control, maatouk-aoii, ramirez-aoi-compression, bastopcu-aoi-distortion, bastopcu-partial-updates}. These works characterize, either implicitly or explicitly, the relationship between mean square error (MSE), or some general measure of distortion, and AoI as a measure of freshness. Our work in this paper also focuses on characterizing the relationship of MSE and AoI, {\it yet with the additional presence of quantization errors.}
+
+\begin{figure}[t]
+\center
+\includegraphics[scale=.375]{sys_mod}
+\caption{System model considered for sampling, quantizing and encoding an OU process at the transmitter, and reconstructing it at the receiver.}
+\label{fig_sys_mod}
+\end{figure}
+
+
+The most closely-related works to ours are \cite{sun-weiner, ornee-aoi-estimation-ou}, which derive optimal sampling methods to minimize the long-term average MMSE for Weiner \cite{sun-weiner} and OU \cite{ornee-aoi-estimation-ou} processes. In both works, the communication channel introduces random delays, before perfect (distortion-free) samples are received. It is shown that if sampling times are independent of the instantaneous values of the process (signal-independent sampling) the MMSE reduces to AoI in case of Weiner \cite{sun-weiner}, and to an increasing functional of AoI (age-penalty) in case of OU \cite{ornee-aoi-estimation-ou}. It is then shown that the optimal sampling policy has a threshold structure, in which a new sample is acquired only if the expected AoI in case of Weiner (or age-penalty in case of OU) surpasses a certain value. In addition, signal-dependent optimal sampling policies are also derived \cite{sun-weiner, ornee-aoi-estimation-ou}.
+
+In this work, we consider the transmission of quantized and coded samples of an OU process through a noisy channel. We note that we consider an OU process in our study since, unlike the conventional Weiner process, it has a bounded variance, leading to bounded quantization error as well. The OU process, in addition, is used to model various physical phenomena, and has relevant applications in control and finance (see, e.g., the discussion in \cite{ornee-aoi-estimation-ou}). Different from \cite{ornee-aoi-estimation-ou}, not every sample has guaranteed reception, and received samples suffer from quantization noise. The receiver uses the received samples to construct an MMSE estimate for the OU process. Quantization and coding introduce a tradeoff: {\it few quantization levels and codeword bits would transmit samples faster, yet with high distortion and probability of error.} An optimal choice, therefore, needs to be made, which depends mainly on how fast the OU process varies as well as the channel errors. Different from related works, effects of having (fixed) {\it non-zero receiver processing times}, mainly due to decoding and sending feedback, are also considered in this work.
+
+We focus on signal-independent sampling, together with an MMSE quantizer, combined with either IIR or FR coding schemes; see Fig.~\ref{fig_sys_mod}. The MMSE of the OU process is first shown to be an increasing functional of AoI, as in \cite{ornee-aoi-estimation-ou}, parameterized directly by the number of quantization bits $\ell$, and indirectly by the number of codeword bits $n$ and the receiver processing time $\beta$. We formulate two problems, one for IIR and another for FR, to choose sampling times so that the long-term average MMSE is minimized. Focusing on stationary deterministic policies, we present optimal solutions for both problems in the case of {\it general increasing age-penalties,} not necessarily corresponding to MMSE, which may be useful in other contexts in which IIR and FR coding schemes are employed. The solution for IIR has a {\it threshold} structure, as in \cite{sun-cyr-aoi-non-linear, ornee-aoi-estimation-ou}, while that for FR is a {\it just-in-time} sampling policy that does not require receiver feedback.
+
+We then present what we call {\it enhanced} IIR and FR schemes, in which we leverage the processing time to our favor through fine-tuning sampling and/or transmission times in such a way that {\it the receiver never waits for data when necessary.} This allows us to mitigate the negative effects of processing times to the most extent possible, and produce timely estimates that are able to track the OU process better. We finally discuss how to select $\ell$ and $n$, and show that the relatively simpler FR scheme can outperform IIR for relatively large values of $\beta$.
+
+The proposed joint optimization of sampling, quantization and coding in this paper takes a step towards achieving the notion of timely real-time tracking of random processes, which can be applied in applications of communications, networks and control.
+
+
+
+%================================
+\section{System Model}
+
+
+\subsection{Quantization and Coding of the OU Process}
+
+We consider a sensor that acquires time-stamped samples from an OU process. Given a value of $X_s$ at time $s$, the OU process evolves as follows \cite{ou-brownian-motion, doob-brownian-motion}:
+\begin{align} \label{eq_ou_evol}
+X_t=X_se^{-\theta(t-s)}+\frac{\sigma}{\sqrt{2\theta}}e^{-\theta(t-s)}W_{e^{2\theta(t-s)}-1},\quad t\geq s,
+\end{align}
+where $W_t$ denotes a Weiner process, while $\theta>0$ and $\sigma>0$ are fixed parameters. The sensor acquires the $i$th sample at time $S_i$ and feeds it to an MMSE quantizer that produces an $\ell$-bit message ready for encoding. We will use the term {\it message} to refer to a quantized sample of the OU process. Let $\tilde{X}_{S_i}$ represent the quantized version of the sample $X_{S_i}$, and let $Q_{S_i}$ denote the corresponding quantization error. Thus,
+\begin{align} \label{eq_qntz_smpl}
+X_{S_i}=\tilde{X}_{S_i}+Q_{S_i}.
+\end{align}
+Each message is encoded and sent over a noisy channel to the receiver. The receiver updates an MMSE estimate of the OU process if decoding is successful. ACKs and NACKs are fed back following each decoding attempt. A fixed receiver processing time $\beta$ time units is incurred per each decoding attempt, which also includes the time to generate and send feedback. Channel errors are independent and identically distributed (i.i.d.) across time/messages.
+
+Two channel coding schemes are investigated. The first is IIR, in which a message transmission starts with an $n$-bit codeword, $n\geq\ell$, and then incremental redundancy (IR) bits are added one-by-one if a NACK is received until the message is eventually decoded and an ACK is fed back. The second scheme is FR, in which a message is encoded into fixed $n$-bit codewords, yet following a NACK the message in transmission is discarded and a {\it new} sample is acquired and used instead. Following ACKs, the transmitter may idly wait before acquiring a new sample and sending a new message.\footnote{The main reason behind waiting, as will be shown in details in the sequel, is that it leads to sending fresher samples, which can be more rewarding in terms of the {\it long-term average} MMSE, and {\it not} the instantaneous MMSE. Note that waiting policies have been generously used in previous works that focus on minimizing average AoI, e.g., \cite{yates_age_eh, sun-age-mdp, arafa-age-online-finite}.}
+
+
+\subsection{Communication Channel}
+
+Let $D_i$ denote the reception time of the $i$th {\it successfully decoded} message. For the IIR scheme, each message is eventually decoded, and therefore
+\begin{align}
+D_i=S_i+Y_i
+\end{align}
+for some random variable $Y_i$ that represents the channel delay incurred due to the IR bits added. Let $T_b$ denote the time units consumed per bit transmission. Hence,
+\begin{align}
+Y_i=nT_b+\beta+r_i(T_b+\beta),
+\end{align}
+where $r_i\in\{0,1,2,\dots\}$ denotes the number of IR bits used until the $i$th message is decoded. Note that in the IIR scheme $\beta$ is added for the original $n$-bit codeword transmission, and then for each IR transmission until successful decoding. Let 
+\begin{align}
+\bar{n}\triangleq nT_b+\beta
+\end{align}
+for conciseness. Channel delays $Y_i$'s are i.i.d. $\sim Y$, where
+\begin{align}
+\mathbb{P}\left(Y=\bar{n}\right)=&p_0, \label{eq_Y_dist_1} \\
+\mathbb{P}\left(Y=\bar{n}+k(T_b+\beta)\right)=&\prod_{j=0}^{k-1}(1-p_j)p_k,\quad k\geq1, \label{eq_Y_dist_2}
+\end{align}
+with $p_j$ denoting the probability that an ACK is received when $r_i=j$. This depends on the channel code being used, and the model of the channel errors, yet it holds that $p_j\leq p_{j+1}$.
+
+For the FR scheme, there can possibly be a number of transmission {\it attempts} before a message is eventually decoded. Let $M_i$ denote the number of these attempts in between the $(i-1)$th and $i$th successfully decoded messages, and let $S_{i,j}$ denote the sampling time pertaining to the $j$th attempt of which, $1\leq j\leq M_i$. Therefore, only the $M_i$th message is successfully decoded, and the rest are all discarded. Since each message is encoded using fixed $n$-bit codewords, we have
+\begin{align}
+D_i=S_{i,M_i}+\bar{n}, \quad\forall i.
+\end{align}
+Observe that in the FR scheme each successfully-decoded message incurs only {\it one} $\beta$, since each decoding attempt occurs on a message pertaining to a {\it fresh} sample. According to the notation developed for the IIR channel delays above, $M_i$'s are i.i.d. geometric random variables with parameter $p_0$.
+
+
+\subsection{MMSE Estimation and AoI}
+
+Upon successfully decoding a message at time $D_i$, the receiver constructs an MMSE estimate for the OU process. We restrict our attention to MMSE estimators that only use the latest-received information.\footnote{Note that the OU process is no longer Markov after quantization.} For the IIR scheme this is
+\begin{align}
+\hat{X}_t=\mathbb{E}\left[X_t\Big|S_i,\tilde{X}_{S_i}\right],\quad D_i\leq t<D_{i+1}.
+\end{align}
+Using (\ref{eq_ou_evol}) and (\ref{eq_qntz_smpl}), we have
+\begin{align}
+\hat{X}_t=&\mathbb{E}\bigg[\tilde{X}_{S_i}e^{-\theta
+\left(t-S_i\right)}+Q_{S_i}e^{-\theta\left(t-S_i\right)}+\frac{\sigma}{\sqrt{2\theta}}e^{-\theta\left(t-S_i\right)}W_{e^{2\theta\left(t-S_i\right)}-1}\bigg|S_i,\tilde{X}_{S_i}\bigg] \\
+=&\tilde{X}_{S_i}e^{-\theta\left(t-S_i\right)},\quad D_i\leq t<D_{i+1},
+\end{align}
+where the last equality follows by independence of the Weiner noise in $[D_i,t]$ from $(S_i,\tilde{X}_{S_i})$, and that for the MMSE quantizer, the quantization error is zero-mean \cite{cover}. The MMSE is now given as follows for $D_i\leq t<D_{i+1}$: 
+\begin{align}
+\texttt{mse}\left(t,S_i\right)=&\mathbb{E}\left[\left(X_t-\hat{X}_t\right)^2\right] \\
+=&\mathbb{E}\left[Q_{S_i}^2\right]e^{-2\theta\left(t-S_i\right)}+\frac{\sigma^2}{2\theta}\left(1-e^{-2\theta\left(t-S_i\right)}\right). \label{eq_mse_qnt_dly}
+\end{align}
+{\it We see from the above that even if $D_i-S_i=0$, i.e., if the $i$th sample is transmitted and received instantaneously, the MMSE estimate at $t=D_i$ would still suffer from quantization errors.} 
+
+In the sequel, we consider $X_0=0$ without loss of generality, and hence, using (\ref{eq_ou_evol}), the variance of $X_t$ is given by $\mathbb{E}\left[X_t^2\right]=\frac{\sigma^2}{2\theta}\left(1-e^{-2\theta t}\right),~t>0$.
+Following a rate-distortion approach (note that $X_t$ is Gaussian), the following relates the number of bits $\ell$ and the instantaneous mean square quantization error \cite{cover}:
+\begin{align} \label{eq_quant_error_t}
+\mathbb{E}\left[Q_t^2\right]=\frac{\sigma^2}{2\theta}\left(1-e^{-2\theta t}\right)2^{-2\ell}, \quad t>0.
+\end{align}
+Using the above in (\ref{eq_mse_qnt_dly}) and rearranging, we get that
+\begin{align}
+\!\!\!\texttt{mse}\!\left(t,S_i\right)\!=&\frac{\sigma^2}{2\theta}\!\left(\!1\!-\!\left(1\!-\!2^{-2\ell}\!\left(1\!-\!e^{-2\theta S_i}\right)\right)\!e^{-2\theta\left(t-S_i\right)}\!\right),
+\end{align}
+We note that as $\ell\rightarrow\infty$, the above expression becomes the same as that derived for the signal-independent sampling scheme analyzed in \cite{ornee-aoi-estimation-ou}. However, since we consider practical coding aspects in this work, as $\ell\rightarrow\infty$, it holds that $n\rightarrow\infty$ as well and no sample will be received.
+
+We focus on dealing with the system in {\it steady state,} in which both $t$ and $S_i$ are relatively large. In this case, the mean square quantization error in (\ref{eq_quant_error_t}) becomes independent of time, and only dependent upon the steady state variance of the OU process $\sigma^2/2\theta$. Hence, in steady state, the MMSE becomes
+\begin{align}
+\texttt{mse}\left(t,S_i\right)=&\frac{\sigma^2}{2\theta}\left(1-\left(1-2^{-2\ell}\right)e^{-2\theta\left(t-S_i\right)}\right) \\
+\triangleq&h_\ell\left(t-S_i\right), \quad D_i\leq t<D_{i+1}, \label{eq_mmse_iir}
+\end{align}
+which is an increasing functional of the AoI $t-S_i$.
+
+For the FR scheme, the analysis follows similarly, after adding one more random variable denoting the number of transmissions, $M_i$. Specifically, it holds that
+\begin{align}
+\hat{X}_t=&\tilde{X}_{S_{i,M_i}}e^{-\theta\left(t-S_{i,M_i}\right)}, \\
+\texttt{mse}\left(t,S_{i,M_i}\right)=&h_\ell\left(t-S_{i,M_i}\right), \quad D_i\leq t<D_{i+1}. \label{eq_mmse_fr}
+\end{align}
+
+We see from (\ref{eq_mmse_iir}) and (\ref{eq_mmse_fr}) that there are two main contributing factors to the MMSE. The first is due to quantization, represented by the factor $\left(1-2^{-2\ell}\right)$, and the second is due to the channel delay, added mainly because of coding and errors, represented by the AoI $t-S$.
+
+
+
+%================================
+\section{Optimal Sampling Policies: General Age-Penalty}
+
+The main goal is to choose the sampling times, for given $\ell$, $n$ and $\beta$, such that the long-term average MMSE is minimized. In this section, we formulate two problems to achieve such goal: one for IIR and another for FR, and present their solutions in the upcoming section. Later on in Section~\ref{sec_cmpr_iir_fr}, we discuss how to choose the best $\ell$ and $n$, as well as compare the performances of IIR and FR in general.
+
+For both coding schemes, let us denote by an {\it epoch} the time elapsed in between two successfully received messages. Thus, the $i$th epoch starts at $D_{i-1}$ and ends at $D_i$, with $D_0\equiv0$.
+
+\begin{remark}
+Our analysis does not depend on the specific structure of the MMSE functional $h_\ell(\cdot)$; it extends to any differentiable increasing age-penalty functional $g(\cdot)$. Therefore, in what follows, we formulate our problems and present their solutions for the case of minimizing a long-term average age-penalty, making the results applicable in other contexts.
+\end{remark}
+
+
+\subsection{The IIR Scheme}
+
+For the IIR scheme, the problem is formulated as
+\begin{align} \label{opt_main_iir}
+\min_{\{S_i\}}\quad\limsup_{l\rightarrow\infty}\frac{\sum_{i=0}^l\mathbb{E}\left[\int_{D_i}^{D_{i+1}}g\left(t-S_i\right)dt\right]}{\sum_{i=0}^l\mathbb{E}\left[D_{i+1}-D_i\right]},
+\end{align}
+where the numerator represents the total age-penalty (the MMSE in case of the OU process estimation) across all epochs, and the denominator represents the total time.
+
+Let us define $W_i$ as the waiting time at the beginning of the $i$th epoch before acquiring the $i$th sample. That is, $S_i=D_{i-1}+W_i$. Therefore, one can equivalently solve for the waiting times $W_i$'s instead of sampling times $S_i$'s. We focus on a class of {\it stationary deterministic} policies in which
+\begin{align}
+W_i=f\left(g\left(D_{i-1}-S_{i-1}\right)\right),\quad\forall i.
+\end{align}
+That is, {\it the waiting time in the $i$th epoch is a deterministic function of its starting age-penalty value.} Such focus is motivated by the fact that channel errors are i.i.d. and by its optimality in similar frameworks, e.g., \cite{sun-age-mdp, jing-age-online, arafa-age-online-finite}. Defining $w\triangleq f\circ g$ and noting that $D_{i-1}-S_{i-1}=Y_{i-1}$ we have
+\begin{align}
+W_i=w\left(Y_{i-1}\right),
+\end{align}
+which induces a stationary distribution of $D_i$'s and the age-penalty across all epochs. Due to stationarity, we can now drop the epoch's index $i$, and (re)define notations used in a typical epoch. It starts at time $\overline{D}$ with AoI $\overline{Y}$, and with the latest sample acquired at time $\overline{S}$, such that $\overline{D}=\overline{S}+\overline{Y}$. Then, a waiting time of $w\left(\overline{Y}\right)$ follows, after which a new sample is acquired, quantized, and transmitted, taking $Y$ time units to reach the receiver at time $D=\overline{D}+w\left(\overline{Y}\right)+Y$, which is the epoch's end time. Therefore, problem (\ref{opt_main_iir}) now reduces to a minimization over a single epoch as follows:
+\begin{align} \label{opt_iir_epoch}
+\min_{w(\cdot)\geq0}\quad\frac{\mathbb{E}\left[\int_{\overline{D}}^{\overline{D}+w\left(\overline{Y}\right)+Y}g\left(t-\overline{S}\right)dt\right]}{\mathbb{E}\left[w\left(\overline{Y}\right)+Y\right]}.
+\end{align}
+Given the realization of $\overline{Y}$ at time $\overline{D}$, the transmitter decides on the waiting time $w\left(\overline{Y}\right)$ that minimizes the long-term average age-penalty demonstrated in the fractional program above.\footnote{We now see explicitly how waiting can be beneficial. Since waiting increases {\it both} the numerator and denominator of the objective function of problem (\ref{opt_iir_epoch}), its optimal value can be non-zero.} 
+
+We follow Dinkelbach's approach to transform (\ref{opt_iir_epoch}) into the following auxiliary problem for fixed $\lambda\geq0$ \cite{dinkelbach-fractional-prog}:
+\begin{align} \label{opt_iir_aux}
+p^{IIR}(\lambda)\triangleq\min_{w(\cdot)\geq0}\quad\mathbb{E}\left[\int_{\overline{D}}^{\overline{D}+w\left(\overline{Y}\right)+Y}g\left(t-\overline{S}\right)dt\right] -\lambda\mathbb{E}\left[w\left(\overline{Y}\right)+Y\right].
+\end{align}
+The optimal solution of (\ref{opt_iir_epoch}) is then given by $\lambda^*_{IIR}$ that solves $p^{IIR}(\lambda^*_{IIR})=0$, which can be found via bisection, since $p^{IIR}(\lambda)$ is decreasing \cite{dinkelbach-fractional-prog}. The following theorem characterizes the solution of problem (\ref{opt_iir_aux}). The proof is in Appendix~\ref{apndx_pf_iir_main_result}.
+
+\begin{theorem} \label{thm_iir_main_result}
+The optimal solution of problem (\ref{opt_iir_aux}) is given by
+\begin{align}
+w^*(\bar{y})=\left[G_{\bar{y}}^{-1}(\lambda)\right]^+,
+\end{align}
+where $\left[\cdot\right]^+\triangleq\max(\cdot,0)$, $\bar{y}$ is the realization of the starting AoI $\bar{Y}$, and $G_{\bar{y}}(x)\triangleq\mathbb{E}\left[g\left(\bar{y}+x+Y\right)\right]$.
+\end{theorem}
+
+We note that the theorem can be shown using the result reported in \cite[Theorem~1]{sun-cyr-aoi-non-linear}. Our proof approach, however, is different, and is reported here for completeness. Such approach is also used to show parts of Theorem~\ref{thm_fr_main_result} below.
+
+The optimal waiting policy for IIR has a {\it threshold} structure: a new sample is acquired only when the expected age-penalty by the end of the epoch is at least $\lambda$. Note that the optimal $\lambda^*_{IIR}$ corresponds to the optimal long-term average age-penalty.
+
+
+\subsection{The FR Scheme}
+
+For the FR scheme, the formulated problem can be derived similarly, {\it with the addition of possible waiting times in between retransmissions.}\footnote{This is only amenable for FR since waiting leads to acquiring a fresher sample, and possibly reduced age-penalties. For IIR, waiting after a NACK is clearly suboptimal since it elongates the channel delay for the {\it same} sample.}
+Specifically, let $W_{i,j}$ represent the waiting time before the $j$th transmission attempt in the $i$th epoch. A stationary deterministic policy here is such that
+\begin{align}
+W_{i,1}=&f\left(g\left(D_{i-1}-S_{i-1,M_{i-1}}\right)\right)=w\left(\bar{n}\right)\equiv w_1, \\
+W_{i,2}=&w\left(w_1+\bar{n}\right)\equiv w_2, \\
+\vdots& \nonumber \\
+W_{i,j}=&w\left(w_1+\dots+w_{j-1}+\bar{n}\right)\equiv w_j,
+\end{align}
+and so on. Therefore, under the FR scheme, a stationary deterministic policy reduces to a countable sequence $\{w_j\}$.
+
+Proceeding with the same notations for a given epoch as in the IIR scheme, let us define $M$ as the number of transmission attempts in the epoch, $\bar{M}$ as those in the previous epoch, and $\overline{S}_{\bar{M}}$ as the sampling time of the successful (last) transmission attempt in the previous epoch. The problem now becomes
+\begin{align} \label{opt_fr_epoch}
+\min_{\{w_j\geq0\}} \quad \frac{\mathbb{E}\left[\int_{\overline{D}}^{\overline{D}+\sum_{j=1}^Mw_j+M\bar{n}}g\left(t-\overline{S}_{\bar{M}}\right)dt\right]}{\mathbb{E}\left[\sum_{j=1}^Mw_j+M\bar{n}\right]}.
+\end{align}
+
+We follow a similar approach here as in the IIR scheme and consider the following auxiliary problem:
+\begin{align} \label{opt_fr_aux}
+p^{FR}(\lambda)\!\triangleq\!\min_{\{w_j\geq0\}} \mathbb{E}\left[\int_{\overline{D}}^{\overline{D}+\sum_{j=1}^Mw_j+M\bar{n}}g\left(t-\overline{S}_{\bar{M}}\right)dt\right]-\lambda\mathbb{E}\left[\sum_{j=1}^Mw_j+M\bar{n}\right].
+\end{align}
+The optimal solution of problem (\ref{opt_fr_epoch}) is now given by $\lambda^*_{FR}$ that solves $p^{FR}\left(\lambda^*_{FR}\right)=0$, which we will actually provide in {\it closed-form} this time. The optimal waiting policy structure is provided in the next theorem. The proof is in Appendix~\ref{apndx_pf_fr_main_result}. 
+
+\begin{theorem} \label{thm_fr_main_result}
+The optimal solution of problem (\ref{opt_fr_aux}) is given by
+\begin{align}
+w_1^*=&\left[G^{-1}(\lambda)\right]^+, \\
+w_j^*=&0,~j\geq2,
+\end{align}
+where $G(x)\triangleq\mathbb{E}\left[g\left(\bar{n}+x+M\bar{n}\right)\right]$. In addition, the optimal solution of problem (\ref{opt_fr_epoch}), $\lambda^*_{FR}$, is such that $w_1^*=\left[G^{-1}\left(\lambda^*_{FR}\right)\right]^+=0$.
+\end{theorem}
+
+A closed-form expression for $\lambda^*_{FR}$ can now be found via substituting $w_j=0,~\forall j$ in (\ref{opt_fr_epoch}).
+
+Theorem~\ref{thm_fr_main_result} shows that {\it zero-wait} policies are optimal for FR, which is quite intuitive. First, waiting is not optimal in between retransmissions, even though it would lead to acquiring fresher samples, since the AoI is already relatively high following failures. Second, since the epoch always starts with the same AoI, $\bar{n}$, one can optimize the long-term average age-penalty to make waiting not optimal at the beginning of the epoch as well. We note, however, that such results do {\it not} follow from \cite[Theorem~5]{sun-age-mdp}, since there can be multiple transmissions in the same epoch. We also note that while zero-wait policies have been invoked in other works involving FR coding schemes, e.g., \cite{yates-age-erase-code, najm-age-erasure-coding}, Theorem~\ref{thm_fr_main_result} provides a proof of their {\it optimality} for general increasing age-penalties.
+
+
+
+%================================
+\section{Enhanced Transmission Schemes}
+
+So far the analysis assumed that, naturally, the transmitter must wait for feedback before taking new decisions, e.g., sending IR bits in case of the IIR scheme or acquiring a new sample in case of the FR scheme. In this section, we show that such waiting for receiver processing is unnecessary. We basically take advantage of the processing time $\beta$ to send extra pieces of information when possible, in order to maintain a smooth information supply {\it as the receiver decodes and processes previous messages.} We show that with proper timing, this can lead to better results for both the IIR and FR schemes, and hence the name {\it enhanced} schemes. One assumption here is that the receiver has a (possibly-infinite) queue to store unprocessed data.
+
+
+\subsection{Enhanced IIR Scheme}
+
+The enhanced IIR scheme works as follows. The transmitter sends the original $n$-bit codeword, consuming $nT_b$ time units, after which the receiver starts decoding. Then, instead of waiting for the $\beta$ time units processing time, the transmitter goes ahead with transmitting IR bits continuously. This way, if the original $n$-bit codeword is not successfully decoded, the receiver would have some IR bits awaiting in its queue ready for processing, which saves time. The continuous stream of IR bits transmission stops whenever an ACK is fed back. We note that if the ACK is received in the middle of a bit transmission, this transmission is cut off and stopped immediately.
+
+The next lemma shows that the enhanced IIR scheme described above experiences (almost surely) smaller channel delay for each message transmission. The proof is in Appendix~\ref{apndx_pf_iir_enhanced}.
+
+\begin{lemma} \label{thm_iir_enhanced}
+For a given value of $r_i$, the enhanced IIR scheme saves the following amount of time in channel delay during the $i$th epoch:
+\begin{align} \label{eq_iir_enhanced_delay}
+r_i\min\{\beta,T_b\}+(r_i-\kappa_i)\beta \cdot \mathbbm{1}_{\beta\geq T_b}, 
+\end{align}
+where $\kappa_i$ is the smallest integer in $\{0,1,\dots,r_i\}$ such that $\lfloor\kappa_i\beta/T_b\rfloor\geq r_i$, with $\lfloor x\rfloor$ denoting the largest integer smaller than or equal to $x$, and $\mathbbm{1}_A=1$ if event $A$ is true and $0$ otherwise.
+\end{lemma}
+
+Lemma~\ref{thm_iir_enhanced} shows that the enhanced IIR scheme would achieve smaller long-term average age-penalty relative to the original IIR scheme discussed previously, owing to (\ref{eq_iir_enhanced_delay}).
+
+Let $\tilde{Y}_i$ denote the channel delay experienced by the $i$th message using the enhanced IIR scheme. Such $\tilde{Y}_i$'s are i.i.d.~$\tilde{Y}$. Using the same notation used to describe the distribution of (the original channel delay) $Y$ in (\ref{eq_Y_dist_1}) and (\ref{eq_Y_dist_1}), the enhanced IIR channel delay $\tilde{Y}$ has the following distribution according to Lemma~\ref{thm_iir_enhanced}:
+\begin{align}
+\mathbb{P}\left(\tilde{Y}=\bar{n}\right)=&p_0, \\
+\mathbb{P}\left(\tilde{Y}=\bar{n}+kT_b\right)=&\prod_{j=0}^{k-1}(1-p_j)p_k,\quad k\geq1,
+\end{align}
+for $\beta<T_b$, and
+\begin{align}
+\mathbb{P}\left(\tilde{Y}=\bar{n}\right)=&p_0, \\
+\mathbb{P}\left(\tilde{Y}=\bar{n}+k\beta\right)=&\prod_{j=0}^{k-1}\left(1-p_{\left\lfloor \frac{(k-1)\beta}{T_b} \right\rfloor}\right)p_{\left\lfloor \frac{k\beta}{T_b} \right\rfloor},\quad k\geq1,
+\end{align}
+for $\beta\geq T_b$. One would then apply the results of Theorem~\ref{thm_iir_main_result} to find the optimal waiting policy in accordance to the enhanced IIR channel delay distribution $\tilde{Y}$ specified above.
+
+
+\subsection{Enhanced FR Scheme}
+
+For FR, since zero-waiting is optimal by Theorem~\ref{thm_fr_main_result}, it could be rewarding therefore, age-wise, to send a new message right away after the previous one is {\it delivered}, i.e., after $nT_b$ time units instead of $\bar{n}$. However, this may not be optimal if $\beta$ is relatively large, since it would lead to accumulating {\it stale} messages at the receiver's end as they wait for decoding to finish. 
+
+Let $\delta$ denote the waiting time following a message {\it delivery} at which a new message is transmitted. In the original FR scheme, by Theorem~\ref{thm_fr_main_result}, we had $\delta=\beta$. In general though, $\delta\in[0,\beta]$ and should be optimized. The next lemma provides a solution to the optimal $\delta^*$. The proof is in Appendix~\ref{apndx_pf_fr_enhanced}.
+
+\begin{lemma} \label{thm_fr_enhanced}
+In the FR scheme, it is optimal to send a new message after the previous one's delivery by $\delta^*=\left[\beta-nT_b\right]^+$ time units.
+\end{lemma}
+
+Lemma~\ref{thm_fr_enhanced} shows that {\it just-in-time} updating is optimal. For $\beta\leq nT_b$, a new sample is acquired and transmitted just-in-time as the previous message is delivered. While for $\beta>nT_b$, a new sample is acquired and transmitted such that it is delivered just-in-time as the receiver finishes decoding the previous message. This way, delivered samples are always fresh, the receiver is never idle, and feedback is unnecessary.
+
+
+
+%================================
+\section{Performance Evaluations and Comparisons} \label{sec_cmpr_iir_fr}
+
+In this section, we discuss how the IIR and FR schemes perform relative to each other under variant system parameters and channel conditions. We do so in the original context of OU process estimation, i.e., when $g(\cdot)\equiv h_\ell(\cdot)$. Applying Theorem~\ref{thm_iir_main_result} and Lemma~\ref{thm_iir_enhanced}'s result, the optimal waiting policy for enhanced IIR is
+\begin{align} \label{eq_iir_enhanced_wait}
+w^*\!\left(\bar{y}\right)\!=\!\left[\frac{1}{2\theta}\log\left(\frac{\frac{\sigma^2}{2\theta}\left(1-2^{-2\ell}\right)\mathbb{E}\left[e^{-2\theta \tilde{Y}}\right]}{\frac{\sigma^2}{2\theta}-\lambda^*_{IIR}}\right)-\bar{y}\right]^+,
+\end{align}
+where $\tilde{Y}$ is as defined following Lemma~\ref{thm_iir_enhanced}.\footnote{With a slight abuse of notation here, $\bar{y}$ now represents the realization of $\tilde{Y}$ that ended the previous epoch.} In addition, observing that $\frac{\sigma^2}{2\theta}2^{-2\ell}\leq h_{\ell}\left(t-\overline{S}\right)\leq\frac{\sigma^2}{2\theta}$ holds true $\forall t\geq\overline{S}$, one can directly see that $\lambda^*_{IIR}\in\left[2^{-2\ell}\frac{\sigma^2}{2\theta},\frac{\sigma^2}{2\theta}\right]$, facilitating the bisection search. Applying Theorem~\ref{thm_fr_main_result} and Lemma~\ref{thm_fr_enhanced}'s results, the optimal long-term average MMSE for enhanced FR is given by
+\begin{align} \label{eq_fr_enhanced_mse}
+\frac{\sigma^2}{2\theta}\left(\!1\!-\!\frac{\left(1-2^{-2\ell}\right)e^{-2\theta\bar{n}}p_0}{2\theta K_{n,\beta}}\frac{1-e^{-2\theta K_{n,\beta}}}{1\!-\!(1-p_0)e^{-2\theta K_{n,\beta}}}\right),
+\end{align}
+where $K_{n,\beta}\triangleq\max\{\beta,nT_b\}$. Derivation details for (\ref{eq_iir_enhanced_wait}) and (\ref{eq_fr_enhanced_mse}) are in Appendix~\ref{apndx_fr_enhanced_mse}.
+
+We consider a binary symmetric channel (BSC) with crossover probability $\epsilon\in\left(0,\frac{1}{2}\right)$, and use maximum distance separable (MDS) codes for transmission. This allows us to write $p_j=\sum_{l=0}^{\lfloor\frac{n+j-\ell}{2}\rfloor}\binom{n+j}{l}\epsilon^l(1-\epsilon)^{n+j-l}$. We set $\sigma^2=1$, and $T_b=0.05$ time units. We refer to enhanced IIR and FR without using the word enhanced throughout this section for convenience.
+
+
+%---
+\subsection{Optimal $(\ell,n)$: Effect of Memory Factor $\theta$}
+
+For fixed $\beta=0.15$, we vary $\ell$ and numerically choose the best $n$ for IIR and FR. We plot the long-term average MMSE for both IIR and FR versus $\ell$ in Fig.~\ref{fig_iir_and_fr_vs_ell_beta_15_eps_1_4}. We do so for $\theta=0.01$ in Fig.~\ref{fig_iir_and_fr_vs_ell_theta_01_beta_15_eps_1_4} (slowly-varying OU process) and $\theta=0.5$ in Fig.~\ref{fig_iir_and_fr_vs_ell_theta_5_beta_15_eps_1_4} (fast-varying OU process). For each value of $\ell$, the optimal $n$ is evaluated. For both values of $\theta$, we repeat the analysis for $\epsilon=0.1$ (in solid lines) and $\epsilon=0.4$ (in dotted lines).
+
+In all of the cases considered, the optimal $n^*=\ell^*+2$. While the optimal $\ell^*$ itself depends on whether the OU processes is slowly ($\theta=0.01$) or fast ($\theta=0.5$) varying. Specifically, we notice that $\ell^*$ decreases with $\theta$. This is intuitive since for slowly-varying processes, one can tolerate larger waiting times to get high quality estimates, and vice versa. It is also shown in the figure that IIR performs better than FR for slowly-varying processes, and vice versa for fast-varying ones. This observation settles a goal that this paper is seeking regarding whether one should send fast low-quality samples or slow high-quality ones for the purpose of remote estimation and tracking; it depends on the memory the time-varying process possesses, abstracted by the variable $\theta$ in this case.
+
+\begin{figure}[t]
+\begin{subfigure}{.5\textwidth}
+\center
+\includegraphics[scale=.4]{iir_and_fr_vs_ell_theta_01_beta_15_eps_1_4}
+\caption{$\theta=0.01$}
+\label{fig_iir_and_fr_vs_ell_theta_01_beta_15_eps_1_4}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+\center
+\includegraphics[scale=.4]{iir_and_fr_vs_ell_theta_5_beta_15_eps_1_4}
+\caption{$\theta=0.5$}
+\label{fig_iir_and_fr_vs_ell_theta_5_beta_15_eps_1_4}
+\end{subfigure}
+\caption{Performance comparison of IIR and FR vs. $\ell$ for $\beta=0.15$, with $\theta=0.01$ in Fig.~\ref{fig_iir_and_fr_vs_ell_theta_01_beta_15_eps_1_4} (slowly-varying OU process) and $\theta=0.5$ in Fig.~\ref{fig_iir_and_fr_vs_ell_theta_5_beta_15_eps_1_4} (fast-varying OU process). Solid lines: $\epsilon=0.1$, and dotted lines: $\epsilon=0.4$. For $\theta=0.01$, the optimal $(\ell,n)$ pair for both schemes is given by $(5,7)$ for $\epsilon=0.1$ and by $(4,6)$ for $\epsilon=0.4$. While for $\theta=0.5$, the optimal $(\ell,n)$ pair for both schemes is given by $(2,4)$ for both values of $\epsilon$.}
+\label{fig_iir_and_fr_vs_ell_beta_15_eps_1_4}
+\end{figure}
+
+
+%---
+\subsection{IIR vs. FR: Effect of Processing Time $\beta$}
+
+In Fig.~\ref{fig_iir_and_fr_vs_beta_theta_25_eps_1_4}, we fix $\theta=0.25$ and plot the long-term average MMSE achieved by IIR and FR versus $\beta$. We do so for $\epsilon=0.1$ (in solid lines) and $\epsilon=0.4$ (in dotted lines). We observe that IIR performs better than FR for relatively lower values of $\beta$, and then the performance switches after some $\beta_{sw}$ processing time value, marked in black squares. We note that the reason why the curves for $\epsilon=0.4$ are not very smooth is mainly attributed to the $\lfloor\cdot\rfloor$ (floor) function used in the enhanced schemes' channel delay calculations.
+
+We notice that the value of $\beta_{sw}$ increases with $\epsilon$, i.e., when the channel becomes worse. However, the gain due to switching from IIR to FR also increases and becomes more rewarding in this case too. As evident from Figs.~\ref{fig_iir_and_fr_vs_ell_beta_15_eps_1_4} and~\ref{fig_iir_and_fr_vs_beta_theta_25_eps_1_4}, there is no coding scheme that dominantly outperforms the other; it all depends on the system parameters comprising the process, the channel and the processing time.
+
+\begin{figure}[t]
+\center
+\includegraphics[scale=.5]{iir_and_fr_vs_beta_theta_25_eps_1_4}
+\caption{Performance comparison of IIR and FR vs. $\beta$, with $\theta=0.25$. Solid lines: $\epsilon=0.1$, and dotted lines: $\epsilon=0.4$. The processing time value after which FR beats IIR, $\beta_{sw}$, is marked in black squares, and is increasing with $\epsilon$.}
+\label{fig_iir_and_fr_vs_beta_theta_25_eps_1_4}
+\end{figure}
+
+
+%---
+\subsection{Enhanced vs.~Non-Enhanced Schemes}
+
+We turn our attention to evaluating the gain achieved (i.e., the loss in MMSE) due to employing the enhanced schemes. Specifically, for fixed $\theta=0.25$, let us denote by $\widetilde{\texttt{mmse}}(\beta)$ and $\texttt{mmse}(\beta)$ the long-term average MMSE achieved by the enhanced and the non-enhanced schemes, respectively. We define the enhancement ratio as
+\begin{align}
+1-\frac{\widetilde{\texttt{mmse}}(\beta)}{\texttt{mmse}(\beta)},
+\end{align}
+and so the higher this ratio is, the larger the gain due to enhancement. In Fig.~\ref{fig_enhanced_vs_non_IIR_and_FR_theta_25_eps_1_4}, we plot the enhancement ratio (in percentage) for both IIR and FR versus $\beta$.
+
+For the IIR case in Fig.~\ref{fig_enhanced_vs_non_IIR_theta_25_eps_1_4}, we observe that: $(1)$ the enhancement ratio relatively increases with $\beta$ (again, the non-smoothness effect is mainly due to using the floor function in calculations), because as $\beta$ increases, one can {\it fit more data} as the receiver decodes previous ones; and $(2)$ the gain is more apparent for worse channel conditions, which is due to the ability of enhanced IIR to make more data available for reprocessing at the receiver's end following decoding errors, compared to non-enhanced IIR.
+
+Fig.~\ref{fig_enhanced_vs_non_FR_theta_25_eps_1_4} deals with FR, and exhibits some behavioral differences when compared to IIR. In particular, the enhancement ratio now decreases with $\beta$. This is mainly because, unlike IIR, one cannot fit more data as the receiver decodes previous ones; {\it only one data packet can be fit regardless of how large $\beta$ can grow}. Another observation is that the gain is less apparent with worse channel conditions, which is a rather  mathematical than structural observation. Basically, what we observe is that worsening the channel shifts up the enhanced and non-enhanced MMSE for FR by roughly the same amount, say $\gamma$, and so, one would immediately get that
+\begin{align}
+1-\frac{\widetilde{\texttt{mmse}}(\beta)+\gamma}{\texttt{mmse}(\beta)+\gamma}<1-\frac{\widetilde{\texttt{mmse}}(\beta)}{\texttt{mmse}(\beta)}
+\end{align}
+for any $\gamma>0$, since $\widetilde{\texttt{mmse}}(\beta)<\texttt{mmse}(\beta)$.
+
+In summary, this numerical calculation shows that the enhancement effect is relatively more noticeable for FR (up to $66\%$ gain) than it is for IIR (up to $14\%$ gain), and that it would better serve IIR in relatively worse channel conditions.
+
+\begin{figure}[t]
+\begin{subfigure}{.5\textwidth}
+\center
+\includegraphics[scale=.4]{enhanced_vs_non_IIR_theta_25_eps_1_4}
+\caption{IIR}
+\label{fig_enhanced_vs_non_IIR_theta_25_eps_1_4}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+\center
+\includegraphics[scale=.4]{enhanced_vs_non_FR_theta_25_eps_1_4}
+\caption{FR}
+\label{fig_enhanced_vs_non_FR_theta_25_eps_1_4}
+\end{subfigure}
+\caption{Evaluating the {\it gain} due to enhancement, with $\theta=0.25$. The enhancement ratio is defined as the ratio between the long-term average MMSE of the enhanced scheme to that of the non-enhanced scheme, subtracted from unity.}
+\label{fig_enhanced_vs_non_IIR_and_FR_theta_25_eps_1_4}
+\end{figure}
+
+
+%---
+\subsection{Timely Real-time Tracking}
+
+We finally apply the techniques developed in this paper to an example sample path of the OU process. In this particular example we fix $\beta=0.15$, $\theta=0.01$ and $\epsilon=0.1$. We first generate an OU process sample path over $t=500$ time units ($10^4\times T_b$). Then, we pass it through an MMSE quantizer\footnote{We train a quantizer using $1000$ different OU processes sample paths, each over $t\in[0,500]$, using Lloyd's algorithm to build this \cite{cover}. Each sample path realization produces a particular code when Lloyd's algorithm converges. We then average over all the produced codes and use the averaged code to generate the results of this subsection.} with $\ell=5$ (which is the optimal $\ell^*$ in this case using Fig.~\ref{fig_iir_and_fr_vs_ell_theta_01_beta_15_eps_1_4}). After that, we use either IIR or FR with $n=7$ (again, this is the optimal $n^*$ in this case) to send the quantized samples through a BSC($0.1$). We apply the optimal waiting policies in accordance to the channel delay realizations and receiver processing time.
+
+The results are shown in Fig.~\ref{fig_tracking_beta_15_theta_01_eps_1}. The full view in Fig.~\ref{fig_tracking_beta_15_theta_01_eps_1_FULL} shows that both IIR and FR are able to allow the receiver to produce MMSE estimates that closely-track the original OU sample path. While the zoomed view in Fig.~\ref{fig_tracking_beta_15_theta_01_eps_1_ZOOM} shows the specifics of how the MMSE estimates look like. Empirically, the MSE for this sample path is $\approx0.87$ for IIR and $\approx0.74$ for FR, which are close to the theoretical values of the long-term average MMSE evaluated in Fig.~\ref{fig_iir_and_fr_vs_ell_theta_01_beta_15_eps_1_4}. This shows the ability of our techniques to achieve {\it timely tracking} of the process.
+
+\begin{figure}[t]
+\begin{subfigure}{.5\textwidth}
+\center
+\includegraphics[scale=.4]{tracking_theta_01_beta_15_eps_1_FULL}
+\caption{Full view}
+\label{fig_tracking_beta_15_theta_01_eps_1_FULL}
+\end{subfigure}
+\begin{subfigure}{.5\textwidth}
+\center
+\includegraphics[scale=.4]{tracking_theta_01_beta_15_eps_1_ZOOM}
+\caption{Zoomed view}
+\label{fig_tracking_beta_15_theta_01_eps_1_ZOOM}
+\end{subfigure}
+\caption{Tracking an OU sample path by generating an MMSE estimate using IIR and FR. We fix $\beta=0.15$, $\theta=0.01$ and $\epsilon=0.1$, and use (the optimal) $\ell=5$ and $n=7$.}
+\label{fig_tracking_beta_15_theta_01_eps_1}
+\end{figure}
+
+
+
+%================================
+\section{Conclusions and Extensions}
+
+A study of the effects of sampling, quantization and coding over noisy channels on MMSE estimates of an OU process has been presented. Focusing on MMSE quantizers, together with IIR and FR codes, a joint optimization problem of when to take new samples, how many quantization and codeword bits to use, has been formulated and solved. A fixed non-zero processing time has been considered at the receiver, modeling mainly decoding and feedback transmission times. It is shown how finely tuning the sampling and transmission times could make us of the processing time to send new data in order to save time in case decoding fails. Through numerical evaluations, it is shown that IIR performs relatively better than FR with small processing times, and vice versa, and so neither coding scheme dominates. It is also shown that the techniques developed in this paper can achieve timely tracking of the original process at the receiver's end.
+
+In this work, the focus has been on signal-independent sampling policies. As an extension, one could develop techniques that work for {\it signal-dependent} sampling policies instead, in which the state of the OU process is observable to the sampler. While this is expected to produce better results, this comes with the challenge of {\it jointly} designing an MMSE quantizer {\it and} deriving an MMSE estimate at the receiver in this case. More generally though, there has been a separation-based quantization and coding methodology followed in this work, with focusing on two relatively-simple coding strategies. One could investigate the benefits of jointly optimizing the quantizer and the transmission code being used to convey the samples to the receiver with the smallest MMSE, which can be done for either signal-independent or signal-dependent sampling policies. Finally, one can also extend the notion of fixed processing times to more practical models that take into consideration the code rate being used, together with noise in the feedback channel.
+
+
+
+%================================
+\appendix
+
+
+%---
+\subsection{Proof of Theorem~\ref{thm_iir_main_result}} \label{apndx_pf_iir_main_result}
+
+We introduce the following Lagrangian \cite{boyd}:\footnote{Using monotonicity of $g(\cdot)$, it can be shown that problem (\ref{opt_iir_aux}) is convex.}
+\begin{align}
+\mathcal{L}=\mathbb{E}\left[\int_{\overline{D}}^{\overline{D}+w\left(\overline{Y}\right)+Y}g\left(t-\overline{S}\right)dt\right]-\lambda\mathbb{E}\left[w\left(\overline{Y}\right)+Y\right]-\sum_{\bar{y}}w(\bar{y})\eta(\bar{y}),
+\end{align}
+where $\eta(\bar{y})$ is a Lagrange multiplier. Using Leibniz rule, we take the functional derivative with respect to $w(\bar{y})$ and equate to $0$ to get
+\begin{align}
+\mathbb{E}\left[g\left(\bar{y}+w^*(\bar{y})+Y\right)\right]=\lambda+\frac{\eta(\bar{y})}{\mathbb{P}\left(\overline{Y}=\bar{y}\right)}.
+\end{align}
+Since $g$ is increasing, the left hand side above is therefore an increasing function of $w^*(\bar{y})$, which we denote $G_{\bar{y}}\left(\cdot\right)$ in the theorem statement. Now, if $\lambda\leq G_{\bar{y}}(0)$, then we must have $\eta(\bar{y})>0$, and hence $w^*(\bar{y})=0$ by complementary slackness \cite{boyd}. Conversely, if $\lambda> G_{\bar{y}}(0)$, then we must have $w^*(\bar{y})>0$, and hence $\eta(\bar{y})=0$ also by complementary slackness. In the latter case, $w^*(\bar{y})=G_{\bar{y}}^{-1}(\lambda)$. Finally, observe that $\lambda\leq G_{\bar{y}}(0)\iff G_{\bar{y}}^{-1}(\lambda)\leq0$. This concludes the proof.
+
+
+%---
+\subsection{Proof of Theorem~\ref{thm_fr_main_result}} \label{apndx_pf_fr_main_result}
+
+We first simplify the terms of the objective function of (\ref{opt_fr_aux}). Using iterated expectations, it can be shown that
+\begin{align}
+\mathbb{E}\left[\sum_{j=1}^Mw_j+M\bar{n}\right]=\sum_{j=1}^\infty w_j(1-p_0)^{j-1}+\frac{\bar{n}}{p_0}.
+\end{align}
+Now let us define
+\begin{align}
+\zeta_m\left({\bm w}_1^m\right)\triangleq\int_{\overline{D}}^{\overline{D}+\sum_{j=1}^mw_j+m\bar{n}}g\left(t-\overline{S}_{\bar{M}}\right)dt
+\end{align}
+and, leveraging iterated expectations on the first term of (\ref{opt_fr_aux}), introduce the following Lagrangian:\footnote{Again, as mentioned above, it can be shown that problem (\ref{opt_fr_aux}) is convex using monotonicity of $g(\cdot)$.}
+\begin{align}
+\mathcal{L}=\sum_{m=1}^\infty \zeta_m\left({\bm w}_1^m\right)(1-p_0)^{m-1}p_0-\lambda\sum_{j=1}^\infty w_j(1-p_0)^{j-1}-\lambda\frac{\bar{n}}{p_0}-\sum_{j=1}^\infty w_j\eta_j,
+\end{align}
+where $\eta_j$'s are Lagrange multipliers. Now observe that, using Leibniz rule, it holds for $j\leq m$ that
+\begin{align}
+\frac{\partial \zeta_m\left({\bm w}_1^m\right)}{\partial w_j}=g\left(\bar{n}+\sum_{j=1}^mw_j+m\bar{n}\right).
+\end{align}
+Taking derivative of the Lagrangian with respect to $w_j$ and equating to $0$, we use the above to get
+\begin{align} \label{eq_fr_pf_wj}
+\sum_{m=j}^\infty g\!\left(\!\bar{n}+\sum_{j=1}^mw_j+m\bar{n}\!\right)\!(1-p_0)^{m-j}p_0\!=\lambda\!+\!\frac{\eta_j}{(1\!-\!p_0)^{j-1}}.
+\end{align}
+Next, let us substitute $j=k$ and $j=k+1$ above, $k\geq1$, subtract them from each other, and rearrange to get
+\begin{align}
+g\left(\bar{n}+\sum_{j=1}^kw_j+k\bar{n}\right)=\lambda+\frac{\eta_k-\eta_{k+1}}{(1-p_0)^{k-1}p_0}.
+\end{align}
+Since $g(\cdot)$ is increasing, and $\lambda$ is fixed, $\left\{\frac{\eta_k-\eta_{k+1}}{(1-p_0)^{k-1}p_0}\right\}$ is increasing. From there, one can conclude that $\eta_j>0,~j\geq2$ must hold. Hence, by complementary slackness, $w_j^*=0,~j\geq2$ \cite{boyd}. Using (\ref{eq_fr_pf_wj}) for $j=1$, the optimal $w_1^*$ now solves
+\begin{align}
+G\left(w_1^*\right)=\lambda+\eta_1,
+\end{align}
+where $G(\cdot)$ is as defined in the theorem statement. Observe that $G(\cdot)$ is increasing and therefore the above has a unique solution. Proceeding similarly as in the proof of Theorem~\ref{thm_iir_main_result}, if $\lambda\leq G(0)$, then we must have $\eta_1>0$, and hence $w_1^*=0$ by complementary slackness; conversely, if $\lambda>G(0)$, then we must have $w_1^*>0$, and hence $\eta_1=0$ by complementary slackness as well \cite{boyd}. In the latter case, $w_1^*=G^{-1}(\lambda)$. Finally, observe that $\lambda\leq G(0)\iff G^{-1}(\lambda)\leq0$. This concludes the proof of the first part of the theorem.
+
+To show the second part, all we need to prove now is that $G^{-1}\left(\lambda^*_{FR}\right)\leq0$, or equivalently that $\lambda^*_{FR}\leq G(0)$. Toward that end, observe that $p_{FR}(\lambda)$ is decreasing, and therefore if $p_{FR}\left(G(0)\right)\leq0$ then the premise follows. Now for $\lambda=G(0)$ we know from the first part of the proof that $w_1^*=0$. Thus,
+\begin{align}
+p_{FR}\left(G(0)\right)=&\sum_{m=1}^\infty\zeta_m\left(0\right)(1-p_0)^{m-1}p_0-G(0)\frac{\bar{n}}{p_0} \\
+=&\mathbb{E}\left[\int_{\overline{D}}^{\overline{D}+M\bar{n}}g\left(t-\overline{S}_{\bar{M}}\right)dt\right]-G(0)\mathbb{E}\left[M\right]\bar{n} \\
+=&\mathbb{E}\left[\int_{0}^{M\bar{n}}g\left(\bar{n}+t\right)dt\right]-\mathbb{E}\left[\int_0^{M\bar{n}}G(0)dt\right] \label{eq_fr_pf_w1_0_1} \\
+=&\mathbb{E}\left[\int_{0}^{M\bar{n}}\mathbb{E}\left[g\left(\bar{n}+t\right)-g\left(\bar{n}+M\bar{n}\right)\right]dt\right],\label{eq_fr_pf_w1_0_2}
+\end{align}	
+where (\ref{eq_fr_pf_w1_0_1}) follows by change of variables and (\ref{eq_fr_pf_w1_0_2}) follows by definition of $G(\cdot)$. Finally, observe that by monotonicity of $g(\cdot)$, (\ref{eq_fr_pf_w1_0_2}) is non-positive. This concludes the proof.
+
+
+%---
+\subsection{Proof of Lemma~\ref{thm_iir_enhanced}} \label{apndx_pf_iir_enhanced}
+
+Let us consider the $i$th epoch. We prove the lemma by computing the channel delay experienced by the enhanced scheme for some realization of $r_i$. The proof can be better-conveyed graphically through Figs.~\ref{fig_iir_enhanced_beta} and~\ref{fig_iir_enhanced_Tb} below. We will consider two cases as follows.
+
+\subsubsection{$\beta\leq T_b$}
+
+In this case, the first feedback following the initial $nT_b$ time units is received while the first IR bit is still being transmitted. If it is an ACK, then the transmitter stops and cuts off the current IR bit transmission and ends the epoch with a channel delay of $nT_b+\beta$. Otherwise, if it is a NACK, then the receiver will begin re-processing with a codeword of length $n+1$ after exactly $T_b-\beta$ time units from the time the feedback is received. Simultaneously, the transmitter will send the second IR bit. The process is repeated till an ACK is received.
+
+In general, an ACK will be received after $r_i$ IR bits, and the $(r_i+1)$th bit will be cut off (this bit will be a non-used IR bit). This ends the epoch with a channel delay of exactly
+\begin{align}
+nT_b+r_i\beta+r_i(T_b-\beta)+\beta=\bar{n}+r_iT_b,
+\end{align}
+which saves $r_i\beta$ time units compared to the original IIR scheme that waits for feedback before sending IR bits. An example sample path is shown in Fig.~\ref{fig_iir_enhanced_beta}.
+
+\begin{figure}[t]
+\center
+\includegraphics[scale=.5]{iir_enhanced_beta}
+\caption{Example sample path during the $i$th epoch using the enhanced IIR scheme when $\beta\leq T_b$. In this example $r_i=2$, and so the third IR bit is non-used and its remaining portion is cut off to start a new epoch. Red crosses denote failed decoding attempts and the green circle denotes success.}
+\label{fig_iir_enhanced_beta}
+\end{figure}
+
+\subsubsection{$\beta>T_b$}
+
+Different from the $\beta\leq T_b$ case, the transmitter can now possibly fit more than one IR bit while the receiver is processing previously-received bits. Specifically, a total of $\lfloor\beta/T_b\rfloor$ IR bits would be received by the end of the first decoding attempt, a total of $\lfloor2\beta/T_b\rfloor$ IR bits would be received by the end of the second decoding attempt, and so on.
+
+Now let $\kappa_i$ be as defined in the lemma. This way, the required IR bits for successful decoding will be available after exactly $\kappa_i\beta$ time units following the initial $nT_b$ time units, and an ACK will be fed back $\beta$ time units afterwards. By the time an ACK is received, there would be already some extra IR bits sent to the receiver that were not needed in decoding (these will be non-used IR bits). In addition, there could be an extra bit portion that needs to be cut off belonging to an IR bit that is being transmitted while the ACK is received; this occurs if $(\kappa_i+1)\beta>\lfloor(\kappa_i+1)\beta/T_b\rfloor T_b$. This ends the epoch with a channel delay of exactly
+\begin{align}
+nT_b+\kappa_i\beta+\beta=\bar{n}+\kappa_i\beta
+\end{align}
+which saves $r_iT_b+(r_i-\kappa_i)\beta$ time units. An example sample path is shown in Fig.~\ref{fig_iir_enhanced_Tb}.
+
+\begin{figure}[t]
+\center
+\includegraphics[scale=.5]{iir_enhanced_Tb}
+\caption{Example sample path during the $i$th epoch using the enhanced IIR scheme when $\beta>T_b$. In this example $r_i=2$ and $\beta=1.5T_b$, and so the final two IR bits are non-used and the remaining bit portion is cut off to start a new epoch. Red crosses denote failed decoding attempts and the green circle denotes success.}
+\label{fig_iir_enhanced_Tb}
+\end{figure}
+
+
+%---
+\subsection{Proof of Lemma~\ref{thm_fr_enhanced}} \label{apndx_pf_fr_enhanced}
+
+Let $L$ denote the epoch length, and let $Q$ denote the cumulative age-penalty in the epoch given by
+\begin{align}
+Q=\int_{\overline{D}}^{\overline{D}+L}g\left(t-\overline{S}_{\bar{M}}\right)dt.
+\end{align}
+Recalling the definition of $\delta$, our goal is to characterize $\mathbb{E}[L]$ and $\mathbb{E}[Q]$ in terms of $\delta$ and solve the following optimization problem to find $\delta^*$:
+\begin{align} \label{opt_fr_enhanced}
+\min_{0\leq\delta\leq\beta}\quad\frac{\mathbb{E}[Q]}{\mathbb{E}[L]}.
+\end{align}
+Similar to the proof of Lemma~\ref{thm_iir_enhanced} in Appendix~\ref{apndx_pf_iir_enhanced}, our proof methodology is made clearer through Figs.~\ref{fig_fr_enhanced_beta} and~\ref{fig_fr_enhanced_Tb}, and we will consider two cases as follows.
+
+\subsubsection{$\beta\leq nT_b$}
+
+In this case, we need to show $\delta^*=0$. Right before the epoch starts, there would be $\left\lfloor(\beta-\delta)/T_b\right\rfloor$ bits (belonging to a new message) already available. The first decoding attempt in the epoch, therefore, occurs after $nT_b-\beta+\delta$ time units from the epoch's start time. If this decoding attempt is successful, an ACK will be fed back after $\beta$ time units. Otherwise, a new message will be transmitted through the same manner again, see Fig.~\ref{fig_fr_enhanced_beta}. From the figure, one can see that the epoch length is given by
+\begin{align}
+L=&\left(\left(nT_b-\beta+\delta\right)+\beta\right)M \\
+=&\left(nT_b+\delta\right)M,
+\end{align}
+and therefore
+\begin{align}
+\mathbb{E}[L]=&\frac{nT_b+\delta}{p_0}, \label{eq_exp_L_fr_enhanced_beta} \\
+\mathbb{E}[Q]=&\sum_{m=1}^\infty\left(\int_{\overline{D}}^{\overline{D}+\left(nT_b+\delta\right)m}g\left(t-\overline{S}_{\bar{M}}\right)dt\right)(1-p_0)^{m-1}p_0. \label{eq_exp_Q_fr_enhanced_beta}
+\end{align}
+
+\begin{figure}
+\center
+\includegraphics[scale=.5]{fr_enhanced_beta}
+\caption{Example sample path during an epoch using the enhanced FR scheme when $\beta\leq nT_b$. In this example $M=2$, and so it takes two transmissions to succeed. The red cross denotes a failed decoding attempt and green circles denote success.}
+\label{fig_fr_enhanced_beta}
+\end{figure}
+
+Next, we follow Dinkelbach's approach \cite{dinkelbach-fractional-prog} to solve problem (\ref{opt_fr_enhanced}) and introduce the auxiliary problem
+\begin{align}
+q(\lambda)\triangleq\min_{0\leq\delta\leq\beta}\quad\mathbb{E}[Q]-\lambda\mathbb{E}[L]
+\end{align}
+for some $\lambda\geq0$. We introduce the following Lagrangian for such problem \cite{boyd}:
+\begin{align}
+\mathcal{L}=&\mathbb{E}[Q]-\lambda\mathbb{E}[L]-\eta\delta+\omega(\delta-\beta),
+\end{align}
+where $\eta$ and $\omega$ are Lagrange multipliers. Now using (\ref{eq_exp_L_fr_enhanced_beta}) and (\ref{eq_exp_Q_fr_enhanced_beta}), we take the derivative with respect to $\delta$ to get
+\begin{align}
+\frac{d\mathcal{L}}{d\delta}=&\sum_{m=1}^\infty mg\left(\overline{D}+\left(nT_b+\delta\right)m-\overline{S}_{\bar{M}}\right)(1-p_0)^{m-1}p_0-\frac{\lambda}{p_0}-\eta+\omega \\
+=&\sum_{m=1}^\infty mg\left(\bar{n}+\left(nT_b+\delta\right)m\right)(1-p_0)^{m-1}p_0-\frac{\lambda}{p_0}-\eta+\omega \\
+\triangleq&H(\delta)-\frac{\lambda}{p_0}-\eta+\omega.
+\end{align} 
+Therefore, the optimal $\delta^*$ solves
+\begin{align}
+H\left(\delta^*\right)=\frac{\lambda}{p_0}+\eta-\omega.
+\end{align}
+Note that $H(\delta)$ is increasing in $\delta$ by monotonicity of $g(\cdot)$. Hence, if $\lambda<p_0H(0)$ then we must have $\eta>0$, which implies by complementary slackness that $\delta^*=0$.
+
+We now proceed similarly as in the second part of the proof of Theorem~\ref{thm_fr_main_result} in Appendix~\ref{apndx_pf_fr_main_result}. Specifically, since the optimal $\lambda^*$ satisfies $q(\lambda^*)=0$ and $q(\lambda)$ is decreasing \cite{dinkelbach-fractional-prog}, it suffices to show that $q\left(p_0H(0)\right)<0$. Towards that end, we have
+\begin{align}
+q\left(p_0H(0)\right)=&\sum_{m=1}^\infty\left(\int_{\overline{D}}^{\overline{D}+nT_bm}g\left(t-\overline{S}_{\bar{M}}\right)dt\right)(1-p_0)^{m-1}p_0-p_0H(0)\frac{nT_b}{p_0} \\
+<&\sum_{m=1}^\infty nT_bmg\left(\overline{D}+nT_bm-\overline{S}_{\bar{M}}\right)(1-p_0)^{m-1}p_0-H(0)nT_b \\
+=&0,
+\end{align}
+where the inequality follows by monotonicity of $g(\cdot)$, and the last equality follows by definition of $H(\cdot)$.
+
+\subsubsection{$\beta>nT_b$}
+
+In this case, we need to show $\delta^*=\beta-nT_b$. We first argue that $\delta^*$ cannot be smaller than $\beta-nT_b$. To see this, observe that if $\delta^*<\beta-nT_b$, then there would be a codeword waiting in the receiver's queue for $\beta-nT_b-\delta^*$ time units after being completely received before it gets processed. One can strictly decrease the age-penalty in this case by acquiring {\it fresher} sample instead of the current one via pushing the sampling time exactly $\beta-nT_b-\delta^*$ time units forward and avoid the unnecessary idle waiting at the receiver. Thus, our goal now is to solve problem (\ref{opt_fr_enhanced}) over the new bound $\delta\in\left[\beta-nT_b,\beta\right]$.
+
+As in the previous case, and now that $\delta\geq\beta-nT_b$, there would also be $\left\lfloor(\beta-\delta)/T_b\right\rfloor$ bits available from a new message right before the epoch starts, and the first decoding attempt in the epoch would occur after $nT_b-\beta+\delta$ time units from the epoch's start time. This repeats until an ACK is fed back, see Fig.~\ref{fig_fr_enhanced_Tb}.
+
+\begin{figure}
+\center
+\includegraphics[scale=.5]{fr_enhanced_Tb}
+\caption{Example sample path during an epoch using the enhanced FR scheme when $\beta>nT_b$. In this example $M=2$, and so it takes two transmissions to succeed. Light-red boxes represent the lower bound on $\delta$ (idle times). The red cross denotes a failed decoding attempt and green circles denote success.}
+\label{fig_fr_enhanced_Tb}
+\end{figure}
+
+This gives rise to the exact same $\mathbb{E}[L]$ and $\mathbb{E}[Q]$ expressions in (\ref{eq_exp_L_fr_enhanced_beta}) and (\ref{eq_exp_Q_fr_enhanced_beta}), respectively. One can thus follow the same analysis for the $\beta\leq nT_b$ case to solve the optimization problem and reach the conclusion that $\delta^*$ should be equal to its lower bound, $\beta-nT_b$ in this case.
+
+
+%---
+\subsection{Deriving Equations (\ref{eq_iir_enhanced_wait}) and (\ref{eq_fr_enhanced_mse})} \label{apndx_fr_enhanced_mse}
+
+We derive the optimal waiting policy in (\ref{eq_iir_enhanced_wait}) by solving $G_{\bar{y}}\left(w^*(\bar{y})\right)=\lambda^*_{IIR}$ with $G_{\bar{y}}(\cdot)$ as defined in Theorem~\ref{thm_iir_main_result}, with $g(\cdot)\equiv h_\ell(\cdot)$, after replacing the random variable $Y$ with $\tilde{Y}$. That is,
+\begin{align}
+G_{\bar{y}}\left(w^*(\bar{y})\right)=&\mathbb{E}\left[h_{\ell}\left(\bar{y}+w^*(\bar{y})+\tilde{Y}\right)\right] \nonumber \\
+=&\frac{\sigma^2}{2\theta}\left(1-\left(1-2^{-2\ell}\right)e^{-2\theta\left(\bar{y}+w^*(\bar{y})\right)}\mathbb{E}\left[e^{-2\theta\tilde{Y}}\right]\right) \nonumber \\
+=&\lambda^*_{IIR},
+\end{align}
+whence (\ref{eq_iir_enhanced_wait}) directly follows by solving for $w^*(\bar{y})$ above and taking the non-negative part.
+
+Next, we derive the long-term average MMSE expression in (\ref{eq_fr_enhanced_mse}) through basically evaluating the optimal $\mathbb{E}[L]$ and $\mathbb{E}[Q]$ in (\ref{eq_exp_L_fr_enhanced_beta}) and (\ref{eq_exp_Q_fr_enhanced_beta}), respectively, with $g(\cdot)\equiv h_\ell(\cdot)$, after substituting $\delta^*=\left[\beta-nT_b\right]^+$. First, we have
+\begin{align}
+\mathbb{E}[L]=&\frac{nT_b+\left[\beta-nT_b\right]^+}{p_0} \nonumber \\
+=&\frac{K_{n,\beta}}{p_0}.
+\end{align}
+Next, we have
+\begin{align}
+\mathbb{E}[Q]=&\sum_{m=1}^\infty\left(\int_{\overline{D}}^{\overline{D}+\left(nT_b+\left[\beta-nT_b\right]^+\right)m}h_{\ell}\left(t-\overline{S}_{\bar{M}}\right)dt\right)(1-p_0)^{m-1}p_0 \nonumber \\
+=&\sum_{m=1}^\infty\left(\int_{\overline{D}}^{\overline{D}+K_{n,\beta}m}\frac{\sigma^2}{2\theta}\left(1-\left(1-2^{-2\ell}\right)e^{-2\theta\left(t-\overline{S}_{\bar{M}}\right)}\right)dt\right)(1-p_0)^{m-1}p_0 \nonumber \\
+=&\frac{\sigma^2}{2\theta}\left(\frac{K_{n,\beta}}{p_0}-\frac{\left(1-2^{-2\ell}\right)e^{-2\theta\bar{n}}}{2\theta}\left(1-\frac{p_0e^{-2\theta K_{n,\beta}}}{1-(1-p_0)e^{-2\theta K_{n,\beta}}}\right)\right) \nonumber \\
+=&\frac{\sigma^2}{2\theta}\left(\frac{K_{n,\beta}}{p_0}-\frac{\left(1-2^{-2\ell}\right)e^{-2\theta\bar{n}}}{2\theta}\frac{1-e^{-2\theta K_{n,\beta}}}{1-(1-p_0)e^{-2\theta K_{n,\beta}}}\right).
+\end{align}
+Equation (\ref{eq_fr_enhanced_mse}) now directly follows via dividing $\mathbb{E}[Q]$ above by $\mathbb{E}[L]$.
+
+
+
+%================================
+\begin{thebibliography}{10}
+
+\bibitem{yates_age_1}
+S.~K. Kaul, R.~D. Yates, and M.~Gruteser.
+\newblock Real-time status: How often should one update?
+\newblock In {\em Proc. IEEE Infocom}, March 2012.
+
+\bibitem{ephremides_age_random}
+C.~Kam, S.~Kompella, and A.~Ephremides.
+\newblock Age of information under random updates.
+\newblock In {\em Proc. IEEE ISIT}, July 2013.
+
+\bibitem{yates_age_eh}
+R.~D. Yates.
+\newblock Lazy is timely: Status updates by an energy harvesting source.
+\newblock In {\em Proc. IEEE ISIT}, June 2015.
+
+\bibitem{ephremides_age_management}
+M.~Costa, M.~Codreanu, and A.~Ephremides.
+\newblock On the age of information in status update systems with packet
+  management.
+\newblock {\em IEEE Trans. Inf. Theory}, 62(4):1897--1910, April 2016.
+
+\bibitem{ephremides_age_non_linear}
+A.~Kosta, N.~Pappas, A.~Ephremides, and V.~Angelakis.
+\newblock Age and value of information: Non-linear age case.
+\newblock In {\em Proc. IEEE ISIT}, June 2017.
+
+\bibitem{modiano-age-bc}
+Y.~Hsu, E.~Modiano, and L.~Duan.
+\newblock Age of information: Design and analysis of optimal scheduling
+  algorithms.
+\newblock In {\em Proc. IEEE ISIT}, June 2017.
+
+\bibitem{sun-age-mdp}
+Y.~Sun, E.~Uysal-Biyikoglu, R.~D. Yates, C.~E. Koksal, and N.~B. Shroff.
+\newblock Update or wait: How to keep your data fresh.
+\newblock {\em IEEE Trans. Inf. Theory}, 63(11):7492--7508, November 2017.
+
+\bibitem{jing-age-online}
+X.~Wu, J.~Yang, and J.~Wu.
+\newblock Optimal status update for age of information minimization with an
+  energy harvesting source.
+\newblock {\em IEEE Trans. Green Commun. Netw.}, 2(1):193--204, March 2018.
+
+\bibitem{himanshu-age-source-coding}
+P.~Mayekar, P.~Parag, and H.~Tyagi.
+\newblock Optimal lossless source codes for timely updates.
+\newblock In {\em Proc. IEEE ISIT}, June 2018.
+
+\bibitem{baknina-updt-info}
+A.~Baknina, O.~Ozel, J.~Yang, S.~Ulukus, and A.~Yener.
+\newblock Sending information through status updates.
+\newblock In {\em Proc. IEEE ISIT}, June 2018.
+
+\bibitem{zhou-age-iot}
+B.~Zhou and W.~Saad.
+\newblock Optimal sampling and updating for minimizing age of information in
+  the internet of things.
+\newblock In {\em Proc. IEEE Globecom}, December 2018.
+
+\bibitem{yates-age-mltpl-src}
+R.~D. Yates and S.~K. Kaul.
+\newblock The age of information: Real-time status updating by multiple
+  sources.
+\newblock {\em IEEE Trans. Inf. Theory}, 65(3):1807--1827, March 2019.
+
+\bibitem{zhang-arafa-aoi-pricing-wiopt}
+M.~Zhang, A.~Arafa, J.~Huang, and H.~V. Poor.
+\newblock How to price fresh data.
+\newblock In {\em Proc. WiOpt}, June 2019.
+
+\bibitem{batu-aoi-multihop}
+B.~Buyukates, A.~Soysal, and S.~Ulukus.
+\newblock Age of information in multihop multicast networks.
+\newblock {\em J. Commun. Netw.}, 21(3):256--267, June 2019.
+
+\bibitem{bacinoglu-aoi-eh-finite-gnrl-pnlty}
+B.~T. Bacinoglu, Y.~Sun, E.~Uysal-Biyikoglu, and V.~Mutlu.
+\newblock Optimal status updating with a finite-battery energy harvesting
+  source.
+\newblock {\em J. Commun. Netw.}, 21(3):280--294, June 2019.
+
+\bibitem{sun-cyr-aoi-non-linear}
+Y.~Sun and B.~Cyr.
+\newblock Sampling for data freshness optimization: Non-linear age functions.
+\newblock {\em J. Commun. Netw.}, 21(3):204--219, June 2019.
+
+\bibitem{leng-aoi-eh-cog-radio}
+S.~Leng and A.~Yener.
+\newblock Age of information minimization for an energy harvesting cognitive
+  radio.
+\newblock {\em IEEE Trans. Cogn. Commun. Netw.}, 5(2):427--439, June 2019.
+
+\bibitem{bedewy-aoi-multihop}
+A.~M. Bedewy, Y.~Sun, and N.~B. Shroff.
+\newblock The age of information in multihop networks.
+\newblock {\em IEEE/ACM Trans. Netw.}, 27(3):1248--1257, June 2019.
+
+\bibitem{talak-aoi-delay}
+R.~Talak and E.~Modiano.
+\newblock Age-delay tradeoffs in single server systems.
+\newblock In {\em Proc. IEEE ISIT}, July 2019.
+
+\bibitem{arafa-aoi-compute}
+A.~Arafa, R.~D. Yates, and H.~V. Poor.
+\newblock Timely cloud computing: Preemption and waiting.
+\newblock In {\em Proc. Allerton}, October 2019.
+
+\bibitem{inoue-aoi-general-formula-fcfs}
+Y.~Inoue, H.~Masuyama, T.~Takine, and T.~Tanaka.
+\newblock A general formula for the stationary distribution of the age of
+  information and its application to single-server queues.
+\newblock {\em IEEE Trans. Inf. Theory}, 65(12):8305--8324, December 2019.
+
+\bibitem{arafa-age-online-finite}
+A.~Arafa, J.~Yang, S.~Ulukus, and H.~V. Poor.
+\newblock Age-minimal transmission for energy harvesting sensors with finite
+  batteries: Online policies.
+\newblock {\em IEEE Trans. Inf. Theory}, 66(1):534--556, January 2020.
+
+\bibitem{yang-arafa-aoi-fl}
+H.~H. Yang, A.~Arafa, T.~Q.~S. Quek, and H.~V. Poor.
+\newblock Age-based scheduling policy for federated learning in mobile edge
+  networks.
+\newblock Available Online: ar{X}iv:1910.14648.
+
+\bibitem{zou-waiting-aoi}
+P.~Zou, O.~Ozel, and S.~Subramaniam.
+\newblock Waiting before serving: A companion to packet management in status
+  update systems.
+\newblock {\em IEEE Trans. Inf. Theory}.
+\newblock To appear.
+
+\bibitem{soysal-aoi-gg11}
+A.~Soysal and S.~Ulukus.
+\newblock Age of information in {G/G/1/1} systems: Age expressions, bounds,
+  special cases, and optimization.
+\newblock Available Online: ar{X}iv:1905.13743.
+
+\bibitem{tang-aoi-power-multi-state}
+H.~Tang, J.~Wang, L.~Song, and J.~Song.
+\newblock Minimizing age of information with power constraints: Opportunistic
+  scheduling in multi-state time-varying networks.
+\newblock Available Online: ar{X}iv: 1912.05947.
+
+\bibitem{parag-age-coding}
+P.~Parag, A.~Taghavi, and J.-F. Chamberland.
+\newblock On real-time status updates over symbol erasure channels.
+\newblock In {\em Proc. IEEE WCNC}, March 2017.
+
+\bibitem{najm-age-mg11-harq}
+E.~Najm, R.~D. Yates, and E.~Soljanin.
+\newblock Status updates through {M/G/1/1} queues with {HARQ}.
+\newblock In {\em Proc. IEEE ISIT}, June 2017.
+
+\bibitem{yates-age-erase-code}
+R.~D. Yates, E.~Najm, E.~Soljanin, and J.~Zhong.
+\newblock Timely updates over an erasure channel.
+\newblock In {\em Proc. IEEE ISIT}, June 2017.
+
+\bibitem{baknina-age-coding}
+A.~Baknina and S.~Ulukus.
+\newblock Coded status updates in an energy harvesting erasure channel.
+\newblock In {\em Proc. CISS}, March 2018.
+
+\bibitem{ceran-age-harq}
+E.~T. Ceran, D.~Gunduz, and A.~Gyorgy.
+\newblock Average age of information with hybrid {ARQ} under a resource
+  constraint.
+\newblock In {\em Proc. IEEE WCNC}, April 2018.
+
+\bibitem{sac-age-mg1-harq}
+H.~Sac, B.~T. Bacinoglu, E.~Uysal-Biyikoglu, and G.~Durisi.
+\newblock Age-optimal channel coding blocklength for an {M/G/1} queue with
+  {HARQ}.
+\newblock In {\em Proc. IEEE SPAWC}, June 2018.
+
+\bibitem{simeone-age-finite-code}
+R.~Devassy, G.~Durisi, G.~C. Ferrante, O.~Simeone, and E.~Uysal-Biyikoglu.
+\newblock Delay and peak-age violation probability in short-packet
+  transmissions.
+\newblock In {\em Proc. IEEE ISIT}, June 2018.
+
+\bibitem{feng-age-rateless-codes}
+S.~Feng and J.~Yang.
+\newblock Age-optimal transmission of rateless codes in an erasure channel.
+\newblock In {\em Proc. IEEE ICC}, May, 2019.
+
+\bibitem{chen-aoi-coding-bc}
+X.~Chen and S.~S. Bidokhti.
+\newblock Benefits of coding on age of information in broadcast networks.
+\newblock In {\em Proc. ITW}, August 2019.
+
+\bibitem{arafa-aoi-coding}
+A.~Arafa, K.~Banawan, K.~G. Seddik, and H.~V. Poor.
+\newblock On timely channel coding with hybrid {ARQ}.
+\newblock In {\em Proc. IEEE Globecom}, December 2019.
+
+\bibitem{wang-aoi-coding-fbit}
+R.~Wang, Y.~Gu, H.~Chen, Y.~Li, and B.~Vucetic.
+\newblock On the age of information of short-packet communications with packet
+  management.
+\newblock In {\em Proc. IEEE Globecom}, December 2019.
+
+\bibitem{feng-coding-aoi-bc}
+S.~Feng and J.~Yang.
+\newblock Adaptive coding for information freshness in a two-user broadcast
+  erasure channel.
+\newblock In {\em Proc. IEEE Globecom}, December 2019.
+
+\bibitem{najm-age-erasure-coding}
+E.~Najm, E.~Telatar, and R.~Nasser.
+\newblock Optimal age over erasure channels.
+\newblock Available Online: ar{X}iv:1901.01573.
+
+\bibitem{javani-aoi-erasure}
+A.~Javani, M.~Zorgui, and Z.~Wang.
+\newblock On the age of information in erasure channels with feedback.
+\newblock Available Online: ar{X}iv:1911.05840.
+
+\bibitem{chakravorty-distortion-gauss-markov}
+J.~Chakravorty and A.~Mahajan.
+\newblock Distortion-transmission trade-off in real-time transmission of
+  {G}auss-{M}arkov sources.
+\newblock In {\em Proc. IEEE ISIT}, June 2015.
+
+\bibitem{gao-estimation-ltd-measurements}
+X.~Gao, E.~Aykol, and T.~Basar.
+\newblock Optimal estimation with limited measurements and noisy communication.
+\newblock In {\em Proc. IEEE CDC}, December 2015.
+
+\bibitem{yun-monitoring-comm-cost}
+J.~Yun, C.~Joo, and A.~Eryilmaz.
+\newblock Optimal real-time monitoring of an information source under
+  communication costs.
+\newblock In {\em Proc. IEEE CDC}, December 2018.
+
+\bibitem{ayan-aoi-voi-cntrl}
+O.~Ayan, M.~Vilgelm, M.~Klugel, S.~Hirche, and W.~Kellerer.
+\newblock Age-of-information vs. value-of-information scheduling for cellular
+  networked control systems.
+\newblock In {\em Proc. IEEE ICCPS}, April 2019.
+
+\bibitem{mitra-estimation-graphs-aoi}
+A.~Mitra, J.~A. Richards, S.~Bagchi, and S.~Sundaram.
+\newblock Finite-time distributed state estimation over time-varying graphs:
+  Exploiting the age-of-information.
+\newblock In {\em Proc. ACC}, July 2019.
+
+\bibitem{roth-mse-aoi-finite-blocklength}
+S.~Roth, A.~Arafa, H.~V. Poor, and A.~Sezgin.
+\newblock Remote short blocklength process monitoring: Trade-off between
+  resolution and data freshness.
+\newblock In {\em Proc. IEEE ICC}, June 2020.
+
+\bibitem{chakravorty-estimation-pckt-drop-markov}
+J.~Chakravorty and A.~Mahajan.
+\newblock Remote estimation over a packet-drop channel with {M}arkovian state.
+\newblock {\em IEEE Trans. Autom. Control}.
+\newblock To appear.
+
+\bibitem{sun-weiner}
+Y.~Sun, Y.~Polyanskiy, and E.~Uysal-Biyikoglu.
+\newblock Remote estimation of the {W}iener process over a channel with random
+  delay.
+\newblock {\em IEEE Trans. Inf. Theory}.
+\newblock To appear.
+
+\bibitem{ornee-aoi-estimation-ou}
+T.~Z. Ornee and Y.~Sun.
+\newblock Sampling for remote estimation through queues: Age of information and
+  beyond.
+\newblock Available Online: ar{X}iv:1902.03552.
+
+\bibitem{huang-estimation-harq-control}
+K.~Huang, W.~Liu, M.~Shirvanimoghaddam, Y.~Li, and B.~Vucetic.
+\newblock Real-time remote estimation with hybrid {ARQ} in wireless networked
+  control.
+\newblock Available Online: ar{X}iv:1903.12472.
+
+\bibitem{maatouk-aoii}
+A.~Maatouk, S.~Kriouile, M.~Assaad, and A.~Ephremides.
+\newblock The age of incorrect information: A new performance metric for status
+  updates.
+\newblock Available Online: ar{X}iv:1907.06604.
+
+\bibitem{ramirez-aoi-compression}
+D.~Ramirez, E.~Erkip, and H.~V. Poor.
+\newblock Age of information with finite horizon and partial updates.
+\newblock Available Online: arXiv:1910.00963.
+
+\bibitem{bastopcu-aoi-distortion}
+M.~Bastopcu and S.~Ulukus.
+\newblock Age of information for updates with distortion: Constant and
+  age-dependent distortion constraints.
+\newblock Available Online: ar{X}iv:1912.13493.
+
+\bibitem{bastopcu-partial-updates}
+M.~Bastopcu and S.~Ulukus.
+\newblock Partial updates: Losing information for freshness.
+\newblock Available Online: ar{X}iv:2001.11014.
+
+\bibitem{ou-brownian-motion}
+G.~E. Uhlenback and L.~S. Ornstein.
+\newblock On the theory of the {B}rownian motion.
+\newblock {\em Phys. Rev.}, 36:823--841, September 1930.
+
+\bibitem{doob-brownian-motion}
+J.~L. Doob.
+\newblock The {B}rownian movement and stochastic equations.
+\newblock {\em Ann. Math.}, 43(2):351--369, 1942.
+
+\bibitem{cover}
+T.~Cover and J.~A. Thomas.
+\newblock {\em Elements of Information Theory}.
+\newblock John Wiley \& Sons, 2006.
+
+\bibitem{dinkelbach-fractional-prog}
+W.~Dinkelbach.
+\newblock On nonlinear fractional programming.
+\newblock {\em Management Science}, 13(7):492--498, 1967.
+
+\bibitem{boyd}
+S.~P. Boyd and L.~Vandenberghe.
+\newblock {\em Convex Optimization}.
+\newblock Cambridge University Press, 2004.
+
+\end{thebibliography}
+
+
+
+\end{document}

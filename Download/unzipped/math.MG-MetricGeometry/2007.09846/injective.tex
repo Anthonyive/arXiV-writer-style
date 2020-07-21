@@ -1,0 +1,424 @@
+\chapter{Injective spaces}
+
+{}\emph{Injective spaces} (also known as {}\emph{hyperconvex spaces}) are metric analog of convex sets.
+The so called \index{injective envelop}\emph{injective envelop} is a minimal injective space that contains a given metric space as a subspace;
+it is a direct analog of convex hull of a set in a Euclidean space.
+
+This lecture is based on a paper of John Isbell \cite{isbell}.
+
+\section{Admissible and extremal functions}
+
+Let $\spc{X}$ be a metric space.
+A function $r\:\spc{X}\to\RR$ is called \label{page:admissible function}\index{admissible function}\emph{admissible} if the following inequality
+\[r(x)+r(y)\ge \dist{x}{y}{\spc{X}}\eqlbl{eq:admissible}\]
+holds for any $x,y\in \spc{X}$.
+
+\begin{thm}{Observation}\label{obs:admissible}
+
+\begin{subthm}{obs:admissible:nonnegative}
+Any admissible function is nonnegative.
+\end{subthm}
+
+\begin{subthm}{obs:admissible:balls}
+If $\spc{X}$ is a geodesic space, then a function $r\:\spc{X}\to\RR$ is admissible if and only if 
+\[\cBall[x,r(x)]\cap\cBall[y,r(y)]\ne \emptyset\]
+for any $x,y\in \spc{X}$.
+\end{subthm}
+ 
+\end{thm}
+
+\parit{Proof.} For \ref{SHORT.obs:admissible:nonnegative}, take $x=y$ in \ref{eq:admissible}.
+Part \ref{SHORT.obs:admissible:balls} follows from the triangle inequality and existence of a geodesic $[xy]$.
+\qeds
+
+A minimal admissible function will be called \label{page:extremal function}\index{extremal function}\emph{extremal}.
+More precisely, an admissible function $r\:\spc{X}\to\RR$ is extremal 
+if 
+\[s\le r\quad\Longrightarrow\quad s=r\]
+for any admissible function $s\:\spc{X}\to\RR$.
+
+\begin{thm}{Key exercise}\label{ex:+-c}
+Let $r$ be an extremal function and $s$ an admissible function on a metric space $\spc{X}$.
+Suppose that $r\ge s-c$ for some constant $c$.
+Show that $c\ge 0$ and $r\le s+c$.
+\end{thm}
+
+
+\begin{thm}{Observations}\label{obs:extremal}
+Let $\spc{X}$ be a metric space.
+
+\begin{subthm}{obs:extremal:distfun}
+For any point $p\in\spc{X}$
+the distance function $r\z=\distfun_p$ is extremal.
+\end{subthm}
+
+\begin{subthm}{lem:extremal-lipschitz}
+Any extremal function $r$ on $\spc{X}$ is \index{1-Lipschitz function}\emph{1-Lipschitz};
+that is,
+\[|r(p)-r(q)|\le \dist{p}{q}{}\]
+for any $p,q\in\spc{X}$.
+In other words, any extremal function is an extension function; see the definition on page \pageref{page:extension function}.
+\end{subthm}
+
+\begin{subthm}{lem:opposite}
+Let $r$ be an extremal function on $\spc{X}$.
+Then for any point $p\in\spc{X}$ and any $\delta>0$, there is a point $q\in \spc{X}$
+such that 
+\[r(p)+r(q)<\dist{p}{q}{\spc{X}}+\delta.\]
+Moreover if $\spc{X}$ is compact, then there is $q$ such that 
+\[r(p)+r(q)=\dist{p}{q}{\spc{X}}.\]
+\end{subthm}
+
+
+\begin{subthm}{obs:extremal:below}
+For any admissible function $s$ there is an extremal function $r$ such that $r\le s$.
+\end{subthm}
+
+\end{thm}
+
+\parit{Proof; \ref{SHORT.obs:extremal:distfun}.}
+By the triangle inequality, \ref{eq:admissible} holds;
+that is, $r=\distfun_p$ is an admissible function.
+
+Further if $s\le r$ is another admissible function then $s(p)=0$ and \ref{eq:admissible} implies that $s(x)\z\ge\dist{p}{x}{}$.
+Whence $s=r$.
+
+\parit{\ref{SHORT.lem:extremal-lipschitz}.}
+By \ref{SHORT.obs:extremal:distfun}, $\distfun_p$ is admissible.
+Since $r$ is admissible, we have that
+\[r\ge \distfun_p-r(p).\]
+Since $r$ is extremal, \ref{ex:+-c} implies that
+\[r\le \distfun_p+r(p),\]
+or, equivalently,
+\[r(q)-r(p)\le \dist{p}{q}{}\]
+for any $p,q\in\spc{X}$.
+The same way we can show that
+\[r(p)-r(q)\le \dist{p}{q}{}\]
+Whence the statement follows.
+
+\parit{\ref{SHORT.lem:opposite}.}
+Again, by \ref{SHORT.obs:extremal:distfun}, $\distfun_p$ is an extremal function.
+Arguing by contradiction, assume 
+\[r(q)\ge \distfun_p(q)-r(p)+\delta\]
+for any $q$.
+By \ref{ex:+-c}, we get that
+\[r(q)\le \distfun_p(q)+r(p)-\delta\]
+for any $q$.
+Taking $q=p$, we get $r(p)\le r(p)-\delta$, a contradiction.
+
+If $\spc{X}$ is compact, then passing to a partial limit of the obtained points $q$ as $\delta\to 0$; we get that 
+\[r(p)+r(q)\le\dist{p}{q}{\spc{X}}.\]
+Since $r$ is admissible, the opposite inequality holds;
+whence the second statement follows.
+
+\parit{\ref{SHORT.obs:extremal:below}.}
+Follows by Zorn's lemma. 
+\qeds
+
+\section{Injective spaces}
+
+\begin{thm}{Definition}\label{def:injective}
+A metric space $\spc{Y}$ is called \index{injective space}\emph{injective} if for any metric space $\spc{X}$ and any its subspace $\spc{A}$
+any short map $f\:\spc{A}\to \spc{Y}$ can be extended to a short map $F\:\spc{X}\to \spc{Y}$;
+that is, $f=F|_{\spc{A}}$.
+\end{thm}
+
+\begin{thm}{Exercise}\label{ex:inj=complete-geodesic-contractible}
+Show that any injective space is 
+
+\begin{subthm}{ex:inj=complete-geodesic-contractible:complete}
+complete,
+\end{subthm}
+
+\begin{subthm}{ex:inj=complete-geodesic-contractible:geodesic}
+geodesic, and
+\end{subthm}
+
+\begin{subthm}{ex:inj=complete-geodesic-contractible:contractible}
+contractible.
+\end{subthm}
+\end{thm}
+
+
+\begin{thm}{Exercise}\label{ex:injective-spaces}
+Show that the following spaces are injective:
+\begin{subthm}{ex:injective-spaces:R}
+the real line;
+\end{subthm}
+
+\begin{subthm}{ex:injective-spaces:tree}
+complete metric tree;
+\end{subthm}
+
+\begin{subthm}{ex:injective-spaces:ell-infty}
+coordinate plane with the metric induced by the $\ell^\infty$-norm.
+\end{subthm}
+
+\end{thm}
+
+
+\begin{thm}{Exercise}\label{ex:ultrametric}
+Suppose that a metric space $\spc{X}$ satisfies the following property:
+For any subspace $\spc{A}$ in $\spc{X}$ and any other metric space $\spc{Y}$, any short map $f\:\spc{A}\to \spc{Y}$ can be extended to a short map $F\:\spc{X}\to \spc{Y}$.
+
+Show that $\spc{X}$ is an \index{ultrametric space}\emph{ultrametric space};
+that is, the following strong version of the triangle inequality
+\[\dist{x}{z}{\spc{X}}
+\le
+\max\{\,\dist{x}{y}{\spc{X}},\dist{y}{z}{\spc{X}}\,\}\]
+holds for any three points $x,y,z\in \spc{X}$.
+\end{thm}
+
+\begin{thm}{Theorem}\label{thm:injective=hyperconvex}
+For any metric space $\spc{Y}$ the following condition are equivalent:
+
+\begin{subthm}{thm:injective=hyperconvex:injective}
+$\spc{Y}$ is injective
+\end{subthm}
+
+
+\begin{subthm}{thm:injective=hyperconvex:extremal}
+If $r\:\spc{Y}\to\RR$ is an extremal function then there is a point $p\in \spc{Y}$ such that 
+\[\dist{p}{x}{}\le r(x)\]
+for any $x\in \spc{Y}$.
+\end{subthm}
+
+\begin{subthm}{thm:injective=hyperconvex:balls}
+$\spc{Y}$ is \index{hyperconvex space}\emph{hyperconvex};
+that is, if $\{\cBall[x_\alpha,r_\alpha]\}_{\alpha\in\IndexSet}$ is a family of closed balls in $\spc{Y}$ such that 
+ \[r_\alpha+r_\beta\ge \dist{x_\alpha}{x_\beta}{}\]
+ for any $\alpha,\beta\in \IndexSet$,
+then all the balls in the family $\{\cBall[x_\alpha,r_\alpha]\}_{\alpha\in\IndexSet}$ have a common point.
+\end{subthm}
+
+\end{thm}
+
+\parit{Proof.} We will prove implications 
+\ref{SHORT.thm:injective=hyperconvex:injective}$\Rightarrow$\ref{SHORT.thm:injective=hyperconvex:extremal}$\Rightarrow$\ref{SHORT.thm:injective=hyperconvex:balls}$\Rightarrow$\ref{SHORT.thm:injective=hyperconvex:injective}.
+
+\parit{\ref{SHORT.thm:injective=hyperconvex:injective}$\Rightarrow$\ref{SHORT.thm:injective=hyperconvex:extremal}.}
+Since $\spc{Y}$ is injective for any extension function $r\:\spc{Y}\to\RR$ there is a point $p\in \spc{Y}$ such that 
+\[\dist{p}{x}{}\le r(x)\]
+for any $x\in \spc{Y}$.
+By \ref{lem:extremal-lipschitz}, any extremal function is an extension function, whence the implication follow.
+
+\parit{\ref{SHORT.thm:injective=hyperconvex:extremal}$\Rightarrow$\ref{SHORT.thm:injective=hyperconvex:balls}.}
+By \ref{obs:admissible:balls}, part \ref{SHORT.thm:injective=hyperconvex:balls} is equivalent to the following statement:
+\begin{itemize}
+ \item If $r\:\spc{Y}\to\RR$ is an admissible function, then there is a point $p\in \spc{Y}$ such that 
+\[\dist{p}{x}{}\le r(x)\eqlbl{eq:|p-x|=<r(x)}\]
+for any $x\in \spc{Y}$.
+\end{itemize}
+Indeed, set $r(x)\df\inf\set{r_\alpha}{x_\alpha=x}$.
+(If $x_\alpha\ne x$ for any $\alpha$, then $r(x)=\infty$.)
+The condition in \ref{SHORT.thm:injective=hyperconvex:balls} imply that $r$ is admissible.
+It remains to observe that $p\in \cBall[x_\alpha,r_\alpha]$ for every $\alpha$ if and only if \ref{eq:|p-x|=<r(x)} holds.
+
+By \ref{obs:extremal:below}, for any admissible function $r$ there is an extremal function $\bar r\le r$;
+whence \ref{SHORT.thm:injective=hyperconvex:extremal}$\Rightarrow$\ref{SHORT.thm:injective=hyperconvex:balls}.
+
+\parit{\ref{SHORT.thm:injective=hyperconvex:balls}$\Rightarrow$\ref{SHORT.thm:injective=hyperconvex:injective}.}
+Arguing by contradiction, suppose $\spc{Y}$ is not injective;
+that is, there is a metric space $\spc{X}$ with a subset $\spc{A}$
+such that a short map $f\:\spc{A}\to \spc{Y}$ cannot be extended to a short map $F\:\spc{X}\to \spc{Y}$.
+By Zorn's lemma we may assume that $\spc{A}$ is a maximal subset; that is, the domain of $f$ cannot be enlarged by a single point.\footnote{In this case $\spc{A}$ must be closed, but we will not use it.}
+
+Fix a point $p$ in the complement $\spc{X}\backslash \spc{A}$.
+To extend $f$ to $p$, we need to choose $f(p)$ in the intersection of the balls 
+$\cBall[f(x),r(x)]$, where $r(x)=\dist{p}{x}{}$.
+Therefore this intersection for all $x\in \spc{A}$ have to be empty.
+
+Since $f$ is short, we have that 
+\begin{align*}
+r(x)+r(y)&\ge \dist{x}{y}{\spc{X}}\ge
+\\
+&\ge \dist{f(x)}{f(y)}{\spc{Y}}.
+\end{align*}
+Therefore by \ref{SHORT.thm:injective=hyperconvex:balls} the balls 
+$\cBall[f(x),r(x)]$ have a common point --- a contradiction. 
+\qeds
+
+\begin{thm}{Exercise}
+Suppose a length space $\spc{W}$ have two subspaces $\spc{X}$ and $\spc{Y}$ such that $\spc{X}\cup\spc{Y}=\spc{W}$ and $\spc{X}\cap\spc{Y}$ is a one-point set.
+Assume $\spc{X}$ and $\spc{Y}$ are injective.
+Show that  $\spc{W}$ is injective
+\end{thm}
+
+\begin{thm}{Exercise}
+Show that the Urysohn space is {}\emph{finitely hyperconvex} but not {}\emph{countably hyperconvex};
+that is, the condition in \ref{thm:injective=hyperconvex:balls} holds for any finite family of balls, but may not hold for a countable family.
+
+Conclude that the Urysohn space is not injective.
+\end{thm}
+
+
+\section{Space of extremal functions}
+
+Let $\spc{X}$ be a metric space.
+Consider the space $\Inj \spc{X}$ of extremal functions on $\spc{X}$ equipped with sup-norm; \label{page:InjX}
+that is,
+\[\dist{f}{g}{\Inj \spc{X}}\df\sup\set{|f(x)-g(x)|}{x\in \spc{X}}.\]
+
+Recall that by \ref{obs:extremal:distfun}, any distance function is extremal.
+It follows that the map $x\mapsto \distfun_x$ produces a distance-preserving embedding $\spc{X}\hookrightarrow\Inj \spc{X}$.
+So we can (and will) treat $\spc{X}$ as a subspace of $\Inj \spc{X}$,
+or, equivalently, $\Inj \spc{X}$ as an extension of $\spc{X}$.
+
+Since any extremal function is 1-Lipschitz, for any $f\in \Inj \spc{X}$ and $p\in \spc{X}$, we have that
+$f(x)\le f(p)+\distfun_p(x)$.
+By \ref{ex:+-c}, we also get $f(x)\ge -f(p)+\distfun_p(x)$.
+Therefore
+\[
+\begin{aligned}
+\dist{f}{p}{\Inj \spc{X}}&=\sup\set{|f(x)-\distfun_p(x)|}{x\in \spc{X}}=
+\\
+&=f(p).
+\end{aligned}
+\eqlbl{eq:f(p)=|f-p|}
+\]
+In particular, the statement in \ref{lem:opposite} can be written as 
+\[\dist{f}{p}{\Inj\spc{X}}+\dist{f}{q}{\Inj\spc{X}}<\dist{p}{q}{\Inj\spc{X}}+\delta.\]
+
+\begin{thm}{Exercise}\label{ex:Inj(compact)}
+Let $\spc{X}$ be a metric space.
+Show that $\Inj\spc{X}$ is compact if and only if so is $\spc{X}$.
+\end{thm}
+
+\begin{thm}{Exercise}\label{ex:tripod+square}
+Suppose that $\spc{X}$ is
+
+\begin{subthm}{ex:tripod+square:tripod} 
+a metric space with exactly tree points $a,b,c$ such that 
+\[\dist{a}{b}{\spc{X}}=\dist{b}{c}{\spc{X}}=\dist{c}{a}{\spc{X}}=1.\]
+\end{subthm}
+
+\begin{subthm}{ex:tripod+square:square}
+ a metric space with exactly four points $p,q,x,y$ such that 
+\[\dist{p}{x}{\spc{X}}=\dist{p}{y}{\spc{X}}=\dist{q}{x}{\spc{X}}=\dist{q}{x}{\spc{X}}=1\]
+and
+\[\dist{p}{q}{\spc{X}}=\dist{x}{y}{\spc{X}}=2.\]
+\end{subthm}
+
+Describe the set of all extremal functions on $\spc{X}$ and the metric space $\Inj \spc{X}$ in each case.
+\end{thm}
+
+\begin{thm}{Proposition}\label{prop:InjX-is-injective}
+For any metric space $\spc{X}$, its extension $\Inj\spc{X}$ is  injective.
+\end{thm}
+
+\begin{thm}{Lemma}\label{lem:r|X-extremal}
+Let $\spc{X}$ be a metric space.
+Suppose that $r$ is an extremal function on $\Inj \spc{X}$.
+Then the restriction $r|_\spc{X}$ is an extremal function on $\spc{X}$.
+In other words, $r|_\spc{X}\in \Inj \spc{X}$
+\end{thm}
+
+\parit{Proof.}
+Arguing by contradiction, suppose that there is an admissible function $s\:\spc{X}\to \RR$ such that $s(x)\le r(x)$ for any $x\in\spc{X}$ and $s(p)\z< r(p)$ for some point $p\in\spc{X}$.
+Consider another function $\bar r\:\Inj \spc{X}\to\RR$ such that $\bar r(f)\df r(f)$ if $f\ne p$ and $\bar r(p)\df s(p)$.
+
+Let us show that $\bar r$ is admissible; that is, 
+\[\dist{f}{g}{\Inj \spc{X}}\le\bar r(f)+\bar r(g)
+\eqlbl{r-admissible}\]
+for any $f,g\in \Inj \spc{X}$.
+
+Since $r$ is admissible and $\bar r= r$ on $(\Inj \spc{X})\backslash \{p\}$, it is sufficient to prove \ref{r-admissible} if $f\ne g=p$.
+By \ref{eq:f(p)=|f-p|}, we have $\dist{f}{p}{\Inj \spc{X}}=f(p)$.
+Therefore \ref{r-admissible} boils down to the following inequality
+\[r(f)+s(p)\ge f(p).\eqlbl{eq:r(f)+s(p)>=f(p)}\]
+for any $f\in\Inj \spc{X}$.
+
+Fix small $\delta>0$. 
+Let $q\in\spc{X}$ be the point provided by \ref{lem:opposite}.
+Then
+\begin{align*}
+r(f)+s(p)&\ge [r(f)-r(q)]+[r(q)+s(p)]\ge
+\intertext{since $r$ is 1-Lipschitz, and $r(q)\ge s(q)$, we can continue}
+&\ge -\dist{q}{f}{\Inj \spc{X}}+[s(q)+s(p)]\ge
+\intertext{by \ref{eq:f(p)=|f-p|} and since $s$ is admissible}
+&\ge -f(q)+\dist{p}{q}{}>
+\intertext{by \ref{lem:opposite}}
+&> f(p)-\delta.
+\end{align*}
+Since $\delta>0$ is arbitrary, \ref{eq:r(f)+s(p)>=f(p)} and \ref{r-admissible} follow.
+
+Summarizing: the function $\bar r$ is admissible, $\bar r\le r$ and $\bar r(p)<r(p)$;
+that is, $r$ is not extremal --- a contradiction.
+\qeds
+
+\parit{Proof of \ref{prop:InjX-is-injective}.}
+Choose an extremal function $r\:\Inj\spc{X}\to\RR$.
+Set $s\z\df r|_{\spc{X}}$.
+By \ref{lem:r|X-extremal}, $s$ is extremal;
+that is, $s\in \Inj\spc{X}$.
+By \ref{thm:injective=hyperconvex:extremal},
+it is sufficient to show that  
+\[r(f)\ge\dist{s}{f}{\Inj\spc{X}}
+\eqlbl{eq:r(f)>=| r-f|}\]
+for any $f\in\Inj\spc{X}$.
+
+Since $r$ is $1$-Lipschitz (\ref{lem:extremal-lipschitz}) we have that
+\[
+s(x)-f(x)=r(x)-\dist{f}{x}{\Inj \spc{X}}\le r(f).
+\]
+for any $x\in\spc{X}$.
+Since $r$ is admissible we have that
+\[
+s(x)-f(x)=r(x)-\dist{f}{x}{\Inj \spc{X}}\ge -r(f).
+\]
+for any $x\in\spc{X}$.
+That is, $|s(x)-f(x)|\le r(f)$ for any $x\in \spc{X}$.
+Recall that
+\[\dist{s}{f}{\Inj \spc{X}}
+\df
+\sup\set{|s(x)-f(x)|}{x\in\spc{X}};\] 
+hence \ref{eq:r(f)>=| r-f|} follows.
+\qeds
+
+\begin{thm}{Exercise}\label{ex:4-on-a-line}
+Let $\spc{X}$ be a compact metric space.
+Show that for any two points $f,g\in\Inj \spc{X}$ lie on a geodesic $[pq]$ with the ends on  $\spc{X}$.
+\end{thm}
+
+\section{Injective envelop}
+
+An extension $\spc{E}$ of a metric space $\spc{X}$ will be called its \index{injective envelop}\emph{injective envelop} if $\spc{E}$ is a an injective space and there is no proper injective subspace of $\spc{E}$ that contains $\spc{X}$.
+
+Two injective envelopes $e\:\spc{X}\hookrightarrow \spc{E}$ and $f\:\spc{X}\hookrightarrow \spc{F}$ are called  equivalent if there is an isometry $\iota\: \spc{E}\to\spc{F}$ such that $f=\iota\circ e$.
+
+\begin{thm}{Theorem}\label{thm:inj-envelop}
+For any metric space $\spc{X}$, its extension $\Inj\spc{X}$ is an injective envelop.
+
+Moreover, any other injective envelop of $\spc{X}$ is equivalent to $\Inj\spc{X}$.
+\end{thm}
+
+\parit{Proof.} 
+Suppose $S\subset \Inj\spc{X}$ is an injective subspace containing $\spc{X}$.
+Since $S$ is injective, there is a short map $w\:\Inj\spc{X}\to S$ that fixes all points in $\spc{X}$.
+
+Suppose that $w\:f\mapsto f'$; observe that $f(x)\ge f'(x)$ for any $x\in \spc{X}$.
+Since $f$ is extremal, $f=f'$;
+that is, $w$ is the identity map and therefore $S=\Inj\spc{X}$.
+
+Assume we have another injective envelop $e\:\spc{X}\hookrightarrow \spc{E}$.
+Then there are short maps $v\:\spc{E}\to \Inj\spc{X}$ and $w\:\Inj\spc{X}\to \spc{E}$ such that $x=v\circ e(x)$ and $e(x)=w(x)$ for any $x\in\spc{X}$.
+From above, the composition $v\circ w$ is the identity on $\Inj\spc{X}$.
+In particular $w$ is distance-preserving.
+
+The composition $w\circ v\:\spc{E}\to \spc{E}$ is a short map that fixes points in $e(\spc{X})$.
+Since $e\:\spc{X}\hookrightarrow \spc{E}$ is an injective envelop, the composition $w\circ v$ and therefore $w$ are onto.
+Whence $w$ is an isometry.
+\qeds
+
+\begin{thm}{Exercise}\label{ex:d-p-inclusion}
+Suppose $\spc{X}$ is a subspace of a metric space $\spc{U}$.
+Show that the inclusion $\spc{X}\hookrightarrow\spc{U}$ can be extended to an distance-preserving inclusion $\Inj\spc{X}\hookrightarrow\Inj\spc{U}$.
+\end{thm}
+
+
+\section{Remarks}
+
+Injective spaces were introduced by Nachman Aronszajn and Prom Panitchpakdi \cite{aronszajn-panitchpakdi} and injective envelop was introduced by John Isbell \cite{isbell}.
+It was rediscovered couple of times since then;
+as a result injective envelop has many other names including \index{tight span}\emph{tight span} and \index{hyperconvex hull}\emph{hyperconvex hull}.
+

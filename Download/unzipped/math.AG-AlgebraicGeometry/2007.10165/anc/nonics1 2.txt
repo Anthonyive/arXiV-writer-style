@@ -1,0 +1,188 @@
+nonics1.txt
+--- This code implements an algorithm (see sub-section 3.2-proof of Theorem 3.20 and subsection 5.2) that shows the birationality of the map f' and yields a method to get ternary nonics of rank lower than 18. 
+--- The code takes in input representative vectors v_i's for the points dual to 18 fixed linear forms L_{i}'s and controls if the v_{i}'s are in sufficiently general position (tests 1), 2), 3)). 
+--- Moreover it generates 14 random numbers a_2,...,a_15 and compute f'(a_2,...,a_15) = Tensor1, providing a column vector 55x1 consisting of the coordinates of a nonic T1 in x,y,z.
+--- By construction, T1 is computed by {L_{1},...,L_{18}} with coefficients \lambda_{1},...,\lambda_{18} produced by the code by means of Kramer's rule. 
+--- The output of the code is the dimension and the degree of f'^{-1}(Tensor1).
+--- In particular it shows that the rank of T1 is lower than 18.
+
+
+k = ZZ/31991;
+R = k[x,y,z];
+--- input: a 18x3 matrix A with the coordinates of v_{1},...,v_{18}
+A = random(R^18,R^3) 
+--- in our example we generated the random matrix: 
+--- A = sub(matrix{{1,1,1},{0,1,2},{-1,2,1},{1,2,3},{1,-2,0},{2,1,4},
+{4,2,-3},{1,5,1},{5,2,3},{6,2,3},{1,7,7},{1,7,3},{6,5,4},{-7,2,3},{3,7,4},{2,-5,1},{6,3,-4},{-7,6,6}},R);
+--- the i-th row of A contains the coordinates of v_{i} 
+
+--- test 1): non-redundancy test
+v9A = symmetricPower(9,A^{0});
+for i from 1 to 17 do v9A = v9A||symmetricPower(9,A^{i})
+v9A; --- 18x55 matrix
+rank v9A
+--- if the output is 18, then A provides a non-redundant decomposition for any ternary form of degree 9 in the linear span <v_{9}(A)> 
+
+--- test 2): fourth Kruskal's rank test
+v4A = symmetricPower(4,A^{0});
+for i from 1 to 17 do v4A = v4A||symmetricPower(4,A^{i})
+v4A; --- 18x15 matrix
+gens minors(15,v4A) 
+--- if the output consists of 816 non-zero maximal minors, then k_4(A) = 15
+
+--- test 3): fifth Hilbert function test
+v5A = symmetricPower(5,A^{0});
+for i from 1 to 17 do v5A = v5A||symmetricPower(5,A^{i})
+v5A; --- 18x21 matrix
+rank v5A 
+--- if the output is 18, then h_A(5) = 18
+
+--- construction of the ideal of the set A and of its Hilbert-Burch matrix
+I1 = ideal(A_(0,1)*x-A_(0,0)*y,A_(0,2)*y-A_(0,1)*z);
+I2 = ideal(A_(1,1)*x-A_(1,0)*y,A_(1,2)*y-A_(1,1)*z);
+I3 = ideal(A_(2,1)*x-A_(2,0)*y,A_(2,2)*y-A_(2,1)*z);
+I4 = ideal(A_(3,1)*x-A_(3,0)*y,A_(3,2)*y-A_(3,1)*z);
+I5 = ideal(A_(4,1)*x-A_(4,0)*y,A_(4,2)*y-A_(4,1)*z);
+I6 = ideal(A_(5,1)*x-A_(5,0)*y,A_(5,2)*y-A_(5,1)*z);
+I7 = ideal(A_(6,1)*x-A_(6,0)*y,A_(6,2)*y-A_(6,1)*z);
+I8 = ideal(A_(7,1)*x-A_(7,0)*y,A_(7,2)*y-A_(7,1)*z);
+I9 = ideal(A_(8,1)*x-A_(8,0)*y,A_(8,2)*y-A_(8,1)*z);
+I10 = ideal(A_(9,1)*x-A_(9,0)*y,A_(9,2)*y-A_(9,1)*z);
+I11 = ideal(A_(10,1)*x-A_(10,0)*y,A_(10,2)*y-A_(10,1)*z);
+I12 = ideal(A_(11,1)*x-A_(11,0)*y,A_(11,2)*y-A_(11,1)*z);
+I13 = ideal(A_(12,1)*x-A_(12,0)*y,A_(12,2)*y-A_(12,1)*z);
+I14 = ideal(A_(13,1)*x-A_(13,0)*y,A_(13,2)*y-A_(13,1)*z);
+I15 = ideal(A_(14,1)*x-A_(14,0)*y,A_(14,2)*y-A_(14,1)*z);
+I16 = ideal(A_(15,1)*x-A_(15,0)*y,A_(15,2)*y-A_(15,1)*z);
+I17 = ideal(A_(16,1)*x-A_(16,0)*y,A_(16,2)*y-A_(16,1)*z);
+I18 = ideal(A_(17,1)*x-A_(17,0)*y,A_(17,2)*y-A_(17,1)*z);
+IA=intersect(I1,I2,I3,I4,I5,I6,I7,I8,I9,I10,I11,I12,I13,I14,I15,
+I16,I17,I18); --- ideal of the set A
+D=res(IA);
+dim IA --- 1
+degree IA --- 18
+M=D.dd_2; --- 4x3 matrix, Hilbert-Burch matrix of the ideal the set A
+MM = transpose(M);
+
+--- in our examples:
+--- M   = 
+{5} | 8549xy+10271y2-4148xz 9866yz-1975z2           
+-3320xy-5755y2+7871xz+8089yz-1533z2         
+6640xy+11510y2-15742xz-7971yz-14056z2 |
+
+{5} | -8549x2+5132xy+8010y2+15751xz-7245yz+4435z2    
+3320x2+5755xy-10840y2+833xz-5408yz-15055z2    
+-6640x2-11510xy-10311y2-9873xz-5157yz-11657z2 |
+
+{5} | -15403x2-168xy+9922y2-3987xz+1506yz+3797z2  
+6970xy+14859y2-8763xz-1509yz+10505z2    
+-13940xy+2273y2+1508xz-9931yz-8835z2  |
+
+{6} | -9152z   x-5388z  y-2104z  |
+
+--- construction of T1
+coe = random(R^1,R^14)
+--- in our example we generated the random matrix: 
+--- coe = sub(matrix{{10399,13534,-633,-11455,2134,11038,-8888,-588,1927,
+4114,11328,13814,-10664,-1749}},R)
+q2 = coe_(0,2)*x^2+coe_(0,3)*x*y+coe_(0,4)*x*z+coe_(0,5)*y^2+coe_(0,6)*y*z+coe_(0,7)*z^2;
+q3 = coe_(0,8)*x^2+coe_(0,9)*x*y+coe_(0,10)*x*z+coe_(0,11)*y^2+coe_(0,12)*y*z+coe_(0,13)*z^2;
+M' = matrix{{1,coe_(0,0),coe_(0,1),0},{0,q2,q3,0}}||MM;
+IB = minors(4,M');
+dim IB --- 1
+degree IB --- 17
+IdFix = IA + IB; 
+Polynon = gens(IdFix)*matrix(basis(9,IdFix));  
+NFix = contract(transpose(basis(9,R)),Polynon);  
+Tensor1 = gens(ker transpose(NFix));  --- 55x1 vector containing the coefficients of T1 in the standard monomial basis of degree 9 in x,y,z
+--- in our example: 
+--- | 9666 13004 12463 -13235 -15442 15509 -6311 -2390 547 -119 -14916  1822 -8022 -9386 -2742 10541 1156 -12023 4417 -11823 -737 -7616 11293 -8260 -9332 7078 -4553 -15941 4339 -4251 9854 -22 8408 11858 -9161 -9854 -13165 -2105 -8715 390 -9955 -11013 -10651 -3850 4029 -11735 -12427 12255  -3686 -2271 5939 -3402 13298 6455 1 |
+T1 = basis(9,R)*Tensor1;  
+--- in our example:
+--- T1 = | 9666x9+13004x8y-13235x7y2-6311x6y3-14916x5y4+10541x4y5-7616x3y6+4339x2y7-13165xy8-11735y9+12463x8z
+-15442x7yz-2390x6y2z+1822x5y3z+1156x4y4z+11293x3y5z
+-4251x2y6z-2105xy7z-12427y8z+15509x7z2+547x6yz2
+-8022x5y2z2-12023x4y3z2-8260x3y4z2+9854x2y5z2
+-8715xy6z2+12255y7z2-119x6z3-9386x5yz3+4417x4y2z3-9332x3y3z3
+-22x2y4z3+390xy5z3-3686y6z3-2742x5z4-11823x4yz4+7078x3y2z4+8408x2y3z4-9955xy4z4-2271y5z4-737x4z5-4553x3yz5+11858x2y2z5- 11013xy3z5+5939y4z5-15941x3z6-9161x2yz6-10651xy2z6-3402y3z6
+-9854x2z7-3850xyz7+13298y2z7+4029xz8+6455yz8+z9 |
+
+--- Kramer's rule to get the coordinates of T1 in <v_{9}(A)>
+P = transpose(v9A)|Tensor1; 
+rank P -- 18
+rank P^{0..16,45} -- 18
+gens(minors(18,P^{0..16,45}));  
+--- in our example the output is:
+--- | 7101 15748 -10230 -1151 -4678 12014 3181 -13183 -4930 4706 6754 -14235  6932 -13947 3099 14214 -6562 9008 -1700 |
+(gens(minors(18,P^{0..16,45}))*(sub(1/(7101),R)))_{1..18};  
+--- in our example the output is:
+--- | -2818 823 4086 6712 -12437 -11348 2940 8496 7308 13629 1755 2213 -4854 -2135 -12270 13956 -9437 -10308 | =
+--- = {\lambda_18,-\lambda_17,\lambda_16,-\lambda_15,\lambda_14,-\lambda_13,\lambda_12,-\lambda_11,\lambda_10,-\lambda_9,
+----   \lambda_8,-\lambda_7,\lambda_6,-\lambda_5,\lambda_4,-\lambda_3,\lambda_2,-\lambda_1}
+
+
+--- computation of the dimension and the degree of f'^{-1}(T1): it is divided into 3 steps, 
+--- depending on which one between a_1, a_2, a_3 is assumed to be 1
+--- if at the end of each of the 3 cases, max di = 0 and max de = 1,
+--- then f'^{-1}(T1) is a point, i.e. f' is birational and T1 has rank lower than 18
+
+--- case 1): a_1 = 1
+S = k[x,y,z,a_2..a_15, Degrees => {1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0}];
+Msupergen=sub(matrix{{1,a_2,a_3,0}}||matrix{{0,a_4*x^2+a_5*x*y+a_6*x*z+a_7*y^2+a_8*y*z+a_9*z^2,a_10*x^2+a_11*x*y+a_12*x*z+a_13*y^2+a_14*y*z+a_15*z^2,0}},S);
+M' = Msupergen||sub(MM,S);
+IdFix' = minors(3,sub(M,S))+minors(4,M');
+time Polynon' = gens(IdFix')*matrix(basis(9,IdFix'))  ---  in our example we got the output in 2009.8 seconds
+N1 = contract(transpose(basis(9,S)),Polynon');   
+Eqns = transpose(N1)*sub(Tensor1,S);  
+Eqns^{37..65} -- 29 not-homogeneous quadratic equations in 
+a_2...a_15
+TT = k[a_2..a_15];
+II = ideal(sub(Eqns^{37..65},TT));
+dim II -- 2
+degree II -- 1
+for i from 4 to 15 do JJ_{i} = II + ideal(a_i-1)
+di = for i from 4 to 15 list dim JJ_{i}; 
+de = for i from 4 to 15 list degree JJ_{i}; 
+d1 = max di  --- in our example the output is 0
+de1 = max de --- in our example the output is 1
+
+
+--- case 2): a_2 = 1
+S = k[x,y,z,a_1,a_3..a_15, Degrees => {1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0}];
+Msupergen=sub(matrix{{a_1,1,a_3,0}}||matrix{{a_4*x^2+a_5*x*y+a_6*x*z+a_7*y^2+a_8*y*z+a_9*z^2,0,a_10*x^2+a_11*x*y+a_12*x*z+a_13*y^2+a_14*y*z+a_15*z^2,0}},S);
+M' = Msupergen||sub(MM,S);
+IdFix' = minors(3,sub(M,S))+minors(4,M');
+time Polynon' = gens(IdFix')*matrix(basis(9,IdFix')); --- in our example we got the output in 981.793 seconds
+N2 = contract(transpose(basis(9,S)),Polynon');   
+Eqns = transpose(N2)*sub(Tensor1,S);
+Eqns^{37..65};
+TT = k[a_1,a_3..a_15];
+II = ideal(sub(Eqns^{37..65},TT));
+dim II -- 2
+degree II -- 1
+for i from 4 to 15 do JJ_{i} = II + ideal(a_i-1)
+di = for i from 4 to 15 list dim JJ_{i}; 
+de = for i from 4 to 15 list degree JJ_{i};
+d2 = max di --- in our example the output is 0
+de2 = max de --- in our example the output is 1
+
+
+--- case 3): a_3 = 1
+S = k[x,y,z,a_1,a_2,a_4..a_15, Degrees => {1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0}];
+Msupergen=sub(matrix{{a_1,a_2,1,0}}||matrix{{a_4*x^2+a_5*x*y+a_6*x*z+a_7*y^2+a_8*y*z+a_9*z^2,a_10*x^2+a_11*x*y+a_12*x*z+a_13*y^2+a_14*y*z+a_15*z^2,0,0}},S);
+M' = Msupergen||sub(MM,S);
+IdFix' = minors(3,sub(M,S))+minors(4,M');
+time Polynon' = gens(IdFix')*matrix(basis(9,IdFix')); --- in our example we got the output in 1180.57 seconds
+N3 = contract(transpose(basis(9,S)),Polynon');   
+Eqns = transpose(N3)*sub(Tensor1,S);
+TT = k[a_1,a_2,a_4..a_15];
+II = ideal(sub(Eqns^{37..65},TT));
+dim II -- 2
+degree II -- 1
+for i from 4 to 15 do JJ_{i} = II + ideal(a_i-1)
+di = for i from 4 to 15 list dim JJ_{i}; 
+de = for i from 4 to 15 list degree JJ_{i}; 
+d3 = max di --- in our example the output is 0
+de3 = max de --- in our example the output is 1
+
+

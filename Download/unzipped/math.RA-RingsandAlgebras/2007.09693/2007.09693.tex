@@ -1,0 +1,308 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+%
+\documentclass[
+]{article}
+\usepackage{lmodern}
+\usepackage{amssymb,amsmath,amsthm}
+\usepackage{ifxetex,ifluatex}
+\ifnum 0\ifxetex 1\fi\ifluatex 1\fi=0 % if pdftex
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{xcolor}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\hypersetup{
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+\urlstyle{same} % disable monospaced font for URLs
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+\theoremstyle{theorem}
+\newtheorem*{theorem}{Theorem}
+
+\theoremstyle{proposition}
+\newtheorem{proposition}{Proposition}
+
+\title{Generalised Singular Value Decomposition of dual-numbered matrices}
+\author{Ran Gutin \\ Department of Computer Science \\ Imperial College London}
+\date{July 17, 2020}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+  We present a generalisation of Singular Value Decomposition to arbitrary square dual-numbered matrices. This generalises a classification of invertible $2 \times 2$ dual matrices found in Yaglom's 1968 book \emph{Complex numbers in geometry}. Unlike the Singular Value Decomposition over real numbers or over complex numbers, our generalisation replaces diagonal matrices with block diagonal matrices where the blocks may be $1 \times 1$ or $2 \times 2$.
+\end{abstract}
+
+
+\hypertarget{introduction}{%
+\section{Introduction}\label{introduction}}
+
+In this paper, we interpret and generalise a result from Yaglom's book \emph{Complex numbers in geometry} (\cite{1968}). We interpret this result as describing an extension of Singular Value Decomposition to matrices whose entries are dual numbers.
+
+A \emph{dual number} is a number of the form $a+b\epsilon$ where $a, b \in \mathbb R$ and $\epsilon^2 = 0$. The dual numbers form a commutative, assocative and unital algebra over the real numbers. Let $\mathbb D$ denote the dual numbers.
+
+Dual numbers have applications in automatic differentiation (see \cite{10.1007/s11075-015-0067-6}), kinematics (via screw theory, see \cite{Fischer1998DualNumberMI}), computer graphics (via the \emph{dual quaternion} algebra, see \cite{Kenwright_abeginners}), and geometry (see \cite{1968}).
+
+Yaglom considers the group of Laguerre transformations. The Laguerre transformations are the group of functions of the form \(z \mapsto \frac{az + b}{cz + d}\) where \(a, b, c, d\) are elements of \(\mathbb D\), $z$ is an element of $\mathbb D$, and \(ad-bc\) is not a zero divisor. It can easily be seen that every Laguerre transformation \(z \mapsto \frac{az + b}{cz + d}\) can be represented as the $2 \times 2$ matrix \(\begin{pmatrix}a & b \\ c & d \end{pmatrix}\).
+
+Yaglom classifies the elements of this group in a geometric way. We restate the classification in the language of matrices: Yaglom argues that every invertible $2 \times 2$ matrix over the dual numbers can be expressed in exactly one of the following two forms:
+
+\begin{itemize}
+\item
+  \(U \Sigma \overline V^T\) where \(U\overline U^T = V\overline V^T = I\) and \(\Sigma\) is a diagonal matrix with real-valued entries.
+\item
+  \(U \Sigma\) where \(U\overline U^T = I\), \(\Sigma = \begin{pmatrix} \sigma & -\epsilon\sigma' \\ \epsilon \sigma' & \sigma\end{pmatrix}\), and both $\sigma$ and $\sigma'$ are real.
+\end{itemize}
+
+The first of these forms is essentially Singular Value Decomposition. The presence of a necessary second form shows that not all dual-numbered matrices have such a Singular Value Decomposition. What we propose in this paper is a generalisation of Singular Value Decomposition to square dual numbered matrices which includes both forms as special cases.
+
+Our decomposition is the following:
+
+\begin{theorem}[Dual SVD]
+  Every square dual numbered matrix \(M \in M_n(\mathbb D)\) can be decomposed as \[M = U\Sigma \overline V^T\] where \(U\overline U^T = V\overline V^T = I\), and \(\Sigma\) is a block-diagonal matrix where each block is of one of the forms \(\begin{pmatrix}\sigma_i\end{pmatrix}\), \(\begin{pmatrix}\sigma_i & -\epsilon \sigma'_i \\ \epsilon\sigma_i' & \sigma_i\end{pmatrix}\) or \(\begin{pmatrix} \epsilon\sigma_i'\end{pmatrix}\), where $\sigma$ and $\sigma'$ are both real.
+\end{theorem}
+We show that this decomposition is the best possible, in the sense that all three types of blocks are necessary.
+
+In \cite{dualmatrix}, the authors attempt to generalise algorithms for real-numbered matrices to dual-numbered matrices. In particular, they consider a form of Singular Value Decomposition that differs from the one relevant to Yaglom's result. We call their version of Singular Value Decomposition R-SVD, and the version generalising Yaglom's as C-SVD.\footnote{The terminology R-SVD and C-SVD refers to the fact that R-SVD resembles real SVD, while C-SVD resembles complex SVD.} R-SVD is the decomposition \[M = U \Sigma V^T\] where \(UU^T = VV^T = I\) and \(\Sigma\) is a diagonal matrix. One of the main differences between R-SVD and C-SVD is that the latter uses \emph{conjugate}-transposes instead of just transposes. It can be shown (but they don't do this) that every dual-numbered matrix has an R-SVD.
+
+Recently in \cite{pinv}, the authors show that not every dual-numbered matrix has a Moore-Penrose pseudoinverse. This shows that linear algebra over the dual numbers is different from that over complex numbers.
+
+\hypertarget{structure}{%
+\section{Structure}\label{structure}}
+
+We first prove an extension of the spectral theorem to dual numbers. We then develop a Singular Value Decomposition which implies Yaglom's classification in the $2 \times 2$ case.
+
+We find that it's clearer to state theorems in matrix language, but easier to prove them using operator language. We therefore state each theorem in both operator and matrix language, and we recommend that the reader looks at the matrix form first.
+
+\hypertarget{preamble-the-spectral-theorem-over-real-numbered-matrices}{%
+\section{Preamble: The spectral theorem over real-numbered matrices}\label{preamble-the-spectral-theorem-over-real-numbered-matrices}}
+
+\hypertarget{over-symmetric-real-matrices}{%
+\subsection{Over symmetric real matrices}\label{over-symmetric-real-matrices}}
+
+The spectral theorem over symmetric matrices states that a symmetric matrix \(A\) over the real numbers can be orthogonally diagonalised. In other words, if \(A\) is a real matrix such that \(A = A^T\), then there exists a matrix \(P\) such that \(P^TP=I\) and \(A = PDP^T\) for some diagonal matrix \(D\).
+
+\hypertarget{over-skew-symmetric-real-matrices}{%
+\subsection{Over skew-symmetric real matrices}\label{over-skew-symmetric-real-matrices}}
+
+The spectral theorem over skew-symmetric matrices states that a skew-symmetric matrix \(A\) over the real number can be orthogonally block-diagonalized, where every block is a skew-symmetric $2 \times 2$ block except possibly for one block, which has dimensions $1\times 1$ and whose only entry equals \(0\).
+
+\hypertarget{a-note-on-notation}{%
+\section{A note on notation}\label{a-note-on-notation}}
+
+By \(\overline{a + b\epsilon}\), we mean \(a - b\epsilon\). We sometimes write \(M^*\) for \(\overline M^T\). Given a dual number \(a + b\epsilon\), we call \(a\) the \emph{real part} and \emph{b} the imaginary part. We sometimes denote the real and imaginary parts of a dual number \(z\) by \(\Re(z)\) and \(\Im(z)\) respectively. Two vectors \(u\) and \(v\) are considered \emph{orthogonal} if \(\overline u^T v = 0\). We write \(\bar u^T v\) as \(\langle u, v \rangle\).
+
+A dual matrix \(U\) which satisfies \(U\bar U^T = \bar U^T U = I\) is called \emph{unitary}.
+
+A dual matrix \(A\) such that \(A = \bar A^T\) is called \emph{Hermitian}.
+
+\section{Dual-number spectral theorem}
+\subsection{In matrix language}
+
+\begin{theorem}[Dual spectral]
+Given a Hermitian dual number matrix \(M \in M_n(\mathbb D)\), we can decompose the matrix as: \[M = V\Sigma V^*\] where \(V\) is unitary, and \(\Sigma\) is a block-diagonal matrix where each block is of the form:
+
+\begin{itemize}
+\item
+  either \(\begin{pmatrix}\sigma_i\end{pmatrix}\),
+\item
+  or \(\begin{pmatrix}\sigma_i & -\epsilon \sigma'_i \\ \epsilon\sigma_i' & \sigma_i\end{pmatrix}\),
+\end{itemize}
+
+where each \(\sigma_i\) and \(\sigma_i'\) is real.
+
+\end{theorem}
+
+\subsection{In operator language}
+
+\begin{theorem}[Dual spectral]
+Given a Hermitian operator \(T: V \to V\) where \(V\) is a free \(\mathbb D\)-module, there is a collection of free submodules \(V_1, V_2, \dotsc, V_k\) of \(V\) such that:
+
+\begin{itemize}
+\item
+  \(V = V_1 \oplus \dotsb \oplus V_k\),
+\item
+  \(V_i \perp V_j\) for any \(i \neq j\),
+\item
+  \(\dim(V_i) \leq 2\),
+\item
+  \(T(V_i) \subseteq V_i\),
+\item
+  \(T|_{V_i} = \lambda Id + \epsilon S\) where \(S\) is skew-Hermitian and \(\lambda \in \mathbb R\).
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+We do induction on \(n = \dim(V)\).
+
+Let \(U = \{u_1, u_2, \dots u_n\}\) be an orthogonal eigenbasis of \(\Re(T)\) (such a thing exists by the spectral theorem). Let \(\lambda_1 \geq \lambda_2 \geq \dots \geq \lambda_n\) be the corresponding eigenvalues. We dispatch on the eigenvalues:
+
+\hypertarget{case-of-lambda_1-lambda_2-dots-lambda_n-base-case}{%
+\subsection*{\texorpdfstring{Case of \(\lambda_1 = \lambda_2 = \dots = \lambda_n\) \emph{(base case)}}{Case of \textbackslash lambda\_1 = \textbackslash lambda\_2 = \textbackslash dots = \textbackslash lambda\_n (base case)}}\label{case-of-lambda_1-lambda_2-dots-lambda_n-base-case}}
+
+First, we have that \(\Re(T) = \lambda Id\). We therefore have that \(T\) can be expressed as \(T = \lambda Id + \epsilon S\) for some operator \(S\). Since \(T\) is Hermitian, it follows that \(S\) must be skew-Hermitian. This can be seen from the fact that \(T^* = T \implies \lambda Id - \epsilon S^* = \lambda Id + \epsilon S \implies -S^* = S\). Since the matrix \([S]_U\) need only consist of real entries (as any infinitesimal entries vanish upon being multiplied by \(\epsilon\)), we get that \([S]_U\) is skew-symmetric. Thus by applying the spectral theorem to \([S]_U\), we get a set of subspaces \(V_1, V_2, \dots, V_n\) of \(V\) such that:
+
+\begin{itemize}
+\item
+  \(V = V_1 \oplus \dotsb \oplus V_n\),
+\item
+  \(V_i \perp V_j\) for every \(i \neq j\),
+\item
+  \(\dim(V_i) \leq 2\),
+\item
+  \(S(V_i) \subseteq V_i\).
+\end{itemize}
+
+It remains to verify that:
+
+\begin{itemize}
+\item
+  \(T(V_i) \subseteq V_i\)
+\item
+  \(T|_{V_i} = \lambda Id + \epsilon S_i\) where \(S_i\) is skew-Hermitian.
+\end{itemize}
+
+Regarding the first property: Since \(\lambda Id (V_i) = V_i\), and \(S(V_i) \subseteq V_i\), we get \(T(V_i) = (\lambda Id + \epsilon S)(V_i) \subseteq V_i\).
+
+Regarding the second property: We already have the decomposition \(T = \lambda Id + S\), and we can restrict the domain to \(V_i\).
+
+\hypertarget{case-of-lambda_1-dots-lambda_m-lambda_m1-for-some-m-inductive-case}{%
+\subsection*{\texorpdfstring{Case of \(\lambda_1 = \dots = \lambda_m > \lambda_{m+1}\) for some \(m\) \emph{(inductive case)}}{Case of \textbackslash lambda\_1 = \textbackslash dots = \textbackslash lambda\_m \textgreater{} \textbackslash lambda\_\{m+1\} for some m (inductive case)}}\label{case-of-lambda_1-dots-lambda_m-lambda_m1-for-some-m-inductive-case}}
+
+In the basis \(U\) given above, the matrix representative of \(T\), denoted \(A = (a_{ij})_{ij} = [T]_U\), is given by \(A = D + \epsilon S\) where \(D\) is a diagonal matrix with entries \(\lambda_1, \dotsc, \lambda_n\) and \(S\) is a skew-symmetric matrix. We can thus say \[a_{ij} = \begin{cases}s_{ij}\epsilon, & i < j \\ d_i, & i = j \\ -s_{ji}\epsilon & i > j \end{cases}.\] Define the matrix \(P \in M_n(\mathbb D)\) by \[p_{ij} = \begin{cases}
+1 , &i = j \leq m \\
+0, &i \neq j \text{ and } i\leq m \text{ and } j\leq m \\
+0, &m < i\text{ and } m < j\\
+\frac{s_{ij}}{d_i - d_j}\epsilon, &i \leq m < j \\
+\frac{-s_{ji}}{d_j - d_i}\epsilon, &j \leq m < i \\
+\end{cases}.\]
+
+Observe that \(P\) is a projection onto some subspace since \(P^2 = P\). Additionally, the subspaces represented by \(P\) and \(I - P\) are orthogonal since \(P = P^*\). Finally, observe that \(PA = AP\). Therefore the matrix \(A = [T]_U\) preserves these subspaces. Call these two subspaces \(W\) and \(W^\perp\). Apply the induction hypothesis to the subspaces \(W\) and \(W^\perp\). We are done.
+
+\end{proof}
+
+\section{Dual-number Singular Value Decomposition}
+\subsection{In matrix language}
+
+\begin{theorem}[Dual SVD]
+Given a square dual number matrix \(M \in M_n(\mathbb D)\), we can decompose the matrix as: \[M = U\Sigma V^*\] where \(U\) and \(V\) are unitary, and \(\Sigma\) is a block-diagonal matrix where each block is either of the form \(\begin{pmatrix}\sigma_i\end{pmatrix}\), \(\begin{pmatrix}\sigma_i & -\epsilon \sigma'_i \\ \epsilon\sigma_i' & \sigma_i\end{pmatrix}\) or \(\begin{pmatrix} \epsilon\sigma_i'\end{pmatrix}\),
+where each \(\sigma_i\) and \(\sigma_i'\) is real.
+\end{theorem}
+
+\begin{proposition}
+  The three block types are necessary.
+\end{proposition}
+
+\begin{proof}
+We will first show that the block type \(\begin{pmatrix}\sigma_i & -\epsilon \sigma'_i \\ \epsilon\sigma_i' & \sigma_i\end{pmatrix}\) is necessary:
+
+Let \(\Delta(t) = \begin{pmatrix}1 & -\epsilon\frac{t}{2} \\ \epsilon\frac{t}{2} & 1\end{pmatrix}\) for \(t \neq 0\). \(\Delta(t)\) is the family of \emph{axial dilatation matrices}. We now show that \(\Delta(t)\) cannot be expressed as \(U \Sigma V^*\) for \(\Sigma\) a \emph{diagonal matrix}. Assume that it can be. It then follows that \(\Delta(t)^*\Delta(t) = V \Sigma^* \Sigma V^*\). The left hand side is \(\Delta(2t)\). So we have that \(\Delta(2t)\) is diagonalisable. If \(\Delta(2t)\) is diagonalisable, then the corresponding Linear Fraction Transformation has a fixed point; i.e.~there is a point \(z\) on the dual number projective line such that \(\frac{z - \epsilon t}{\epsilon t z + 1} = z\). Rearranging that equation gives \(\epsilon t(z^2 + 1) = 0\), which has no solution in the dual number projective line. Therefore \(\Delta(t)\) cannot be expressed in the form \(U\Sigma V^*\) for \(\Sigma\) diagonal.
+
+We next show that the block type \(\begin{pmatrix} \epsilon\sigma_i'\end{pmatrix}\) is necessary:
+
+Let \(X(t) = \begin{pmatrix} \epsilon t\end{pmatrix}\) for \(t \neq 0\). Assume that \(X(t)\) can be written as \(X(t) = U \Sigma V^*\) for \(\Sigma\) a diagonal matrix with strictly real entries. We now equate $1 \times 1$ matrices with scalars. \(U\) is expressible in the form \(\pm (1 + \epsilon u')\) and \(V\) is expressible in the form \(\pm (1 + \epsilon v')\). \(\Sigma\) is a real number \(\sigma\). We get \(\epsilon t = \pm \sigma(1 + \epsilon(u' + v'))\). This equation clearly has no solution in the dual numbers. We are done.
+
+\end{proof}
+
+\subsection{In operator language}
+
+\begin{theorem}[Dual SVD]
+Let \(\mathbb D\) be the dual numbers. Let \(V\) be a free \(\mathbb D\)-module. Let \(T: V \to V\) be a linear endomorphism. We show that there exists a set of free submodules \(\{V_1, V_2, \dotsc, V_k\}\) of \(V\) such that:
+
+\begin{itemize}
+\item
+  \(V = \bigoplus_{i=1}^k V_i\).
+\item
+  \(V_i \perp V_j\) for each \(i \neq j\).
+\item
+  \(\dim(V_i) \leq 2\) for each \(i\)
+\item
+  \(T(V_i) \perp T(V_j)\) for \(i \neq j\).
+\item
+  The action of \(T\) on each subspace \(V_i\) is either of the form
+
+  \begin{itemize}
+  \item
+    \(T|_{V_i} = U_i (\lambda_i Id + \epsilon S_i)\) where \(U_i\) is a unitary operator, \(\lambda_i\) is a real scalar, and \(S_i:V_i \to V\) is skew-Hermitian.
+  \item
+    \(T|_{V_i} = \epsilon \lambda'_i U_i\) where \(U_i\) is a unitary operator and \(\lambda'_i\) is a real scalar.
+  \end{itemize}
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Let \(T:V \to V\) be a linear map from a \(\mathbb D\)-module \(V\) to itself. Observe that \(T^*T\) is Hermitian. Thus, apply the dual-number spectral theorem to it to get subspaces \(V_1, V_2, \dotsc, V_k\) of \(V\). Observe that these subspaces are orthogonal to each other. Also observe that their images under \(T\) are orthogonal to each other because: Given \(v_i \in V_i\) and \(v_j \in V_j\), assuming \(i \neq j\), we have that \(\langle T(v_i), T(v_j) \rangle = \langle T^*T(v_i), v_j \rangle = 0\) as \(T^*T(v_i) \in V_i\). Also, by definition, \(\dim(V_i) \leq 2\) and \(V_1 \oplus V_2 \dotsb \oplus V_k = V\).
+
+The dual-number spectral theorem implies that \(T^*|_{V_i}T|_{V_i} = \lambda_i Id + \epsilon S_i\) for some skew-Hermitian \(S_i\). Either \(\lambda_i = 0\) or \(\lambda_i \neq 0\).
+
+If \(\lambda_i = 0\), then \(T\) can be expressed as \(T|_{V_i} = \epsilon T'\) for some linear endomap \(T'\). Passing to its matrix representations, we see that \(T'\) only needs to have a real matrix. By singular value decomposition of real matrices, there exists an orthonormal basis \(\{v_1, v_2\}\) of \(T'\) that is mapped to an orthogonal set of vectors. We thus have a set of blocks of the form \(\{\epsilon \sigma_i'\}\).
+
+If \(\lambda_i \neq 0\) then let \(P_i = \sqrt{\frac{\lambda_i Id - \epsilon S}{\lambda^2}}\). Observe that \((T|_{V_i}P_i)^*(T|_{V_i}P_i) = Id\); therefore \(T|_{V_i}P_i\) is a unitary matrix. We have that \(T|_{V_i} = (T|_{V_i}P_i)P_i^{-1}\) where \(P_i^{-1} = \sqrt{\lambda_i} Id + \epsilon \frac 1 {2 \sqrt\lambda_i}S_i\). Now observe that the first term of the product is unitary operator, and the second term is a real multiple of the identity matrix plus a skew-Hermitian matrix. We are done.
+
+\end{proof}
+
+\begin{thebibliography}{1}
+
+  \bibitem{Fischer1998DualNumberMI}
+  Ian~S. Fischer.
+  \newblock {\em Dual-Number Methods in Kinematics, Statics and Dynamics}.
+  \newblock CRC Press, 1998.
+  
+  \bibitem{10.1007/s11075-015-0067-6}
+  Philipp~H. Hoffmann.
+  \newblock A hitchhiker’s guide to automatic differentiation.
+  \newblock {\em Numer. Algorithms}, 72(3):775–811, July 2016.
+  
+  \bibitem{Kenwright_abeginners}
+  Ben Kenwright.
+  \newblock A beginners guide to dual-quaternions: What they are, how they work,
+    and how to use them for 3d.
+  \newblock In {\em Character Hierarchies”, The 20th International Conference
+    on Computer Graphics, Visualization and Computer Vision, WSCG 2012
+    Communication Proceedings,pp.1-13}, 2012.
+  
+  \bibitem{dualmatrix}
+  E.~Pennestrì and R.~Stefanelli.
+  \newblock Linear algebra and numerical algorithms using dual numbers.
+  \newblock {\em Multibody System Dynamics}, 18:323--344, Oct 2007.
+  
+  \bibitem{pinv}
+  Firdaus Udwadia, Ettore Pennestri, and Domenico de~Falco.
+  \newblock Do all dual matrices have dual moore–penrose generalized inverses?
+  \newblock {\em Mechanism and Machine Theory}, 151, Sept 2020.
+  
+  \bibitem{1968}
+  I.M. Yaglom.
+  \newblock {\em Complex Numbers in Geometry}.
+  \newblock Academic Press, 1968.
+  
+  \end{thebibliography}
+\end{document}

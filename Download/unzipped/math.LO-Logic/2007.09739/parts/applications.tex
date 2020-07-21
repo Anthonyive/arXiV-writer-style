@@ -1,0 +1,91 @@
+In this section, we study the computable content of some consequences of Milliken's tree theorem. Specifically, we focus on three well-known combinatorial principles and consider how their logical strength is informed by our work in the preceding sections. Though we study each principle separately and in its own right, we begin our discussion within a common framework intended to better highlight some of the main similarities between the three.
+
+Throughout, all languages will be countable and relational, and all structures will be countable and, unless otherwise stated, infinite. For a finite substructure $\mathcal{A}$ of a structure $\mathcal{B}$, let $[\mathcal{B}]^\mathcal{A}$ denote the set of (isomorphic) copies of $\mathcal{A}$ contained in $\mathcal{B}$. Recall also that if $X$ is a set and $n$ is a positive integer then $[X]^n$ denotes the set of $n$-element subsets of $X$. In particular, if $B$ is the domain of $\mathcal{B}$, then each element of $[B]^n$ may be regarded as a substructure of $\mathcal{B}$ by restriction since the language of $\mathcal{B}$ is relational. In general, however, $[B]^n$ need not equal $[\mathcal{B}]^\mathcal{A}$ for any $\mathcal{A}$.
+
+The first principle we consider is \emph{Devlin's theorem}, also called \emph{Devlin's second theorem}, e.g., in \cite{Todorcevic2010Ramsey}, Chapter 6.
+\begin{theorem}[Devlin's theorem]
+	For every $n \geq 1$ there exists $\ell \geq 1$ such that for every $k \geq 1$ and every $f : [\mathbb{Q}]^n \to k$ there is a dense suborder $S$ of $\mathbb{Q}$ with no endpoints satisfying $|f ([S]^n)| \leq \ell$.
+\end{theorem}
+\noindent It is easy to see that if $n = 1$ then we can take $\ell = 1$. However, for $n \geq 2$, this is no longer the case, so Devlin's theorem is not a direct extension of Ramsey's theorem. To see this, let $(q_n)_{n\in\Nb}$ be an enumeration of the rationals, and define $f : [\mathbb Q]^2\to 2$ by letting $f(q_n, q_m) = 0$ if $q_n<q_m\iff n<m$, and $f(q_n, q_m) = 1$ otherwise. Then it is readily seen that every subset $S\subseteq\mathbb Q$ of order-type $\mathbb Q$ (or even $\mathbb Z$) must contain pairs of both colors under $f$. For $n = 2$, this situation turns out to be as bad as it can be \benoit{with this example}, as we can always take $\ell = 2$. This fact was originally observed by Galvin (unpublished). For general $n$, the values of $\ell$ were obtained by Devlin \cite[Chapter 4]{Devlin1980}.
+
+The second principle we consider concerns graph colorings. Here, we recall that a graph is a structure $\mathcal{G} = (V,E)$ in a language with one binary predicate symbol whose domain $V$ is called the set of \emph{vertices}, and the interpretation $E$ of the binary predicate is called the set of \emph{edges}. As usual, for $x,y \in V$ we write $xEy$ if $(x,y) \in E$ and $\lnot x E y$ if $(x,y) \notin E$. The graph $\mathcal{G}$ is called a \emph{Rado graph} (or \emph{random graph}) if for every two disjoint finite sets of vertices $F_0,F_1 \subseteq V$ there exists $x \in V$ such that $xEy$ for all $y \in F_0$ and $\lnot x E y$ for all $y \in F_1$. All Rado Graphs are isomorphic via by the standard back and forth construction, so we usually speak just of \emph{the} Rado graph, and we fix a canonical representative of it, $\mathcal{R}$. The principle of interest to us is following, which we will call the \emph{Rado graph theorem} here for definiteness.
+\begin{theorem}[Rado graph theorem]
+	For every finite graph $G$ there exists $\ell \geq 1$ such that for every $k \geq 1$ and every $f : [\mathcal{R}]^G \to k$ there is an isomorphic subgraph $\mathcal{R}'$ of $\mathcal{R}$ satisfying $|f ([\mathcal{R}']^G)| \leq \ell$.
+\end{theorem}
+\noindent As with Devlin's theorem, the key here is that the bound $\ell$ does not depend on $k$ or the particular coloring, but only, in this case, on the particular subgraph $G$. The precise bounds here were obtained by Sauer \cite{Sauer2006} and Laflamme, Sauer, and Vuksanovic \cite{LSV2006}. The result shares much in common with Devlin's theorem, as we will see further below. Both results are well-known consequences of Milliken's theorem. (See, e.g., Todorcevic \cite{Todorcevic2010Ramsey}, Theorems 6.23 and 6.25 for direct proofs.) We give a more effective proof of the Rado graph theorem from Milliken's tree theorem in \Cref{subsect:rado-from-mtt}.
+
+The final principle we look at, unlike the previous two, is not a familiar one in set theory. However, it has been studied extensively in computable combinatorics and reverse mathematics (see, e.g., \cite{Chong2019Strengtha, Chong2019Strengthb, Chong2019Strengthc, Dzhafarov2017Coloring, Patey2016strength} for some very recent papers). This is the tree theorem of Chubb, Hirst, and McNicholl \cite{Chubb2009Reverse}, which we will refer to as the \emph{Chubb-Hirst-McNicholl (CHM) tree theorem} in this paper, to avoid confusion with Milliken's tree theorem. The CHM tree theorem concerns a weaker structure of tree than in Definition \ref{def:trees}, where we do not insist on being closed under meets. A tree is thus any subset of $2^{<\omega}$ with a root. The theorem asserts the existence, for every finite coloring of the $n$-tuples of \emph{comparable} nodes of $\cantor$, of an infinite monochromatic perfect subtree in this weaker sense. The restriction to comparable nodes comes from wanting to extend Ramsey's theorem to these ``weak'' trees. And indeed, as in Devlin's theorem, it is easy to devise a coloring of arbitrary tuples of nodes here\benoit{remove here} where no monochromatic solution exists (e.g., consider coloring all comparable pairs of strings $0$, and all incomparable pairs of strings $1$). As it turns out, this restriction loses a great deal of combinatorial structure, which becomes apparent if we look not for monochromatic solutions, but merely for bounds on the numbers of colors used in a solution. It is this generalization of the CHM tree theorem that we investigate below as our final application.
+
+\begin{theorem}[Generalized CHM tree theorem]
+	For every $n \geq 1$ there exists $\ell \geq 1$ such that for every $k \geq 1$ and every $f : [2^{<\omega}]^n \to k$ there is an $S \subseteq 2^{<\omega}$ such that $(S,\preceq)$ is isomorphic to $(2^{<\omega},\preceq)$ and $|f ([S]^n)| \leq \ell$.
+\end{theorem}
+
+\noindent As with the previous two principles, the CHM tree theorem is a consequence of Milliken's tree theorem. We include a proof in Theorem \ref{th:strong_gen_treeth} below.
+
+All three principles can be stated more succinctly using the concept of big Ramsey degrees, which we now review. Recall that if $\mathcal{B}$ is an infinite structure and $\mathcal{A}$ is a finite substructure of $\mathcal{B}$, then for positive numbers $\ell \leq k$ the notation
+\[
+\mathcal{B} \to (\mathcal{B})^{\mathcal{A}}_{k,\ell}
+\]
+means that for every coloring $f : [\mathcal{B}]^\mathcal{A} \to k$ there exists an isomorphic substructure $\mathcal{B}'$ of $\mathcal{B}$ such that $|f([\mathcal{B}'])^\mathcal{A}| \leq \ell$. The following terminology is standard in structural Ramsey theory.
+
+\begin{definition}\label{D:bigRamsey}
+	Let $\mathcal{B}$ be a structure.
+	\begin{itemize}
+		\item For a finite substructure $\mathcal{A}$ of $\mathcal{B}$, the \emph{big Ramsey degree of $\mathcal{A}$ in $\mathcal{B}$} is the least number $\ell \in \omega$, if it exists, such that $\mathcal{B} \to (\mathcal{B})^\mathcal{A}_{k,\ell}$ for all $k \in \omega$, in which case we say that the big Ramsey degree of $\mathcal{A}$ is \emph{finite}.
+		\item We say that a structure \emph{$\mathcal{B}$ has finite big Ramsey degrees} if, for every finite substructure $\mathcal{A}$ of $\mathcal{B}$ has finite big Ramsey degree.
+	\end{itemize}
+\end{definition}
+
+\noindent In the parlance of this definition, then, the Rado graph theorem is simply the assertion that the Rado graph has finite big Ramsey degrees. Similarly, Devlin's theorem is the assertion that $(\mathbb{Q},<)$ has finite big Ramsey degrees, since up to isomorphism $(\mathbb{Q},<)$ has exactly one finite substructure $\mathcal{A}$ of each size $n \geq 1$, and so $[(\mathbb{Q},<)]^\mathcal{A} = [\mathbb{Q}]^n$. For the generalized CHM tree theorem the situation is slightly different. While $(2^{<\omega},\preceq)$ can have more than one non-isomorphic substructure of a given finite size, it still has only finitely many. Thus, the generalized CHM tree theorem is equivalent to the statement that $(2^{<\omega},\preceq)$ has finite big Ramsey degrees.
+
+The bounds $\ell$ in each of Devlin's theorem, the Rado graph theorem, and the generalized CHM tree theorem are not determined purely by properties of the underlying structures. For example, even though $\mathbb{Q}$ has only one substructure of size $2$ up to isomorphism, we saw that we could differentiate two \emph{types} of substructure of size $2$ by enriching the structure by an enumeration of the domain. Enrichments of this kind play an important role in these computations, since they can be taken into account in designing colorings with a certain number of unavoidable colors.
+
+A precise formalization of the concept of ``enrichment'' is given by Zucker \cite{Zucker-2019}.
+
+\begin{definition}[Zucker \cite{Zucker-2019}, Definition 1.3]\label{def:big-ramsey-structure}
+	Let $\mathcal{B}$ be a structure in a language $\mathscr{L}$. A \emph{big Ramsey structure for $\mathcal{B}$} is a structure $\hat{\mathcal{B}}$ in a language $\hat{\mathscr{L}}$ satisfying the following properties:
+	\begin{enumerate}
+		\item $\mathscr{L} \subseteq \hat{\mathscr{L}}$;
+		\item the restriction of $\hat{\mathcal{B}}$ to $\mathscr{L}$ is $\mathcal{B}$;
+		\item for every finite substructure $\mathcal{A}$ of $\mathcal{B}$ there is a number $t_{\hat{\mathcal{B}}}(\mathcal{A})$ such that, up to isomorphism, there are exactly $t_{\hat{\mathcal{B}}}(\mathcal{A})$ many different substructures $\hat{\mathcal{A}}$ of $\hat{\mathcal{B}}$ whose restriction to $\mathscr{L}$ is a copy of $\mathcal{A}$;
+		\item every finite substructure $\mathcal{A}$ of $\mathcal{B}$ has big Ramsey degree equal to $t_{\hat{\mathcal{B}}}(\mathcal{A})$;
+		\item for every finite substructure $\mathcal{A}$ of $\mathcal{B}$ and choice $\hat{\mathcal{A}}_0,\ldots,\hat{\mathcal{A}}_{t_{\hat{\mathcal{B}}}(\mathcal{A})-1}$ of substructures of $\hat{\mathcal{B}}$ as in property 3, the coloring $f : [\mathcal{B}]^\mathcal{A} \to t_{\hat{\mathcal{B}}}(\mathcal{A})$ mapping each copy of $\mathcal{A}'$ of $\mathcal{A}$ in $\mathcal{B}$ to the unique $i < t_{\hat{\mathcal{B}}}(\mathcal{A})$ such that $\mathcal{A}'$, viewed as a substructure of $\hat{\mathcal{B}}$ by restriction, is isomorphic to $\hat{\mathcal{A}}_i$ witnesses that the big Ramsey degree of $\mathcal{A}$ in $\mathcal{B}$ is at least $t_{\hat{\mathcal{B}}}(\mathcal{A})$.
+	\end{enumerate}
+\end{definition}
+
+\noindent The idea here is that for every finite substructure $\mathcal{A}$ of $\mathcal{B}$, the substructures $\hat{\mathcal{A}}_0,\ldots,\hat{\mathcal{A}}_{t_{\hat{\mathcal{B}}}(\mathcal{A})}$ of $\hat{\mathcal{B}}$ satisfying property 3 represent all recognizable or describable types of the copies of $\mathcal{A}$ in $\mathcal{B}$, and the additional structure of $\hat{\mathcal{B}}$ facilitates these descriptions. In the literature, these instances are called more specifically \emph{embedding types} or \emph{Devlin types} based on the specific structure $\mathcal{B}$.
+
+Zucker \cite[Theorem 7.1]{Zucker-2019} provides some sufficient (and somewhat technical) conditions for a structure to admit a big Ramsey structure. For our purposes here, it is enough to know that each of $(\mathbb{Q},\leq)$, the Rado graph, and $(2^{<\omega},\preceq)$ does.
+
+In the next sections, we study the big Ramsey structure of the Rado graph in detail (see also \cite{Zucker-2019}, Section 6.3), and we carefully develop the appropriate notion of type in the sense of the big Ramsey structure for the generalized CHM tree theorem. For an account of a big Ramsey structure for $(\mathbb{Q},\leq)$, see \cite[Section 6.2]{Zucker-2019}.
+
+
+%To illustrate these notions, we relate them to Milliken's tree theorem (Theorem \ref{th:milliken-theorem}). First, we make an auxiliary definition that we will use in the sequel.
+
+%\begin{definition}\label{d:closures}
+%	Let $F$ be a subset of $\omega^{<\omega}$.
+%	\begin{enumerate}
+%		\item The \emph{meet closure} of $F$ is the set $\meetclosure{F} = \{\sigma \meet \tau : \sigma,\tau \in F\}$.
+%		\item The \emph{level closure} of $F$ is the set $\lvlclosure{F} = \{\sigma \upharpoonright |\tau|: \sigma,\tau \in F\}$.
+%	\end{enumerate}	
+%\end{definition}
+
+
+%Consider any strong subtree $T$ of $2^{<\omega}$ of height $\omega$. Note that if $F$ is any subset of $T$ then $\lvlclosure{(\meetclosure{F})}$ is a strong subtree of $T$ containing $F$.
+%
+%We can regard $T$ as a structure by attaching the prefix relation, $\preceq$, a ternary relation $M$ such that $M(\sigma,\tau,\rho)$ holds if and only if $\sigma \meet \tau = \rho$, and a binary relation $L(\sigma,\tau)$ that holds if and only if $|\sigma| = |\tau|$. Every finite subset of $T$ can then be regarded as a substructure by restriction. It is easily checked that the isomorphic substructures of $T$ are exactly the strong subtrees of $T$ of height $\omega$.
+%
+%Now fix any finite substructure $F$ of $T$. There is an $n \geq 1$ such that there are exactly $n$ copies $F'$ of $F$ in $T$ with $\lvlclosure{(\meetclosure{F'})} = \lvlclosure{(\meetclosure{F})}$. For instance, if $F = \{\langle 0 \rangle, \langle 011 \rangle, \langle 1011 \rangle \}$ then
+%\[
+%\lvlclosure{(\meetclosure{F})} = \{ \lambda, \langle 0 \rangle, \langle 1 \rangle, \langle 011 \rangle, \langle 101 \rangle, \langle 1011 \rangle \}\]
+%and the only other copy $F'$ of $F$ satisfying $\lvlclosure{(\meetclosure{F'})} = \lvlclosure{(\meetclosure{F})}$ is $\{\langle 1 \rangle, \langle 011 \rangle, \langle 1011 \rangle \}$, so $n = 2$. It is easy to see that $n$ is invariant across copies of $F$.
+%
+%This means that every $k$-coloring $f$ of the copies of $F$ in $T$ induces a $k^n$-coloring $g$ of the copies of $\lvlclosure{(\meetclosure{F})}$: if $G$ is a copy of $\lvlclosure{(\meetclosure{F})}$ there exist $n$ distint copies $F_0,\ldots,F_{n-1}$ of $F$ with $\lvlclosure{(\meetclosure{F_i})} = G$ for each $i < n$, and $g(G) = \langle f(F_0),\ldots,f(F_{n-1}) \rangle$. By Milliken's tree theorem applied to $T$, there exists a strong subtree $S$ of $T$ of height $\omega$ such that $g$ restricted to the copies of $\lvlclosure{(\meetclosure{F})}$ in $S$ is monochromatic. Thus, $f$ uses at most $\min\{k,n\}$ many colors on the copies of $F$ in $S$.
+%
+%Since $F$ was arbitrary, we conclude that $T$ has big Ramsey degrees. Thus, Milliken's tree theorem provides a way for proving that big Ramsey degrees exist.
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "../embryon"
+%%% End:
+

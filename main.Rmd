@@ -12,10 +12,15 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(rvest)
 library(stringr)
+library(R.utils)
 ```
 
 ## Scratch: get a random link
 ```{r}
+###################
+# remove all downloads
+system("./removeDownloads")
+
 url <- "https://arxiv.org/"
 mathurl <- "https://arxiv.org/archive/math"
 
@@ -34,11 +39,37 @@ topicMath_recent_tags <- paste("li:nth-child(",
                                ") a:nth-child(3)", 
                                sep = "")
 
-topicMath_other_tags <- paste("dl:nth-child(9) dt:nth-child(", 
-                               seq(1, by = 2, len = 5), 
-                               ") a:nth-child(4)", 
-                               sep = "")
+topicMath_other_tags <- function(numPaper) {
+  paste("dl:nth-child(9) dt:nth-child(", 
+        seq(1, by = 2, len = numPaper), 
+        ") a:nth-child(4)", 
+        sep = "")
+}
 
+categories <- arXivMath %>% 
+  html_nodes("h2+ ul b") %>% 
+  html_text() %>% 
+  str_replace_all("\\s", "")
+
+
+###################
+# Error handling with unzipping
+
+HoldError <- function(expr) {
+  tryCatch(expr,
+    error = function(e) {
+      message("An error occurred:\n", e)
+    },
+    warning = function(w) {
+      message("A warning occured:\n", w)
+    },
+    finally = {
+      message("Finally done!")
+    }
+  )
+}
+
+###################
 # mathurl -> recent links -> other links -> download links
 
 for (i in seq_along(topicMath_recent_tags)) {
@@ -47,9 +78,24 @@ for (i in seq_along(topicMath_recent_tags)) {
     str_extract(".*recent")
   topicMath_recent_link <- topicMath_recent_link[!is.na(topicMath_recent_link)]
   
-  for (j in 1:5) {
+  numberOfPapers <- get_link(topicMath_recent_link,
+                           "dl:nth-child(9) dt") %>% length() - 1
+  
+  othertags <- topicMath_other_tags(numberOfPapers)
+  
+  category_path <- paste("./Download/unzipped/", 
+                           categories[i], 
+                           sep = "")
+  dir.create(category_path)
+  
+  # ignore the case where there is no paper in a specific category
+  if (numberOfPapers <= 0) {
+    next
+  }
+  
+  for (j in 1:numberOfPapers) {
     other_link <- get_link(topicMath_recent_link,
-                            topicMath_other_tags[j])
+                           othertags[j])
     download_link <- get_link(other_link, 
                            "dd b+ a")
     
@@ -61,21 +107,41 @@ for (i in seq_along(topicMath_recent_tags)) {
     download.file(download_link, 
                   paste("./Download/targz", 
                         file_name, 
-                        ".tar.gz", 
+                        ".gz",
                         sep = ""))
-    
+
     # unzip tar
-    unzipped_path <- paste("./Download/unzipped", 
+    unzipped_path <- paste(category_path, 
                            file_name, 
                            sep = "")
     dir.create(unzipped_path)
     
-    command <- paste('cd ', unzipped_path, '; tar -zxvf ../../targz', file_name, '.tar.gz', sep = "")
-    system(command)
+    # unzipped to the unzipped path
+    HoldError(gunzip(filename = paste('./Download/targz', file_name, '.gz', sep = ""),
+                     destname = paste(unzipped_path, file_name, sep = "")))
+    
+    firstlineIsCommand <- system(paste('cd ',unzipped_path, '; ',
+                 "head -n 5 `ls`",
+                 sep = ""),
+                 intern = TRUE) %>% 
+      str_detect("\\\\documentclass") %>% 
+      any()
+    
+    if (firstlineIsCommand) {
+      cat("Single file! Chenged into .tex file. \n")
+      system(paste('cd ',unzipped_path, '; ',
+                 "mv `ls` `ls`.tex",
+                 sep = ""))
+    } else {
+      cat("Probably multiple files! Untarred it. \n")
+      system(paste('cd ',unzipped_path, '; ',
+                 "tar -xvf ", substring(file_name,2),
+                 sep = ""))
+    }
   }
   
 }
-
+###################
 
 
 

@@ -1,0 +1,2193 @@
+\documentclass[12pt]{amsart}
+
+\usepackage{amssymb, amscd, txfonts}
+\usepackage{graphicx}
+\usepackage[all]{xy}
+
+%%%%%%% Layout %%%%%%%%%%%%%%%%%%%%%
+%\setlength{\textwidth}{16cm}
+%\setlength{\oddsidemargin}{0cm}
+%\setlength{\evensidemargin}{0cm}
+%\setlength{\topmargin}{0cm}
+%\setlength{\textheight}{22.5cm}
+ 
+\numberwithin{equation}{section}
+
+\renewcommand{\thefootnote}{\fnsymbol{footnote}}
+
+\sloppy
+
+%%%%%%% Theoremstyle %%%%%%%%%%%%%%%%%%
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{reduction}[theorem]{Reduction}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem*{conjecture}{Conjecture}
+\newtheorem{condition}[theorem]{Condition}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{claim}[theorem]{Claim}
+
+
+%%%%%%% Macro %%%%%%%%%%%%%%%%%%%%%%
+\renewcommand{\hom}{\operatorname{Hom}}
+\renewcommand{\ker}{\operatorname{Ker}}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\C}{\mathbb{C}}
+\newcommand{\HH}{\mathbb{H}}
+\newcommand{\proj}{{\mathbb P}}
+\newcommand{\QZ}{\mathbb{Q}/\mathbb{Z}}
+\newcommand{\e}{{\mathbf e}}
+\newcommand{\emu}{{\mathbf e}_{\mu}}
+\newcommand{\elambda}{{\mathbf e}_{\lambda}}
+
+\newcommand{\SL}{{\rm SL}_2(\mathbb{Z})}
+\newcommand{\Mp}{{\rm Mp}_2(\mathbb{Z})}
+\newcommand{\pullL}{\uparrow_{L}^{L'}}
+\newcommand{\pushL}{\downarrow_{L}^{L'}}
+\newcommand{\pushLK}{\downarrow^{L}_{K}}
+\newcommand{\ThetaK}{\Theta_{K^{+}}}
+\newcommand{\ML}{M^{!}(L)}
+\newcommand{\MLZ}{M^{!}(L)_{\mathbb{Z}}}
+\newcommand{\MLR}{M^{!}(L)_{R}}
+\newcommand{\fTheta}{\langle f\downarrow^{L}_{K}, \Theta_{K^{+}} \rangle}
+\newcommand{\foneTheta}{\langle f_{1}\downarrow^{L}_{K}, \Theta_{K^{+}} \rangle}
+\newcommand{\ftwoTheta}{\langle f_{2}\downarrow^{L}_{K}, \Theta_{K^{+}} \rangle}
+
+\DeclareMathOperator{\Ad}{Ad}
+\DeclareMathOperator{\aut}{Aut}
+\DeclareMathOperator{\coker}{Coker}
+\DeclareMathOperator{\im}{Im}
+\DeclareMathOperator{\out}{Out}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\tr}{tr}
+\DeclareMathOperator{\vol}{Vol}
+
+
+\begin{document}
+
+%%%%%%% Title %%%%%%%%%%%%%%%%%%%%%%%%
+\title[]{Algebra of Borcherds products}
+\author[]{Shouhei Ma}
+\thanks{Supported by JSPS KAKENHI 17K14158 and 20H00112.} 
+\address{Department~of~Mathematics, Tokyo~Institute~of~Technology, Tokyo 152-8551, Japan}
+\email{ma@math.titech.ac.jp}
+\subjclass[2010]{11F37, 16S99, 11F27, 11F55, 11F50}
+\keywords{Weil representation, modular forms, Borcherds products, associative ring} 
+%\dedicatory{}
+\maketitle
+
+\begin{abstract}
+Borcherds lift for an even lattice $L$ of signature $(p, q)$ is 
+a lifting from weakly holomorphic modular forms of 
+weight $(p-q)/2$ for the Weil representation of $L$. 
+We introduce a product operation on the space of such modular forms, 
+depending on the choice of a maximal isotropic sublattice of $L$,  
+which makes this space a finitely generated filtered associative algebra, without unit element in general. 
+%This is done for each choice of a maximal isotropic sublattice of $L$. 
+This algebra structure is functorial with respect to embedding of lattices by the quasi-pullback map. 
+We study the basic properties, 
+prove for example that 
+the algebra is commutative if and only if $L$ is unimodular. 
+When $L$ is unimodular with $p=2$, 
+the multiplicative group of Borcherds products of integral weight 
+forms a subring. 
+\end{abstract} 
+
+
+%%%%%%%%Introduction%%%%%%%%%%%
+
+\section{Introduction}
+
+Since ancient, mathematicians have introduced and studied product structures 
+on various mathematical objects. 
+In this paper we define a product structure on a space of 
+certain vector-valued modular forms of fixed weight attached to an integral quadratic form, 
+that is functorial and that reflects some properties of the quadratic form. 
+
+Let $L$ be an even lattice of signature $(p, q)$ with $p\leq q$ and  
+$\rho_{L}$ be the Weil representation attached to the discriminant form of $L$. 
+In \cite{Bo95}, \cite{Bo98}, Borcherds constructed a lifting from 
+weakly holomorphic modular forms $f$ of weight $\sigma(L)/2=(p-q)/2$ and type $\rho_{L}$ 
+to automorphic forms $\Phi(f)$ with remarkable singularity on the symmetric domain attached to $L$. 
+When $p=2$ and the principal part of $f$ has integral coefficients, 
+$\Phi(f)$ gives rise to a meromorphic modular form $\Psi(f)$ with infinite product expansion, 
+known as Borcherds product. 
+
+The discovery of Borcherds has stimulated the study of 
+weakly holomorphic modular forms of weight $\sigma(L)/2$ and type $\rho_{L}$.  
+If we consider the space of such modular forms,  
+say ${\ML}$, 
+it is a priori just an infinite dimensional ${\C}$-linear space. 
+The purpose of this paper is to define a product operation on the space ${\ML}$, 
+%essentially one for each maximal boundary component of a locally symmetric space attached to $L$, 
+depending on the choice of a maximal isotropic sublattice of $L$ up to the action of an arithmetic group, 
+which makes ${\ML}$ an associative ${\C}$-algebra, finitely generated and filtered but without unit element in general. 
+Moreover, this product is functorial with respect to embedding of lattices by the so-called quasi-pullback operation. 
+This gives a link between quadratic forms and noncommutative rings. 
+
+In order to state our result, 
+we assume that the lattice $L$ has Witt index $p$ ($=$ maximal) and  
+%We write $\sigma(L)=b_{+}-b_{-}$ and let 
+%${\ML}=M^{!}_{\sigma(L)/2}(\rho_{L})$ be the space of 
+%weakly holomorphic modular forms of weight $\sigma(L)/2$ and type $\rho_{L}$.  
+choose a maximal isotropic sublattice $I$ of $L$. 
+Then $K=I^{\perp}/I$ is an even negative-definite lattice of rank $-\sigma(L)$. 
+Let ${\pushLK}$ be the pushforward operation from $\rho_{L}$ to $\rho_{K}$ (\S \ref{ssec: Weil representation}), 
+and ${\ThetaK}(\tau)$ be the $\rho_{K^{+}}$-valued theta series of the positive-definite lattice $K^{+}=K(-1)$. 
+In \S \ref{sec: product}, we define the $\Theta$-product of $f_{1}, f_{2} \in {\ML}$ with respect to $I$ by 
+\begin{equation*}
+f_{1} \ast_{I} f_{2} = \langle f_{1}{\pushLK}, {\ThetaK} \rangle \cdot f_{2}.  
+\end{equation*}
+Then $f_{1} \ast_{I} f_{2}$ is again an element of ${\ML}$. 
+By considering Fourier expansion, 
+this could be viewed as a sort of product of two $\rho_{L}$-valued Laurent series, 
+one suitably contracted with the theta series ${\ThetaK}$. 
+
+In what follows, an \textit{associative algebra} is not assumed to have a unit element. 
+Our basic results can be summarized as follows. 
+
+\begin{theorem}\label{thm: main}
+The $\Theta$-product $\ast_{I}$ makes ${\ML}$ a finitely generated filtered associative ${\C}$-algebra. 
+%Its commutator brackets are contained in the (unique) annihilator ideal. 
+The algebra ${\ML}$ has a unit element if and only if $L\simeq U\oplus \cdots \oplus U$. 
+The algebra ${\ML}$ is commutative if and only if $L$ is unimodular. 
+
+If $L'$ is a sublattice of $L$ of signature $(p, q')$ with $I_{{\Q}}\subset L'_{{\Q}}$, 
+the map 
+\begin{equation*}
+{\ML} \to M^{!}(L'), \quad f\mapsto |I/I'|^{-1} \cdot f|_{L'}, 
+\end{equation*}
+is a homomorphism of ${\C}$-algebras, 
+where $I'=I\cap L'$ and 
+$f|_{L'}\in M^{!}(L')$ is the quasi-pullback of $f\in {\ML}$ 
+as defined in \eqref{eqn: define quasi-pullback}. 
+\end{theorem} 
+
+
+Here the filtration on ${\ML}$ is defined by the degree of principal part. 
+$U$ stands for the integral hyperbolic plane, namely 
+the even unimodular lattice of signature $(1, 1)$. 
+The quasi-pullback map $|_{L'}\colon {\ML}\to M^{!}(L')$  
+is an operation coming from quasi-pullback of Borcherds products (\cite{Bo95}, \cite{B-K-P-SB}, \cite{Ma}), 
+which is a sort of renormalized restriction.  
+The kernel of ${\ML}\to M^{!}(L')$ for various sublattices $L'\subset L$ 
+provide natural examples of two-sided ideals of ${\ML}$ contained in the left annihilator ideal. 
+The statements in Theorem \ref{thm: main} are proved in Propositions 
+\ref{prop: associativity et al}, 
+\ref{prop: unimodular commutative}, 
+\ref{prop: RUE}, 
+\ref{prop: f.g.}, and 
+\ref{prop: functorial main}. 
+
+
+The algebra structure on ${\ML}$ requires the choice of $I$, 
+but actually it depends only on the equivalence class of $I$ under a natural subgroup 
+of the orthogonal group of $L$. 
+Geometrically, when $p=2$, such equivalence classes correspond to 
+maximal boundary components of the Baily-Borel compactification of the associated modular variety. 
+
+In some special cases, $\Theta$-product is a quite simple operation. 
+When $L$ is unimodular, so that $f_{1}, f_{2}$ and ${\ThetaK}=\theta_{K^{+}}$ are scalar-valued, 
+$f_{1}\ast_{I}f_{2}$ is just the product $f_{1} \cdot \theta_{K^+} \cdot f_{2}$ (Example \ref{ex: unimodular}). 
+When $I$ comes from $pU=U\oplus \cdots \oplus U$ embedded in $L$, 
+so that we have a splitting $L=pU\oplus K$, 
+$f_{1}, f_{2}$ correspond to weakly holomorphic Jacobi forms $\phi_{1}(\tau, Z), \phi_{2}(\tau, Z)$ 
+of weight $0$ and index $K^+$ (see \cite{Gr}). 
+Then the Jacobi form corresponding to $f_{1}\ast_{I}f_{2}$ is just 
+$\phi_{1}(\tau, 0)\cdot \phi_{2}(\tau, Z)$ (Example \ref{ex: Jacobi form}). 
+In general, one can say that $\Theta$-product $\ast_{I}$ is a functorial extension of  
+this simple product to all pairs $(L, I)$. 
+
+We expect that 
+the complexity of the lattice $L$ (within fixed $p$ or up to direct summand of $U$) 
+would be reflected in the complexity of the algebra ${\ML}$ in some way. 
+The first examples are stated in Theorem \ref{thm: main}: 
+commutativity and existence of (two-sided) unit element. 
+More widely, we show that 
+${\ML}$ has a left unit element 
+if it contains a modular form with very mild singularity that is not a left zero divisor 
+(Proposition \ref{prop: LUE}). 
+Some reflective modular forms provide typical examples of such a modular form 
+(Examples \ref{ex: reflective 1} and \ref{ex: reflective 2}). 
+This might remind us of 
+Borcherds' philosophy \cite{Bo00b} that 
+for $L$ Lorentzian, 
+existence of a reflective modular form 
+should be related to interesting property of the reflection group of $L$. 
+
+Another example of our general expectation is that 
+the minimal number of generators of ${\ML}$ would reflect the size of $L$, 
+and generators of small degree would have some significance (\S \ref{ssec: f.g.}). 
+We prove a finiteness result on 
+lattices $L$ with bounded number of generators of ${\ML}$ (Proposition \ref{prop: finiteness}). 
+In the simple example $L=pU\oplus \langle -2 \rangle$, 
+${\ML}$ is generated by two basic reflective modular forms (Example \ref{ex: generator}). 
+We hope to find further connection between the algebra ${\ML}$ and the lattice $L$. 
+It would be also a natural problem to find an interesting ${\ML}$-module. 
+
+
+A natural but subtle problem is 
+whether various subgroups of ${\ML}$ defined by 
+arithmetic condition on the coefficients of principal part 
+are closed under $\Theta$-product. 
+We give a general criterion in the positive direction, 
+and use it to deduce the following (\S \ref{ssec: integral part}): 
+\begin{itemize}
+\item The real part $M^!(L)_{{\R}}\subset {\ML}$ is closed under $\ast_{I}$.  
+\item When $L$ is unimodular with $p=2$, 
+the multiplicative group of Borcherds products of integral weight is closed under $\ast_{I}$. 
+\end{itemize}
+In general, the possible obstruction can be expressed as a $2$-cocycle in group cohomology. 
+
+
+%We prove that the real part $M^{!}(L)_{{\R}}\subset {\ML}$ consisting of 
+%modular forms with real principal part is closed under $\Theta$-product (Proposition \ref{prop: real}). 
+%A subtler problem is whether the integral part ${\MLZ}\subset {\ML}$ is so. 
+%We give a sufficient condition that guarantees $f_{1}\ast_{I} f_{2}\in {\MLZ}$ for two $f_{1}, f_{2} \in {\MLZ}$. 
+%Using this criterion, we show that when $L$ is unimodular, 
+%the lattice of Borcherds products of integral or half integral weight, 
+%a natural sublattice of ${\MLZ}$, is closed under $\ast_{I}$ (Proposition \ref{prop: Z-part unimodular}). 
+%In general, the obstruction can be expressed as a $2$-cocycle of the abelian group ${\MLZ}$ 
+%with value in the module $M^{!}(L)_{{\R}}/{\MLZ}$. 
+
+
+This paper is organized as follows. 
+\S \ref{sec: preliminary} is recollection of modular forms for the Weil representation. 
+In \S \ref{sec: product} we define $\Theta$-product. 
+In \S \ref{sec: first property} we study some basic properties of the algebra ${\ML}$. 
+In \S \ref{sec: functorial} we prove that $\Theta$-product is functorial. 
+\S \ref{sec: first property} and \S \ref{sec: functorial} may be read independently. 
+
+\vspace{0.2cm}
+
+\textbf{Convention.} 
+\textit{Unless stated otherwise, every ring in this paper is not assumed to be commutative nor have a unit element.} 
+
+
+
+\section{Weil representation and modular forms}\label{sec: preliminary}
+
+In this section we recall some basic facts about 
+modular forms of Weil representation type 
+following \cite{Bo98}, \cite{Br}. 
+ 
+
+\subsection{Weil representation}\label{ssec: Weil representation} 
+
+Let $L$ be an even lattice, namely 
+a free abelian group of finite rank equipped with a nondegenerate symmetric bilinear form 
+$(\cdot , \cdot) \colon L\times L \to {\Z}$ such that 
+$(l ,l)\in 2{\Z}$ for all $l\in L$. 
+When $L$ has signature $(p, q)$, we write $\sigma(L)=p-q$. 
+The dual lattice of $L$ is denoted by $L^{\vee}$. 
+The quotient $A_L=L^{\vee}/L$ is called the \textit{discriminant group} of $L$, 
+and is endowed with the canonical ${\QZ}$-valued quadratic form 
+$q_L \colon A_L\to {\QZ}$, $q_L(x)=(x, x)/2+{\Z}$, 
+called the \textit{discriminant form} of $L$. 
+In general, a finite abelian group $A$ endowed with a nondegenerate quadratic form 
+$q \colon A\to{\QZ}$ is called a \textit{finite quadratic module}. 
+We will frequently abbreviate $(A, q)$ as $A$. 
+Every finite quadratic module $A$ is isometric to the discriminant form of some even lattice $L$. 
+We then write $\sigma(A)=[\sigma(L)]\in {\Z}/8$. 
+We denote by ${\C}A$ the group ring of $A$. 
+The standard basis vector of ${\C}A$ corresponding to an element $\lambda\in A$ 
+will be denoted by ${\elambda}$. 
+
+Let ${\Mp}$ be the metaplectic double cover of ${\SL}$.   
+Elements of ${\Mp}$ are pairs $(M, \phi)$ where 
+$M=\begin{pmatrix}a & b \\ c & d \end{pmatrix}\in {\SL}$ 
+and $\phi$ is a holomorphic function on the upper half plane such that $\phi(\tau)^2=c\tau+d$. 
+The group ${\Mp}$ is generated by 
+%\begin{equation*}
+$T = \left( \begin{pmatrix}1&1\\ 0&1\end{pmatrix}, 1 \right)$ and %\quad  
+$S = \left( \begin{pmatrix}0&-1\\ 1&0\end{pmatrix}, \sqrt{\tau} \right)$,  
+%\end{equation*}
+and the center of ${\Mp}$ is generated by 
+$Z = S^{2} = \left( \begin{pmatrix}-1& 0\\ 0 & -1 \end{pmatrix}, \sqrt{-1} \right)$. 
+
+The \textit{Weil representation} $\rho_A$ of ${\Mp}$ attached to a finite quadratic module $A$ 
+is a unitary representation on ${\C}A$ defined by 
+\begin{eqnarray*}
+\rho_A(T)({\elambda}) & = & e(q(\lambda)){\elambda}, \\ 
+\rho_A(S)({\elambda}) & = & 
+\frac{e(-\sigma(A)/8)}{\sqrt{|A|}} \sum_{\mu\in A}e(-(\lambda, \mu)){\emu}.  
+\end{eqnarray*}
+Here $e(z)={\rm exp}(2\pi i z)$ for $z\in{\Q}/{\Z}$. 
+We have 
+\begin{equation*}
+\rho_A(Z)({\elambda})  = e(-\sigma(A)/4)\mathbf{e}_{-\lambda}. 
+\end{equation*}
+We will also write $\rho_A=\rho_L$ when $A=A_{L}$ for an even lattice $L$. 
+
+ 
+Let $A(-1)$ be the $(-1)$-scaling of $A$, 
+namely the same underlying abelian group with the quadratic form $q$ replaced by $-q$. 
+Then $\rho_{A(-1)}$ is canonically isomorphic to the dual representation $\rho_A^{\vee}$ of $\rho_A$. 
+The isomorphism is defined by sending the standard basis of ${\C}A(-1)$ 
+to the dual basis $\{ \mathbf{e}_{\lambda}^{\vee} \}$ 
+of the standard basis $\{ \mathbf{e}_{\lambda} \}$ of ${\C}A$ 
+through the identification $A(-1)=A$ as abelian groups. 
+We will tacitly identify $\rho_{A(-1)}=\rho_{A}^{\vee}$ in this way. 
+ 
+Let $I\subset A$ be an isotropic subgroup. 
+Then $A'=I^{\perp}/I$ inherits the structure of a finite quadratic module. 
+Let $p:I^{\perp}\to A'$ be the projection. 
+We define linear maps 
+\begin{equation}\label{eqn: pull push}
+\uparrow_{A'}^{A} : {\C}A' \to {\C}A, \qquad 
+\downarrow_{A'}^{A} : {\C}A \to {\C}A', 
+\end{equation}
+called \textit{pullback} and \textit{pushforward} respectively, by 
+\begin{equation*}
+{\elambda}\uparrow_{A'}^{A}=\sum_{\mu\in p^{-1}(\lambda)}{\emu}, \qquad 
+{\emu}\downarrow_{A'}^{A} = 
+\begin{cases}
+\mathbf{e}_{p(\mu)}, & \mu\in I^{\perp}, \\ 
+0, & \mu\not\in I^{\perp},  
+\end{cases}
+\end{equation*}
+for $\lambda\in A'$ and $\mu\in A$. 
+Then 
+$\uparrow_{A'}^{A}$ and $\downarrow_{A'}^{A}$ are homomorphisms between the Weil representations 
+(see, e.g., \cite{Bo98}, \cite{Br}, \cite{Ma}). 
+Note that 
+$\downarrow^{A}_{A'}\circ \uparrow^{A}_{A'}$ 
+is the scalar multiplication by $|I|$. 
+Note also that 
+$\uparrow_{A'}^{A}$ and $\downarrow_{A'}^{A}$ 
+are adjoint to each other with respect to the standard Hermitian metrics on ${\C}A$ and ${\C}A'$. 
+When $A=A_{L}$ for an even lattice $L$, 
+the isotropic subgroup $I$ corresponds to 
+the even overlattice $L\subset L'\subset L^{\vee}$ of $L$ with $L'/L=I$. 
+Then $A'=A_{L'}$. 
+In this situation, we will also write 
+$\uparrow_{A'}^{A} = \uparrow_{L'}^{L}$ and 
+$\downarrow_{A'}^{A}=\downarrow_{L'}^{L}$.  
+
+
+
+\subsection{Modular forms}\label{ssec: modular form}
+
+Let $A$ be a finite quadratic module and 
+let $k\in \frac{1}{2}{\Z}$ with $k\equiv \sigma(A)/2$ modulo $2{\Z}$. 
+(We will be mainly interested in the case $k\leq 0$.) 
+A $ {\C}A$-valued holomorphic function 
+$f$ on the upper half plane is called a \textit{weakly holomorphic modular form} 
+of weight $k$ and type $\rho_A$ if it satisfies 
+$f(M\tau)=\phi(\tau)^{2k}\rho_A(M, \phi)f(\tau)$ 
+for every $(M, \phi)\in {\Mp}$ 
+and is meromorphic at the cusp. 
+We write 
+\begin{equation*}
+f(\tau) = \sum_{\lambda\in A} \sum_{n\in q(\lambda)+{\Z}} c_{\lambda}(n) q^{n}{\elambda} 
+\end{equation*}
+for the Fourier expansion of $f$ 
+where $q^n=\exp (2\pi in\tau)$ for $n\in {\Q}$. 
+By the invariance under $Z$, we have 
+$c_{-\lambda}(n)=c_{\lambda}(n)$. 
+The finite sum 
+$\sum_{\lambda} \sum_{n<0} c_{\lambda}(n) q^{n}{\elambda}$ 
+is called the \textit{principal part} of $f$. 
+When $k<0$, $f$ is determined by its principal part; 
+when $k=0$, $f$ is determined by its principal part and constant term. 
+According to Borcherds duality theorem (\cite{Bo00a}, \cite{Bo00b}, \cite{Br}), 
+which polynomial can be realized as principal part 
+is determined by certain cusp forms as follows. 
+
+\begin{theorem}[\cite{Bo00a}, \cite{Bo00b}, \cite{Br}]
+Let 
+$P=\sum_{\lambda, n}c_{\lambda}(n)q^n{\elambda}$ 
+be a ${\C}A$-valued polynomial % in $q^{-1}$ with fractional power 
+where $\lambda\in A$ and $n\in q(\lambda)+{\Z}$ with $n<0$, 
+such that $c_{-\lambda}(n)=c_{\lambda}(n)$. 
+Then $P$ is the principal part of a weakly holomorphic modular form 
+of weight $k\equiv \sigma(A)/2$ mod $2{\Z}$ and type $\rho_{A}$ 
+if and only if 
+$\sum_{n<0}c_{\lambda}(n)a_{\lambda}(-n)=0$ 
+for every cusp form 
+$\sum_{\lambda, m} a_{\lambda}(m)q^{m}\mathbf{e}_{\lambda}^{\vee}$ 
+of weight $2-k$ and type $\rho_{A}^{\vee}$. 
+\end{theorem}
+
+This will be used in \S \ref{sec: first property}. 
+The version in \cite{Bo00a} also takes the constant term into account 
+and replaces cusp forms by holomorphic modular forms. 
+
+We write $M^{!}_{k}(\rho_A)$ for the space of weakly holomorphic modular forms of weight $k$ and type $A$. 
+For a subring $R$ of ${\C}$ (typically ${\Z}$ or ${\Q}$ or ${\R}$), 
+we write $M^{!}_{k}(\rho_A)_{R} \subset M^{!}_{k}(\rho_A)$ 
+for the subgroup of those $f$ whose principal part has coefficients in $R$. 
+It is clear that 
+$M^{!}_{k}(\rho_A)_{{\Z}}\otimes_{{\Z}}{\Q} = M^{!}_{k}(\rho_A)_{{\Q}}$. 
+Moreover, 
+McGraw's rationality theorem \cite{Mc} and Borcherds duality theorem 
+tell us that 
+\begin{equation*}
+M^{!}_{k}(\rho_A)_{{\Q}}\otimes_{{\Q}}{\C} = M^{!}_{k}(\rho_A). 
+\end{equation*}
+If $f\in M^{!}_{k}(\rho_A)_{{\Q}}$, its coefficients $c_{\lambda}(0)$ of the constant term ($\lambda$ isotropic) 
+are also rational number. 
+This follows from the version of Borcherds duality theorem in \cite{Bo00a} 
+and the rationality of Fourier coefficients of Eisenstein series 
+due to Bruinier-Kuss \cite{B-K} ($\lambda=0$) and 
+Schwagenscheidt \cite{Sc} ($\lambda$ general). 
+
+
+Theta series are typical examples of holomorphic modular forms of Weil representation type. 
+Let $N$ be an even positive-definite lattice. 
+By Borcherds \cite{Bo98}, 
+the $\rho_N$-valued function 
+\begin{equation*}
+\Theta_{N}(\tau) 
+= \sum_{l\in N^{\vee}} q^{(l, l)/2}\mathbf{e}_{[l]} 
+= \sum_{\lambda, n}c_{\lambda}^{N}(n)q^{n}{\elambda},  
+\end{equation*}
+where $c_{\lambda}^{N}(n)$ is the number of vectors $l$ in $\lambda+N\subset N^{\vee}$ such that $(l, l)=2n$, 
+is a holomorphic modular form of weight ${\rm rk}(N)/2$ and type $\rho_{N}$. 
+All Fourier coefficients of $\Theta_{N}(\tau)$ are nonnegative integers. 
+If $N'$ is an even overlattice of $N$, we have 
+$\Theta_{N'}=\Theta_{N}\!\downarrow^{N}_{N'}$. 
+
+
+Let $L$ be an even lattice. 
+For $A=A_{L}$ and $k=\sigma(L)/2$, 
+we write 
+\begin{equation*}
+{\ML} = M^{!}_{\sigma(L)/2}(\rho_{L}), \qquad 
+{\MLR} = M^{!}_{\sigma(L)/2}(\rho_{L})_{R}. 
+\end{equation*}
+We especially write 
+\begin{equation*}
+M^{!}=M^{!}(U\oplus \cdots \oplus U)=M^{!}(\{ 0 \}), 
+\end{equation*} 
+which is just the space of scalar-valued weakly holomorphic modular forms of weight $0$. 
+Then $M^{!}$ is the polynomial ring in the $j$-function 
+$j(\tau)=q^{-1}+744+ \cdots$. 
+It is a fundamental remark that for every even lattice $L$, ${\ML}$ is a $M^{!}$-module. 
+
+
+When $p=2$ and for $f\in{\MLZ}$, Borcherds \cite{Bo95}, \cite{Bo98} constructed a meromorphic modular form 
+$\Psi(f)$ on the Hermitian symmetric domain attached to $L$, 
+which has weight $c_{0}(0)/2\in {\Q}$ and whose divisor is 
+a linear combination of Heegner divisors determined by the principal part of $f$. 
+%Here, if $c_0(0)\not\in {\Z}$, $\Psi(f)$ is modular with respect to some multiplier system. 
+The lifting 
+$f\mapsto \Psi(f)$ is multiplicative (at least up to constant). 
+%namely $\Psi(f_1+f_2)=\Psi(f_1)\cdot \Psi(f_2)$ for $f_1, f_2\in {\MLZ}$. 
+Thus, at least when $R\supset {\Q}$, 
+${\MLR}={\MLZ}\otimes_{{\Z}}R$ can be thought of as a scalar extension of the multiplicative group of Borcherds products. 
+
+
+
+%%%Section3: Theta-prpoduct
+
+\section{$\Theta$-product}\label{sec: product} 
+
+Let $L$ be an even lattice of signature $(p, q)$ with $p\leq q$ 
+and assume that $L$ has Witt index $p$. 
+We choose and fix a maximal ($=$ rank $p$, primitive) isotropic sublattice $I$ of $L$. 
+%This corresponds to a maximal rational boundary component of 
+%the symmetric domain attached to $L$. 
+In this section we define $\Theta$-product $\ast_{I}$ on the space 
+${\ML}=M_{\sigma(L)/2}^{!}(\rho_{L})$ 
+with respect to $I$, 
+which makes ${\ML}$ an associative algebra.  
+\S \ref{ssec: lattice lemma} is lattice-theoretic preliminary. 
+$\Theta$-product is defined in \S \ref{ssec: theta product}. 
+In \S \ref{ssec: example} we look at some examples. 
+
+
+\subsection{Preliminary}\label{ssec: lattice lemma}
+
+We first prepare a lattice-theoretic lemma. 
+We write $K=I^{\perp}\cap L/I$, which is an even negative-definite lattice of rank $-\sigma(L)$. 
+We shall realize $K$ as an orthogonal direct summand of a canonical overlattice of $L$. 
+Let $I^{\ast}=I_{{\Q}}\cap L^{\vee}$ be the primitive hull of $I$ in the dual lattice $L^{\vee}$. 
+Then $L^{\ast}=\langle L, I^{\ast} \rangle$ is an even overlattice of $L$ with $L^{\ast}/L\simeq I^{\ast}/I$. 
+For $rU=U\oplus \cdots \oplus U$ ($r$ times) 
+we denote by $e_{1}, f_{1}, \cdots , e_{r}, f_{r}$ its standard basis, 
+namely $(e_{i}, f_{j})=\delta_{ij}$ and $(e_i, e_j)=(f_i, f_j)=0$. 
+We write $I_{r}=\langle e_{1}, \cdots, e_{r} \rangle$. 
+
+\begin{lemma}\label{lem: overlattice split}
+There exists an embedding $\varphi\colon pU \hookrightarrow L^{\ast}$ 
+such that $\varphi(I_{p})=I^{\ast}$.  
+%and $\varphi(pU)^{\perp}\cap L' \simeq K$ naturally. 
+In particular, we have 
+$L^{\ast} = \varphi(pU)\oplus \varphi(pU)^{\perp} \simeq pU\oplus K$. 
+The induced isometry 
+$A_{L^{\ast}}\to A_{K}$ 
+does not depend on the choice of $\varphi$.  
+\end{lemma}
+
+\begin{proof}
+By the primitivity of $I^{\ast}$ in $L^{\vee}$, 
+we have $(l, L^{\ast})=(l, L)={\Z}$ for any primitive vector $l$ in $I^{\ast}$. 
+We take one such vector $l_1\in I^{\ast}$ and a vector $m_1\in L^{\ast}$ with $(l_1, m_1)=1$. 
+Then $\langle l_1, m_1 \rangle \simeq U$ and 
+we have a splitting $L^{\ast}=\langle l_1, m_1 \rangle \oplus L_{1}$ 
+where $L_{1}=\langle l_1, m_1 \rangle^{\perp}\cap L^{\ast}$. 
+The intersection 
+$I_{1}=I^{\ast}\cap L_{1}$ satisfies $I^{\ast}=I_{1}\oplus {\Z}l_{1}$ 
+and we have 
+$(l, L_{1})=(l, L^{\ast})={\Z}$ for any primitive vector $l\in I_{1}$. 
+Then we can repeat the same process for $I_{1}\subset L_{1}$. 
+This eventually defines an embedding $\varphi\colon pU\hookrightarrow L^{\ast}$ with 
+$\varphi(I_{p})=I^{\ast}$. 
+We have natural isomorphisms 
+\begin{equation*}
+\varphi(pU)^{\perp}\cap L^{\ast} \stackrel{\simeq}{\to} 
+(I^{\ast})^{\perp}\cap L^{\ast}/I^{\ast} = I^{\perp}\cap L/I =K. 
+\end{equation*}
+
+For the last assertion, we use the following construction. 
+($I^{\ast}\subset L^{\ast}$ will be $I\subset L$ below.) 
+
+\begin{claim}\label{claim: AL AK}
+Let $L$ be an even lattice and $I\subset L$ be a primitive isotropic sublattice. 
+Let $\varphi_{1}, \varphi_{2} \colon rU \hookrightarrow L$ 
+be two embeddings with 
+$\varphi_{1}(I_{r})=\varphi_{2}(I_{r})=I$. 
+Then there exist 
+\begin{itemize}
+\item an isometry $\gamma_{L}$ of $L$ which preserves $I$ and acts trivially on $K=I^{\perp}/I$ and $A_{L}$, and 
+\item an isometry $\gamma_{rU}$ of $rU$ which preserves $I_{r}$, 
+\end{itemize}
+such that $\varphi_{2}=\gamma_{L} \circ \varphi_{1} \circ \gamma_{rU}$. 
+\end{claim}
+
+If we write 
+$K_{i}=\varphi_{i}(rU)^{\perp}\cap L$, 
+then we have $\gamma_{L}(K_{1})=K_{2}$. 
+The properties of $\gamma_{L}$ 
+imply that the composition 
+$A_{L}\to A_{K_{1}} \to A_{K}$ 
+coincides with 
+$A_{L}\to A_{K_{2}} \to A_{K}$,  
+hence the last assertion of Lemma \ref{lem: overlattice split} follows.  
+
+We prove Claim \ref{claim: AL AK} by induction on $r$. 
+We may assume that $\varphi_{1}|_{I_{r}}=\varphi_{2}|_{I_{r}}$ 
+by composing an isometry of $rU$ preserving $I_{r}$ 
+and $\langle f_1, \cdots, f_r \rangle \simeq I_{r}^{\vee}$. 
+When $r=1$, we let $l=\varphi_{i}(e_{1})$ and $m_{i}=\varphi_{i}(f_{1})$. 
+Then as $\gamma_{L}$ we take the Eichler transvection $E_{l,m_{2}-m_{1}}$ (see, e.g., \cite{G-H-S}) 
+which fixes $l$, sends $m_{1}$ to $m_{2}$, 
+and acts trivially on $K$ and on $A_{L}$. 
+
+%For general $r$, 
+%we may assume by induction that 
+%$\varphi_{1}|_{(r-1)U}=\varphi_{2}|_{(r-1)U}$. 
+%Let $U\subset rU$ be the remaining component and $\varphi_{i}'=\varphi_{i}|_{U}$. 
+%We write $L'=\varphi_{i}((r-1)U)^{\perp}\cap L$ and $I'=I\cap L'$. 
+%Then we can apply the result in $r=1$ to 
+%$I'\subset L'$ and $\varphi_{1}', \varphi_{2}'$ 
+%to find a suitable isometry $\gamma$ of $L'$ and $\gamma'=\pm{\rm id}_{U}$ 
+%such that $\varphi_{2}'=\gamma \circ \varphi_{1}' \circ \gamma'$. 
+%Adding identity of $(r-1)U$ and $\varphi_{i}((r-1)U)$, 
+%this proves Claim \ref{claim: AL AK} and so completes the proof of Lemma \ref{lem: overlattice split}. 
+
+For general $r$, 
+let $rU=(r-1)U\oplus U$ be the apparent decomposition and let  
+$\varphi_{i}'=\varphi_{i}|_{(r-1)U}$ and $I'=\varphi_{i}(I_{r-1})$. 
+By induction, there exists an isometry $\gamma_{L}'$ of $L$ 
+which preserves $I'$ and acts trivially on $(I')^{\perp}/I'$ and $A_{L}$, 
+and an isometry $\gamma_{(r-1)U}$ of $(r-1)U$ preserving $I_{r-1}$, 
+such that 
+$\varphi_{2}'=\gamma_{L}' \circ \varphi_{1}' \circ \gamma_{(r-1)U}$. 
+Note that $\gamma_{L}'$ also preserves $I$ and acts trivially on $K$. 
+We put 
+$L'=\varphi_{2}((r-1)U)$, 
+$L''=(L')^{\perp}\cap L$ and 
+$I''=I\cap L''$. 
+Then we have 
+$\gamma_{L}' \circ \varphi_{1}({\Z}e_r)=\varphi_{2}({\Z}e_{r})=I''$. 
+Thus we can apply the result for $r=1$ to 
+$\varphi_{1}''=\gamma_{L}' \circ \varphi_{1}|_{U}$, 
+$\varphi_{2}''= \varphi_{2}|_{U}$, and 
+$I''\subset L''$. 
+This provides us with an isometry $\gamma_{L''}$ of $L''$ 
+which preserves $I''$ and acts trivially on $(I'')^{\perp}/I''\simeq K$ and $A_{L''}\simeq A_{L}$, 
+and an isometry $\gamma_{U}=\pm{\rm id}_{U}$ of $U$, 
+such that 
+$\varphi_{2}''=\gamma_{L''}\circ \varphi_{1}'' \circ \gamma_{U}$. 
+Now 
+$\gamma_{L}=({\rm id}_{L'}\oplus \gamma_{L''})\circ \gamma_{L}'$ and 
+$\gamma_{rU}=\gamma_{(r-1)U} \oplus \gamma_{U}$ 
+satisfy the desired properties. 
+\end{proof} 
+
+
+\begin{remark}
+The lattice $K$ can also be realized as a sublattice of $I^{\perp}\cap L$ as follows. 
+We choose a basis $l_1, \cdots, l_p$ of $I$ and its dual basis 
+$l_1^{\vee}, \cdots, l_p^{\vee}$ from $L^{\vee}$. 
+We put $\tilde{K}=\langle l_1^{\vee}, \cdots, l_p^{\vee} \rangle^{\perp} \cap I^{\perp} \cap L$. 
+By construction we have a splitting 
+$I^{\perp}\cap L = I \oplus \tilde{K}$, 
+so the projection gives an isometry $\tilde{K}\to K$. 
+%This is a generalization of the construction in \cite{Br}. 
+\end{remark}
+
+
+
+
+\subsection{$\Theta$-product}\label{ssec: theta product}
+
+
+We now define $\Theta$-product $\ast_{I}$ on ${\ML}$. 
+%Let $K, I', L'$ be as in \S \ref{ssec: rank 2 isotropic}. 
+We put $K^{+}=K(-1)$, which is an even positive-definite lattice of rank $-\sigma(L)$. 
+We identify $A_{L^{\ast}}=A_{K}$ as in Lemma \ref{lem: overlattice split}. 
+Let 
+\begin{equation*}
+{\pushLK} = \downarrow^{L}_{L^{\ast}} : A_{L} \to A_{L^{\ast}} = A_{K} 
+\end{equation*}
+be the pushforward operation defined in \eqref{eqn: pull push}. 
+%This does not depend on the choice of the isometry $L'\simeq pU\oplus K$ as above. 
+If $f\in {\ML}$, then 
+$f{\pushLK}$ is an element of $M^{!}(K)$. 
+We take the tensor product $f{\pushLK}\otimes {\ThetaK}$ with the theta series ${\ThetaK}$.  
+This is a weakly holomorphic modular form of weight $0$ and type 
+$\rho_{K}\otimes \rho_{K^{+}} \simeq \rho_{K}\otimes \rho_{K}^{\vee}$. 
+Taking the contraction $\rho_{K}\otimes \rho_{K}^{\vee} \to {\C}$ 
+produces a scalar-valued weakly holomorphic modular form of weight $0$, 
+namely an element of $M^{!}$.  
+We denote this modular function by 
+\begin{equation*}
+\xi(f) = \langle f{\pushLK}, {\ThetaK} \rangle \; \; \in M^{!}.  
+\end{equation*}
+The map $\xi \colon {\ML}\to M^{!}$ is $M^{!}$-linear. 
+
+Now if $f_1, f_2\in {\ML}$, we define 
+\begin{equation*}
+f_{1} \ast_{I} f_{2} = \xi(f_{1}) \cdot f_{2} = \langle f_{1}{\pushLK}, {\ThetaK} \rangle \cdot f_2. 
+\end{equation*}
+This is again an element of ${\ML}$. 
+The map 
+\begin{equation*}
+\ast_{I} : {\ML} \times {\ML} \to {\ML} 
+\end{equation*}
+is $M^!$-bilinear. 
+
+Explicitly, if 
+$f_{i}(\tau)=\sum_{\lambda, n}c_{\lambda}^{i}(n)q^{n}{\elambda}$ 
+for $i=1, 2$ and 
+${\ThetaK}(\tau)=\sum_{\nu, m} c_{\nu}^{K}(m)q^{m}\mathbf{e}_{\nu}^{\vee}$, 
+the Fourier coefficients of 
+$f_{1}\ast_{I}f_{2}=\sum_{\lambda, n}c_{\lambda}(n)q^{n}{\elambda}$ 
+are given by 
+\begin{equation*}
+c_{\lambda}(n) = 
+\sum_{m+l+k=n}\sum_{\mu\in J^{\perp}} 
+c^{1}_{\mu}(m) \cdot c^{K}_{p(\mu)}(l) \cdot c^{2}_{\lambda}(k). 
+\end{equation*}
+Here 
+$J=I^{\ast}/I\subset A_{L}$ 
+and $p:J^{\perp}\to A_{K}$ is the projection. 
+Note that even coefficients of $f_1, f_2$ in $n>0$, 
+sometimes not being paid much attention, 
+may contribute to the principal part of $f_1\ast_{I} f_2$. 
+
+
+\begin{proposition}\label{prop: associativity et al}
+We have 
+%The following equalities hold. 
+%
+%(1) $f_1\ast_{I}(f_2+f_2') = f_1\ast_{I}f_2 + f_1\ast_{I}f_2'$. 
+%
+%(2) $(f_1+f_1')\ast_{I} f_2 = f_1\ast_{I}f_2 + f_1'\ast_{I}f_2$. 
+\begin{equation*}
+(f_1\ast_{I} f_2)\ast_{I} f_3 = f_1\ast_{I}(f_2\ast_{I} f_3) 
+\end{equation*}
+for $f_1, f_2, f_3 \in {\ML}$. 
+Therefore $\Theta$-product $\ast_{I}$ makes ${\ML}$ an associative ${\C}$-algebra. 
+Moreover, the map $\xi \colon {\ML}\to M^{!}$ is a ring homomorphism.  
+%
+%(4) $(f_1\ast_{I} f_2)\ast_{I} f_3 = (f_2\ast_{I} f_1)\ast_{I} f_3$. 
+\end{proposition}
+
+\begin{proof}
+For the first assertion, we have 
+\begin{eqnarray*}
+(f_1\ast_{I} f_2)\ast_{I} f_3 
+& =  & 
+\xi(f_1\ast_{I}f_2) \cdot f_3  
+\; = \; \xi(\xi(f_1) \cdot f_2) \cdot f_3 \\  
+& = & 
+\xi(f_1) \cdot \xi(f_2) \cdot f_3  
+\; = \; \xi(f_1) \cdot (f_2 \ast_{I} f_3) \\
+& = & 
+f_{1}\ast_{I} (f_2 \ast_{I} f_3). 
+\end{eqnarray*}
+For the second assertion, we calculate  
+\begin{equation*}
+\xi(f_{1} \ast_{I} f_{2}) = 
+\xi(\xi(f_{1})\cdot f_{2}) = 
+\xi(f_{1})\cdot \xi(f_{2}).  
+\end{equation*}
+Thus $\xi$ preserves the products. 
+\end{proof}
+  
+
+The algebra ${\ML}$ has the following filtration. 
+For a natural number $d$ we denote by 
+$M^{!}(L)_{d}\subset {\ML}$ 
+the subspace of modular forms $f$ 
+whose principal part has degree $\leq d$. 
+Then we have 
+\begin{equation*}
+M^{!}(L)_{d} \ast_{I} M^{!}(L)_{d'} \subset M^{!}(L)_{d+d'}. 
+\end{equation*}
+Hence ${\ML}$ is a filtered algebra with this filtration. 
+%We observe that 
+%multiplication by the $j$-function $j(\tau)=q^{-1}+O(1)$ defines an embedding 
+%$M^{!}(L)_{d}/M^{!}(L)_{d-1}\hookrightarrow M^!(L)_{d+1}/M^!(L)_{d}$ 
+%for every $d$. 
+
+
+By construction, this algebra structure on ${\ML}$ requires the choice of 
+a maximal isotropic sublattice $I$, 
+so we should write $\xi=\xi_{I}$ and ${\ML}=M^{!}(L, I)$ when we want to specify this dependence. 
+In fact, the freedom of choice is finite. 
+If $\gamma\colon L\to L$ is an isometry of $L$, 
+then $\gamma$ acts on $A_{L}$. 
+Since the induced action on ${\C}A_{L}$ preserves the Weil representation $\rho_L$, 
+$\gamma$ acts on ${\ML}$. 
+We have 
+$\xi_{\gamma I}(\gamma f)=\xi_{I}(f)$ 
+and so 
+\begin{equation*}
+(\gamma f_{1})\ast_{\gamma I} (\gamma f_{2}) 
+= \gamma (f_{1}\ast_{I} f_{2}). 
+\end{equation*}
+In other words, the action of $\gamma$ on ${\ML}$ gives an isomorphism 
+\begin{equation*}
+\gamma : M^!(L, I) \to M^!(L, \gamma I) 
+\end{equation*}
+of algebras. 
+In particular, 
+when $\gamma$ acts trivially on $A_{L}$, 
+its action on ${\ML}$ is also trivial, 
+so we have 
+$M^{!}(L, I)=M^{!}(L, \gamma I)$ 
+as algebras. 
+
+To summarize, 
+if ${\rm O}(L)$ is the orthogonal group of $L$ and 
+$\Gamma_{L}<{\rm O}(L)$ is the kernel of the reduction map ${\rm O}(L)\to {\rm O}(A_{L})$, 
+then $M^!(L, I)$ depends only on the $\Gamma_{L}$-equivalence class of $I$. 
+Moreover, its isomorphism class depends only on the ${\rm O}(L)$-equivalence class of $I$. 
+In particular, we have only finitely many algebra structures $M^!(L, I)$ on ${\ML}$ 
+for a fixed lattice $L$. 
+
+Geometrically, the $\Gamma_{L}$-equivalence class of $I$ corresponds more or less to 
+a boundary component of some compactification of the locally symmetric space associated to $\Gamma_{L}$. 
+(For example, when $p=2$, a boundary curve in the Baily-Borel compactification.) 
+Perhaps this geometric picture might lead one to wonder whether it is possible to interpolate 
+$M^!(L, I)$ and $M^!(L, I')$ for $I\not\sim I'$ 
+by some continuous family of algebraic objects. 
+
+
+\subsection{Examples}\label{ssec: example}
+
+We look at $\Theta$-product in some examples. 
+
+\begin{example}\label{ex: unimodular}
+Assume that $L$ is unimodular. 
+Then $8 | \sigma(L)$. 
+Modular forms of type $\rho_{L}$ are just scalar-valued modular forms. 
+For any maximal isotropic sublattice $I$ we can find a splitting $L\simeq pU \oplus K$ with $I\subset pU$, 
+and $K$ is also unimodular. 
+In particular, ${\pushLK}$ is identity and 
+${\ThetaK}=\theta_{K^{+}}$ is also scalar-valued. 
+In this case, $\Theta$-product is just the product 
+\begin{equation*}
+f_1 \ast_{I} f_{2} = f_1 \cdot \theta_{K^{+}} \cdot f_2 
+\end{equation*}
+for $f_1, f_2\in {\ML}$. 
+This shows that ${\ML}$ is commutative and has no zero divisor.  
+Furthermore, ${\ML}$ has no unit element unless when $L=pU$. 
+Indeed, if $f\in {\ML}$ is a unit element, then $f\cdot \theta_{K^{+}}=1$, 
+but this is impossible when $K\ne \{ 0 \}$ 
+because %$\theta_{K^{+}}(\tau)$ has a zero on the upper half plane. 
+then $f$ would be a holomorphic modular form of negative weight. 
+\end{example}
+
+
+\begin{example}\label{ex: Jacobi form}
+More generally, assume that we have a splitting 
+$L=pU\oplus K$ with $I\subset pU$ ($K$ not necessarily unimodular). 
+This is equivalent to $I=I^{\ast}$. 
+In this situation, modular forms of type $\rho_{L}=\rho_{K}$ 
+correspond to Jacobi forms of index $K^{+}$ as follows (see \cite{Gr} for more detail). 
+Let 
+$\Theta_{K^{+}}(\tau, Z) = \sum_{\lambda\in A_{K}} \theta_{K^{+}+\lambda}(\tau, Z)\mathbf{e}_{\lambda}^{\vee}$ 
+be the $\rho_{K^{+}}$-valued Jacobi theta series. 
+%where we identify $A_{K^{+}}=A_{K}$ as abelian groups 
+%and $\{ \mathbf{e}_{\lambda}^{\vee} \}$ is the dual basis of $\{ {\elambda} \}$. 
+If $f(\tau)=\sum_{\lambda\in A_K}f_{\lambda}(\tau){\elambda}$ 
+is a weakly holomorphic modular form of weight $\sigma(L)/2$ and type $\rho_{K}$, 
+the function 
+\begin{equation*}
+\phi(\tau, Z) 
+= \langle f(\tau), \: \Theta_{K^{+}}(\tau, Z) \rangle 
+= \sum_{\lambda\in A_{K}} f_{\lambda}(\tau)\theta_{K^{+}+\lambda}(\tau, Z) 
+\end{equation*}
+given by the contraction 
+$\rho_K\otimes \rho_K^{\vee} \to {\C}$ 
+is a weakly holomorphic Jacobi form of weight $0$ and index $K^{+}$. 
+This gives a one-to-one correspondence between two such forms. 
+Note that 
+the restriction $\phi(\tau, 0)$ of $\phi(\tau, Z)$ to $Z=0$  
+is just the modular function $\xi(f)$ because 
+$\Theta_{K^{+}}(\tau, 0) = \Theta_{K^{+}}(\tau)$. 
+%a scalar-valued weakly holomorphic modular form of weight $0$. 
+
+Now let $f_1, f_2 \in {\ML}$ 
+and $\phi_1, \phi_2$ be the corresponding Jacobi forms. 
+Then the Jacobi form corresponding to $f_1\ast_{I} f_2$ is 
+\begin{equation*}
+\phi_1(\tau, 0) \cdot \phi_2(\tau, Z). 
+\end{equation*}
+Indeed, we have 
+\begin{eqnarray*}
+\langle f_1\ast_{I} f_2(\tau), \: \Theta_{K^{+}}(\tau, Z) \rangle 
+& = & 
+\langle \xi(f_{1})(\tau) \cdot f_2(\tau), \: \Theta_{K^{+}}(\tau, Z) \rangle \\ 
+& = &  
+ \xi(f_{1})(\tau) \cdot \langle f_2(\tau), \: \Theta_{K^{+}}(\tau, Z) \rangle \\ 
+& = &  
+\phi_1(\tau, 0) \cdot \phi_2(\tau, Z). 
+\end{eqnarray*}
+Thus Jacobi form interpretation of $\Theta$-product is simple: 
+substitute $Z=0$ into $\phi_1$ to obtain a scalar-valued modular function, 
+and multiply it to $\phi_2$. 
+$\Theta$-product for general $(L, I)$, not necessarily coming from $pU\hookrightarrow L$, 
+can be thought of as a functorial extension of this simple operation using the pushforward operation $\downarrow^{L}_{K}$. 
+\end{example}
+
+
+
+
+
+
+%%%Section 4: First properties
+
+\section{Basic properties}\label{sec: first property}
+
+In this section we study some basic properties of the algebra ${\ML}$. 
+Except in Proposition \ref{prop: finiteness}, 
+the reference maximal isotropic sublattice $I\subset L$ is fixed throughout. 
+In \S \ref{ssec: annihilator} we study the left annihilator ideal of ${\ML}$, 
+which plays a basic role in the study of ${\ML}$. 
+In \S \ref{ssec: unit} we study existence/nonexistence of unit element. 
+In \S \ref{ssec: f.g.} we prove that ${\ML}$ is finitely generated. 
+In \S \ref{ssec: integral part} we study the problem 
+whether the $R$-part ${\MLR}$ of ${\ML}$ or its variant is closed under $\ast_{I}$. 
+\S \ref{ssec: unit} should be read after \S \ref{ssec: annihilator}, 
+but \S \ref{ssec: f.g.} and \S \ref{ssec: integral part} may be read independently. 
+
+
+
+\subsection{Left annihilator}\label{ssec: annihilator} 
+
+The left annihilator ideal of ${\ML}$ 
+%\begin{equation*}
+%\{ \: f\in {\ML} \: | \: f\ast_{I}g=0 \; \textrm{for any} \; g\in {\ML} \: \}.  
+%\end{equation*}
+is a two-sided ideal of ${\ML}$. 
+Since ${\ML}$ is torsion-free as a $M^{!}$-module, 
+this coincides with the kernel of $\xi \colon {\ML}\to M^{!}$, 
+which we denote by 
+\begin{equation*}
+\Theta^{\perp} = 
+\{ \: f\in{\ML} \: | \: \langle f{\pushLK}, {\ThetaK} \rangle = 0 \: \}. 
+\end{equation*}
+This is also a sub $M^!$-module. 
+Note that $\Theta^{\perp}$ also coincides with the left annihilator of any \textit{fixed} $g\ne0 \in {\ML}$. 
+We have 
+$(\Theta^{\perp})^{2}=0$ 
+and $\Theta^{\perp}$ is the maximal nilpotent ideal of ${\ML}$, 
+consisting of all nilpotent elements of ${\ML}$. 
+
+
+\begin{proposition}\label{prop: theta kernel basic}
+The quotient ring ${\ML}/\Theta^{\perp}$ is canonically identified with 
+a nonzero ideal of the polynomial ring $M^{!}={\C}[j]$.  
+%The quotient map ${\ML}\to {\ML}/\Theta^{\perp}$ 
+%is universal among homomorphisms from ${\ML}$ to integral domains. 
+Every homomorphism from ${\ML}$ to a ring without nonzero nilpotent element 
+factors through ${\ML}\to {\ML}/\Theta^{\perp}$. 
+\end{proposition}
+
+\begin{proof}
+%Since $\xi\colon {\ML}\to M^!$ is $M^!$-linear, its image is an ideal of $M^!$. 
+By the definition $\Theta^{\perp}={\rm Ker}(\xi)$, 
+the quotient ${\ML}/\Theta^{\perp}$ is identified with 
+the image $\xi({\ML})\subset M^!$ of $\xi$. 
+Since $\xi$ is a $M^!$-linear map, 
+$\xi({\ML})$ is an ideal of $M^!$. 
+We shall show that $\xi$ is a nonzero map. 
+Since the map ${\pushLK}\colon {\ML}\to M^{!}(K)$ is surjective, 
+it suffices to check that the map 
+$\langle \cdot , {\ThetaK} \rangle \colon M^!(K)\to M^{!}$ is nonzero. 
+This can be seen, e.g., by taking a modular form $f\in M^!(K)$ 
+with Fourier expansion of the form 
+$f(\tau)=q^{n}\mathbf{e}_{0}+o(q^{n})$ 
+for some negative integer $n$,  
+which is possible as guaranteed by Lemma \ref{lem: leading term}.  
+The last assertion follows by a standard argument. 
+%For the last assertion, 
+%it suffices to see that 
+%$\varphi(\Theta^{\perp})= \{ 0 \}$ 
+%for an arbitrary ring homomorphism 
+%$\varphi\colon {\ML}\to R$ 
+%to an integral domain $R$. 
+%If $f\in\Theta^{\perp}$ but $\varphi(f)\ne 0$, 
+%then 
+%$\varphi(f\ast_{I}f)=\varphi(f)\cdot \varphi(f)\ne 0$, 
+%while $\varphi(f\ast_{I}f)=\varphi(0)=0$. 
+%This is absurd. 
+\end{proof}
+
+By general theory of associative algebra, 
+${\ML}$ has the structure of a Lie algebra by the commutator bracket 
+\begin{equation*}
+[ f_1, f_2 ] = f_1\ast_{I} f_2 - f_2\ast_{I} f_1. 
+\end{equation*}
+Since $\xi$ is a ring homomorphism and $M^!$ is commutative, 
+these brackets are contained in $\Theta^{\perp}$. 
+In other words, 
+\begin{equation*}
+f_1\ast_{I} f_2\ast_{I} f_3 = f_2\ast_{I} f_1\ast_{I} f_3. 
+\end{equation*}
+
+\begin{proposition}\label{prop: unimodular commutative} 
+The following three conditions are equivalent. 
+
+(1) $L$ is unimodular. 
+
+(2) ${\ML}$ is commutative. 
+
+(3) $\Theta^{\perp} = \{ 0 \}$. 
+
+\noindent
+Moreover, if $\Theta^{\perp}\ne \{ 0 \}$, we have $\dim \Theta^{\perp} = \infty$. 
+\end{proposition}
+
+\begin{proof}
+(1) $\Rightarrow$ (2), (3) is observed in Example \ref{ex: unimodular}. 
+(3) $\Rightarrow$ (2) holds because $[f_1, f_2]\in \Theta^{\perp}$. 
+We check (2) $\Rightarrow$ (3). 
+If $\Theta^{\perp}\ne \{ 0 \}$, 
+we take $f_1\ne 0 \in \Theta^{\perp}$ and $f_2\not\in \Theta^{\perp}$. 
+Then $f_1\ast_{I}f_2=0$ but $f_{2}\ast_{I}f_{1}\ne 0$, 
+so ${\ML}$ is not commutative. 
+
+Finally, we prove (3) $\Rightarrow$ (1). 
+Suppose that $L$ is not unimodular. 
+We shall show that $\dim \Theta^{\perp} = \infty$. 
+We consider separately according to whether $K$ is unimodular or not. 
+%(The case $n=2$ is included in the former: we have $K=\{ 0 \}$ and $\theta_{K^{+}}=1$.) 
+When $K$ is unimodular, 
+$\Theta^{\perp}$ coincides with the kernel of the pushforward 
+${\pushLK}\colon {\ML} \to M^{!}(K)$. 
+%Here modular forms in $M{!}(K)$ are scalar-valued. 
+We show that 
+$\dim {\rm Ker}({\pushLK})= \infty$. 
+%For a natural number $d$, 
+%let $M^{!}(L)_{d}$ be the space of modular forms in ${\ML}$ 
+%whose principal part as a polynomial in $q^{-1}$ has degree $\leq d$. 
+%We define 
+%$M^{!}(K)_{d}\subset M^{!}(K)$ similarly. 
+The map ${\pushLK}$ preserves the degree filtration, 
+namely 
+$M^!(L)_{d}{\pushLK} \subset M^!(K)_d$. 
+By Borcherds duality theorem, we have 
+\begin{eqnarray*}
+\dim M^!(L)_d & = & |A_L/\pm 1| \cdot d+O(1), \\
+%\end{equation*}
+%\begin{equation*}
+\dim M^!(K)_d & = & 1\cdot d+O(1), 
+\end{eqnarray*}
+as $d$ grows. 
+Therefore 
+\begin{equation*}
+\dim (\ker({\pushLK})\cap M^!(L)_d) \: \geq \: (|A_L/\pm1|-1)\cdot d + O(1) \to \infty 
+\end{equation*}
+as $d\to \infty$. 
+Here $|A_L/\pm1|>1$ because $A_{L}\ne \{ 0 \}$. 
+
+When $K$ is not unimodular, we can still argue similarly. 
+The map 
+${\pushLK}\colon {\ML}\to M^!(K)$ 
+is surjective as 
+the composition $\downarrow^{L}_{K} \circ \uparrow^{L}_{K}$ is a nonzero scalar multiplication.  
+Therefore it is sufficient to show that the subspace 
+$\ker \langle \cdot, {\ThetaK} \rangle$ of $M^!(K)$ 
+has dimension $\infty$. 
+The map 
+$\langle \cdot, {\ThetaK} \rangle \colon M^!(K)\to M^!$ 
+preserves the degree filtration, 
+so we have similarly 
+\begin{equation*}
+\dim (\ker \langle \cdot, {\ThetaK} \rangle \cap M^!(K)_d) \: \geq \: (|A_K/\pm 1|-1)\cdot d + O(1) \to \infty 
+\end{equation*}
+as $d\to \infty$. 
+This finishes the proof of (3) $\Rightarrow$ (1). 
+\end{proof}
+
+
+By Proposition \ref{prop: theta kernel basic}, 
+${\ML}$ is decomposed into two parts: 
+the ideal $\xi({\ML})$ in the polynomial ring $M^{!}={\C}[j]$, 
+and the left annihilator $\Theta^{\perp}$. 
+By the proof of (2) $\Rightarrow$ (3) in Proposition \ref{prop: unimodular commutative},  
+the Lie brackets $[f, g]$ generate a large part of $\Theta^{\perp}$ 
+containing at least $\xi({\ML})\cdot \Theta^{\perp}$. 
+In \S \ref{sec: functorial} we will see that 
+the kernels of the quasi-pullback maps to sublattices of $L$ 
+provide natural examples of two-sided ideals contained in $\Theta^{\perp}$. 
+
+\begin{remark}
+We have only studied the left annihilator. 
+The right annihilator of a fixed $f\in {\ML}$ 
+coincides with the whole ${\ML}$ if $f\in \Theta^{\perp}$, 
+while it is $\{ 0 \}$ if $f\not\in \Theta^{\perp}$. 
+\end{remark}
+
+
+
+\subsection{Unit element}\label{ssec: unit}
+
+Next we study existence/nonexistence of unit element. 
+Right unit element exists only in the apparent case. 
+
+\begin{proposition}\label{prop: RUE}
+${\ML}$ has a right unit element if and only if $L=pU$. 
+In this case it is actually the two-sided unit element. 
+\end{proposition}
+
+\begin{proof}
+It suffices to verify the ``only if'' direction. 
+Let $g\in {\ML}$ be a right unit element. 
+If $L$ is not unimodular, we can take $f\ne 0 \in \Theta^{\perp}$ by Proposition \ref{prop: unimodular commutative}. 
+Then $f\ast_{I}g=0\ne f$, which is absurd. 
+So $L$ must be unimodular. 
+Then the assertion follows from the last part of Example \ref{ex: unimodular}. 
+\end{proof} 
+
+
+On the other hand, 
+left unit element, though still relatively rare, 
+exists in more cases. 
+They are exactly modular forms $f\in {\ML}$ with $\xi(f)=1$. 
+In particular, if $f$ is a left unit element, 
+every element of $f+\Theta^{\perp}$ is so, 
+and vice versa. 
+
+
+\begin{proposition}\label{prop: LUE}
+(1) ${\ML}$ has a left unit element if and only if the homomorphism 
+$\xi\colon {\ML}\to M^{!}$ is surjective. 
+This always holds when $\sigma(L)=0$. 
+
+
+(2) If there exists a modular form $f\in {\ML}\backslash \Theta^{\perp}$ with $f(\tau)=o(q^{-1})$, 
+then ${\ML}$ has a left unit element. 
+Such a modular form $f$ exists only when $|\sigma(L)|<24$. 
+\end{proposition}
+
+\begin{proof}
+The first assertion of (1) holds because $\xi$ is $M^!$-linear. 
+When $\sigma(L)=0$, 
+we have $M^!(K)=M^!$ and 
+$\xi={\pushLK}\colon {\ML}\to M^{!}(K)$ is surjective. 
+
+Next we prove (2). 
+If $f=o(q^{-1})$, we have 
+$\xi(f) = o(q^{-1})$. 
+Since Fourier expansion of elements of $M^!$ have only integral powers of $q$, 
+we have in fact $\xi(f) = O(1)$. 
+Hence $\xi(f)$ is a holomorphic modular function, 
+namely a constant, 
+which is nonzero by our assumption $f\not\in \Theta^{\perp}$. 
+As for the last assertion of (2), 
+we consider the product $\Delta\cdot f$ with the $\Delta$-function. 
+This is a cusp form , so its weight $12+\sigma(L)/2$ must be positive. 
+\end{proof}
+
+
+The condition $f\not\in \Theta^{\perp}$ in Proposition \ref{prop: LUE} (2) is satisfied when 
+the principal part of $f{\pushLK}$ has nonnegative (at least one nonzero) coefficients. 
+Indeed, $\Theta_{K^{+}}(\tau)=\mathbf{e}_{0}^{\vee}+o(1)$ has nonnegative coefficients 
+and the coefficient $c_{0}(0)$ of $f{\pushLK}$ is positive (\cite{Br}, \cite{B-K}), 
+so $\xi(f)$ has nonzero constant term. 
+
+Some reflective modular forms provide 
+typical examples of modular forms as in Proposition \ref{prop: LUE} (2). 
+
+\begin{example}\label{ex: reflective 1}
+Let $L= pU \oplus \langle -2 \rangle$. 
+Then $K^{+}= \langle 2 \rangle$. 
+Let $\phi_{0,1}$ be the weak Jacobi form of weight $0$ and index $1$ 
+constructed by Eichler-Zagier in \cite{E-Z} Theorem 9.3. 
+The corresponding modular form in ${\ML}$ has Fourier expansion 
+$f(\tau)=q^{-1/4}\mathbf{e}_{1}+10\mathbf{e}_{0}+o(1)$  
+where $\mathbf{e}_{i}$ is the basis vector of ${\C}A_{L}$ corresponding to $[i]\in {\Z}/2\simeq A_{L}$. 
+This modular form satisfies the condition in Proposition \ref{prop: LUE} (2). 
+We will return to this example in Example \ref{ex: generator}. 
+\end{example}
+
+
+\begin{example}\label{ex: reflective 2}
+More generally, let $L=pU\oplus \langle -2t \rangle$. 
+Then $K=K_{t}=\langle -2t \rangle$. 
+Eichler-Zagier's Jacobi form $\phi_{0,1}$ was generalized by Gritsenko-Nikulin in \cite{G-N} \S 2.2 
+to Jacobi forms $\phi_{0,t}$ of weight $0$ and index $t$. 
+For $t=2, 3, 4$, 
+the $\rho_{K_{t}}$-valued modular form $f_{t}$ corresponding to $\phi_{0,t}$ 
+has Fourier expansion 
+$f_{t}(\tau) = q^{-1/4t}\mathbf{e}_{1}+a_{t}\mathbf{e}_{0}+ \cdots $ 
+where 
+$a_{t}=4, 2, 1$ for $t=2, 3, 4$ respectively. 
+Thus $f_{t}$ for $t=2, 3, 4$ satisfy the condition in Proposition \ref{prop: LUE} (2). 
+\end{example}
+
+
+\subsection{Finite generation}\label{ssec: f.g.}
+
+In this subsection we prove that ${\ML}$ is finitely generated and 
+give rough estimates, from above and below, 
+on the minimal number of generators. 
+
+\begin{proposition}\label{prop: f.g.}
+The algebra ${\ML}$ is finitely generated over ${\C}$. 
+\end{proposition}
+
+For the proof we need the following construction. 
+
+\begin{lemma}\label{lem: leading term}
+There exists a natural number $d_{0}$ such that 
+for any pair $(\lambda, n)$ with 
+$\lambda\in A_{L}$ and $n\in q(\lambda)+{\Z}$, $n<-d_{0}$,  
+there exists a modular form $f_{\lambda,n}\in {\ML}$ with Fourier expansion 
+$f_{\lambda,n}(\tau)=q^{n}({\elambda}+\mathbf{e}_{-\lambda})+o(q^{n})$. 
+\end{lemma}
+
+\begin{proof}
+For simplicity we assume $\sigma(L)<0$; 
+the case $\sigma(L)=0$ can be dealt with similarly. 
+For each natural number $d$ we let $V_{d}$ be 
+the space of ${\C}A_{L}$-valued polynomials of the form 
+\begin{equation}\label{eqn: principal part}
+\sum_{\lambda\in A_{L}} 
+\sum_{\substack{-d\leq m <0 \\ m\in q(\lambda)+{\Z}}} 
+c_{\lambda}(m)q^{m}{\elambda}, \qquad 
+c_{\lambda}(m) = c_{-\lambda}(m).  
+\end{equation}
+Then $\dim V_{d} = |A_{L}/\pm 1|\cdot d$. 
+The filter $M^{!}(L)_{d}$ of ${\ML}$ is canonically embedded in $V_{d}$ 
+by associating the principal parts. 
+Let $S=S_{2-\sigma(L)/2}(\rho_{L}^{\vee})$ 
+be the space of cusp forms of weight $2-\sigma(L)/2$ and type $\rho_{L}^{\vee}$. 
+By Borcherds duality theorem, 
+the subspace $M^{!}(L)_{d}$ of $V_{d}$ is characterized as 
+\begin{equation*}
+M^{!}(L)_{d} = {\ker}(V_{d}\to S^{\vee}). 
+\end{equation*}
+When $d\gg 0$, 
+$V_{d}\to S^{\vee}$ is surjective (\cite{Bo00a}), 
+and hence 
+\begin{equation*}
+\dim M^{!}(L)_{d} = |A_L/\pm 1|\cdot d - \dim S. 
+\end{equation*}
+In particular, we find that 
+\begin{equation*}
+\dim M^{!}(L)_{d+1} - \dim M^{!}(L)_{d} = |A_{L}/\pm 1|. 
+\end{equation*}
+On the other hand, 
+$M^{!}(L)_{d}$ as a subspace of $M^{!}(L)_{d+1}$ 
+is the kernel of the map 
+$\rho_{d}\colon M^{!}(L)_{d+1} \to {\C}(A_{L}/\pm 1)$ 
+that associates coefficients of the principal part in degree $\in [-d-1, -d)$. 
+Therefore $\rho_{d}$ must be surjective when $d\gg 0$. 
+The form $f_{\lambda,n}$ as desired can be obtained as 
+$\rho_{d}^{-1}({\elambda}+\mathbf{e}_{-\lambda})$ for suitable $d$. 
+\end{proof}
+
+We now prove Proposition \ref{prop: f.g.}. 
+
+\begin{proof}[(Proof of Proposition \ref{prop: f.g.})]
+We first define a set of generators. 
+First we take $f_{0}\in{\ML}$ whose Fourier expansion is of the form 
+$q^{-d_{1}}\mathbf{e}_{0}+o(q^{-d_{1}})$ for some natural number $d_{1}$. 
+Next, 
+letting $d_{0}$ be as in Lemma \ref{lem: leading term}, 
+we put  
+\begin{equation*}
+\Lambda_{1} = 
+\{ \: f_{\lambda,m} \: | \: \lambda\in A_{L}/\pm 1, \: m\in q(\lambda)+{\Z}, \: -d_{0}-d_{1} \leq m < -d_{0} \: \}. 
+\end{equation*}
+Then we take a basis of $M^{!}(L)_{d_{0}}$ and denote it by $\Lambda_{2}$. 
+We shall show that $f_{0}$, $\Lambda_{1}$ and $\Lambda_{2}$ 
+generate ${\ML}$ as a ${\C}$-algebra. 
+
+By definition $M^{!}(L)_{d_{0}+d_{1}}$ is generated by 
+$\Lambda_{1}\cup \Lambda_{2}$ as a ${\C}$-linear space. 
+The quotient 
+$M^!(L)/M^!(L)_{d_0+d_1}$ 
+is generated as a ${\C}$-linear space 
+by any set of modular forms whose Fourier expansion is of the form 
+$q^{n}({\elambda}+\mathbf{e}_{-\lambda})+o(q^{n})$ 
+where $\lambda$ varies over $A_{L}/\pm 1$ and 
+$n$ varies over  $q(\lambda)+{\Z}$ with $n<-d_{0}-d_{1}$. 
+Therefore it suffices to show that 
+we can construct such a modular form as a product of $f_{0}$ and elements of $\Lambda_{1}$. 
+Since 
+$f_{0}(\tau){\pushLK}=q^{-d_1}\mathbf{e}_{0}+o(q^{-d_1})$ 
+and 
+${\ThetaK}(\tau)=\mathbf{e}_{0}^{\vee}+o(1)$, 
+we have 
+$\xi(f_0)=q^{-d_1}+o(q^{-d_1})$. 
+We take 
+$m\equiv n$ modulo $d_1$ from 
+$-d_0-d_1 \leq m < -d_0$ 
+and put 
+$r=(m-n)/d_1\in {\N}$. 
+Then 
+\begin{eqnarray*}
+& & 
+f_{0} \ast_{I} \cdots \ast_{I} f_{0} \ast_{I} f_{\lambda,m} \qquad (f_{0} \: \: r \: \textrm{times}) \\ 
+& = & 
+%\xi(f_0)^{r} \cdot f_{\lambda,m} = 
+(q^{-d_1}+o(q^{-d_1}))^{r} (q^{m}({\elambda}+\mathbf{e}_{-\lambda})+o(q^{m})) \\ 
+& = & 
+q^{n}({\elambda}+\mathbf{e}_{-\lambda}) + o(q^{n}). 
+\end{eqnarray*}
+This gives a desired modular form. 
+\end{proof}
+
+
+\begin{remark}\label{remark: f.g. as module}
+By a similar (and easier) argument, 
+using the $j$-function in place of $f_{0}$, 
+we see that ${\ML}$ is also finitely generated as a $M^!$-module. 
+Indeed, 
+multiplication by $j(\tau)=q^{-1}+O(1)$ defines an embedding 
+$M^{!}(L)_{d}/M^{!}(L)_{d-1}\hookrightarrow M^!(L)_{d+1}/M^!(L)_{d}$ 
+for every $d$, 
+which stabilizes to an isomorphism in $d \gg 0$. 
+\end{remark} 
+
+
+
+By the proof of Proposition \ref{prop: f.g.}, 
+the number of generators can be bounded above by 
+\begin{equation*}\label{eqn: bound generator}
+1 + d_{1}\cdot |A_{L}/\pm 1| + \dim M^!(L)_{d_{0}} 
+\: \leq \: 
+1+(d_0+d_1)\cdot |A_{L}/\pm 1|.   
+\end{equation*}
+In this upper bound is reflected the size of $L$. 
+Indeed, $|A_{L}/\pm 1|$ reflects $|A_{L}|$, and 
+$d_{0}, d_{1}$ reflect $|\sigma(L)|$ by the following well-known property. 
+
+\begin{lemma}\label{lem: sgn bound}
+If $M^!(L)_{d}\ne \{ 0 \}$, then $|\sigma(L)|\leq 24d$. 
+\end{lemma}
+
+\begin{proof}
+If $f\ne 0 \in M^!(L)_{d}$, 
+the product $\Delta^{d}\cdot f$ with the $\Delta$-function is holomorphic also at the cusp. 
+Hence its weight $\sigma(L)/2+12d$ must be nonnegative. 
+\end{proof}
+
+%It might be natural to expect that a minimal set of generators of ${\ML}$ 
+%would still reflect the size of $L$ and perhaps more. 
+
+
+On the other hand, a lower bound leads to the following. 
+
+\begin{proposition}\label{prop: finiteness}
+Let $p\leq q$ be fixed. 
+Let $N$ be a fixed natural number. 
+Then up to isometry 
+there are only finitely many pairs $(L, I)$ 
+of an even lattice $L$ of signature $(p, q)$ and Witt index $p$ 
+and a maximal isotropic sublattice $I\subset L$ such that 
+the algebra $M^!(L, I)$ can be generated by at most $N$ elements. 
+\end{proposition}
+
+\begin{proof}
+In \S \ref{ssec: theta product}, we observed that 
+the dependence on $I$ is finite for a fixed lattice $L$. 
+Hence it is sufficient to prove finiteness of lattices $L$. 
+Since $f\ast_{I}g=\xi(f)\cdot g$, 
+generators of ${\ML}$ as algebra 
+also serve as generators as $M^!$-module. 
+Since we need at least $|A_{L}/\pm 1|$ generators as $M^!$-module, 
+we obtain the bound 
+\begin{equation*}
+N \: \geq \: |A_{L}/\pm 1| \: > \: |A_{L}|/2. 
+\end{equation*}
+Then our assertion follows from 
+finiteness of even lattices of fixed signature and bounded discriminant. 
+\end{proof}
+
+
+%Proposition \ref{prop: finiteness} 
+%is one coarse way of expressing the expectation that 
+%the minimal number of generators of ${\ML}$ would reflect the complexity of $L$. 
+It would be a natural problem whether the finiteness still holds 
+even if we let $q$ vary with $p$ fixed. 
+The same statement is not true for generators \textit{as $M^!$-module}. 
+Indeed, when $L$ is unimodular, 
+${\ML}$ can be generated by one element as $M^!$-module (cf.~Remark \ref{remark: f.g. as module}). 
+
+
+
+
+We close this subsection with some simple examples. 
+
+
+\begin{example}
+Assume that the obstruction space 
+$S_{2-\sigma(L)/2}(\rho_{L}^{\vee})$ 
+is trivial. 
+(Such lattices $L$ with $p=2$ are classified in \cite{B-E-F}.) 
+Then every polynomial as in \eqref{eqn: principal part} 
+is the principal part of some modular form in ${\ML}$. 
+In this case, using the notation in the proof of Proposition \ref{prop: f.g.}, 
+we have 
+$d_{0}=0$, 
+$d_{1}=1$, 
+$\Lambda_{2}=\emptyset$, 
+and the modular form $f_{0}$ can be included in $\Lambda_{1}$. 
+Therefore ${\ML}$ can be generated by modular forms 
+$f_{\lambda}=q^n(\mathbf{e}_{\lambda}+\mathbf{e}_{-\lambda})+O(1)$ 
+with $\lambda\in A_L/\pm1$ and $n\in q(\lambda)+{\Z}$, $-1\leq n < 0$. 
+The minimal number of generators is thus equal to $|A_{L}/\pm1|$. 
+The generator $f_{\lambda}$ with $\lambda\ne 0$ 
+is either a left unit element or a left zero divisor 
+according to Proposition \ref{prop: LUE} (2). 
+\end{example}
+
+
+\begin{example}\label{ex: generator}
+We go back to Example \ref{ex: reflective 1} where $L=pU \oplus \langle -2 \rangle$. 
+The algebra ${\ML}$ is generated by the two elements 
+$f_{0}=q^{-1}\mathbf{e}_{0}+O(1)$ and 
+$f_{1}=q^{-1/4}\mathbf{e}_{1}+O(1)$ 
+with the relation 
+$f_{1}\ast_{I} f_{1}= 12 f_{1}$ and $f_{1}\ast_{I} f_{0}= 12 f_{0}$.  
+Thus the two basic reflective modular forms for $L$ 
+give minimal generators of the algebra ${\ML}$.  
+\end{example}
+
+
+
+
+\subsection{On the integral part}\label{ssec: integral part}
+
+One of interests in ${\ML}$ would lie in the integral part ${\MLZ}$ 
+because when $p=2$ Borcherds products can be constructed from modular forms in ${\MLZ}$. 
+It seems to be a subtle problem 
+whether ${\MLZ}$ is closed under $\Theta$-product. 
+There are examples of $f_{1}, f_{2}\in {\MLZ}$ with $f_{1}\ast_{I}f_{2}\in {\MLZ}$, 
+but in general there seems to be an obstruction coming from the possibility that 
+Fourier coefficients of $f\in{\MLZ}$ in positive degree might be no longer integer. 
+In this subsection we study some aspects of this problem. 
+
+We first give a sufficient condition that guarantees $f_{1}\ast_{I}f_{2}\in {\MLZ}$. 
+Since the proof is similar, we work with a general subring $R$ of ${\C}$. 
+
+\begin{proposition}\label{prop: criterion}
+Let $R$ be a subring of ${\C}$. 
+Let $f_{1}, f_{2}\in M^!(L)_{R}$ and 
+$f_{i}(\tau) = \sum_{\lambda, n}c_{\lambda}^{i}(n)q^{n}{\elambda}$ 
+be their Fourier expansion. 
+Let $f_{1}\in M^!(L)_{d}$. 
+Assume that 
+
+(a) the coefficients $c_{\lambda}^{1}(0)$ of the constant term of $f_{1}$ are contained in $R$; 
+
+(b) the coefficients $c_{\lambda}^{2}(n)$ of $f_{2}$ in  $n< d$ are contained in $R$. 
+
+\noindent
+Then $f_{1}\ast_{I}f_{2}\in M^!(L)_{R}$. 
+\end{proposition}
+
+\begin{proof}
+ 
+We shall show that $\xi(f_{1})$ has Fourier coefficients in $R$. 
+Since only coefficients of $f_{2}$ in degree $<d$ 
+contribute to the principal part of $f_{1}\ast_{I}f_{2}=\xi(f_{1})f_{2}$, 
+the assertion then follows from the condition (b). 
+
+In order to show that $\xi(f_{1})$ has coefficients in $R$, 
+we first note that the principal part of $f_{1}{\pushLK}$ has coefficients in $R$. 
+By the condition (a), the constant term of $f_{1}{\pushLK}$ also has coefficients in $R$. 
+Since ${\ThetaK}$ is holomorphic and has integral coefficients, 
+we find that the principal part and the constant term of $\xi(f_{1})$ have coefficients in $R$. 
+We write $\xi(f_{1})$ as a polynomial $P(j)$ of the $j$-function  
+$j(\tau)=q^{-1}+744+\cdots$. 
+In view of the fact that 
+$j(\tau)$ has integral coefficients, 
+this implies that the polynomial $P$ has coefficients in $R$. 
+This in turn concludes that $\xi(f_{1})=P(j)$ has Fourier coefficients in $R$. 
+\end{proof}
+
+
+We apply this criterion in two cases. 
+
+\begin{proposition}\label{prop: real}
+The real part $M^{!}(L)_{{\R}}$ is closed under $\ast_{I}$. 
+\end{proposition}
+
+\begin{proof}
+We prove that any modular form 
+$f=\sum_{\lambda,n}c_{\lambda}(n)q^n{\elambda}$ 
+in $M^!(L)_{{\R}}$ has real Fourier coefficients: 
+this enables us to apply Proposition \ref{prop: criterion}. 
+We use the results of Bruinier in \cite{Br} \S 1.3. 
+%to which we refer for the following notation. 
+Let $F_{\lambda,n}(\tau)$ be the Maass-Poincare series constructed in \cite{Br} Proposition 1.10. 
+By \cite{Br} Proposition 1.12, 
+$f$ can be written as a linear combination of $F_{\lambda,n}(\tau)$ as 
+\begin{equation*}
+f(\tau) = \frac{1}{2} \sum_{\lambda\in A_{L}} \sum_{\substack{n\in q(\lambda)+{\Z} \\ n<0}} 
+c_{\lambda}(n) F_{\lambda,n}(\tau). 
+\end{equation*}
+Here the non-holomorphic parts $\tilde{F}_{\lambda,n}$ of $F_{\lambda,n}$ cancel out (cf.~\cite{Br} Theorem 1.17). 
+By \cite{Br} Remark 1.14, 
+the Fourier coefficients of $F_{\lambda,n}$ are real. 
+Since $c_{\lambda}(n)$ are real in $n<0$, 
+this implies that $f$ has real Fourier coefficients. 
+\end{proof}
+
+In general, arithmetic property of Fourier coefficients of Maass-Poincare series 
+seems to be a subtle problem. 
+See \cite{B-F-O-R}. 
+
+
+Next we let $L$ be unimodular. 
+We show that 
+a natural subgroup of ${\MLR}$ is closed under $\ast_{I}$. 
+%Since the argument is similar, we again work with a general subring $R$ of ${\C}$. 
+Let $M^{!}(L)_{R}'\subset {\MLR}$ be the subgroup of those $f\in {\MLR}$ 
+whose constant term $c(0)$ is also contained in $R$. 
+
+\begin{example}
+(1) When $R\supset{\Q}$, we have $M^!(L)_{R}'=M^{!}(L)_{R}$ 
+by Borcherds duality theorem in \cite{Bo00b} and the rationality of Fourier coefficients of 
+(scalar-valued) Eisenstein series. 
+
+(2) When $R={\Z}$, we have in fact $c(0)\in 2{\Z}$ for $f\in M^!(L)_{{\Z}}'$ by \cite{W-W}. 
+Thus, when $p=2$, $M^!(L)_{{\Z}}'$ can be thought of as 
+the multiplicative group of Borcherds products of integral weight.  
+\end{example}
+
+
+\begin{proposition}\label{prop: Z-part unimodular} 
+Let $R$ be a subring of ${\C}$. 
+When $L$ is unimodular, $M^{!}(L)_{R}'$ is closed under $\ast_{I}$. 
+\end{proposition}
+
+\begin{proof}
+By Proposition \ref{prop: criterion},  
+it suffices to show that if $f(\tau)=\sum_{n}c(n)q^{n}$ is an element of $M^{!}(L)_{R}'$, 
+its coefficients $c(n)$ in $n>0$ are also contained in $R$. 
+By the same argument as in the proof of Proposition \ref{prop: criterion}, 
+%the principal part and the constant term of 
+%$f\cdot \theta_{K^{+}}\in M^{!}$ have coefficients in $R$. 
+%Using the $j$-function similarly, 
+we find that 
+all Fourier coefficients of $f\cdot \theta_{K^{+}}\in M^!$ are contained in $R$. 
+If we write 
+$\theta_{K^{+}}(\tau)=\sum_{n\geq 0}c^{K}(n)q^{n}$ and notice that $c^{K}(0)=1$, 
+this means that 
+\begin{equation*}
+c(n)+\sum_{m<n}c(m)c^{K}(n-m)\in R 
+\end{equation*}
+for every $n$. 
+Since we already know that 
+$c(m)\in R$ for $m\leq 0$ 
+and $c^{K}(l)\in {\Z}$ for every $l$, 
+induction on $n$ tells us that 
+$c(n)\in R$ for every $n$. 
+This proves our claim. 
+\end{proof} 
+
+
+\begin{corollary}
+When $L$ is unimodular with $p=2$, 
+the multiplicative group of Borcherds products of integral weight 
+has the structure of a commutative ring under $\Theta$-product. 
+\end{corollary}
+
+
+We close this subsection with a remark that 
+how far ${\MLR}$ is not closed under $\ast_{I}$ can be 
+expressed as a $2$-cocyle in group cohomology. 
+We view ${\ML}/{\MLR}$ as a ${\MLR}$-module with trivial action. 
+We define a map 
+\begin{equation*}
+\phi : {\MLR}\times {\MLR} \to {\ML}/{\MLR} 
+\end{equation*}
+by 
+$\phi(f_{1}, f_{2})=[f_{1}\ast_{I}f_{2}]$, 
+where $[ \: ]$ means the image in ${\ML}/{\MLR}$. 
+
+\begin{proposition}
+(1) ${\MLR}$ is closed under $\ast_{I}$ if and only if $\phi\equiv 0$. 
+
+(2) $\phi$ is a $2$-cocycle of the abelian group ${\MLR}$ with value in ${\ML}/{\MLR}$. 
+\end{proposition}
+
+\begin{proof}
+(1) is obvious from the definition of $\phi$. 
+For (2), the cocycle condition is 
+\begin{equation*}
+\phi(f_{2}, f_{3}) + \phi(f_{1}, f_{2}+f_{3}) = 
+\phi(f_{1}+f_{2}, f_{3}) + \phi(f_{1}, f_{2}). 
+\end{equation*}
+This holds true by the bilinearity of $\ast_{I}$. 
+\end{proof}
+
+When $R\subset {\R}$, we may replace ${\ML}/{\MLR}$ with 
+$M^!(L)_{{\R}}/{\MLR}$ by Proposition \ref{prop: real}. 
+
+
+
+
+%%%Section 5: functoriality 
+
+\section{Functoriality}\label{sec: functorial}  
+
+In this section we prove that  
+$\Theta$-product is functorial with respect to embedding of lattices 
+if we use quasi-pullback as morphism. 
+The statement is Proposition \ref{prop: functorial main}, 
+and the proof is given in \S \ref{ssec: finite pullback} and  \S \ref{ssec: general case}. 
+In \S \ref{ssec: functorial push} we also prove functoriality 
+with respect to pushforward to a special type of overlattice. 
+Except for Corollaries \ref{cor: functorial add consequence} and \ref{cor: functorial add consequence II}, 
+this section may be read independently of \S \ref{sec: first property}. 
+
+
+
+\subsection{Quasi-pullback}\label{ssec: quasi-pullback} 
+
+Let $L$ be an even lattice of signature $(p, q)$ %with $p\leq q$, 
+and $L'$ be a sublattice of $L$ of signature $(p, q')$. %with $p\leq q'$. 
+We do not assume that $L'$ is primitive in $L$. 
+Following \cite{Ma}, we define a linear map 
+$|_{L'} \colon {\ML}\to M^{!}(L')$ as follows. 
+Let 
+$N=(L')^{\perp}\cap L$, 
+which is a negative-definite lattice. 
+We write $N^{+}=N(-1)$. 
+The lattice $L'\oplus N$ is of finite index in $L$. 
+Let $f\in {\ML}$. 
+We first take the pullback 
+$f\!\uparrow_{L}^{L'\oplus N}$, 
+which is an element of $M^!(L'\oplus N)$. 
+Since 
+$\rho_{L'\oplus N} = \rho_{L'}\otimes \rho_{N}$, 
+we can take contraction of $f\!\uparrow_{L}^{L'\oplus N}$ 
+with the $\rho_{N^{+}}$-valued theta series $\Theta_{N^{+}}$ of $N^{+}$. 
+This produces a $\rho_{L'}$-valued weakly holomorphic modular form of weight $\sigma(L')/2$, 
+which we denote by 
+\begin{equation}\label{eqn: define quasi-pullback}
+f|_{L'} = \langle f\!\uparrow_{L}^{L'\oplus N}, \: \Theta_{N^{+}} \rangle \quad \in M^{!}(L'). 
+\end{equation}
+We call $f|_{L'}$ the \textit{quasi-pullback} of $f$ to $L'$. 
+The map $|_{L'} \colon {\ML}\to M^!(L')$ is $M^!$-linear. 
+
+The geometric significance of this operation comes from Borcherds products as follows. 
+Assume that $p=2$ and $f$ has integral principal part, 
+and let $\Psi(f)$ be the Borcherds product associated to $f$ 
+on the Hermitian symmetric domain $\mathcal{D}_{L}$ for $L$.   
+The Hermitian symmetric domain $\mathcal{D}_{L'}$ for $L'$ 
+is naturally embedded in $\mathcal{D}_{L}$. 
+The quasi-pullback of $\Psi(f)$ from $L$ to $L'$, 
+discovered by Borcherds \cite{Bo95}, \cite{B-K-P-SB},  
+is defined by 
+first dividing $\Psi(f)$ by suitable linear forms to get rid of zeros and poles containing $\mathcal{D}_{L'}$, 
+and then restricting the resulting form to $\mathcal{D}_{L'}\subset \mathcal{D}_{L}$. 
+It is proved in \cite{Ma} that this quasi-pullback of $\Psi(f)$ 
+coincides with the Borcherds product for $f|_{L'}\in M^{!}(L')$ up to constant. 
+Thus the operation $|_{L'}$ defined in \eqref{eqn: define quasi-pullback} 
+can be thought of as a formal ${\C}$-linear extension of 
+the quasi-pullback operation on Borcherds products. 
+
+We can now state the main result of this \S \ref{sec: functorial}. 
+We assume that $p\leq q' \leq q$ and both $L$ and $L'$ have Witt index $p$. 
+
+\begin{proposition}\label{prop: functorial main}
+Let $L'\subset L$ be as above. 
+Let $I$ be a maximal isotropic sublattice of $L$ 
+such that $I_{{\Q}}\subset L'_{{\Q}}$. 
+We set $I'=I\cap L'$. 
+Then we have 
+\begin{equation*}\label{eqn: functorial}
+(f|_{L'})\ast_{I'}(g|_{L'}) = |I/I'|\cdot (f\ast_{I}g)|_{L'} 
+\end{equation*}
+for $f, g \in {\ML}$. 
+In particular, the map
+\begin{equation*} 
+|I/I'|^{-1}\cdot |_{L'} : M^!(L, I) \to M^{!}(L', I') 
+\end{equation*}
+is a ring homomorphism. 
+\end{proposition}
+
+
+This means that the assignment 
+\begin{equation*}
+(L, I) \mapsto M^{!}(L, I) 
+\end{equation*}
+is a contravariant functor 
+from the category of pairs $(L, I)$ 
+to the category of associative ${\C}$-algebras, 
+by assigning the morphism $|I/I'|^{-1}\cdot |_{L'}$ 
+to an embedding $(L', I')\hookrightarrow (L, I)$. 
+
+The proof of Proposition \ref{prop: functorial main} is reduced to the following assertion. 
+
+\begin{proposition}\label{prop: functorial}
+Let $L'\subset L$ and $I'\subset I$ be as in Proposition \ref{prop: functorial main}. 
+We put $K=I^{\perp}\cap L / I$ and $K'=(I')^{\perp}\cap L'/I'$. 
+Let 
+$\xi \colon {\ML}\to M^{!}$ and 
+$\xi' \colon M^{!}(L')\to M^{!}$ be the maps 
+$\xi= \langle \cdot {\pushLK}, {\ThetaK} \rangle$ and 
+$\xi'= \langle \cdot \! \downarrow^{L'}_{K'}, \Theta_{(K')^{+}} \rangle$ 
+respectively. 
+Then we have 
+\begin{equation*}
+\xi' \circ |_{L'} = |I/I'| \cdot \xi. 
+\end{equation*}
+\end{proposition}
+
+Indeed, if we admit Proposition \ref{prop: functorial}, we can calculate 
+\begin{eqnarray*}
+(f|_{L'})\ast_{I'}(g|_{L'}) 
+& = & 
+\xi'(f|_{L'})\cdot (g|_{L'}) 
+= |I/I'| \cdot \xi(f) \cdot (g|_{L'}) \\ 
+& = & 
+|I/I'| \cdot (\xi(f)\cdot g)|_{L'} 
+= |I/I'| \cdot (f\ast_{I}g)|_{L'}. 
+\end{eqnarray*}
+Thus Proposition \ref{prop: functorial} implies Proposition \ref{prop: functorial main}. 
+
+Before going on, we note some consequences.  
+
+\begin{corollary}\label{cor: functorial add consequence}
+%Let $L'\subset L$ be as in Proposition \ref{prop: functorial main} and 
+%Assume that $I\subset L'$. 
+Let $\Theta^{\perp}(L)\subset {\ML}$ and 
+$\Theta^{\perp}(L')\subset M^!(L')$ be 
+the respective left annihilators. 
+Then we have 
+%$\Theta^{\perp}(L)|_{L'}\subset \Theta^{\perp}(L')$ and 
+$|_{L'}^{-1}(\Theta^{\perp}(L'))=\Theta^{\perp}(L)$. 
+In particular, we have 
+${\rm Ker}(|_{L'})\subset \Theta^{\perp}(L)$. 
+The map 
+${\ML}/\Theta^{\perp}(L) \to M^!(L')/\Theta^{\perp}(L')$ 
+induced by $|I/I'|^{-1}\cdot |_{L'}$ 
+is inclusion of ideals in the polynomial ring $M^!={\C}[j]$. 
+\end{corollary}
+
+\begin{proof}
+%The inclusion 
+%$\Theta^{\perp}(L)|_{L'}\subset \Theta^{\perp}(L')$ 
+%follows from Proposition \ref{prop: functorial main} and 
+%the last part of Proposition \ref{prop: theta kernel basic}. 
+%Proposition \ref{prop: functorial} implies that 
+%the map 
+%${\ML}/\Theta^{\perp}(L) \to M^!(L')/\Theta^{\perp}(L')$ 
+%induced by $[I:I']^{-1}\cdot |_{L'}$ 
+%is compatible with $\xi$ and $\xi'$, 
+%so it is inclusion of ideals in $M^!$. 
+%In particular, it is injective, and hence 
+The equality 
+$|_{L'}^{-1}(\Theta^{\perp}(L'))=\Theta^{\perp}(L)$ 
+follows from Proposition \ref{prop: functorial}. 
+Since $\xi$ and $\xi'$ embed 
+${\ML}/\Theta^{\perp}(L)$ and $M^!(L')/\Theta^{\perp}(L')$ 
+as ideals in $M^!$ respectively, 
+the last assertion follows.  
+\end{proof}
+
+%Thus the kernel of the quasi-pullback map $|_{L'}$ 
+%provides a natural example of two-sided ideal of ${\ML}$ contained in $\Theta^{\perp}$. 
+
+
+\begin{corollary}\label{cor: functorial add consequence II}
+Assume that $L$ is unimodular and let $R$ be a subring of ${\C}$. 
+Then the subgroup $|I/I'|^{-1}\cdot M^!(L)_{R}'|_{L'}$ of $M^!(L')$ is closed under $\ast_{I'}$. 
+In particular, $M^{!}(L)_{R}'|_{L'}\subset M^{!}(L')_{R}$ is closed under $\ast_{I'}$. 
+\end{corollary}
+
+\begin{proof}
+This follows from Propositions \ref{prop: Z-part unimodular} and \ref{prop: functorial main}. 
+\end{proof}
+
+%The rest of this section is devoted to 
+The proof of Proposition \ref{prop: functorial} occupies \S \ref{ssec: finite pullback} and \S \ref{ssec: general case}. 
+It is divided into two parts, 
+reflecting the fact that the quasi-pullback $|_{L'}$ is composition of 
+two operators $\uparrow_{L}^{L'\oplus N}$ and $\langle \cdot, \Theta_{N^{+}} \rangle$. 
+In \S \ref{ssec: finite pullback} we consider the case when $L'$ is of finite index in $L$. 
+In \S \ref{ssec: general case} we consider the case when the splitting $L=L'\oplus N$ holds. 
+The proof in the general case is a combination of these two special cases.  
+
+
+\subsection{The case of finite pullback}\label{ssec: finite pullback} 
+
+In this subsection we prove Proposition \ref{prop: functorial} 
+in the case when $L'$ is of finite index in $L$. 
+In this case, the quasi-pullback $|_{L'}$ is the operation $\uparrow^{L'}_{L}$, 
+and Proposition \ref{prop: functorial} takes the following form. 
+
+\begin{lemma}\label{prop: finite pullback}
+When $L'\subset L$ is of finite index, we have for $f \in {\ML}$ 
+\begin{equation*}
+\xi'(f\!\uparrow^{L'}_{L}) = |I/I'| \cdot \xi(f).  
+\end{equation*}
+\end{lemma}
+
+This is a consequence of the following calculation in 
+finite quadratic modules. 
+
+\begin{lemma}\label{lem: finite pullback FQM}
+Let $A$ be a finite quadratic module and 
+$I_1, I_2 \subset A$ be two isotropic subgroups. %such that $(I_{1}, I_{2})\equiv 0$. 
+We set $A_1=I_1^{\perp}/I_1$, $A_2=I_2^{\perp}/I_2$ and 
+\begin{equation*}
+A'= %(I_{1}^{\perp}\cap I_{2}^{\perp}) /I_1+I_2$.  
+(I_{1}^{\perp}\cap I_{2}^{\perp}) / ((I_{1}\cap I_{2}^{\perp})+(I_{2}\cap I_{1}^{\perp})). 
+\end{equation*}
+Let $I_{2}'=I_{2}\cap I_{1}^{\perp}/I_{1}\cap I_{2}$ be the image of $I_{2}\cap I_{1}^{\perp}$ in $A_{1}$, 
+and $I_{1}'=I_{1}\cap I_{2}^{\perp}/I_{1}\cap I_{2}$ be the image of $I_{1}\cap I_{2}^{\perp}$ in $A_{2}$. 
+Then, under the natural isomorphism 
+\begin{equation}\label{eqn: description of A'}
+A' \simeq (I_{2}')^{\perp}\cap A_{1}/I_{2}' \simeq (I_{1}')^{\perp}\cap A_{2}/I_{1}', 
+\end{equation}
+we have 
+\begin{equation}\label{eqn: pull push commute FQM}
+\downarrow^{A}_{A_{2}} \circ \uparrow^{A}_{A_{1}} = 
+| I_{1} \cap I_{2} |  \uparrow^{A_{2}}_{A'} \circ \downarrow^{A_{1}}_{A'} 
+\end{equation}
+as linear maps 
+${\C}A_{1} \to {\C}A_{2}$. 
+\end{lemma}
+
+We postpone the proof of Lemma \ref{lem: finite pullback FQM} for a moment, 
+and first explain how Lemma \ref{prop: finite pullback} is deduced from Lemma \ref{lem: finite pullback FQM}. 
+
+\begin{proof}[(Proof of Lemma \ref{prop: finite pullback})]
+Let $K=I^{\perp}\cap L /I$ and $K'=(I')^{\perp}\cap L' /I'$. 
+We have a canonical embedding $K'\hookrightarrow K$ of finite index. 
+Since ${\ThetaK}=\Theta_{(K')^{+}}\!\downarrow^{(K')^{+}}_{K^{+}}$, 
+we find that  
+\begin{equation*}
+\xi(f) 
+= \langle f{\pushLK}, {\ThetaK} \rangle 
+= \langle f{\pushLK}, \: \Theta_{(K')^{+}}\!\downarrow^{(K')^{+}}_{K^{+}} \rangle 
+= \langle f{\pushLK}\uparrow_{K}^{K'}, \: \Theta_{(K')^{+}} \rangle. 
+\end{equation*}
+On the other hand, we have 
+\begin{equation*}
+\xi'(f \! \uparrow^{L'}_{L}) = 
+\langle f {\pullL}\downarrow^{L'}_{K'}, \: \Theta_{(K')^{+}} \rangle. 
+\end{equation*}
+Thus it is sufficient to show that 
+\begin{equation}\label{eqn: pull push commute lattice}
+\downarrow^{L'}_{K'} \circ {\pullL} = |I/I'| \uparrow^{K'}_{K} \circ {\pushLK} 
+\end{equation}
+as linear maps 
+${\C}A_{L}\to {\C}A_{K'}$. 
+
+We apply Lemma \ref{lem: finite pullback FQM} as follows. 
+Let $I^{\ast}=I_{{\Q}}\cap L^{\vee}$ and 
+$(I')^{\ast} = I_{{\Q}}\cap (L')^{\vee}$. 
+We set 
+$A=A_{L'}$, 
+$I_{1}=L/L'$ and 
+$I_{2}=(I')^{\ast}/I'$. 
+Then 
+$A_{1}\simeq A_{L}$ and  
+$A_{2}\simeq A_{K'}$. 
+%The condition $(I_{1}, I_{2})\equiv 0$ is satisfied because $I^{\ast}\subset L^{\vee}$. 
+We have 
+$I_{2}\cap I_{1}^{\perp}=I^{\ast}/I'$ and 
+\begin{equation*}
+I_{1} \cap I_{2} 
+= ( L\cap \langle L', (I')^{\ast} \rangle )/L' 
+= \langle L', I \rangle /L' 
+= I/I'. 
+\end{equation*}
+This implies that 
+$I_{2}'=I^{\ast}/I \subset A_{L}$ 
+and $A'= A_{K}$. 
+Thus we have 
+\begin{equation*}
+\uparrow^{A}_{A_{1}} = \uparrow^{L'}_{L}, \quad 
+\downarrow^{A}_{A_{2}} = \downarrow^{L'}_{K'}, \quad 
+\downarrow^{A_{1}}_{A'} = \downarrow^{L}_{K}, \quad 
+\uparrow^{A_{2}}_{A'} = \uparrow^{K'}_{K},  
+\end{equation*}
+hence \eqref{eqn: pull push commute FQM} implies \eqref{eqn: pull push commute lattice}.  
+\end{proof}
+
+
+We now prove Lemma \ref{lem: finite pullback FQM}. 
+
+\begin{proof}[(Proof of Lemma \ref{lem: finite pullback FQM})] 
+We first justify the isomorphism \eqref{eqn: description of A'}, 
+which also implies that $A'$ is nondegenerate. 
+We write 
+$\hat{I}_{1}'=I_{1}\cap I_{2}^{\perp}$ and  
+$\hat{I}_{2}'=I_{2}\cap I_{1}^{\perp}$. 
+We shall establish the following commutative diagram: 
+\begin{equation*}\label{eqn: CD}
+\xymatrix{
+    & (\hat{I}_2')^{\perp}\cap I_{1}^{\perp} \ar[rd]^{p_1} &  \\ 
+(\hat{I}_{1}')^{\perp}\cap I_{2}^{\perp} \ar[rd]_{p_2} & 
+I_{1}^{\perp}\cap I_{2}^{\perp} \ar[r]^{p_1'} \ar@{^{(}-_>}[u] \ar[d]^{p_2'} \ar@{_{(}-_>}[l]
+& (I_{2}')^{\perp}\cap A_{1} \ar[d]_{q_{2}}  \\ 
+   & (I_{1}')^{\perp}\cap A_{2} \ar[r]_{q_1} & A' 
+}
+\end{equation*}
+Here $p_i$ is the quotient map by $I_{i}$ and 
+$p_{i}'$ is the restriction of $p_{i}$. 
+Since we have 
+$\hat{I}_{1}' = I_{1} \cap (I_{1}^{\perp}\cap I_{2}^{\perp})$ and 
+\begin{equation*}
+I_{1} / \hat{I}_{1}'  \simeq 
+((\hat{I}_2')^{\perp}\cap I_{1}^{\perp}) / (I_{1}^{\perp}\cap I_{2}^{\perp}) 
+\simeq (\hat{I}_{2}')^{\perp}/I_{2}^{\perp}, 
+\end{equation*}
+we see that $p_{1}'$ is surjective and is the quotient map by $\hat{I}_{1}'$. 
+This induces the map  
+$q_{2}\colon (I_2')^{\perp}\cap A_{1} \to A'$ 
+as the quotient map by $I_2'$. 
+Similarly, we find that 
+$p_2'$ is the quotient map by $\hat{I}_{2}'$ and 
+$q_{1}$ is induced as the quotient map by $I_{1}'$. 
+
+We now prove \eqref{eqn: pull push commute FQM}. 
+Let $\lambda\in A_{1}$. 
+It suffices to show that 
+\begin{equation}\label{eqn: pullback FQM}
+{\elambda}\uparrow_{A_{1}}^{A}\downarrow^{A}_{A_{2}} = 
+|I_{1}\cap I_{2}| \cdot {\elambda}\downarrow^{A_{1}}_{A'}\uparrow^{A_{2}}_{A'}. 
+\end{equation}
+When $\lambda\not\in (I_{2}')^{\perp}$, we have 
+$\mathbf{e}_{\lambda}\! \downarrow^{A_{1}}_{A'}=0$. 
+On the other hand, we have 
+$(\tilde{\lambda}, \hat{I}_{2}')\not\equiv 0$ 
+for every $\tilde{\lambda}\in I_{1}^{\perp}$ 
+in the inverse image of $\lambda$. 
+In particular, we have $(\tilde{\lambda}, I_2)\not\equiv 0$ and hence 
+$\mathbf{e}_{\tilde{\lambda}}\downarrow^{A}_{A_{2}}=0$. 
+This implies that  
+${\elambda}\uparrow_{A_{1}}^{A}\downarrow^{A}_{A_{2}}=0$. 
+
+%We first consider the case . 
+%Then $\tilde{\lambda}\not\in I_{2}^{\perp}$. 
+%We have 
+%We shall show that ${\elambda}\!\uparrow^{A}_{A_{1}}\downarrow^{A}_{A_{2}}=0$. 
+%By definition we have  
+%${\elambda}\uparrow^{A}_{A_{1}}\downarrow^{A}_{A_{2}} = 
+%\sum_{\lambda'\in \tilde{\lambda}+I_{1}}\mathbf{e}_{\lambda'}\downarrow^{A}_{A_{2}}$. 
+%Since 
+%$(\tilde{\lambda}, I_{2}) \not\equiv 0$ 
+%and $(I_{1}, I_{2})\equiv 0$, 
+%we have 
+%$(\lambda', I_{2})\not\equiv 0$ 
+%for every $\lambda' \in \tilde{\lambda}+I_{1}$. 
+%Therefore 
+%$\mathbf{e}_{\lambda'}\downarrow^{A}_{A_{2}}=0$. 
+
+%Next we let 
+%$\lambda\in (I_{2}')^{\perp}$. 
+%Then $\tilde{\lambda}\in I_{1}^{\perp}\cap I_{2}^{\perp}$. 
+%We consider the following commutative diagram: 
+%\begin{equation*}
+%\begin{CD}
+%I_{1}^{\perp}\cap I_{2}^{\perp} @>{p_{1}}>> (I_{2}')^{\perp} \\ 
+%@V{p_{2}}VV        @VV{p_{2}'}V \\ 
+%(I_{1}')^{\perp} @>>{p_{1}'}>  A'
+%\end{CD}
+%\end{equation*}
+%Here 
+%$p_{1}$, $p_{2}$, $p_{1}'$, $p_{2}'$ 
+%are the quotient maps by 
+%$I_{1}$, $I_{2}$, $I_{1}'$, $I_{2}'$ respectively. 
+%We write 
+%$p=p_{2}'\circ p_{1}=p_{1}'\circ p_{2}$. 
+%the quotient map by $I_{1}+I_{2}$. 
+%Then we have 
+%\begin{equation*}
+%\mathbf{e}_{\lambda}\downarrow^{A_{1}}_{A'} \uparrow_{A'}^{A_{2}} = 
+%\mathbf{e}_{p(\tilde{\lambda})}\uparrow_{A'}^{A_{2}} = 
+%\sum_{\mu'\in I_{1}'} \mathbf{e}_{p_{2}(\tilde{\lambda})+\mu'}. 
+%\end{equation*}
+%On the other hand, we have 
+%\begin{equation*}
+%\mathbf{e}_{\lambda}\uparrow_{A_{1}}^{A}\downarrow^{A}_{A_{2}} 
+%= \sum_{\mu\in I_{1}} \mathbf{e}_{\tilde{\lambda}+\mu}\downarrow^{A}_{A_{2}} 
+%= \sum_{\mu\in I_{1}} \mathbf{e}_{p_{2}(\tilde{\lambda})+p_{2}(\mu)}.  
+%\end{equation*}
+%Since the fibers of the map 
+%$p_{2}\colon I_{1}\to I_{1}'$ 
+%consist of $|I_{1}\cap I_{2}|$ elements, 
+%we obtain the desired equality \eqref{eqn: pullback FQM}. 
+
+Next let $\lambda\in (I_{2}')^{\perp}$. 
+By the above commutative diagram, 
+we can choose $\tilde{\lambda}\in I_1^{\perp}\cap I_2^{\perp}$ such that 
+$p_{1}'(\tilde{\lambda})=\lambda$. 
+Then 
+\begin{equation}\label{eqn: push then pull}
+\mathbf{e}_{\lambda}\downarrow^{A_{1}}_{A'} \uparrow_{A'}^{A_{2}} \: = \: 
+\mathbf{e}_{q_{2}(\lambda)}\uparrow^{A_{2}}_{A'} \: = \: 
+\sum_{\mu'\in I_{1}'} \mathbf{e}_{p_{2}'(\tilde{\lambda})+\mu'}. 
+\end{equation}
+On the other hand, we have 
+\begin{equation}\label{eqn: pull then push}
+\mathbf{e}_{\lambda}\uparrow_{A_{1}}^{A}\downarrow^{A}_{A_{2}} 
+\: = \:  
+\sum_{\mu\in I_{1}} \mathbf{e}_{\tilde{\lambda}+\mu}\downarrow^{A}_{A_{2}}  
+\: = \: 
+\sum_{\mu\in \hat{I}_{1}'} \mathbf{e}_{p_{2}(\tilde{\lambda}+\mu)} 
+\: = \: 
+\sum_{\mu\in \hat{I}_{1}'} \mathbf{e}_{p_{2}'(\tilde{\lambda})+p_{2}'(\mu)}.  
+\end{equation}
+Here we used the equality 
+$(\tilde{\lambda}+I_{1}) \cap I_{2}^{\perp} = \tilde{\lambda}+\hat{I}_{1}'$. 
+Since the map 
+$p_{2}'\colon \hat{I}_{1}'\to I_{1}'$ 
+is the quotient map by $I_{1}\cap I_{2}$, 
+its fibers consist of $|I_{1}\cap I_{2}|$ elements. 
+Comparing \eqref{eqn: push then pull} and \eqref{eqn: pull then push},  
+we obtain the desired equality \eqref{eqn: pullback FQM}. 
+\end{proof}
+
+
+
+\subsection{The split case}\label{ssec: general case} 
+
+Next we prove Proposition \ref{prop: functorial} 
+in the case when the splitting $L=L'\oplus N$ holds. 
+In this case, 
+$\uparrow^{L'\oplus N}_{L}$ is identity, 
+$I'$ coincides with $I$, 
+so Proposition \ref{prop: functorial} takes the following form. 
+
+\begin{lemma}\label{prop: split case}
+When the splitting $L=L'\oplus N$ holds, we have for $f \in {\ML}$ 
+\begin{equation*}
+\xi'(\langle f, \Theta_{N^{+}} \rangle) = \xi(f).  
+\end{equation*}
+\end{lemma}
+
+\begin{proof}
+%By definition of $\ast_{I}$ we have 
+%\begin{equation*}
+%\langle f_{1}\ast_{I} f_{2}, \Theta_{N^{+}} \rangle = 
+%\langle f_{1}{\pushLK}, \Theta_{K^{+}} \rangle \ast_{I} \langle f_{2}, \Theta_{N^{+}} \rangle. 
+%\end{equation*}
+%On the other hand, if we write 
+%$K'=I^{\perp}\cap L'/I$, 
+Since $K=K'\oplus N$, we have 
+${\ThetaK}=\Theta_{(K')^{+}} \otimes \Theta_{N^+}$ 
+under the natural isomorphism 
+$\rho_{K^+}\simeq \rho_{(K')^{+}}\otimes \rho_{N^+}$. 
+Therefore 
+\begin{eqnarray*}
+\xi'(\langle f, \Theta_{N^{+}} \rangle) 
+& = & 
+\langle \langle f, \Theta_{N^{+}} \rangle \! \downarrow^{L'}_{K'}, \: \Theta_{(K')^{+}} \rangle 
+= 
+\langle \langle f{\pushLK}, \Theta_{N^{+}} \rangle, \Theta_{(K')^{+}} \rangle \\ 
+& = & 
+\langle f{\pushLK}, \Theta_{N^{+}}\otimes \Theta_{(K')^{+}} \rangle 
+= \xi(f). 
+\end{eqnarray*}
+This proves the desired equality.  
+\end{proof}
+
+
+
+We can now prove Proposition \ref{prop: functorial} in the general case. 
+
+\begin{proof}[(Proof of Proposition \ref{prop: functorial})]
+Let $L'\oplus N\subset L$ and $I'\subset I$ be as in Proposition \ref{prop: functorial}. 
+We write 
+$L''=L'\oplus N$,  
+$K''=(I')^{\perp}\cap L''/I'$ and 
+$\xi''= \langle \cdot\!\downarrow^{L''}_{K''}, \Theta_{(K'')^{+}} \rangle$. 
+By using Lemma \ref{prop: split case} for $L'\subset L''$ and 
+Lemma \ref{prop: finite pullback} for $L''\subset L$, 
+we see that  
+\begin{equation*}
+\xi'(f|_{L'}) 
+= \xi'(\langle f\!\uparrow_{L}^{L''}, \Theta_{N^{+}} \rangle ) 
+= \xi''(f\!\uparrow_{L}^{L''}) 
+= |I/I'|\cdot \xi(f). 
+\end{equation*}
+This proves Proposition \ref{prop: functorial} in the general case. 
+\end{proof}
+
+
+  
+
+
+\subsection{Special finite pushforward}\label{ssec: functorial push}
+
+We close this section by noticing that 
+$\Theta$-product is also covariantly functorial with respect to 
+pushforward to a special type of overlattices. 
+Let $I\subset L$ be as before. 
+
+\begin{proposition}\label{prop: functorial push}
+Let $L'$ be a sublattice of $L$ of finite index. 
+Assume that $L= \langle L', I \rangle$. 
+We set $I'=I\cap L'$. 
+Then we have 
+\begin{equation*}
+(f\! \downarrow^{L'}_{L})\ast_{I}(g\! \downarrow^{L'}_{L}) = 
+(f\ast_{I'}g)\! \downarrow^{L'}_{L} 
+\end{equation*}
+for $f, g\in M^!(L')$. 
+\end{proposition}
+
+\begin{proof}
+We use the notation in the proof of Lemma \ref{prop: finite pullback}. 
+Since $I_1=L/L'$ coincides with $I_1\cap I_2=I/I'$, 
+we have $I_1 \subset I_2$. 
+Hence $I_{1}'=\{ 0 \}$ 
+and so the canonical embedding $K'\hookrightarrow K$ is isomorphic. 
+Moreover, since $I_{2}=(I')^{\ast}/I'$ coincides with $I_{2}\cap I_{1}^{\perp}$, 
+we have $(I')^{\ast}=I^{\ast}$ and hence 
+$\langle L, I^{\ast} \rangle = \langle L', (I')^{\ast} \rangle$. 
+These equalities imply that 
+$\downarrow^{L'}_{K'} \: = \: \downarrow^{L}_{K} \circ \downarrow^{L'}_{L}$. 
+Therefore we have 
+\begin{equation*}
+\xi'(f) = 
+\langle f\! \downarrow^{L'}_{K'}, \: \Theta_{(K')^{+}} \rangle = 
+\langle f\! \downarrow^{L'}_{L} \downarrow^{L}_{K}, \: \Theta_{K^{+}} \rangle = 
+\xi(f\! \downarrow^{L'}_{L}). 
+\end{equation*}
+As in the case of quasi-pullback, 
+this implies 
+\begin{eqnarray*}
+(f\! \downarrow^{L'}_{L})\ast_{I}(g\! \downarrow^{L'}_{L}) 
+& = & 
+\xi(f\! \downarrow^{L'}_{L})\cdot (g\! \downarrow^{L'}_{L}) 
+\: = \: \xi'(f)\cdot (g\! \downarrow^{L'}_{L}) \\ 
+& = & 
+(\xi'(f)\cdot g)\! \downarrow^{L'}_{L} 
+\: = \: (f\ast_{I'}g)\! \downarrow^{L'}_{L}. 
+\end{eqnarray*}
+This proves Proposition \ref{prop: functorial push}. 
+\end{proof}
+
+
+
+%%%%%%% Reference %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{thebibliography}{99}
+
+
+\bibitem{Bo95}Borcherds, R. 
+\textit{Automorphic forms on $O_{s+2,2}({\R})$ and infinite products.} 
+Invent. Math. \textbf{120} (1995), no. 1, 161--213. 
+
+\bibitem{Bo98}Borcherds, R. 
+\textit{Automorphic forms with singularities on Grassmannians.} 
+Invent. Math. \textbf{132} (1998), no. 3, 491--562. 
+
+\bibitem{Bo00a}Borcherds, R. 
+\textit{The Gross-Kohnen-Zagier theorem in higher dimensions.} 
+Duke Math. J. \textbf{97} (1999), no. 2, 219--233. 
+
+\bibitem{Bo00b}Borcherds, R. 
+\textit{Reflection groups of Lorentzian lattices.} 
+Duke Math. J. \textbf{104} (2000), no. 2, 319--366. 
+
+\bibitem{B-K-P-SB}
+Borcherds, R.; Katzarkov, L.; Pantev, T.; Shepherd-Barron, N. I. 
+\textit{Families of K3 surfaces.} 
+J. Algebraic Geom. \textbf{7} (1998), no. 1, 183--193. 
+
+\bibitem{B-F-O-R}Bringmann, K.; Folsom, A.; Ono, K.; Rolen, L. 
+\textit{Harmonic Maass forms and mock modular forms: theory and applications.}  
+American Mathematical Society, 2017. 
+
+\bibitem{Br}Bruinier, J.~H.
+\textit{Borcherds products on $O(2, l)$ and Chern classes of Heegner divisors.} 
+Lecture Notes in Math. \textbf{1780}, Springer-Verlag, 2002. 
+
+\bibitem{B-E-F}Bruinier, J.~H.; Ehlen, S.; Freitag, E. 
+\textit{Lattices with many Borcherds products.}  
+Math. Comp. \textbf{85} (2016), no. 300, 1953--1981. 
+
+\bibitem{B-K}Bruinier, J.~H.; Kuss, M. 
+\textit{Eisenstein series attached to lattices and modular forms on orthogonal groups.} 
+Manuscripta Math. \textbf{106} (2001), no. 4, 443--459. 
+
+\bibitem{E-Z}Eichler, M.; Zagier, D. 
+\textit{The theory of Jacobi forms.} 
+Birkh\"auser, 1985. 
+
+\bibitem{Gr}Gritsenko, V.~A. 
+\textit{Modular forms and moduli spaces of abelian and K3 surfaces.} 
+St. Petersburg Math. J. \textbf{6} (1995), no. 6, 1179--1208.  
+
+\bibitem{G-H-S}Gritsenko, V.; Hulek, K.; Sankaran, G.~K.
+\textit{Abelianisation of orthogonal groups and the fundamental group of modular varieties.} 
+J. Algebra \textbf{322} (2009), no. 2, 463--478. 
+
+\bibitem{G-N}Gritsenko, V.~A.; Nikulin, V.~V. 
+\textit{Automorphic forms and Lorentzian Kac-Moody algebras. II.}  
+Internat. J. Math. \textbf{9} (1998), no. 2, 201--275. 
+
+\bibitem{Ma}Ma, S. 
+\textit{Quasi-pullback of Borcherds products.}  
+Bull. Lond. Math. Soc. \textbf{51} (2019), no. 6, 1061--1078. 
+
+\bibitem{Mc}McGraw, W.~J. 
+\textit{The rationality of vector valued modular forms associated with the Weil representation.}  
+Math. Ann. \textbf{326} (2003), no. 1, 105--122. 
+
+\bibitem{Sc}Schwagenscheidt, M. 
+\textit{Eisenstein series for the Weil representation.} 
+J. Number Theory \textbf{193} (2018), 74--90. 
+
+\bibitem{W-W}Wang, H.; Williams, B. 
+\textit{Borcherds products of half-integral weight.}
+arXiv: 2007.00055. 
+
+\end{thebibliography}
+
+\end{document}

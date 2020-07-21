@@ -1,0 +1,372 @@
+\documentclass[12pt, oneside]{amsart}
+
+\usepackage{filecontents}
+\begin{filecontents}{refs.bib}
+@BOOK{Berge1963,
+  author = {Berge, Claude},
+  title = {Topological Spaces},
+  publisher={Oliver and Boyd},
+  year = {1963}
+}
+@ARTICLE{Dubra2004,
+  author = {Dubra, Juan and Maccheroni, Fabio and Ok, Efe A.},
+  title = {Expected Utility Theory without the Completeness Axiom},
+  journal = {Journal of Economic Theory},
+  year = {2004},
+  volume = {115},
+  number = {1},
+  pages = {118-133}
+}
+@ARTICLE{Evren2011,
+author = {Evren, \"{O}zg\"{u}r and Ok, Efe A.},
+title = {On the Multi-Utility Representation of Preference Relations},
+journal = {Journal of Mathematical Economics},
+year = {2011},
+volume = {47},
+pages = {554-563},
+number = {4-5}
+}
+@ARTICLE{Gorno2018,
+author={Gorno, Leandro},
+title={The Structure of Incomplete Preferences},
+journal={Economic Theory},
+year={2018},
+volume={66},
+number={1},
+pages={159--185},
+}
+@UNPUBLISHED{GornoRivello2020,
+author={Gorno, Leandro and Rivello, Alessandro},
+title={Connected Incomplete Preferences},
+year={2020}
+}
+@ARTICLE{Walker1979,
+author = {Walker, Mark},
+title = {A Generalization of the Maximum Theorem},
+journal = {International Economic Review},
+year = {1979},
+volume = {20},
+issue = {1},
+pages = {267-272}
+}
+\end{filecontents}
+
+
+\usepackage[margin=1.35in]{geometry}
+
+\usepackage{hyperref}
+
+
+\usepackage[round]{natbib}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{cleveref}
+\usepackage{enumerate}
+\usepackage{xcolor}
+
+\newtheorem*{theorem*}{Theorem}
+\newtheorem{theorem}{Theorem}
+\newtheorem*{lemma*}{Lemma}
+\newtheorem{lemma}{Lemma}
+\newtheorem*{proposition*}{Proposition}
+\newtheorem{proposition}{Proposition}
+\newtheorem*{corollary*}{Corollary}
+\newtheorem{corollary}{Corollary}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem*{fact*}{Fact}
+\newtheorem{fact}{Fact}
+
+\theoremstyle{definition}
+\newtheorem{assumption}{Assumption}
+\newtheorem{definition}{Definition}
+\newtheorem{example}{Example}
+\newtheorem{remark}{Remark}
+\newtheorem{axiom}{Axiom}
+\newtheorem{property}{Property}
+
+\crefname{lemma}{Lemma}{Lemmas}
+
+\title{A Maximum Theorem for Incomplete Preferences}
+\author{Leandro Gorno\\Alessandro Rivello}
+\date{First draft: January 2020. Current version: July 2020.}
+
+
+\begin{document}
+
+\begin{abstract}
+We extend Berge's Maximum Theorem to allow for incomplete preferences (\textit{i.e.}, reflexive and transitive binary relations which fail to be complete). We show that if, in addition to the traditional continuity assumptions, a new continuity property for the domains of comparability holds, the limits of maximal elements along a sequence of decision problems are maximal elements of the limit problem. While this new continuity property for the domains of comparability is sufficient, it is not generally necessary. However, we provide conditions under which it is necessary and sufficient for maximality and minimality to be preserved by limits.\vspace{10pt}\\
+\noindent \textit{Keywords:} incomplete preferences, maximum theorem, maximal elements, continuity.\vspace{10pt}\\
+\noindent \textit{JEL classifications:} C61, C62.
+\end{abstract}
+
+
+
+\maketitle
+
+
+
+\section{Introduction}
+An important issue arising in the study of models involving optimization is whether optimal choices depend continuously on parameters affecting the objective function and the constraints. The main tool to address this question is the Maximum Theorem by \citet*{Berge1963}. The argument can be easily adapted to deal with complete preferences that are strongly continuous or even incomplete preferences with open strict sections (see, for example, \citet*{Walker1979}). However, none of these results applies to some of the most standard types of continuous incomplete preferences such as Pareto orderings based on continuous utility functions, preferences over lotteries admitting an expected multi-utility representation as in \citet*{Dubra2004}, or the ordinal preferences possessing a continuous multi-utility representation studied by \citet*{Evren2011}. The following example shows that extending these results is not trivial:
+
+\begin{example}
+Consider a consumer choosing bundles of two goods: apples (A) and bananas (B). Her preferences are fixed, but incomplete. They can be represented with two utilities: $u_1(q_A, q_B) = q_A + q_B$ and $u_2(q_A, q_B) = q_A + 2 q_B$, in the sense that a bundle $(q_A, q_B)$ is considered at least as good as another bundle $(q'_A, q'_B)$ if and only if $u_1(q_A,q_B) \geq u_1(q'_A,q'_B)$ and $u_2(q_A,q_B) \geq u_2(q'_A,q'_B)$. The price of apples is normalized to $p_A = 1$ and there is sequence of prices for bananas $p_{B,n} = 1+1/n$. Note that, if the consumer's wealth is $w=1$, bundle $(1,0)$ is optimal for every $n \in \mathbb{N}$: there is no feasible bundle that the consumer strictly prefers to $(1,0)$. However, in the limit as $n\to +\infty$, $(1,0)$ is no longer optimal because $(0,1)$ becomes feasible when the prices are $(p_A, p_{B,+\infty}) = (1,1)$ and the consumer strictly prefers $(0,1)$ to $(1,0)$.
+\end{example}
+
+As the example above illustrates, when preferences are incomplete, it is relatively easy to construct sequences of maximal elements for continuous preferences that converge to suboptimal alternatives. The main contribution of this paper is to provide a general condition that avoids these counterexamples and ensures that limit of optimal choices is optimal in the limit problem.
+
+
+
+
+\section{Preliminaries}
+Let $(X, d)$ be a metric space. A \textit{preference} is a reflexive and transitive binary relation on $X$. We say  that $\succsim$ is \textit{complete} on a set $A \subseteq X$ if $A \times A \subseteq \hspace{2pt} \succsim \cup \precsim$. The set $A$ is a $\succsim$-\textit{domain} if $\succsim$ is complete on $A$. If $A \subseteq B \subseteq X$ and $A$ is a $\succsim$-domain such that there exists no $\succsim$-domain contained in $B$ and strictly containing $A$, then $A$ is a \textit{maximal $\succsim$-domain relative to $B$}. Denote by $\mathcal{D}\left(\succsim, B\right)$ the collection of all maximal $\succsim$-domains relative to $B$.
+
+A point $x \in A$ is $\succsim$\textit{-maximal in} $A$ if, for every $y \in A$, $y \succsim x$ implies $x \succsim y$. The set of all $\succsim$-maximal elements in $A$ is denoted by $\mathcal{M}ax(\succsim, A)$. Analogously, a point $x \in A$ is $\succsim$\textit{-minimal in} $A$ if, for every $y \in A$, $x \succsim y$ implies $y \succsim x$. The set of all $\succsim$-minimal elements in $A$ is denoted by $\mathcal{M}in(\succsim, A)$.
+
+A preference $\succsim$ is \textit{continuous} if it is a closed subset of $X \times X$. Denote by $\mathcal{P}$ the collection of continuous preferences on $X$. 
+
+Let $\mathcal{K}_X$ be the collection of nonempty compact subsets of $X$. Consider both $\mathcal{K}_X$ and $\mathcal{P}$ equipped with the Hausdorff metric topology derived from $X$ and $X \times X$, respectively. 
+Finally, for any sequence $\left\{\mathcal{A}_n\right\}_{n \in \mathbb{N}}$ of nonempty subsets of $\mathcal{K}_X$, denote by $LS_{n \to +\infty} \mathcal{A}_n$ the collection of accumulation points of all sequences $\left\{A_n\right\}_{n \in \mathbb{N}}$, where $A_n \in \mathcal{A}_n$ for each $n \in \mathbb{N}$.
+
+
+
+\section{A Maximum Theorem}
+
+The following is the main result of this paper:
+
+\begin{theorem}
+\label{th:maximum}
+Let $\left\{\left(\succsim_n, K_n, x_n\right)\right\}_{n \in\mathbb{N}}$ be a sequence in $\mathcal{P}\times \mathcal{K}_X \times X$ such that
+\begin{enumerate}
+\item $\left\{\left(\succsim_n, K_n, x_n\right)\right\}_{n \in \mathbb{N}}$ converges to $\left(\succsim, K, x\right) \in \mathcal{P}\times \mathcal{K}_X \times X$ as $n\to +\infty$.
+\item $x_n \in \mathcal{M}ax\left(\succsim_n, K_n\right)$ for every $n \in \mathbb{N}$.
+\item $LS_{n \to +\infty} \mathcal{D}\left(\succsim_n, K_n\right) \subseteq \mathcal{D}\left(\succsim, K\right)$.
+\end{enumerate}
+Then, $x \in \mathcal{M}ax\left(\succsim, K\right)$.
+\end{theorem}
+
+\begin{proof}
+For each $n \in \mathbb{N}$, there exists $D_n \in \mathcal{D}\left(\succsim_n, K_n\right)$ such that $x_n \in D_n$. Since $K_n \in \mathcal{K}_X$ converges to $K \in \mathcal{K}_X$ and $D_n$ is closed in $K_n$, we have $D_n \in \mathcal{K}_X$. By Lemma~\ref{lemma:subsequence}, there exists a convergent subsequence $(D_{n_h})_{h \in \mathbb{N}}$. As a result, there is no loss of generality in assuming that $\left\{D_n\right\}_{n \in \mathbb{N}}$ itself converges. Define $D := \lim_{n \to +\infty} D_n$. By Lemma ~\ref{lemma:Hausdorff_facts}, $x_n \in D_n$ for all $n \in \mathbb{N}$ and $\lim_{n \to +\infty} (D_n, x_n) = (D, x)$ together imply that $x \in D$. Moreover, condition (3) implies that $D \in \mathcal{D}\left(\succsim, K\right)$.
+	
+We now claim that $x$ is a $\succsim$-best in $D$. To prove this, suppose, seeking a contradiction, that there exists $y \in D$ such that $y \succ x$. Since $\lim_{n \to +\infty} D_n = D$, there must exist a sequence $\left\{y_n\right\}_{n \in \mathbb{N}}$ such that $\lim_{n \to +\infty} y_n =y$ and $y_n \in D_n$ for every $n \in \mathbb{N}$. Moreover, since $\lim_{n \to +\infty}\succsim_n \hspace{2pt} = \hspace{2pt} \succsim$, by the second part of Lemma \ref{lemma:Hausdorff_facts}, there must exist $N \in \mathbb{N}$ such that $y_N \succ_N x_N$. This contradicts that $x_N$ is $\succsim_N$-maximal in $K_N$, as assumed.
+	
+Since $x$ is $\succsim$-best in $D \in \mathcal{D}\left(\succsim, K\right)$, Theorem 1 of \citet*{Gorno2018} implies that $x$ is $\succsim$-maximal in $K$.
+\end{proof}
+
+Theorem~\ref{th:maximum} generalizes the upper-hemicontinuity of the $\arg\max$ correspondence in Berge's maximum theorem by weakening the completeness implied by the existence of a utility representation to condition (3). Roughly, this condition says that limits of maximal $\succsim_n$-domains should be maximal $\succsim$-domains, relative to the relevant feasible sets. In the particular case in which all preferences in the sequence $\left\{\succsim_n\right\}_{n \in \mathbb{N}}$ are complete, the limit preference $\succsim$ must also be complete and condition (3) holds trivially. However, condition (3) is also compatible with incomplete preferences.
+
+\begin{example}
+\label{ex:partition}
+Suppose there is a finite partition $\mathcal{D}^*$ of $X$ such that $\mathcal{D}\left(\succsim_n, X\right) = \mathcal{D}^*$ for all $n \in \mathbb{N}$. Note that this assumption nests the case of complete preferences as the particular case in which $\mathcal{D}^*=\{X\}$. Convergence of preferences implies that $\mathcal{D}\left(\succsim, X\right) = \mathcal{D}^*$ as well. Moreover, since all maximal domains relative to $X$ are disjoint, we also have $\mathcal{D}\left(\succsim, K\right) = \left\{D \cap K\middle| D\in \mathcal{D}^*\right\}$ and $\mathcal{D}\left(\succsim_n, K_n\right) = \left\{D \cap K_n\middle| D\in \mathcal{D}^*\right\}$ for every $n \in \mathbb{N}$. We conclude that $LS_{n \to +\infty} \mathcal{D}\left(\succsim_n, K_n\right) \subseteq \mathcal{D}\left(\succsim, K\right)$ and condition (3) holds.
+\end{example}
+
+Even though condition (3) constitutes a general sufficient condition for convergence of maximal elements, it is not necessary:
+
+\begin{example}
+Let $X = \left[-1, 1\right]$ and consider 
+\[
+\succsim \hspace{2pt} = \left\{(-1, 1), (1, -1)\} \cup \{(x, y) \in X^2 \middle| 0 \ge y \ge x \text{ or } x \ge y \ge 0 \right\}
+\]
+For each $n \in \mathbb{N}$, let $K_n = \{-1\} \cup \left[-1/n, 1\right]$. Then, for each $n \in \mathbb{N}$, we have two maximal $\succsim$-domains relative to $K_n$, $D_n = \left[0, 1\right]$ and $D'_n = \{-1\} \cup \left[-1/n,0\right]$.
+
+Note that $\lim_{n \to +\infty} K_n = K = \{-1\} \cup [0, 1]$ and $\lim_{n \to +\infty} D'_n = D' = \{-1, 0\}$, which implies $D' \notin \mathcal{D}\left(\succsim, K\right)$, failing condition (3). However, for each $n \in \mathbb{N}$, the only maximal elements are $-1$ and $1$, thus every sequence of maximal elements converges to a maximal element of the limit set.
+\end{example}
+
+
+\section{Necessity of the key condition}
+
+As we saw in the previous section condition (3) is not necessary in general. However, it is possible to obtain a full characterization for the convergence of maximal elements, through condition (3) of Theorem \ref{th:maximum}, in more specific settings. In this section, we accomplish this by restricting attention to partial orders (\textit{i.e.}, antisymmetric preferences) and sets that are ``order dense".
+
+Formally, a set $A \subseteq X$ is $\succsim$-\textit{dense} if, for every $x,y \in A$, $x \succ y$ implies that there exists $z \in A$ such that $x \succ z \succ y$. $\succsim$-dense sets are quite common in applications. For instance, if $\succsim$ is a preference over lotteries that admits an expected multi-utility representation\footnote{\citet*{Dubra2004} show that a preference over lotteries has an expected multi-utility representation if and only if it is continuous and satisfies the independence axiom.}, then every convex set of lotteries is $\succsim$-dense. We can now state the main result of this section.
+
+\begin{theorem}
+	\label{th:full_maximum}
+Denote by $\mathcal{G} \subseteq \mathcal{P}$ the collection of continuous partial orders on $X$. Let $\left\{\left(\succsim_n, K_n\right)\right\}_{n \in\mathbb{N}}$ be a converging sequence in $\mathcal{P} \times \mathcal{K}_X$ with limit $\left(\succsim, K\right) \in \mathcal{G} \times \mathcal{K}_X$ and such that, for every $n \in \mathbb{N}$, $K_n$ is a $\succsim_n$-dense set and all indifference classes of $\succsim_n \cap \left(K_n \times K_n\right)$ are connected. Then, $K$ is $\succsim$-dense. Moreover, the following are equivalent:
+\begin{enumerate}
+	\item $LS_{n \to +\infty} \mathcal{D}\left(\succsim_n, K_n\right) \subseteq \mathcal{D}\left(\succsim, K\right)$
+	\item $LS_{n \to +\infty} \mathcal{M}ax(\succsim_n, K_n) \subseteq \mathcal{M}ax(\succsim, K)$ and \\$LS_{n \to +\infty} \mathcal{M}in(\succsim_n, K_n) \subseteq {\mathcal{M}in(\succsim, K)}$.
+\end{enumerate}
+\end{theorem}
+
+
+\begin{proof}
+$(1) \Rightarrow (2)$. The convergence of the maximal elements is a direct implication of Theorem \ref{th:maximum}. To see the convergence of the minimal elements let $\left\{y_n\right\}_{n \in \mathbb{N}}$ be a convergent sequence such that $\lim_{n \to + \infty} y_n = y$ and, for all $n \in \mathbb{N}$, $y_n$ is a $\succsim_n$-minimal element. Define $\succsim^*_n \hspace{2pt} = \hspace{2pt}\precsim_n$, then $\mathcal{D}\left(\succsim^*_n, K_n\right) = \mathcal{D}\left(\succsim_n, K_n\right)$ for every $n \in \mathbb{N}$. Moreover, every $y_n$ is a $\succsim^*_n$-maximal. Thus we can apply Theorem \ref{th:maximum} to conclude that $y$ is a $\succsim^*$-maximal which is equivalent to it be a $\succsim$-minimal.
+	
+$(1) \Leftarrow (2)$. Take a sequence $\left\{D_n\right\}_{n \in \mathbb{N}}$ such that $D_n \subseteq K_n$, $D_n \in \mathcal{D}\left(\succsim_n, K_n\right)$, and $\lim_{n \to +\infty} D_n = D$. Since $\lim_{n \to +\infty} \succsim_n \hspace{2pt} = \hspace{2pt} \succsim$, $D$ is a $\succsim$-domain. For each $n \in \mathbb{N}$, $\succsim_n$ is a continuous preference such that $\succsim_n \cap \left(K_n \times K_n\right)$ has connected indifference classes and $K_n$ is $\succsim_n$-dense. Thus, by Lemma \ref{lm:maxdomain_fullchar}, $D_n$ is connected for every $n \in \mathbb{N}$. It follows that $D$ is also connected by Lemma \ref{lm:conv_connectset} and $\succsim$-dense by Lemma~\ref{lm:pref_connectset}.
+
+We claim that $D$ has no exterior bounds. Suppose, seeking a contradiction, there is $x \in K$ such that $x \succsim\tilde{y}$ for every $\tilde{y} \in D$ and $x \notin D$. In fact, we must have $x \succ \tilde{y}$ because $\succsim$ is a partial order. For each $D_n$ take $y_n \in D_n$ such that $y_n \succsim_n z$ for all $z \in D_n$. By Theorem 1 in \citet*{Gorno2018} each $y_n$ is a maximal element of $K_n$. Note that $\left\{y_n\right\} \subset K_n$ and $\left\{y_n\right\}$ is compact for every $n \in \mathbb{N}$, thus by Lemma \ref{lemma:subsequence} there is no loss of generality in assuming that $\{y_n\}_{n\in \mathbb{N}}$ converges to some $y \in K$. Since $y_n \in D_n$ for every $n$ and $\left\{(D_n, y_n)\right\}_{n \in \mathbb{N}}$ converges to $(D,y)$, we must have $y \in D$. By hypothesis we have $x \succ y$ and $y$ is a maximal element of $K$, a contradiction. An analogous argument guarantees that there is no $x \in K$ such that $y \succsim x$ for every $y \in D$ and $x \notin D$. This means that $D$ has no exterior bounds.
+	
+Furthermore, since $\succsim$ is a partial order, $D$ contains all its indifferent alternatives. Thus, by Lemma \ref{lm:maxdomain_fullchar}, we conclude that $D \in \mathcal{D}\left(\succsim, K\right)$.
+\end{proof}
+
+The advantage of Theorem~\ref{th:full_maximum} is that it provides assumptions under which the convergence of maximal domains is a necessary and sufficient condition for convergence of maximal and minimal elements. One drawback of this result is that two of the assumptions involved, $\succsim_n$-denseness of the $K_n$ and connectedness of the relative indifference classes, refer to the specific sequence $\left\{\left(\succsim_n, K_n\right)\right\}_{n \in\mathbb{N}}$ under consideration. However, if we restrict attention to convex feasible sets and preferences over lotteries that admit an expected multi-utility representation\footnote{Let $C$ be a separable metric space of consequences and let $X$ be the set of (Borel) probability measures (lotteries) over $C$ equipped with the topology of weak convergence of probability measures. Similarly to \citet*{Dubra2004}, we say that a set $\mathcal{U}$ of bounded continuous functions $C \to \mathbb{R}$ constitutes an \textit{expected multi-utility representation} for $\succsim$ whenever, for every two lotteries $x,y \in X$, $x \succsim y$ is equivalent to $\int_C u(c) dx(c) \geq \int_C u(c)dy(c)$ for all $u \in \mathcal{U}$.}, these assumptions are automatically satisfied for all sequences $\left\{\left(\succsim_n, K_n\right)\right\}_{n \in\mathbb{N}}$. This is the content of the following corollary:
+
+\begin{corollary}
+\label{cor:EMU}
+Let $X$ be the space of (Borel) probability measures on a separable metric space equipped with the topology of weak convergence. Suppose further that:
+\begin{enumerate}
+\item For each $n \in \mathbb{N}$, $K_n \in \mathcal{K}_X$ is convex and $\succsim_n$ is a preference that admits an expected multi-utility representation,
+\item $\succsim$ is a partial order that admits an expected multi-utility representation.
+\end{enumerate}
+Then, the equivalence in the conclusion of Theorem~\ref{th:full_maximum} holds.
+\end{corollary}
+
+
+
+A subtlety of Theorem \ref{th:full_maximum} is that condition (2) requires that \textit{every} convergent sequence of $\succsim$-maximal (resp. $\succsim$-minimal) elements converges to a $\succsim$-maximal (resp. $\succsim$-minimal) element. The next example make this point more clear
+
+\begin{example}
+Let $\succsim$ be the natural vector order on $X = [0,1]^2$ . Clearly, $\succsim$ is a continuous partial order and $X$ is $\succsim$-\textit{dense}. Now, for each $n\in \mathbb{N}$, consider
+\[
+K_n := \left\{(x_1, x_2) \in X \middle| x_2 \leq n(1-x_1)\right\}.
+\]
+Note that $K_n$ is nonempty and compact for each $n \in \mathbb{N}$. Moreover, $\lim_{n \to + \infty} K_n = K := [0,1]^2$ and $(1, 0) \in \mathcal{M}ax(\succsim, K_n)$. However, $(1,0)  \not\in \mathcal{M}ax(\succsim, K)$. It follows from Theorem~\ref{th:full_maximum} that there must be at least one convergent sequence $\left\{D_n\right\}_{n \in \mathbb{N}}$, where, for each $n \in \mathbb{N}$, $D_n$ is a maximal $\succsim$-domains relative to $K_n$, but such that $\lim_{n \to +\infty} D_n$ is not a maximal $\succsim$-domain relative to $K$. In fact, taking $D_n = \{0\} \times [0,1]$ yields a concrete example of such $\left\{D_n\right\}_{n \in \mathbb{N}}$.
+\end{example}
+
+One limitation of the above theorem is the assumption that $\succsim$ is a partial order. However, the next example shows that it cannot be dropped:
+
+\begin{example}
+\label{ex:preorder-vs-poset}
+Let $X = [-1, 1]$. Consider the following preference
+\[
+\succsim \hspace{2pt} = \left\{(x,y) \in [-1,0)^2 \middle| x=y\right\} \cup \left\{(x, y) \in [0,1]^2 \middle| u(x) \geq u(y)\right\},
+\]
+where $u : [0,1] \to \mathbb{R}$ is a continuous function. Take a sequence $\left\{K_n\right\}_{n \in \mathbb{N}}$ in $X$ where $K_n = [-1/n, 1]$. On the one hand, setting $D_n = \{-1/n\}$ for each $n \in \mathbb{N}$, the sequence $\left\{D_n\right\}_{n \in \mathbb{N}}$ of maximal $\succsim$-domains (of the corresponding $K_n$) converges to $D = \{0\}$, which is not a maximal $\succsim$-domain of the limit set $K$. On the other hand, for all convergent sequences composed by $\succsim$-maximal and $\succsim$-minimal elements in each $K_n$ to converge to $\succsim$-maximal and $\succsim$-minimal elements in the limit set $K = [0, 1]$, it is necessary and sufficient that $u$ is constant. But, whenever $u$ is constant, $\succsim$ is not a partial order.
+\end{example}
+
+
+
+
+
+
+\section{Discussion}
+
+The present paper provides two results that expand the scope of Berge maximum theorem to allow for incomplete preferences. Theorem \ref{th:maximum} depends crucially on its condition (3), a form of upper hemicontinuity of the mapping between preferences-feasible sets pairs and the corresponding collection of maximal domains of comparability. Since \citet*{Gorno2018} shows that every maximal element is the best element of some maximal domain and vice-versa, convergence of maximal domains permits the application of a Berge-type of argument to ensure the convergence of maximal elements through the convergence of local best elements, where the term ``local" here means ``relative to a maximal domain''. 
+
+In Theorem \ref{th:full_maximum}, we describe a more specific setting in which condition (3) in Theorem \ref{th:maximum} is necessary and sufficient for minimal and maximal elements to be preserved by limits. The result is a step forward towards understanding convergence of maximal elements without completeness and opens at least two avenues for future research. First, the equivalence might be true under weaker assumptions. Second, the characterization suggests to look for simple sets of conditions which are sufficient for either side of the equivalence.
+
+
+
+
+
+\section{Technical lemmas}
+\label{sec:proofs}
+
+The proof of Theorem \ref{th:maximum} requires some results about Hausdorff convergence. In the following two lemmas $(M,d)$ is any metric space and $\mathcal{K}_M$ (resp. $\mathcal{F}_M$) is the collection of all nonempty compact (resp. closed) subsets of $M$.
+
+\begin{lemma}
+\label{lemma:subsequence}
+Let $\{K_n\}_{n \in \mathbb{N}}$ be a convergent sequence in $\mathcal{K}_M$ with limit $K \in \mathcal{K}_M$. Then, every sequence $\{A_n\}_{n \in \mathbb{N}}$ in $\mathcal{K}_M$ such that $A_n \subseteq K_n$ for all $n\in \mathbb{N}$ has a subsequence which converges to a nonempty compact subset of $K$.
+\end{lemma}
+
+\begin{proof}
+Let $d^H : \mathcal{K}_M \times \mathcal{K}_M \to \mathbb{R}_+$ denote the Hausdorff distance and let $\mathcal{K}_K$ be the collection of all nonempty compact subsets of $K$. Note that $\left(\mathcal{K}_M, d^H\right)$ is a metric space, $\mathcal{K}_K$ is compact in the (relative) Hausdorff metric topology, and $d^H(A_n, \cdot)$ is continuous on $\mathcal{K}_K$. For each $n \in \mathbb{N}$, let $B_n \in \arg\min_{\tilde{B} \in \mathcal{K}_K} d^H(A_n, \tilde{B})$. I now claim that, for each $n \in \mathbb{N}$, we have
+\[
+d^H(A_n, B_n) \leq d^H(K_n, K).
+\]
+To prove this claim, note that, since $\{y\} \in \mathcal{K}_K$ for all $y \in K$, we have
+\[
+d^H(A_n, B_n) \leq d^H(A_n, \{y\}) = \max_{x \in A_n}d(x,y)
+\]
+for all $y \in K$. Defining $y^*(x) \in \arg\min_{y \in K} d(x,y)$ for each $x \in A_n$, we have
+\[
+d^H(A_n, B_n) \leq \max_{x \in A_n} d(x,y^*(x)) = \max_{x \in A_n}\min_{y \in K} d(x,y) \leq \max_{x \in K_n}\min_{y \in K} d(x,y) \leq d^H(K_n, K)
+\]
+as desired. It follows that $\lim_{n \to +\infty} d^H(A_n , B_n) \leq \lim_{n \to +\infty} d^H(K_n , K_n) = 0$.
+
+Since $\mathcal{K}_K$ is compact, the sequence $\{B_n\}_{n \in \mathbb{N}}$ has a convergent subsequence, say $\{B_{n_h}\}_{h \in \mathbb{N}}$. Let $A := \lim_{h \to +\infty} B_{n_h} \in \mathcal{K}_K$. We claim that $\{A_{n_h}\}_{h \in \mathbb{N}}$ converges to $A$.
+To prove this, it suffices to note that, since $\lim_{n \to +\infty} d^H(A_n , B_n) = 0$ and $\lim_{h\to+\infty} B_{n_h} = A$, the triangle inequality
+\[
+d^H(A_{n_h}, B) \leq d^H(A_{n_h}, B_{n_h})+d^H(B_{n_h}, B). 
+\]
+implies $\lim_{h\to +\infty} d^H(A_{n_h}, B) = 0$.
+\end{proof}
+
+
+\begin{lemma}
+\label{lemma:closed-convergence}
+Denote by $\mathcal{F}_M$ the collection of all nonempty closed subsets of $M$ and let $\left\{\left(F_n, x_n\right)\right\}_{n \in \mathbb{N}}$ be a convergent sequence on $\mathcal{F}_M \times M$ with limit $\left(F, x\right) \in \mathcal{F}_M \times M$ and such that $x_n \in F_n$ for every $n \in \mathbb{N}$. 
+Then, $x \in F$.
+\end{lemma}
+
+\begin{proof}
+Suppose, seeking a contradiction, that $x \notin F$. Since $F$ is closed, there exists $\epsilon > 0$ such that $\left\{ y \in M \middle| d(x, y) \le \epsilon \right\} \cap F = \emptyset$. Hence, $\inf_{y \in F} d(x, y) > \epsilon/2$. By the triangule inequality, we have
+\[
+d(x, y) \le d(x, x_n) + d(x_n, y)
+\]
+for all $y \in F$ and all $n \in \mathbb{N}$. Therefore
+\begin{align*}
+\inf_{y \in F} d(x, y) &\le \inf_{y \in F} \left\{ d(x, x_n) + d(x_n, y) \right\} \\
+&= d(x, x_n) + \inf_{y \in F} d(x_n, y)\\
+&\leq d(x, x_n) + d^H(F_n, F)
+\end{align*}
+for all $n \in \mathbb{N}$, where we used
+\[
+\inf_{y \in F} d\left( x_n, y \right) \le \sup_{x \in F_n} \inf_{y \in F} d(x, y) \le d^H(F_n, F)
+\]
+Taking limits we conclude that $\inf_{y \in F} d(x, y) = 0$, a contradiction.
+\end{proof}
+
+
+\begin{lemma}
+\label{lemma:Hausdorff_facts}
+Consider a converging sequence $\left\{\left(\succsim_n, K_n, x_n, y_n\right)\right\}_{n \in \mathbb{N}}$ in $\mathcal{P}\times \mathcal{K}_X \times X \times X$ with limit $\left(\succsim, K, x, y\right) \in \mathcal{P}\times \mathcal{K}_X \times X \times X$. Then:
+\begin{enumerate}
+\item $x_n \in K_n$ for all $n \in \mathbb{N}$ implies $x \in K$.
+\item $x_n \succsim_n y_n$ for all $n \in \mathbb{N}$ implies $x \succsim y$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+The first part follows from Lemma~\ref{lemma:subsequence} by taking $M=X$ and $A_n = \{x_n\}$ for each $n \in \mathbb{N}$, since every subsequence of $\{x_n\}_{n \in \mathbb{N}}$ converges to $x \in K$.
+
+The second part follows from Lemma~\ref{lemma:closed-convergence} by taking $M = X \times X$ and noting that $x_n \succsim_n y_n$ means $(x_n, y_n) \in \hspace{2pt} \succsim_n$.
+\end{proof}
+
+
+The following three lemmas are used in the proof of Theorem~\ref{th:full_maximum}. In what follows $K$ is an element of $\mathcal{K}_X$ and $\succsim$ is a continuous preference, that is, a continuous partial order on $X$. A set $A \subseteq K$ \textit{has no exterior bound in} $K$ if, for every $x,y\in K$, $x \succsim A \succsim y$ implies $x,y \in A$.
+	
+\begin{lemma}
+\label{lm:maxdomain_fullchar}
+Assume that $K$ is $\succsim$-dense and $\succsim \cap \left(K\times K\right)$ has connected indifference classes. Then, a subset of $K$ is a maximal $\succsim$-domain relative to $K$ if and only if it is a connected $\succsim$-domain relative to $K$ which has no exterior bound in $K$.
+\end{lemma}
+	
+\begin{proof}
+Since $K$ is compact and $\succsim \cap \left(K\times K\right)$ is a continuous preference on $K$ with connected indifference classes, the result follows from Theorem 4 in \citet*{GornoRivello2020}.
+\end{proof}
+	
+	
+\begin{lemma}
+\label{lm:conv_connectset}
+Let $\left\{K_n\right\}_{n \in \mathbb{N}}$ be a sequence in $\mathcal{K}_X$ such that $K_n$ is connected for every $n$ and $\lim_{n \to +\infty} K_n = K$, then $K$ is connected.
+\end{lemma}
+	
+\begin{proof}
+Suppose, seeking a contradiction, that $K$ is not connected. Then, there exist disjoint nonempty sets $A$ and $B$ which are closed in $K$ and satisfy $A \cup B = K$. For any $\epsilon > 0$, define $A^{\epsilon} := \left\{ x \in X \middle| d(x, A) < \epsilon \right\}$ and $\bar{A}^{\epsilon}$ as its closure. Define $B^{\epsilon}$ and $\bar{B}^{\epsilon}$ analogously. Define $K^{\epsilon} := A^{\epsilon} \cup B^{\epsilon}$ and $\bar{K}^{\epsilon}$ as its clousure.
+		
+Since $K$ is closed, $A$ and $B$ are also closed in $X$, which is a normal space. Then, there exists $\bar{\epsilon} > 0$ such that, for every $\epsilon \in (0, \bar{\epsilon}]$, we have $A^{\epsilon} \cap B^{\epsilon} = \emptyset$. Fix $\epsilon = \bar{\epsilon}/2$, then $\bar{A}^{\epsilon} \cap \bar{B}^{\epsilon} = \emptyset$. Because $\lim_{n \to +\infty} K_n = K$ there is $N_{\epsilon} \in \mathbb{N}$ such that $n \ge N_{\epsilon}$ implies $K_n \subseteq \bar{K}^{\epsilon}$. Now define $A_n := K_n \cap \bar{A}^{\epsilon}$ and $B_n := K_n \cap \bar{B}^{\epsilon}$. It is easy to see that $A_n \cap B_n = \emptyset$, $A_n \cup B_n = K_n$, and $A_n, B_n \in \mathcal{K}_X$. It follows that $K_n$ is not connected, a contradiction.
+\end{proof}
+	
+	
+\begin{lemma}
+\label{lm:pref_connectset}
+Let $\left\{\left(\succsim_n, K_n\right)\right\}_{n \in \mathbb{N}}$ be a converging sequence in $\mathcal{P} \times \mathcal{K}_X$ with limit $(\succsim, K) \in \mathcal{G} \times \mathcal{K}_X$. If, for every $n \in \mathbb{N}$, $K_n$ is $\succsim_n$-dense and all indifference classes of $\succsim_n \cap \left(K_n \times K_n\right)$ are connected, then $K$ is $\succsim$-dense.
+\end{lemma}
+	
+\begin{proof}
+Suppose, seeking a contradiction, that $K$ is not $\succsim$-dense. Then, there exist $x, y \in K$ such that $x \succ y$ and there is no $z \in K$ that satisfies $x \succ z \succ y$. Take $\left\{x_n\right\}_{n \in \mathbb{N}}$ and $\left\{y_n\right\}_{n \in \mathbb{N}}$ such that $x_n, y_n \in K_n$ for every $n \in \mathbb{N}$, $\lim_{n \to +\infty} x_n = x$, and $\lim_{n \to +\infty} y_n = y$. Define $M_n := \left\{ z \in K_n \middle| x_n \succsim_n z \succsim_n y_n \right\}$. Note that $M_n \in \mathcal{K}_X$ and $M_n \subseteq K_n$ for every $n \in \mathbb{N}$, so Lemma~\ref{lemma:subsequence} implies that $\left\{M_n\right\}_{n \in \mathbb{N}}$ has a convergent subsequence. Thus, we can assume without loss of generality that $\left\{M_n\right\}_{n \in \mathbb{N}}$ itself converges and define $M := \lim_{n \to +\infty} M_n$. 
+		
+We claim that $M_n$ is connected for each $n \in \mathbb{N}$. Suppose, seeking a contradiction, that $M_n$ is not connected for some $n \in \mathbb{N}$. Then there should exist disjoint nonempty sets $A$ and $B$ which are closed in $M_n$ and satisfy $A \cup B = M_n$. Without loss, assume that $x_n  \in A$. Since $B$ is compact and $\succsim_n$ is continuous, there exists at least one $\succsim_n$-maximal element in $B$, call it $\overline{x}_B$. Define $C := \left\{ z \in A \middle| z \succsim_n \overline{x}_B \right\}$. Note that $C$ is also compact and nonempty ($x_n \in C$), so we can take $\underline{x}_C$, one of its $\succsim_n$-minimal elements. We will now show that $\underline{x}_C \succ_n \overline{x}_B$. Define $I := \left\{ z \in K_n \middle| z \sim_n \bar{x}_B \right\}$. Since $I \subseteq M_n$, both $I \cap B$ and $I \cap A$ are closed sets which satisfy $\left(I \cap A\right) \cup \left(I \cap B\right) = I$ and $\left(I \cap A\right) \cap \left(I \cap B\right) = \emptyset$. Since $I$ is assumed to be connected and $\bar{x}_B \in I \cap B$ it must be that $I \cap A = \emptyset$, proving that $\underline{x}_C \succ_n \overline{x}_B$. Define $D := \left\{ z \in M_n \middle| \underline{x}_C \succ_n z \succ_n \overline{x}_B \right\}$. If there is $z \in D$, then $z \succ_n \overline{x}_B$ implies $z \notin B$. Moreover $\underline{x}_C \succ_n z \succ_n \overline{x}_B$ implies that $z \not \in C$, so $z \not \in A$ either. It follows that $D$ must be empty, which is a contradiction with $K_n$ being $\succsim_n$-dense. We conclude that $M_n$ is connected.
+		
+On the one hand, since $\left\{M_n\right\}_{n \in \mathbb{N}}$ is a sequence of connected sets in $\mathcal{K}_X$, $M$ is connected by Lemma \ref{lm:conv_connectset}. On the other hand, we claim that $M = \left\{x, y\right\}$. It is easy to see that $\left\{x, y\right\} \subseteq M$. To prove the other inclusion take any sequence $\left\{z_n\right\}_{n \in \mathbb{N}}$ converging to $z \in M$ and such that $z_n \in M_n$ for every $n \in \mathbb{N}$. Then $x_n \succsim_n z_n \succsim_n y_n$ implies $x \succsim z \succsim y$. But, since we initially assumed that there is no $z \in K$ that satisfies $x \succ z \succ y$, we must necessarily have that either $x \sim z$ or $z \sim y$. Furthermore, $\succsim$ antisymmetric implies that $x=z$ or $z=y$. Hence, $M$ must be equal to $\left\{x, y\right\}$.
+		
+We conclude that $M$ must simultaneously be connected and equal to $\left\{x, y\right\}$, which yields the desired contradiction.
+\end{proof}
+	
+
+\bibliographystyle{abbrvnat}
+\bibliography{refs}
+
+\end{document}

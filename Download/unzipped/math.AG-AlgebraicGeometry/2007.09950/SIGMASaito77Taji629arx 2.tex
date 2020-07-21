@@ -1,0 +1,1120 @@
+\RequirePackage{ifpdf}
+\ifpdf % We are running pdfTeX in pdf mode
+\documentclass[pdftex]{arxsigma}
+\else
+\documentclass{arxsigma}
+\fi
+
+
+\usepackage{hyperref}
+
+
+%%% !!!uncomment to enumerate the equations throught the sections!!!
+%\numberwithin{equation}{section} 
+
+%%% !!!uncomment to enumerate the statements throught the sections!!!
+%\numberwithin{theorem}{section}
+%\numberwithin{proposition}{section}
+%\numberwithin{lemma}{section}
+%\numberwithin{corollary}{section}
+%\numberwithin{definition}{section}
+%\numberwithin{example}{section}
+%\numberwithin{remark}{section}
+%\numberwithin{note}{section}
+
+%%% !!!uncomment to enumerate the statements continuously inside the sections (e.g. Theorem 3.1, Remark 3.2, Lemma 3.3 etc.)!!!
+%\newtheorem{Theorem}{Theorem}[section]
+%\newtheorem{Corollary}[Theorem]{Corollary}
+%\newtheorem{Lemma}[Theorem]{Lemma}
+%\newtheorem{Proposition}[Theorem]{Proposition}
+% { \theoremstyle{definition}
+%\newtheorem{Definition}[Theorem]{Definition}
+%\newtheorem{Note}[Theorem]{Note}
+%\newtheorem{Example}[Theorem]{Example}
+%\newtheorem{Remark}[Theorem]{Remark} }
+
+\begin{document}
+
+\renewcommand{\PaperNumber}{***}
+
+\FirstPageHeading
+
+\ShortArticleName{Computing regular meromorphic differential forms}
+
+\ArticleName{Computing regular meromorphic differential forms \\ via Saito's logarithmic residues}
+
+% Names of the authors for the title of the paper
+\Author{Shinichi Tajima~$^\dag$ and Katsusuke Nabeshima~$^\ddag$}
+
+\AuthorNameForHeading{S.~Tajima and K.~Nabeshima}
+
+
+
+\Address{$^\dag$~Graduate School of Science and Technology, Niigata University, \\
+ 8050, Ikarashi 2-no-cho, \\ Nishi-ku Niigata, Japan } % Address of First Author
+\EmailD{\href{mailto:tajima@emeritus.niigata-u.ac.jp}{tajima@emeritus.niigata-u.ac.jp}} % E-mail address of First Author
+%\URLaddressD{\url{http://www.home.org/~myHome/}} %URL address of First Author
+
+% Address of Second Author
+\Address{$^\ddag$~Graduate School of Technology, Industrial and Social Sciences, Tokushima University, \\ 2-1, Minamijosanjima-cho, Tokushima, Japan}
+\EmailD{\href{mailto:nabeshima@tokushima-u.ac.jp}{nabeshima@tokushima-u.ac.jp}} % E-mail address of Second Author
+
+% In the case of the same organization, please use the following standard
+%\Author{First Names LASTNAME and Second COAUTHOR}
+%\AuthoqNameForHeading{F.N. Lastname and S. Coauthor}
+%\Address{Address of Author(s), Country}
+%\Email{\href{mailto:email@address}{email1@address}, \href{mailto:email@address}{email2@address}}
+%\URLaddress{\url{URL1}, \url{URL2})
+
+%\ArticleDates{Received ???, in final form ????; Published online ????}
+
+
+
+\Abstract{Logarithmic differential forms and logarithmic residues associated to a hypersurface with an isolated singularity are considered in the context of computational complex analysis. An effective method is introduced for computing  logarithmic residues. A relation between logarithmic differential forms and the Brieskorn formula on Gauss-Manin connection are discussed. Some examples are also given for illustration.}
+
+\Keywords{logarithmic vector field; logarithmic residue; torsion module}
+%Please type here List of Keywords for your article separated by semicolon.
+
+\Classification{32S05; 32A27} % e.g. 35A30; 81Q05
+% For 2010 Mathematics Subject Classification see http://www.ams.org/mathscinet/msc/msc2010.html
+
+\begin{flushright}
+{\it Dedicated to Kyoji Saito on the} \\
+{\it occasion of his $77^{th}$ birthday \ \ \ \ }
+\end{flushright}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+In 1975, K. Saito introduced, with deep insight,  the concept of logarithmic differential forms and that of logarithmic vector fields and studied Gauss-Manin connection associated with the versal deformations of hypersurface singularities of type $A_2$ and $A_3$ as applications. These results are published in \cite{S77}. He developed the theory of logarithmic differential forms, logarithmic vector fields and the theory of residues and published in 1980 a landmark paper \cite{S}. One of the motivations of his study, as he himself wrote in \cite{S}, came from the study of Gauss-Manin connections (\cite{B,S73}). Another motivation came from the importance of these concepts he realized.
+Notably the logarithmic residue, interpreted as a meromorphic differential form on a divisor, is regarded as a natural generalization of the classical Poincar\'e residue 
+to the singular cases. 
+
+In 1990, A. G. Aleksandrov(\cite{A}) studied Saito theory and gave in particular a characterization of the image of the residue map. He showed 
+that the image sheaf of the logarithmic residues coincides with the sheaf of regular meromorphic differential forms introduced by D. Barlet (\cite{B}) and M. Kersken (\cite{K83,K84}).
+We refer the reader to \cite{AT,Bru,CM1,CM2,GS,P} for more recent results on logarithmic residues. 
+
+We consider logarithmic differential forms along a hypersurface with an isolated singularity in the context of computational complex analysis. In our previous paper \cite{TN20}, we study torsion modules and give an effective method for computing them. 
+In the present paper, we first consider a method for computing regular meromorphic differential forms. We show that, based on the result of A. G. Aleksandrov mentioned above, representatives of regular meromorphic differential forms can be computed by using the algorithm presented in \cite{TN20} on torsion modules. Main ideas of our approach are the use of the concept of logarithmic residue and that of logarithmic vector field. Next, we show a link between logarithmic differential forms and Gauss-Manin connections, which reveals the role of the torsion module in the computation of a saturation of Brieskorn lattice of Gauss-Manin connection (\cite{B,Sch,Schu}).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Logarithmic differential forms and residues}
+
+In this section, we briefly recall the concept of logarithmic differential forms and that of logarithmic residues and fix notation. We refer the reader to 
+\cite{S} for details. Next we recall the result on A. G. Aleksandrov on regular meromorphic differential forms. Then, we recall a result of 
+G. -M. Greuel on torsion modules. 
+
+
+Let $X$ be an open neighborhood of the origin $O$ in $ {\mathbb C}^n$.  Let $ {\mathcal O}_X $ be the sheaf on $ X $ of holomorphic functions and $ {\mathcal O}_{X,O} $ the stalk at $ O $ of the sheaf $ {\mathcal O}_X$.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Logarithmic residues}
+
+Let $f$ be a holomorphic function defined on $X$. Let $S=\{ x \in X \mid f(x)=0 \} $ denote the hypersurface  defined by $ f$. 
+
+\begin{definition}
+Let $\omega $ be a meromorphic differential $q$-form on $X$, which may have poles only along $S$. The form $\omega$ is a logarithmic differential form along $S$ if it satisfies the following equivalent four conditions:
+\begin{enumerate}
+\item[(i)] $f\omega$ and $fd\omega$ are holomorphic on $X$.
+
+\item[(ii)] $f\omega$ and $df \wedge \omega$ are holomorphic on $X$.
+
+\item[(iii)] There exists a holomorphic function $g(x)$ and a holomorphic $(q-1)$-form $\xi$  and a holomorphic $q$-form $\eta$ on $X$, 
+such that:
+\begin{enumerate}
+\item[ (a)] $ \dim_{\mathbb C}( S \cap \{x  \in X \mid g(x)=0 \}) \leq n-2, $
+
+\item[ (b)] $ {\displaystyle g\omega = \frac{df}{f} \wedge \xi + \eta.}$
+\end{enumerate}
+\item[(iv)] There exists an $ (n-2)$-dimensional analytic set $A \subset S$ such that the germ of $\omega$ at any point $ p \in S-A$ belongs to $ {\displaystyle \frac{df}{f} \wedge \Omega_{X, p}^{q-1} + \Omega_{X,p}^{q}},$ where $ \Omega_{X,p}^{q}$ denotes the module of germs of holomorphic $q$-forms on $X$ at $p.$
+\end{enumerate}
+\end{definition}
+
+
+For the equivalence of the condition above, see \cite{S}. 
+Let $ \Omega_X^{q}(\log S) $ denote the sheaf of logarithmic $q$-forms along $S$.
+Let $ {\mathcal M}_{S} $ be the sheaf on $S$ of meromorphic functions, let $ \Omega_{S}^{q} $ be the sheaf on $S$ of holomorphic $q$-forms defined to be 
+\begin{equation*}
+\Omega_{S}^{q} = \Omega_{X}^{q}/(f\Omega_X^{q} + df \wedge \Omega_{X}^{q-1}). 
+\end{equation*}
+
+
+\begin{definition}
+The residue map $ {\rm res} : \Omega_X^{q}(\log S) \longrightarrow {\mathcal M}_S \otimes_{{\mathcal O}_X}\Omega_S^{q-1} $ is define as follows:
+For $ \omega \in \Omega_S^{q}(\log S) $, there exists $ g, \xi, \eta $ such that 
+$  {\displaystyle g\omega = \frac{df}{f} \wedge \xi + \eta}. $ Then 
+the residue of $\omega$ is defined to be
+$ {\rm res}(\omega) = \frac{\xi}{g}|_S $ in $ {\mathcal M}_S \otimes_{{\mathcal O}_X}\Omega_S^{q-1}. $
+\end{definition}
+
+
+Note that it is easy to see that the image sheaf of the residue map $ {\rm res} $ of the subsheaf $ \displaystyle{ \frac{df}{f}\wedge \Omega_X^{q-1} + \Omega_X^{q}} $ of $ \Omega_X^{q}(\log S) $ is equal to $ \Omega_X^{q-1}|_S:$
+\begin{equation*}
+ {\rm res}\left( \frac{df}{f}\wedge \Omega_X^{q-1} + \Omega_X^{q}\right) = \Omega_X^{q-1}|_S. 
+\end{equation*}
+
+
+See also \cite{S} for details on logarithmic residues. 
+The concept of residue for logarithmic differential forms can be actually regarded as a natural generalization of the classical Poincar\'e residue. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Barlet sheaf and torsion differential forms}
+
+In 1978, by using results of F. El Zein on fundamental classes, D. Barlet introduced in \cite{B} the notion of the sheaf of regular meromorphic differential forms $\omega_S^{q} $ in a  quite general setting. He showed that for the case $q=n-1$, the sheaf $ \omega_S^{n-1}$ coincides with the 
+Grothendieck dualizing sheaf and $ \omega_S^{q} $ can also be defined in the following manner:
+
+\begin{definition}
+ Let $S$ be a hypersurface  in $X \subset {\mathbb C}^n. $ Let $ \omega_S^{n-1} $ be the Grothendieck dualizing sheaf $ {\rm Ext}_{{\mathcal O}_X}^{1}({\mathcal O}_S, \Omega_X^{n}). $ Then, the sheaf of regular meromorphic differential forms $ \omega_S^{q}, \ q=0,1,\dots, n-2$ on $S$ is defined to be
+\begin{equation*}
+ \omega_S^{q} = {\rm Hom}_{{\mathcal O}_S}(\Omega_S^{n-1-q}, \omega_S^{n-1}). 
+\end{equation*}
+
+\end{definition}
+
+
+
+In 1990, A. G. Aleksandrov(\cite{A}) obtained the following result.
+
+\begin{theorem}
+  For any $ q \geq 0$, there is an isomorphism of $ {\mathcal O}_S $ modules
+\begin{equation*}
+{\rm res}(\Omega_X^{q}(\log S)) \cong \omega_S^{q-1}. 
+\end{equation*}
+
+\end{theorem}
+
+See \cite{A} or \cite{A05} for the proof.\\
+
+
+
+Let $ {\rm Tor}(\Omega_S^{q}) $ denote the sheaf of torsion differential $q$-forms of $ \Omega_S^{q}. $
+
+\begin{example}
+Let $ X $ be an open neighborhood of the origin $O$ in $ \mathbb{C}^2.$ Let $ f(x,y)=x^2-y^3$ and $ S=\{ (x,y) \in X \mid f(x,y)=0 \}. $ Then, for stalk at the origin of the sheaves of logarithmic differential forms, we have
+\begin{equation*}
+\Omega_{X,O}^{1}(\log S) \cong {\mathcal O}_{X,O}\left(\frac{df}{f}, \frac{\beta}{f}\right), \ \ \ \Omega_{X,O}^{2}(\log S) \cong {\mathcal O}_{X,O}\left(\frac{dx\wedge dy}{f}\right),
+\end{equation*}
+where $ {\mathcal O}_{X,O} $ is the stalk at the origin of the sheaf $ {\mathcal O}_X $ of holomorphic functions and  $ \beta=2y dx-3xdy. $ The differential form $\beta$, as an element of $ \Omega_S^{1} = \Omega_X^{1}/(\mathcal{O}_{X}df +f\Omega_X^{1}) $, is a torsion. The differential form $y\beta$ is also a torsion. Since the defining function $f$ is quasi-homogeneous, the dimension of the vector space $ {\rm Tor}(\Omega_S^{1})$ is equal to the Milnor number $\mu=2 $ of $S$ (\cite{M, Z}). Therefore we have 
+$ {\rm Tor}(\Omega_S^{1}) \cong {\mathcal O}_{X,O}(\beta) \cong {\mathbb C}(\beta, y\beta). $
+\end{example}
+
+In 1988 \cite{A88}, A. G. Aleksandrov studied logarithmic differential forms and residues and proved in particular the following.
+
+\begin{theorem} 
+Let $S=\{ x \in X \mid f(x) =0 \} $ be a hypersurface in $X \subset {\mathbb C}^n.$ For $ q=0,1,\ldots,n $, there exists an exact sequence of sheaves of $ {\mathcal O}_{X} $ modules, 
+\begin{equation*}
+0 \longrightarrow\frac{df}{f} \wedge \Omega_{X}^{q-1}+ \Omega_{X}^{q} \longrightarrow 
+\Omega_{X}^{q}(\log S) \stackrel{\cdot f}\longrightarrow {\rm Tor}(\Omega_{S}^{q}) \longrightarrow 0. 
+\end{equation*}
+
+\end{theorem}
+
+
+The result above yields the following observation:
+$  {\rm Tor}(\Omega_{S}^{q}) $  plays a key role to study the structure of $ {\rm res}(\Omega_X^{q}(\log S)). $
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Vanishing theorem}
+
+In 1975, in his study(\cite{G}) on Gauss-Manin connections G. -M. Greuel proved the following results on torsion differential forms.
+
+\begin{theorem}
+Let $ S = \{ x \in X \mid f(x) = 0 \} $ be a hypersurface in $ X $ 
+with an isolated singularity at $ O \in {\mathbb C}^n. $
+Then, 
+\begin{enumerate}
+\item[(i)\ \ ]  $ {\rm Tor}(\Omega_S^{q}) = 0,\  q=0,1,\ldots,n-2, $
+
+\item[(ii)\ ]  ${\rm Tor}(\Omega_S^{n-1}) $ is a skyscraper sheaf supported at the origin $O.$
+
+\item[(iii)]  The dimension, as a vector space over ${\mathbb C}$, of torsion module  ${\rm Tor}(\Omega_S^{n-1}) $ is equal to $ \tau(f), $ the Tjurina number of the hypersurface $ S $ at the origin defined to be 
+\begin{equation*}
+ \tau(f) = \dim_{{\mathbb C}}\left({\mathcal O}_{X, O}/\left(f, \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2},\ldots,\frac{\partial f}{\partial x_n}\right)\right),
+\end{equation*}
+where 
+$ (f, \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2},\ldots,
+\frac{\partial f}{\partial x_n}) $
+is an ideal in $ {\mathcal O}_{X,O} $ generated by \\ 
+$ f, \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2},\ldots,\frac{\partial f}{\partial x_n}. $
+\end{enumerate}
+\end{theorem}
+
+
+Note that the first result was obtained by U. Vetter in \cite{V} and the last result above is a generalization of a result of O. Zariski (\cite{Z}). 
+G.-M. Greuel obtained  much more general results on torsion modules. See \cite{G} (Proposition 1.11, p. 242).
+
+
+
+Assume that the hypersurface $S$ has an isolated singularity at the origin. 
+We thus have, by combining the results of G. -M. Greuel above and of A. G. Aleksandrov presented in the previous subsection, the followings.
+
+
+
+\begin{enumerate}
+\item[(i)] $\Omega_{X,O}^{q}(\log S)= \frac{df}{f} \wedge \Omega_{X,O}^{q-1}+\Omega_{X,O}^{q},  \ q=1,2,\ldots, n-2, $
+
+\item[(ii)] $  0 \longrightarrow\frac{df}{f} \wedge \Omega_{X,O}^{n-2} +  \Omega_{X,O}^{n-1}\longrightarrow 
+\Omega_{X,O}^{n-1}(\log S) \stackrel{\cdot f}\longrightarrow {\rm Tor}(\Omega_{S}^{n-1}) \longrightarrow 0. $
+\end{enumerate}
+
+Accordingly we have the following.
+
+\begin{proposition} Let  $ S = \{ x \in X \mid f(x) = 0 \} $ be a hypersurface in $ X $ 
+with an isolated singularity at $ O \in {\mathbb C}^n. $ Then,
+$ \omega_S^{q} = \Omega_X^{q}, q=0,1,...,n-3 $ hold.
+\end{proposition}
+\begin{proof}
+Since $ {\rm res}(\Omega_X^{q}(\log S)) = \Omega_X^{q-1} |_S, \ q=1,2,...,n-2 $
+the result of A. G. Aleksandrov presented in the last subsection yields the result. 
+\end{proof}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section{Description via logarithmic residues}
+
+In this section, we recall results given in \cite{TN20} to show that torsion differential forms can be described 
+in terms of non-trivial logarithmic vector fields. We also recall basic idea for computing non-trivial logarithmic vector fields. As an application, 
+we give a method for computing logarithmic residues. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Logarithmic vector fields}
+
+
+A vector field $ v $ on $ X $ with holomorphic coefficients is called  logarithmic 
+along the hypersurface $ S $, if the holomorphic function $ v(f) $ is in the ideal $ (f) $ generated by $ f $ in 
+$ {\mathcal O}_X $. Let $ {\mathcal Der}_{X}(-\log S) $ denote the sheaf of modules on $ X $ of logarithmic 
+vector fields along $ S $ (\cite{S}). 
+
+Let $ \omega_X = dx_1 \wedge dx_2 \wedge \cdots \wedge dx_n. $ For a holomorphic vector field $ v $, 
+let $ i_{v}(\omega_X) $ denote the inner product of $ \omega_X $ by $ v $. 
+
+
+\begin{proposition}
+Let $ S=\{ x \in X \mid f(x) =0 \} $ be a hypersurface with an isolated singularity at the origin. Then, 
+\begin{equation*}
+\Omega_{X, O}^{n-1}(\log S) = \left\{ \frac{i_{v}(\omega_X)}{f} \middle| \  v \in  {\mathcal Der}_{X, O}(-\log S) \right\} 
+\end{equation*}
+holds.
+\end{proposition}
+\begin{proof}
+Let $ \beta=i_{v}(\omega_X), $ and set $ \omega = \frac{\beta}{f}. $ Then, $ f\omega = \beta $ is a holomorphic differential form. Therefore, the meromorphic differential $ n-1$ form
+$ \omega $ is logarithmic if and only if $ df \wedge \frac{\beta}{f} $ is a holomorphic differential $ n $-form. 
+Since $ df \wedge \beta = df \wedge i_{v}(\omega_X) = v(f)\omega_X $, we have $ df \wedge \frac{\beta}{f} = \frac{v(f)}{f} \omega_X $. Hence, the condition above means $ v(f) $ is in the ideal $ (f) \subset {\mathcal O}_{X,O} $ generated by $ f $. 
+This completes the proof.
+\end{proof}
+
+
+
+A germ of logarithmic vector field $ v $ generated over $ {\mathcal O}_{X,O} $ by 
+\begin{equation*}
+f\frac{\partial}{\partial x_i}, \ i=1,2,\ldots,n, \ 
+\frac{\partial f}{\partial x_j}\frac{\partial}{\partial x_i} - \frac{\partial f}{\partial x_i}\frac{\partial}{\partial x_j}
+ \ 1 \leq i  < j \leq n, 
+\end{equation*}
+is called trivial.
+
+\begin{lemma}
+Let $ v $ be a germ of a logarithmic vector field. Then, the following conditions are equivalent.
+\begin{enumerate}
+\item[(i)\ ]  $ \omega = \frac{i_{v}(\omega_X)}{f} $ belongs to  $\frac{df}{f} \wedge \Omega_{X,O}^{n-2}+  \Omega_{X,O}^{n-1}$
+\item[(ii)] \ $ v $ is a trivial vector field.
+\end{enumerate}
+\end{lemma}
+\begin{proof}
+The logarithmic differential form  $ \omega = \frac{i_{v}(\omega_X)}{f} $ is in   $ \Omega_{X,O}^{n-1}+\frac{df}{f} \wedge \Omega_{X,O}^{n-2} $ if and only if the numerator 
+$ i_{v}(\omega_X) $ is in  $ f\Omega_{X,O}^{n-1}+ df \wedge \Omega_{X,O}^{n-2}. $ The last condition is
+equivalent to the triviality of the vector field $ v $, which completes the proof.
+\end{proof}
+
+For $ \beta \in \Omega_{X, O}^{n-1}, $ let $ [\beta] $ denote the K\"ahler differential form in $ \Omega_{S, O}^{n-1} $ 
+defined by $ \beta, $ that is, $ [\beta] $ is the equivalence class in 
+$ \Omega_{X, O}^{n-1} /(f \Omega_{X, O}^{n-1} + df \wedge \Omega_{X, O}^{n-2}) $ of $ \beta. $ 
+
+
+The lemma above amount to say that, for logarithmic vector fields $v$, 
+ $ [i_{v}(\omega_X)] $ is a non-zero torsion differential form 
+in $ {\rm Tor}(\Omega_{S,O}^{n-1}) $ if and only if $ v $ is a non-trivial logarithmic vector field.
+
+
+
+We say that germs of two logarithmic vector fields $ v, v^{\prime} \in  {\mathcal Der}_{X, O}(-\log S) $ are 
+equivalent, denoted by $ v \sim v^{\prime} $, if $ v-v^{\prime} $ is trivial. 
+Let $ {\mathcal Der}_{X, O}(-\log S)/\sim $ denote the quotient by the equivalence relation $ \sim $. (See  \cite{T}.)
+
+Now consider the following map
+\begin{equation*}
+ \Theta:  {\mathcal Der}_{X, O}(-\log S)/\sim \ \longrightarrow  
+\Omega_{X, O}^{n-1} /(f \Omega_{X, O}^{n-1} + df \wedge \Omega_{X, O}^{n-2}) 
+\end{equation*}
+defined to be $ \Theta([v]) = [i_{v}(\omega_X)], $ where $ [v] $  is the equivalence class in \\
+$ {\mathcal Der}_{X, O}(-\log S)/\sim $ 
+of $ v. $ It is easy to see that the map $ \Theta $ is well-defined. 
+We arrive at the following description of the torsion module.
+
+\begin{theorem}
+The map 
+\begin{equation*}
+\Theta :  {\mathcal Der}_{X, O}(-\log S)/\sim \ \longrightarrow  {\rm Tor}(\Omega_{S}^{n-1}) 
+\end{equation*}
+is an isomorphism.
+\end{theorem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Polar method}
+
+
+In \cite{T}, based on the concept of polar variety,  logarithmic vector fields are studied and an effective and constructive method is considered. Here in this section, following \cite{NT19a, T} we recall some basics and give a description of non-trivial logarithmic vector fields.
+
+Let $ S =\{ x \in X \mid f(x) =0 \} $ be a hypersurface with an isolated singularity. In what follows, 
+we assume that $ f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}} $ 
+is a regular sequence and the common locus 
+ $V(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,$ $\frac{\partial f}{\partial x_{n}})\cap X$
+is the origin $ O $.\\
+
+Let $ (f, \frac{\partial f}{\partial x_2},$ $\frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}) : (\frac{\partial f}{\partial x_1}) $ denote the ideal quotient, in the local ring $ {\mathcal O}_{X,O} $,  of
+$(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,
+\frac{\partial f}{\partial x_{n}}) $ by $ (\frac{\partial f}{\partial x_1}) $
+.\\
+
+We have the followings
+
+\begin{lemma}
+Let $ a(x) $ be a germ of holomorphic function in $  {\mathcal O}_{X,O}. $Then, the following are equivalent.
+\begin{enumerate}
+\item[(i)\ ] $ a(x) \in (f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}) : (\frac{\partial f}{\partial x_1}),$ 
+
+\item[(ii)] There exists a germ of logarithmic vector field $ v $ in $  {\mathcal Der}_{X, O}(-\log S) $ s.t.
+\begin{equation*}
+v= a(x)\frac{\partial }{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2} + \cdots + a_{n-1}(x)\frac{\partial}{\partial x_{n-1}}+ a_n(x)\frac{\partial}{\partial x_n}, 
+\end{equation*}
+where $  a_2(x), \ldots , a_{n}(x) \in {\mathcal O}_{X, O}. $
+\end{enumerate}
+\end{lemma}
+
+
+Since the sequence   $ f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}} $ is assumed to be  regular, we also have the following. 
+
+\begin{lemma}
+Let $ v^{\prime} $ be a logarithmic vector fields in  $  {\mathcal Der}_{X, O}(-\log S) $ of the form
+\begin{equation*}
+v^{\prime}= a_2(x)\frac{\partial }{\partial x_2} + a_3(x)\frac{\partial}{\partial x_3} + \cdots +a_{n}(x)\frac{\partial}{\partial x_{n}}. 
+\end{equation*}
+Then, $ v^{\prime} $ is trivial.
+\end{lemma}
+
+
+Accordingly, we have the following result.
+
+\begin{proposition}
+Let  $ f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,
+\frac{\partial f}{\partial x_{n}} $ be a regular sequence. Let $ v $ be a germ of logarithmic 
+vector field along $ S $ of the form 
+\begin{equation*}
+v= \displaystyle{a_1(x)\frac{\partial }{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2} + \cdots + 
+    a_{n-1}(x)\frac{\partial}{\partial x_{n-1}}+ a_n(x)\frac{\partial}{\partial x_n}}. 
+\end{equation*}
+ Then, the following conditions are equivalent.
+\begin{enumerate}
+\item[(i)\ ]$ v $ is trivial,
+
+\item[(ii)] $ a_1(x) \in  (f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}).  $ \\
+\end{enumerate}
+\end{proposition}
+
+The discussion above leads a method for computing non-trivial logarithmic vector fields:
+
+\vspace{1ex}
+\noindent
+{\rm Step 1} \ Compute a basis $A$, as a vector space, of the quotient 
+\begin{equation*}
+\left(\left(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}\right) : \left(\frac{\partial f}{\partial x_1}\right)\right)/\left(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}\right). 
+\end{equation*}
+{\rm Step 2} \ For each $ a(x) \in A$, compute $ a_2(x), a_3(x),...,a_n(x), b(x)  \in {\mathcal O}_{X,O} $, such that 
+\begin{equation*}
+a(x)\frac{\partial f}{\partial x_1} + a_2(x)\frac{\partial f}{\partial x_2} + \cdots + a_{n-1}(x)\frac{\partial f}{\partial x_{n-1}}+ a_n(x)\frac{\partial f}{\partial x_n} - b(x)f(x) =0. 
+\end{equation*}
+
+Then, since 
+$ {\mathcal Der}_{X, O}(-\log S)/\sim $ is isomorphic to 
+\begin{equation*}
+\left(\left(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}\right) : \left(\frac{\partial f}{\partial x_1}\right)\right)/\left(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}\right). 
+\end{equation*}
+the $ \tau$ vector fields, 
+\begin{equation*}
+v= a(x)\frac{\partial }{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2} + \cdots +a_{n-1}(x)\frac{\partial}{\partial x_{n-1}}+ a_n(x)\frac{\partial}{\partial x_n}, \ a(x) \in A 
+\end{equation*}
+give rise to a basis of $ {\mathcal Der}_{X, O}(-\log S)/\sim$.
+
+Note that algorithms for computing non-trivial logarithmic vector fields is described in \cite{TN20}. 
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Regular meromorphic differential forms}
+
+Now we are ready to consider a method for computing regular meromorphic differential forms. For simplicity, we first consider three dimensional case. 
+ Assume that a non-trivial logarithmic vector field $v$ is given.
+\begin{equation*}
+v=a_1(x)\frac{\partial}{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2}+a_3(x)\frac{\partial}{\partial x_3}.
+\end{equation*}
+
+Let $ v(f)=b(x)f(x) $ and $ \beta=i_v(\omega_X), $ where $\omega_X=dx_1\wedge dx_2\wedge dx_3.$
+We have $ \beta=a_1(x)dx_2\wedge dx_3-a_2(x)dx_1\wedge dx_3+a_3(x)dx_1\wedge dx_2. $
+We introduce differential forms $ \xi$ and $\eta$ as
+\begin{equation*}
+\xi=-a_2(x)dx_3+a_3(x)dx_2, \ \eta =b(x)dx_2\wedge dx_3.
+\end{equation*}
+
+Let $g(x)=\frac{\partial f}{\partial x_1}. $ Then, the following holds.
+\begin{equation*}
+g(x)\beta= df \wedge \xi + f(x)\eta. 
+\end{equation*}
+
+Accordingly, the logarithmic differential form $ \omega=\frac{\beta}{f} $ satisfies 
+\begin{equation*}
+g(x)\omega=\frac{df}{f} \wedge \xi + \eta 
+\end{equation*}
+Since $ g(x) = \frac{\partial f}{\partial x_1}, $ we have, by definition, the following:
+\begin{equation*}
+{\rm res}\left(\frac{\beta}{f}\right) = \frac{\xi}{\frac{\partial f}{\partial x_1}}|_S. 
+\end{equation*}
+Notice that the differential form  $ \xi$ above is directly defined from the coefficients of  the logarithmic vector field $v$.
+
+\begin{proposition}\label{pro4}
+ Let $S=\{ x \in X \mid f(x)=0 \} $ be a hypersurface with an isolated singularity at the origin $ O \in X \subset {\mathbb C}^n. $ Let 
+\begin{equation*}
+v=a_1(x)\frac{\partial}{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2}+ \cdots +a_n(x)\frac{\partial}{\partial x_n} 
+\end{equation*}
+be a germ of  non-trivial logarithmic vector field along $S$. Let $ v(f)=b(x)f(x) $, $ \beta=i_v(\omega_X) $ and $ g(x) =\frac{\partial f}{\partial x_1}. $ Let $ \xi, \eta$ denote the differential form defined to be 
+\begin{eqnarray*}
+\xi &=& -a_2(x)dx_3 \wedge dx_4 \wedge \cdots \wedge dx_n +a_3(x)dx_2 \wedge dx_4 \wedge \cdots \wedge dx_n - \cdots \\
+& & +(-1)^{(n+1)}a_n(x)dx_2 \wedge dx_3 \wedge \cdots \wedge dx_{n-1}, \\
+\eta &=& b(x) dx_2 \wedge dx_3 \wedge \cdots \wedge dx_n. 
+\end{eqnarray*} 
+Then,
+$ g(x)\frac{\beta}{f} = \frac{df}{f}\wedge \xi + \eta $
+ and $ {\rm res}(\frac{\beta}{f}) = \frac{\xi}{\frac{\partial f}{\partial x_1}}|_S $ hold.
+\end{proposition}
+
+\begin{theorem} 
+Let $S=\{ x \in X \mid f(x)=0 \} $ be a hypersurface with an isolated singularity at the origin $ O \in X \subset {\mathbb C}^n. $ Let $V=\{v_1, v_2,\ldots , v_{\tau} \} $ be a set of non-trivial logarithmic vector fields such that 
+the class $ [v_1], [v_2], \cdots, [v_{\tau}] $ constitutes a basis of the vector space $ {\mathcal Der}_{X,O}(-\log S)/\sim$, where 
+$ \tau $ stands for the Tjurina number of $f$. Let $ \xi_1, \xi_2, \ldots, \xi_{\tau} $ be the differential forms correspond to 
+$ v_1, v_2, \ldots, v_{\tau} $ defined in {\bf Proposition}~\ref{pro4}. 
+
+Then, any logarithmic residue in ${\rm res}(\Omega^{n-1}(\log S)) $, or a regular meromorphic differential form $ \gamma $ in $ \omega_S^{n-2} $ can be represented as 
+\begin{equation*}
+\gamma = \left(\frac{1}{\frac{\partial f}{\partial x_1}}(c_1\xi_1+c_2\xi_2+ \cdots +c_{\tau}\xi_{\tau})\right)|_S + \alpha, 
+\end{equation*}
+where $ c_i \in {\mathbb C}, i=1,2,\dots, \tau, $ and $ \alpha \in \Omega_X^{n-2}|_S $
+\end{theorem}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Examples}
+
+In this section, we give  examples of computation for illustration. Data is an  extraction from \cite{TN20}.  Let $ f_0(z,x,y)=x^3+y^3+z^4 $ and let $ f_t(z,x,y)=f_0(z,x,y)+txyz^2, $
+where $ t $ is a deformation parameter. We regard $ z $ as the first variable. Then, $ f_0$ is a weighted homogeneous polynomial with respect to a weight 
+vector $ (3,4,4) $ and $ f_t $ is a $ \mu $-constant deformation of $ f_0 $, called $ U_{12} $ singularity. The Milnor number 
+$ \mu(f_t) $ of $ U_{12} $ singularity is equal to 12. In contrast, the Tjurina number 
+$ \tau(f_t) $ depends on the parameter $ t. $ In fact, 
+if $ t=0,$ then $\tau(f_0) = 12 $ and if $ t \ne 0, $ then $ \tau(f_t) =11. $ In the computation, we fix a term order $ \succ^{-1} $ on $ {\mathcal O}_{X,O} $
+which is compatible with the weigh vector $(3,4,4). $
+
+We consider these two cases separately.
+
+\begin{example}[weighted homogeneous $ U_{12} $ singularity] 
+Let $ f_0(z,x,y) = x^3+y^3+z^4. $ Then, $ \mu(f_0)=\tau(f_0)=12. $ 
+The monomial basis $ {\rm M} $ with respect to the term ordering $ \succ^{-1} $ of the quotient space 
+$ {\mathcal O}_{X,O}/(f_0, \frac{\partial f_0}{\partial x}, \frac{\partial f_0}{\partial y}) $ is 
+\begin{equation*}
+{\rm M} = \{ x^i y^j z^k \mid \  i=0,1, \ j=0,1, \ k=0,1,2,3 \}. 
+\end{equation*}
+The standard basis $ {\rm Sb}$ of the ideal quotient 
+$ (f_0, \frac{\partial f_0}{\partial x}, \frac{\partial f_0}{\partial y}): (\frac{\partial f_0}{\partial z})  $ is 
+\begin{equation*}
+{\rm Sb} = \{ x^2, y^2, z \} 
+\end{equation*}
+The normal form in  $ {\mathcal O}_{X,O}/(f_0, \frac{\partial f_0}{\partial x}, \frac{\partial f_0}{\partial y}) $ of $ x^2, y^2$ and $ z $ are
+\begin{equation*}
+{\rm NF}_{\succ^{-1}}(x^2) = {\rm NF}_{\succ^{-1}}(y^2) = 0, 
+ {\rm NF}_{\succ^{-1}}(z) = z. 
+\end{equation*}
+Therefore, 
+$ {\rm A} = \{ x^iy^jz^k \mid i=0,1, \ j=0,1, \ k=1,2,3 \}. $ Notice that ${\rm A}$ consists of $12$ elements. It is easy to see that the Euler vector field 
+\begin{equation*}
+v= 4x\frac{\partial}{\partial x} + 4y\frac{\partial}{\partial y} +3z\frac{\partial}{\partial z} 
+\end{equation*}
+that corresponds to the element $ z \in {\rm A} $ is a non-trivial logarithmic vector field. Therefore, the torsion module of the hypersurface 
+$ S_0 = \{ (x, y,z) \mid x^3+y^3+z^4=0 \} $ is given by 
+\begin{equation*}
+{\rm Tor}(\Omega_{S_0}^2) = \{ x^iy^jz^k i_v(\omega_X) \mid i=0,1, \ j=0,1, \ k=1,2,3 \}, 
+\end{equation*}
+where $ \omega_X = dz \wedge dx \wedge dy. $ 
+
+Let $ \xi = -4xdy+4ydx. $ Then $ {\rm res}(\frac{i_v(\omega_X)}{f}) = \frac{\xi}{4z^3}|_S. $ Computation of other logarithmic residues are same. 
+\end{example}
+
+
+\begin{example}[semi quasi-homogeneous $U_{12}$ singularity]
+
+ Let $ f(x,y,z) = x^3+y^3+z^4+txyz^2, \ t\ne 0. $ Then, $ \mu(f)=12, \tau(f)=11. $The monomial basis ${\rm M} $ with respect to the term ordering $ \succ^{-1} $ of the quotient space 
+$ {\mathcal O}_{X,O}/(f, \frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) $ is 
+\begin{equation*}
+{\rm M} = \{ x^i y^j z^k \mid \  i=0,1, \ j=0,1, \ k=0,1,2,3 \}. 
+\end{equation*}
+
+The standard basis of the ideal quotient $ (f, \frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) : (\frac{\partial f}{\partial z}) $ 
+in the local ring $ {\mathcal O}_{X,O} $ is 
+\begin{equation*}
+{\rm Sb} = \left\{ z^2-\dfrac{t}{6}xy, \ xz, \ yz, \ x^2, \ y^2 \right\}. 
+\end{equation*}
+From $ {\rm Sb} $ and $ {\rm M} $, we have 
+\begin{equation*}
+{\rm A} =\left\{ z^2-\dfrac{t}{6}xy, \ xz, \ yz, \ z^3, \ xz^2, \ yz^2, \ xyz, \ xz^3, \ yz^3, \ xyz^2, xyz^3 \right\}. 
+\end{equation*}
+
+These 11 elements in $ {\rm A} $ are used to construct non-trivial logarithmic vector fields and regular meromorphic differential forms.
+We give the results of computation.\\
+\noindent
+(i) Let $ a=6z^2-txy. $ Then, 
+\begin{equation*}
+v=\frac{d_1}{27+t^3z^2}\frac{\partial}{\partial x} +\frac{d_2}{27+t^3z^2}\frac{\partial}{\partial y} +(6z^2-txy)\frac{\partial}{\partial z} 
+\end{equation*}
+is a non-trivial logarithmic vector field, where
+\begin{equation*}
+d_1= 216xz-6t^2y^2z-2t^4x^2yz, \ d_2=216yz+24t^2x^2z+10t^3yz^3-2t^4xy^2z 
+\end{equation*}
+\noindent
+(ii) Let $ a=xz. $ Then, 
+\begin{equation*}
+v=\frac{d_1}{27+t^3z^2}\frac{\partial}{\partial x} +\frac{d_2}{27+t^3z^2}\frac{\partial}{\partial y} +xz\frac{\partial}{\partial z} 
+\end{equation*}
+is a non-trivial logarithmic vector field, where
+\begin{equation*}
+d_1=36x^2-6yz^2-6t^2xy^2, \ d_2=36xy+2t^2x^3-4t^2y^3-2t^2z^4. 
+\end{equation*}
+We omit the other nine cases. 
+\end{example}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Brieskorn formula}
+
+In 1970, B. Brieskorn studied the monodromy of Milnor fibration and developed the theory of Gauss-Manin connection (\cite{Br}). He proved the regularity of the connection and proposed an algebraic framework  for computing the monodromy via Gauss-Manin connection. He gave in particular a basic formula, now called Brieskorn formula, for computing Gauss-Manin connection. 
+
+We show in this section a link between Brieskorn formula, torsion differential forms and logarithmic vector fields. We present an alternative method for computing non-trivial logarithmic vector fields. We also present some examples for illustration.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Brieskorn lattices and Gauss-Manin connection}
+
+We briefly recall some basics on Brieskorn lattice and Brieskorn formula. We refer to \cite{BS, Br, Schu}.
+Let $f(x) $ be a holomorphic function on $X$ with an isolated singularity at the origin $ O \in X, $ where $X$ is an open neighborhood of $ O $ in $ {\mathbb C}^n. $
+Let 
+\begin{equation*}
+H_{0}^{\prime} = \Omega_{X, O}^{n-1}/(df \wedge \Omega_{X,O}^{n-2} + d \Omega_{X,O}^{n-2}, \  H_{0}^{\prime\prime}=\Omega_{X,O}^{n}/df \wedge \Omega_{X,O}^{n-2}. 
+\end{equation*}
+
+Then, $df \wedge  H_{0}^{\prime} \subset H_{0}^{\prime\prime}. $
+A map $D : df \wedge H_{0}^{\prime} \longrightarrow H_{0}^{\prime\prime} $ is defined as follows.
+\begin{equation*}
+D(df \wedge \varphi) = [d\varphi], \quad \varphi \in \Omega_{X,O}^{n-1}. 
+\end{equation*}
+
+
+Let $ \varphi= \sum_{i=1}^{n} (-1)^{i+1}h_i(x)dx_1 \wedge dx_2 \wedge \cdots \wedge dx_{i-1} \wedge dx_{i+1} \wedge \cdots \wedge dx_n. $ Then 
+\begin{equation*}
+df \wedge \varphi = \left(\sum_{i=1}^{n} h_i(x)\frac{\partial f}{\partial x_i}\right) \omega_X, 
+\end{equation*}
+where $ \omega_X=dx_1\wedge dx_2 \wedge \cdots \wedge dx_n. $ Therefore  in terms of the coordinate we have the following, known as Brieskorn formula.
+\begin{equation*}
+D(df\wedge \varphi) = \left(\sum_{i}^{n} \frac{\partial h_i}{\partial x_i}\right)\omega_X. \end{equation*}
+
+
+\begin{example}
+ Let $ f(x,y)=x^2-y^3 $and $ S=\{ (x,y) \in X \mid f(x,y)=0 \} $ where $ X \subset {\mathbb C}^2 $ is an open neighborhood of the origin $O$. Then $ v=\dfrac{1}{6}(3x\frac{\partial}{\partial x}+2y\frac{\partial}{\partial y}) $ is a logarithmic vector field along $ S$. 
+
+Let $ \beta=i_v(\omega_X). $ Then, $ \beta=\dfrac{1}{6}(3xdy-2ydx). $
+Since $v(f)=f, $ we have $ df \wedge \beta = f\omega_X, $ where $ \omega_X=dx \wedge dy. $
+By Brieskorn formula, we have 
+\begin{equation*}
+D(f\omega_X) = D(df \wedge \beta) =\dfrac{5}{6}\omega_X. 
+\end{equation*}
+
+Note that the formula above is equivalent $ \displaystyle{d (\frac{\beta}{f^{\lambda}}) =0, } $ with $ \lambda = \dfrac{5}{6}. $
+
+
+Likewise, for $ y\beta$, we have $ df \wedge (y\beta) = f (y\omega_X) $ and
+\begin{equation*}
+D(f(y\omega_X)) = D(df \wedge (y\beta)) = \dfrac{7}{6}\omega_X, 
+\end{equation*}
+which is equivalent to 
+$ \displaystyle{d \left(\frac{y\beta}{f^{\lambda}}\right) =0, } $ with $ \lambda = \dfrac{7}{6}. $
+
+
+Notice that $ \beta, y\beta$ are non-zero torsion differential forms in $ \Omega_S^{1}. $
+\end{example}
+
+
+The observation above can be generalized as follows.
+
+\begin{proposition}
+Let $ S=\{x  \in X \mid f(x)=0 \} $ be a hypersurface with an isolated singularity at the origin $O \in X, $ where $ X \subset {\mathbb C}^n. $ Let 
+\begin{equation*}
+v=a_1(x)\frac{\partial}{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2}+ \cdots +a_n(x)\frac{\partial}{\partial x_n} 
+\end{equation*}
+be a germ of  non-trivial logarithmic vector field along $S. $
+ Let
+$ v(f) = b(x)f(x) $ and $ \beta=i_v(\omega_X), $ where $ \omega_X=dx_1 \wedge dx_2 \wedge \cdots \wedge dx_n. $
+Then, 
+\begin{equation*}
+D(f(b(x)\omega_X)) = \left( \sum_{i=1}^{n} \frac{\partial a_i}{\partial x_i} \right) \omega_X 
+\end{equation*}
+holds.
+\end{proposition}
+\begin{proof}
+Since $ df \wedge \beta = v(f) \omega_X,  $ we have $\displaystyle  df \wedge \beta = \left( \sum_{i=1}^{n} a_i(x)\frac{\partial f}{\partial x_i} \right)\omega_X. $ Since $ v(f) =b(x)f(x), $ Brieskorn formula implies the result.
+\end{proof}
+
+Now we present an alternative method for computing the module of germs of non-trivial logarithmic vector fields. \\
+
+\noindent
+{\rm Step 1} Compute a monomial basis ${\rm M} $ of the quotient space 
+\begin{equation*}
+{\mathcal O}_{X,O}/\left(\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \cdots, \frac{\partial f}{\partial x_n}\right). 
+\end{equation*}
+\noindent
+{\rm Step 2} Compute a standard basis $ {\rm Sb} $ of the ideal quotient 
+\begin{equation*}
+\left(\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \cdots, \frac{\partial f}{\partial x_n}\right) : (f). 
+\end{equation*}
+\noindent
+{\rm Step 3} \ Compute a basis $ {\rm B} $ of the vector space by using $ {\rm Sb} $ and $ {\rm M} $ 
+\begin{equation*}
+\left(\left(\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \cdots, \frac{\partial f}{\partial x_n}\right) : (f)\right)/
+\left(\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \cdots, \frac{\partial f}{\partial x_n}\right) 
+\end{equation*}
+\noindent
+{\rm Step 4} For each $ b(x) \in {\rm B}, $ compute a logarithmic vector field along $S$ such that 
+\begin{equation*}
+v(f)=b(x)f(x). 
+\end{equation*}
+
+The method above computes a set of basis of non-trivial logarithmic vector fields. Note that, the number of logarithmic vector fields in the output is, as proved in \cite{M, T}, equals to the Tjurina number $ \tau(f). $ 
+
+
+ Let 
+\begin{equation*}
+v=a_1(x)\frac{\partial}{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2}+ \cdots +a_n(x)\frac{\partial}{\partial x_n} 
+\end{equation*}
+be a germ of  non-trivial logarithmic vector field along $S, $ such that $ v(f) = b(x)f(x). $ Then from the Proposition above, 
+we have
+\begin{equation*}
+D(f(b(x)\omega_X)) =  \left( \sum_{i=1}^{n} \frac{\partial a_i}{\partial x_i} \right) \omega_X 
+\end{equation*}
+Therefore, the proposed method can be used as a basic procedure for computing Gauss-Manin connection. 
+Each step can be effectively executable, as in \cite{TN20},  by utilizing algorithms described in \cite{NT16a,NT16b,NT17a,TNN}. 
+One of the advantage of the proposed method  lies in the fact that the resulting algorithm can handle parametric cases. 
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\subsection{Examples}
+
+Let us recall that $ x^3+y^7+txy^5 $ is the standard normal form of semi quasi-homogeneous  $E_{12}$ singularity. The weight vector of  is $(7,3)$ and the weighted degree of the quasi-homogeneous part is equal to $21$ and the weighted degree of the upper monomial $ txy^5 $ is equal to $22$. We examine here, by contrast, the case where the weighted degree of an upper monomial is bigger than $ 22.$
+
+\begin{example}
+Let $ f(x,y)=x^3+y^7+txy^6, $ where $t$ is a parameter. Notice that the polynomial $f$ is not weighted homogeneous. The weighted degree of the upper monomial  $ txy^6 $ is equal to $25$, Accordingly $ f $ is a quasi homogeneous function. In fact, by using an algorithm described in \cite{NT16a,T14}, we find that 
+$ f $ is in the ideal $ (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}). $ Therefore, by a classical result of K. Saito (\cite{S71}), $ f $ is  quasi-homogeneous. The Milnor number $\mu(f) $ is equal to $12$. 
+A monomial basis ${\rm M}$ of  $ {\mathcal O}_{X,O}/(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) $ is 
+\begin{equation*}
+{\rm M} = \{1, y, y^2, x, y^3, xy, y^4, xy^2, y^5, xy^3, xy^4, xy^5 \}. 
+\end{equation*}
+Since a standard basis ${\rm Sb} $ of $ (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) : (f)  $ is $ \{ 1 \},$  a basis $ {\rm B} $ of the vector space 
+$ ( (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) : (f) )/ (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y})) $ is 
+equal to $ {\rm M} $ that consists of $12$ elements. 
+
+By using an algorithm given in \cite{NT16b}, we compute  a logarithmic vector field which plays the role of Euler vector field.
+The result of computation is the following. 
+\begin{equation*}
+v= \frac{d_1}{3(49+12t^3y^4)}\frac{\partial}{\partial x} + \frac{d_2}{3(49+12t^3y^4)}\frac{\partial}{\partial y}, 
+\end{equation*}
+where
+\begin{equation*}
+d_1=49x+8t^2y^5+12t^3xy^4, \quad d_2=21y-4tx+4t^3y^5. 
+\end{equation*}
+The vector field $ v$ enjoys  $ v(f)=f. $ Note also that for the case $ t=0, $ we have 
+\begin{equation*}
+v= \frac{1}{21}\left(7x\frac{\partial}{\partial x} + 3y\frac{\partial}{\partial y}\right). \end{equation*}
+
+
+The other non-trivial logarithmic vector fields can be obtained from $v$. Gauss-Manin connection can be determined explicitly by using these non-trivial logarithmic vector fields, 
+\end{example}
+
+\begin{remark*}
+Let $H_J $ denote the set of local cohomology classes in $ H_{[0,0]}^{2}({\mathcal O}_{X}) $ that are killed by the Jacobi ideal $  (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) : $
+\begin{equation*}
+H_J = \left\{ \psi \in  H_{[0,0]}^{2}({\mathcal O}_{X}) \middle|   \frac{\partial f}{\partial x}\psi = \frac{\partial f}{\partial y}\psi = 0 \right\}. 
+\end{equation*}
+Then, by using an algorithm given in \cite{NT17a,TNN}, a basis as a vector space of $H_J$ is computed as 
+
+\vspace{1ex}
+\noindent
+$\left[ \begin{array}{c} 1 \\ x  y \end{array} \right] , $ $\left[ \begin{array}{c} 1 \\ x  y^2 \end{array} \right] , $
+$\left[ \begin{array}{c} 1 \\ x  y^3 \end{array} \right] , $ $\left[ \begin{array}{c} 1 \\ x^2  y \end{array} \right] , $
+$\left[ \begin{array}{c} 1 \\ x  y^4 \end{array} \right] , $ $\left[ \begin{array}{c} 1 \\ x^2  y^2 \end{array} \right] , $ 
+$\left[ \begin{array}{c} 1 \\ x  y^5 \end{array} \right] , $ $\left[ \begin{array}{c} 1 \\ x^2  y^3 \end{array} \right] , $
+
+\vspace{1ex}
+$\left[ \begin{array}{c} 1 \\ x  y^6 \end{array} \right] , $ $\left[ \begin{array}{c} 1 \\ x ^2 y^4 \end{array} \right] , $
+$\left[ \begin{array}{c} 1 \\ x^2  y^5 \end{array} \right] , $ 
+$\left[ \begin{array}{c} 1 \\ x^2  y^6 \end{array} \right] -\dfrac{6}{7}t\left[ \begin{array}{c} 1 \\ x  y^7 \end{array} \right] 
++\dfrac{2}{7}t^2\left[ \begin{array}{c} 1 \\ x^3  y \end{array} \right]  $
+
+\vspace{1ex}
+\noindent
+where $ \left[ \quad \right] $ stands for Grothendieck symbol. 
+These local cohomology classes can be used for computing normal forms in the computation of Gauss-Manin connection in an effective manner (\cite{TNN}).
+\end{remark*}
+
+
+J. Scherk studied in \cite{Sch} the following case.
+
+\begin{example}
+ Let $ f(x,y)=x^5+x^2y^2+y^5. $ Then, the Milnor number $ \mu(f) $ is equal to 11 and the Tjurina number $ \tau(f) $ is equal to 10. A monomial basis $ {\rm M} $ of $ {\mathcal O}_{X,O}/(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) $ is 
+$ {\rm M} = \{1, x, x^2, x^3, x^4, x^5, xy, y, y^2, y^3, y^4 \}. $ A standard basis $ {\rm Sb} $ of the ideal quotient 
+$ (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) : (f) $ is $ \{ x, y \} . $ A basis $ {\rm B} $ of the vector space 
+$ ( (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) : (f) / (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) $ is 
+\begin{equation*}
+{\rm B} = \{ x, x^2, x^3, x^4, x^5, xy, y, y^2, y^3, y^4 \}. 
+\end{equation*}
+
+\noindent
+(i) For $ b(x,y)=x, $ we have 
+\begin{equation*}
+v=\frac{d_1}{5(4-25xy)}\frac{\partial}{\partial x} + \frac{d_2}{5(4-25xy)}\frac{\partial}{\partial y}, 
+\end{equation*}
+where
+$ d_1=4x^2-25x^3y-5y^3, \ d_2=6xy-25x^2y^2. $
+
+By a direct computation, we have 
+\begin{equation*}
+D(f(x\omega_X)) = \left(\dfrac{7}{10}x-\dfrac{3\times25}{16}y^4\right)\omega_X  \mod \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right) .
+\end{equation*}
+\noindent
+(ii) For $ b(x,y)=y, $ we have 
+\begin{equation*}
+ v=\frac{d_1}{5(4-25xy)}\frac{\partial}{\partial x} + \frac{d_2}{5(4-25xy)}\frac{\partial}{\partial y}, 
+\end{equation*}
+where
+$ d_1=6xy-25x^2y^2, \ d_2=4y^2-25xy^3-5x^3 $ and 
+\begin{equation*}
+D(f(y\omega_X)) = \left(\dfrac{7}{10}y-\dfrac{3\times25}{16}x^4\right)\omega_X \mod \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right) .
+\end{equation*}
+
+We omit the other cases.
+\end{example}
+
+\begin{remark*}
+By using an algorithm given in \cite{NT20}, we have the following integral dependence relation
+\begin{equation*}
+25(4-25xy)f^2 = 10x\left(\frac{\partial f}{\partial x}\right)f+10y\left(\frac{\partial f}{\partial y}\right)f+d_{2,0}\left(\frac{\partial f}{\partial x}\right)^2+d_{1,1}\left(\frac{\partial f}{\partial x}\right)\left(\frac{\partial f}{\partial y}\right)+d_{0,2}\left(\frac{\partial f}{\partial y}\right)^2, 
+\end{equation*}
+where 
+\begin{equation*}
+d_{2,0}=2x^2-25x^3y-10y^3, \ d_{1,1}=11xy-50x^2y^2, \ d_{0,2}=2y^2-25xy^3-10x^3
+\end{equation*}
+The use of the integral dependence relation, or the integral equation leads an effective method for computing 
+$ D(f^2\omega_X) $ and $ D(f(D(f\omega_X))). $
+\end{remark*}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Acknowledgements}
+This work has been partly supported by JSPS Grant-in-Aid for  Scientific Research (C) (18K03320 and 18K03214).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\bibliographystyle{sigma}
+%\bibliography{example}
+
+\pdfbookmark[1]{References}{ref}
+\begin{thebibliography}{99}
+\footnotesize\itemsep=0pt
+\providecommand{\eprint}[2][]{\href{http://arxiv.org/abs/#2}{arXiv:#2}}
+
+
+
+\bibitem{A88}
+Aleksandrov, A. G.:
+\newblock A de Rham complex of nonisolated singularities, 
+\newblock Funct. Anal. Appl. 
+Vol. {\bf 22}, pp. 131-133 (1988)
+
+
+
+\bibitem{A}
+Alexsandrov, A. G.:
+\newblock Nonisolated hypersurface singularities, 
+\newblock Adv. Soviet Math.
+Vol {\bf 1}, pp. 211--246 (1990)
+
+\bibitem{A05}
+Aleksandrov, A. G.: 
+\newblock Logarithmic differential forms, torsion differentials and residue,
+\newblock Complex Var. Theory Appl. 
+Vol. {\bf 50}, pp. 777--802 (2005)
+
+\bibitem{A12}
+Aleksandrov, A. G.:
+\newblock Multidimensional residue theory and the logarithmic de Rham complex, 
+\newblock J. Singularities
+Vol. {\bf 5}, pp. 1-18 (2012)
+
+\bibitem{AT}
+Aleksandrov, A. G. et Tsikh, A. K.: 
+\newblock Th\'eorie des r\'esidus de Leray et formes de Barlet sur une intersection compl\`ete singuli\`ere, 
+\newblock C. R. Acad. Sci. Paris S\'er. I Math., 
+Vol. {\bf 333}, pp. 973--978 (2001)
+
+
+\bibitem{B}
+Barlet, D.: 
+\newblock Le faisceau $ \omega_X^{*}$ sur un espace analytique $X$ de dimension pure, 
+\newblock Lecture Notes in Math.
+Vol {\bf 670}, pp. 187--204 (1978)
+
+\bibitem{BS}
+Brasselet, J.-P. and Sebastiani, M.:
+\newblock Brieskorn and the monodromy,
+\newblock J. Singularities
+Vol. {\bf 18}, pp. 84--104 (2018)
+
+
+\bibitem{Br}
+Brieskorn, E.:
+\newblock Die Monodromie der isolierten Singularit\"aten von Hyperfl\"achen, 
+\newblock Manuscripta Math. 
+Vol. {\bf 2}, pp. 103--161 (1970)
+
+\bibitem{Bru}
+Brunella, M. 
+\newblock Some remarks on indices of holomorphic fields, 
+\newblock Publ. Matem\`atiques, 
+Vol. {\bf 41}, pp. 527--544 (1997)
+
+\bibitem{CM1}
+Corr\^ea, M.  and Machado, D. S.:
+\newblock Residue formula for logarithmic foliations and applications, 
+\newblock Trans. Amer. Math. Soc. 
+Vol. {\bf 371}, pp. 6403--6420 (2019)
+
+\bibitem{CM2}
+Corr\^ea, M.  and Machado, D. S.:
+\newblock GSV-index for holomorphic Pfaff systems, 
+\newblock arXiv:1611.09376v4 (2020)
+
+
+\bibitem{E}
+El Zein, F.:
+\newblock La classe fondamentale d'un cycle, 
+\newblock Compositio Math.
+Vol. {\bf 29}, pp. 9--33 (1974)
+
+\bibitem{GS}
+Granger, M. and  and Schulze, M.:
+\newblock  Normal crossing properties of complex hypersurfaces via logarithmic residues, 
+\newblock Compos. Math. 
+Vol. {\bf 150}, pp. 1607--1622 (2014)
+
+\bibitem{G}
+Greuel, G. M.:
+\newblock Der Gauss-Manin Zusammenhang isolierter Singularit\"aten von vollst\"andigen Durchschnitten. 
+\newblock Mat. Ann. 
+Vol. {\bf 214}, pp. 235--266 (1975)
+
+\bibitem{K83}
+Kersken, M.:
+\newblock Der Residuenkomplex in der lokalen algebraischen und analytischen Geometrie, 
+\newblock Math. Ann. Vol. {\bf 265}, pp. 423--455 (1983)
+
+\bibitem{K84}
+Kersken, M.:
+\newblock Regul\"are Differentialformen, 
+\newblock Manuscripta Math.
+Vol. {\bf 46}, pp. 1--25 (1984)
+
+
+
+\bibitem{M}
+Michler, R.:
+\newblock Torsion of differentials of hypersurfaces with isolated singularities, 
+\newblock J. Pure Appl. Algebra,
+Vol. {\bf 104}, pp. 81--88 (1995)
+
+
+
+
+
+\bibitem{NT16a}
+Nabeshima, K.  and Tajima, S.: 
+\newblock Computing Tjurina stratifications of $\mu$-constant 
+deformations via parametric local cohomology systems, 
+\newblock Applicable Algebra in Engineering, Computation and Computing. 
+Vol. {\bf 27}, pp. 451--467 (2016)
+
+
+
+\bibitem{NT16b}
+Nabeshima, K.  and Tajima, S.: 
+\newblock Solving extended ideal membership problems in rings of 
+convergent power series via Gr\"obner bases, 
+\newblock Lecture Notes in Computer Sciences 
+Vol. {\bf 9582} (2016), pp. 252--267 (2016)
+
+
+\bibitem{NT17a}
+Nabeshima, K.  and Tajima, S.:
+\newblock Algebraic local cohomology with parameters and 
+parametric standard bases for zero-dimensional ideals, 
+\newblock Journal of Symbolic Computation,
+Vol. {\bf 82}, pp. 91--122 (2017)
+
+
+
+
+
+%\bibitem{NT17b}
+%Nabeshima, K.  and Tajima, S.:
+%\newblock Computing $\mu^{\ast}$-sequences of hypersurface isolated singularities via 
+%parametric local cohomology systems, 
+%\newblock  Acta Mathematica Vietnamica. 
+%Vol. {\bf 42}(2), 
+%279--288 (2017)
+
+
+
+
+
+\bibitem{NT19a}
+Nabeshima, K. and Tajima, S.: 
+\newblock Computing logarithmic vector fields and Bruce-Roberts Milnor numbers via local cohomology classes.
+\newblock Revue Roumaine Math. Pures et Appl.,
+Vol. {\bf 64}, pp. 521--538 (2019)
+
+
+
+%\bibitem{NT19b}
+%Nabeshima, K.  and Tajima, S.:
+%\newblock Alternative  algorithms for computing generic $\mu^{\ast}$-sequences 
+%and local Euler obstructions of isolated hypersurface singularities, 
+%\newblock Journal of Algebra and its Applications 
+%Vol. {\bf 18} No. 8 (2019) 1950159, 13pp.
+%DOI: 10.1142/S02194988195015614
+
+
+
+\bibitem{NT20}
+Nabeshima, K.  and Tajima, S.:
+\newblock Generalized integral dependence relations, 
+\newblock Lecture Notes in Computer Science.
+Vol. {\bf 11989}, pp. 48--63 (2020)
+
+
+
+
+
+
+\bibitem{P}
+Pol, D.:
+\newblock On the values of logarithmic residues along curves, 
+\newblock Ann. Inst. Fourier (Grenoble),
+Vol. {\bf 68}, pp. 725--766 (2018) 
+
+\bibitem{S71}
+Saito, K.: 
+\newblock Quasihomogene isolierte Singularit\"aten von Hyperfl\"achen, 
+\newblock Invent. Math.,
+Vol. {\bf 14}, pp.123--142 (1971)
+
+\bibitem{S73}
+Saito, K.:
+\newblock Calcul alg\'ebrique de la monodromie, dans Singularit\'es \` a Carg\`ese, 
+\newblock Ast\'erisque 
+Vol. {\bf 7} et {\bf 8}, pp. 195--211, Soc. Math. France '1973)
+
+\bibitem{S77}
+Saito, K.:
+\newblock On the uniformization of complements of discriminant loci, 
+\newblock Preprint, Williamstone, Williams College, S1-KS, pp. 1--21, (1975) and 
+\newblock in Hyperfunctions and Linear Partial Differential Equations, RIMS Kokyuroku, 
+Vol. {\bf 287}, pp. 117--137 (1977)
+
+\bibitem{S}
+Saito, K.:
+\newblock Theory of logarithmic differential forms and logarithmic vector fields,
+\newblock J. Fac. Sci. Univ. Tokyo, Sect. IA Math., 
+Vol \textbf{27}, pp. 265--291 (1980)
+
+
+\bibitem{Sch}
+Scherk, J.:
+\newblock On the Gauss-Manin connection of an isolated hypersurface singularity, 
+\newblock Math. Ann. 
+Vol. {\bf 238}, pp. 23--32 (1978)
+
+
+\bibitem{Schu}
+Schulze, M.:
+\newblock Algorithms for the Gauss-Manin connection, 
+\newblock J. of Symbolic Computation 
+Vol. {\bf 32}, pp. 549--564 (2001)
+
+
+\bibitem{T}
+Tajima, S.:
+\newblock  On polar varieties, logarithmic vector fields and holonomic D-modules, 
+\newblock RIMS Kokyuroku Bessatsu 
+Vol. {\bf 40}, pp.  41--51 (2013)
+
+
+\bibitem{T14}
+Tajima, S.:
+\newblock Parametric local cohomology classes and Tjurina stratifications for $ \mu$-constant deformations of 
+quasi-homogeneous singularities,  
+\newblock Several Topics on Real and Complex Singularities, 
+pp. 189--200, World Scientific (2014)
+
+
+\bibitem{TNN}
+Tajima, S., Nakamura, Y. and  and Nabeshima, K.:
+\newblock Standard bases and algebraic local cohomology for zero dimensional ideals, 
+\newblock Advanced Studies in Pure Math., 
+Vol. {\bf 56}, pp. 341--361 (2009)
+
+
+
+\bibitem{TN20}
+Tajima, S  and Nabeshima, K.: 
+\newblock An algorithm for computing torsion differential forms associated to 
+an isolated hypersurface singularity, 
+\newblock to appear in Mathematics in Computer Scinece \\
+(DOI: 10.1007/s11786-020-00486-w)
+
+\bibitem{V}
+Vetter, U.:
+\newblock \"Aussere Potenzen von Differentialmoduln reduzierter vollst\"andiger Durchschnitte, 
+\newblock Manuscripta Math.
+Vol. {\bf 2}, pp. 67--75 (1970)
+
+\bibitem{Z}
+Zariski, O.: 
+\newblock Characterization of plane algebroid curves whose module of differentials has maximum torsion, 
+\newblock Proc. Nat. Acad. Sci. U.S.A. 
+Vol. {\bf 56}, pp. 781--786 (1966)
+
+
+\end{thebibliography}\LastPageEnding
+
+\end{document}
+
