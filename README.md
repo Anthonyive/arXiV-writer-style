@@ -7,3 +7,6 @@ Task list is now in Projects tab.
 - Generally, start with `\` until the last word
   - For example, `\usepackage{amsmath}` will take `\usepackage`
 - Excluding greek letters
+- ignore `[...]`
+- remove comments
+
