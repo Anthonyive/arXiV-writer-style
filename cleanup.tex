@@ -1,1368 +1,838 @@
-
-\documentclass{article}
-\usepackage{fullpage}
-\RequirePackage{fontenc}
-\RequirePackage{hyperref}
-\RequirePackage{amsthm,amsmath}
-\RequirePackage{natbib}
-\usepackage{amssymb,bbm,tikz}
-\usepackage{mathtools}
-\mathtoolsset{showonlyrefs}
-\usepackage{cases}
-\usepackage{graphicx}
-\usepackage{tabularx}
-\usepackage{microtype}
-\usepackage{enumitem}
-\usepackage{url}
-\usepackage{amsfonts, mathabx}
-\usepackage{appendix}
-\renewcommand{\qedsymbol}{\hfill\rule{2mm}{2mm}}
-\let\hat\widehat
-\let\tilde\widetilde
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}{Lemma}
-\newtheorem{corollary}{Corollary}
-\newtheorem{remark}{Remark}
-\newtheorem{example}{Example}
-\newtheorem{proposition}{Proposition}
-\newtheorem{definition}{Definition}
-\newtheorem*{definition*}{Definition}
-\newtheorem*{remark*}{Remark}
-\DeclareMathOperator*{\argmax}{argmax}
-\DeclareMathOperator*{\argmin}{argmin}
-\renewcommand{\P}{\mbox{$\mathbb{P}$}}
-\newcommand{\E}{\mbox{$\mathbb{E}$}}
-\newcommand{\wS}{\widehat{S}}
-\makeatletter
-\def\namedlabel#1#2{\begingroup
-#2
-\def\@currentlabel{#2}
-\phantomsection\label{#1}\endgroup}
-\makeatother
-\usepackage{todonotes}
-\title{\bf Berry-Esseen Bounds for Projection Parameters and Partial Correlations With Increasing Dimension}
-\author\{Arun Kumar Kuchibhotla\thanks{Email:{\tt
-karun3kumar@gmail.com}.}
-\and
-Alessandro Rinaldo\thanks{Email:{\tt arinaldo@cmu.edu}}
-\and
-Larry Wasserman\thanks{Email:{\tt larry@stat.cmu.edu}.}}
+\RequirePackage{ifpdf}
+\ifpdf
+\documentclass{arxsigma}
+\else
+\documentclass{arxsigma}
+\fi
+\usepackage{hyperref}
 \begin{document}
-\maketitle{\centering
-\vspace*{-0.5cm}
-\textit{Carnegie Mellon University}\\ \par\bigskip
-July 15, 2020
-\par}
-\begin{abstract}
-The linear regression model can be used even when
-the true regression function is not linear.
-The resulting estimated linear function is the best linear
-approximation to the regression function and
-the vector $\beta$ of the coefficients of this linear approximation
-are the projection parameter.
-We provide finite sample bounds
-on the Normal approximation to the law of
-the least squares estimator of the projection parameters
-normalized by the sandwich-based standard error. Our results hold in the increasing dimension setting and under minimal assumptions on the distribution of the response variable.
-Furthermore, we construct confidence sets
-for $\beta$ in the form of hyper-rectangles and establish rates on their coverage accuracy.
-We provide analogous results for partial correlations among the entries of sub-Gaussian vectors.
-\end{abstract}
+\renewcommand{\PaperNumber}{***}
+\FirstPageHeading
+\ShortArticleName{Computing regular meromorphic differential forms}
+\ArticleName{Computing regular meromorphic differential forms \\ via Saito's logarithmic residues}
+\Author{Shinichi Tajima~  and Katsusuke Nabeshima~ }
+\AuthorNameForHeading{S.~Tajima and K.~Nabeshima}
+\Address{ ~Graduate School of Science and Technology, Niigata University, \\ 8050, Ikarashi 2-no-cho, \\ Nishi-ku Niigata, Japan }
+\EmailD{\href{mailto:tajima@emeritus.niigata-u.ac.jp}{tajima@emeritus.niigata-u.ac.jp}}
+\Address{ ~Graduate School of Technology, Industrial and Social Sciences, Tokushima University, \\ 2-1, Minamijosanjima-cho, Tokushima, Japan}
+\EmailD{\href{mailto:nabeshima@tokushima-u.ac.jp}{nabeshima@tokushima-u.ac.jp}}
+\Abstract{Logarithmic differential forms and logarithmic residues associated to a hypersurface with an isolated singularity are considered in the context of computational complex analysis. An effective method is introduced for computing
+logarithmic residues. A relation between logarithmic differential forms and the Brieskorn formula on Gauss-Manin connection are discussed. Some examples are also given for illustration.}
+\Keywords{logarithmic vector field; logarithmic residue; torsion module}
+\Classification{32S05; 32A27}
+\begin{flushright}{\it Dedicated to Kyoji Saito on the} \\{\it occasion of his   birthday \ \ \ \ }
+\end{flushright}
 \section{Introduction}
-Linear regression is a ubiquitous technique in applied statistics. In much of the classic and recent literature in regression, the theoretical study of ordinary least squares (OLS) estimation has focused primarily on the well-specified case, where the observations are obtained from a model postulating a linear regression function. Although widely studied in the statistical and econometric literature, the properties of the OLS estimator for inference in non-standard settings has gained attraction only relatively recently~\citep{Buja14,Buja16,Uniform:Kuch18}.
-In this paper, we study the finite-sample theoretical properties of the OLS estimator, such as estimation error and approximation error to a normal distribution, under minimal assumptions on the data generating distribution and in high-dimensional settings in which the dimension $d$ of the covariates may grow with the sample size $n$ in such a way that $d = o(n)$. In particular, we focus on misspecified regression models in which the regression function is not linear.
-Specifically, we adopt the standard regression setting,
-in which we observe an i.i.d sample $(X_1,Y_1),\ldots, (X_n,Y_n)$ from an unknown distribution $P$ on $\mathbb{R}^d \times \mathbb{R}$, where $X_i$ is the $d$-dimensional vector of covariates and $Y_i$ the response variable for the $i$th sample point.
-We are interested in providing inferential guarantees for the best linear approximation to the
-regression function $x \in \mathbb{R}^d \mapsto \mathbb{E}$, which may take any form.
-When the underlying
-distribution $P$ admits a second moment, it is well known \citep{Buja14} that, even in misspecified models and regardless of true underlying relationship between the covariate and the response variables, the best (in $L_2$ sense) linear approximation to the regression function is well-defined. It is equal to the linear function
-$x \mapsto x^\top \beta$, where $\beta \in \mathbb{R}^d$ is any solution to the optimization problem
-\,
-\]
-with $(X,Y) \sim P$.
-When the Gram matrix $\Sigma
-= \mathbb{E}$ of the covariate vector is invertible, the solution is unique and is given by the vector of{\it projection parameters}
-\\in\mathbb{R}^d.
-\]
-Making inferential statements on $\beta$ in these{\it assumption-lean} settings \citep{Buja14}, i.e. with random covariates and without a true underlying linear model, is an exceedingly common task in applied regression. However, as elucidated in \cite{Buja14}, in this case it is necessary to apply appropriate modifications to standard theory and methods in order to obtain valid asymptotic conclusions, even in fixed-dimensional settings. In particular, it is essential to deploy the sandwich estimator \citep{White1980,Buja14} of the variance of the ordinary least squares estimators.
-In this paper we follow the{\it assumption-lean} framework put forward by \cite{Buja14}, \cite{kuchibhotla2018valid} and \cite{boot} and derive novel non-asymptotic inferential guarantees for the projection parameters that hold under minimal assumptions on the data generating distribution and in the high-dimensional regime of $d$ increasing in (but of smaller order than) $n$.
-The main goals of this paper are to present (1) precise high-dimensional Berry-Esseen bounds
-for the Normal approximation to the law of
-the OLS estimator
-$\hat\beta$ of $\beta$ (normalized by the sandwich standard error) under weak assumptions,
-(2) finite sample bounds on the
-accuracy of the coverage of a simple and practicable class of confidence intervals for the entries of
-$\beta$
-and
-(3) similar results for the
-partial correlations of the entries of sub-Gaussian vectors.
-The confidence sets we consider are
-hyper-rectangles, which
-immediately imply
-simultaneous
-confidence intervals
-for all the components of $\beta$.
-To the best of our knowledge, our results provide the sharpest known rates for the projection parameters under arguably the weakest possible settings considered in the
-literature.
-\subsubsection*{Related Work}
-Berry-Esseen bounds for M-estimators such as ordinary least squares is a seasoned topic in statistics. \cite{pfanzagl1973accuracy} and~\cite{paulauskas1996rates}, among others, have considered Berry-Esseen bounds for multivariate estimators albeit without explicit focus on the dependence on the dimension.
-Statistical inference for linear regression models based on central limit theorems in increasing dimensions is also a well-established topic in the statistical literature.
-In a series of paper, \cite{Portnoy84,Portnoy85,Portnoy86,Portnoy88} established
-various types of asymptotic normal approximations in increasing dimensions in a variety of settings. When applied to our problem, those results imply a scaling for the dimension of order $d = o(\sqrt{n})$, assuming a correctly specified model and arguably strong assumptions.
-\cite{bickel1983bootstrapping}
-showed
-consistency of the bootstrap
-when $d=o(\sqrt{n})$ assuming again a linear regression model, i.i.d. errors and deterministic covariates \cite{mammen1989}. Under more general settings, but still postulating a correctly specified linear model, \cite{mammen1993} proposed the wild (aka multiplier) bootstrap strategy \citep{liu1988} for linear contrasts and proved its consistency. \cite{He2000} \citep{welsh1989} established component-wise asymptotic normality of regression parameters and of more general estimators in parametric models in increasing dimensions.
-Recently, in a groundbreaking series of papers \cite{Cher13,chernozhukov2017detailed, chernozhukov2019improved} have obtained high-dimensional Berry-Esseen rates over hyper-rectangles and certain types of sparsely-convex sets exhibiting only a poly-logarithmic dependence on the dimension (see also~\citet{MR1115160}). These results, which also hold for the ordinary and multiplier bootstrap,
-have been further extended by
-\cite{2018arXiv180606153K}, \cite{hang.hzhang.bootstrap.17} (only for the bootstrap)
-and then by \cite{koike2019high}. They have seen applications in numerous statistical problems and especially in high-dimensional regression settings: see, e.g., \cite{zhang2014confidence}, \cite{wasserman2014berry}, \cite{10.1093/biomet/asu056},
-\cite{doi:10.1146/annurev-economics-012315-015826}, \cite{zhang2017simultaneous}, \cite{test}, \cite{boot}
-and \cite{hang.hzhang.bootstrap.17}.
-The recent statistical literature has produced a variety of methods for constructing confidence sets for the individual regression parameters (or fixed contrast thereof) in high-dimensional settings, some based on the bootstrap. See, e.g.,
-\cite{javanmard2014confidence}, \cite{javanmard2018}, \cite{ning2017},
-\cite{zhu2018,doi:10.1080/01621459.2017.1356319}, \cite{cai2017confidence}, \cite{ren2015}, \cite{rajen.peter.2018} and \cite{peter.sarah.2015}.
-What set the present paper apart from much of the existing
-literature on the topic is the lack of the linearity and of the sparsity assumptions and, more generally, reliance on very weak conditions on the underlying data distribution, consistent with the{\it assumption-lean} approach.
-\cite{boot} tackled the same misspecified settings considered in this article and formulated general Berry-Esseen bounds for non-linear statistics
-in increasing dimensions.
-When applied to the projection parameters $\beta$,
-the resulting rates are sub-optimal, as they require
-$d = o(n^{1/5})$.
-For partial correlations,
-\cite{wasserman2014berry}
-obtain Berry-Esseen bounds in the increasing dimension case.
-The current paper sharpens these bounds considerably and requires much weaker assumptions.
-Under the{\it assumption-lean} settings, \cite{kuchibhotla2018valid} proposed the UPoSI methodology for constructing simultaneous confidence sets for the projection parameters of all possible submodels, which in turn is equivalent to post-selection inference control. For the special case of the saturated model, UPoSI implies a confidence set for $\beta$ with coverage guarantees under weaker scaling for the dimension than the one required by the present paper, though at the cost of larger volumes. We comment on the differences between our results and those of
-\cite{kuchibhotla2018valid} below in Section \ref{section::conclusion}.
-\subsubsection*{Summary of our Contributions}
-The main
-contributions of the paper can be summarized as follows:
-\begin{itemize}
-\item Theorem \ref{thm:Berry-Esseen-OLS}
-provides a Berry-Esseen bound
-on the difference between
-the law of $\hat\beta - \beta$ ---
-normalized by the standard errors from the sandwich estimator---
-and an appropriate Gaussian distribution.
-The result is deterministic in the sense that
-no distributional assumptions are imposed
-on the data generating process. In particular, it holds true for data that are not i.i.d..
-\item
-Theorem \ref{thm::berry-esseen}
-is our main result.
-Assuming independence and additional mild conditions,
-we bound the error terms in
-Theorem \ref{thm:Berry-Esseen-OLS}
-to derive explicit Berry-Esseen rates where the dimension $d$, as well as other parameters of the underlying distribution (including the condition number of the Gram matrix and the number of finite moments of the response variable) are accounted for.
-To that effect, we apply recent high-dimensional central limit results of \cite{koike2019high}, and~\cite{Chern17} for hyper-rectangles that exhibit only a logarithmic dependence on the dimension $d$, albeit at the cost of a worse sample complexity of order
-$n^{-1/6}$ instead of the parametric rate $n^{-1/2}$.
-Considering
-the case where only the dimension $d$ is allowed to change, and ignoring log terms for convenience, the coverage rates we derive are vanishing provided that
-$$
-d = o\left(\min\left\{n^{1/2},\, n^{(q-3)/(q-1)}\right\}\right)
-$$
-where $q$ is the number of
-finite moments of
-$Y-X^T\beta$, assumed to satisfy $q \geq 4 \log(n)/(\log(n) - 2)$.
-If $q \ge 5$, this requirement reduces to $d = o(\sqrt{n})$, a scaling that has become
-known informally as the ``Portnoy rate,'' based on a body of work by
-\cite{Portnoy84,Portnoy85,Portnoy86,Portnoy88} and others, though with different settings, techniques
-and assumptions.
-To the best of our knowledge,
-this is the sharpest result
-in the mis-specified case. Our finite sample bounds immediately yield practicable simultaneous confidence intervals for the projection parameters, constructed either through a simple Bonferroni or{\v{S}}id{\'a}k correction, or using the bootstrap (see Theorem~\ref{thm:multiplier-bootstrap-consistency}), a more laborious but sharper method. Furthermore, in all these cases, the length of the (simultaneous) confidence intervals for the entries of the $\beta$ is of order $1/\sqrt{n}$, independently of the dimension.
-It is noteworthy that the final scaling requirement of $d = o(\sqrt{n})$ is imposed to ensure consistency in the operator norm of the sandwich estimator (see Theorem~\ref{thm:main-rates-thm-OLS-independence}). We conjecture that such scaling cannot be weakened while retaining the parametric rate of $n^{-1/2}$ for accuracy.
-Finally, we mention that by using instead more general high-dimensional Berry-Esseen bounds for convex sets as in \cite{bentkus2003dependence,raivc2019multivariate}, we can achieve coverage rates with a root-n dependence on $n$ but with a much worse scaling in $d$, namely $d = o(n^{2/7})$.
-\item
-Leveraging these results and the mathematical relationship between partial correlations and projection parameters, in Theorem \ref{thm:Berry-Esseen-bound-partial-corr}
-we derive a Berry-Esseen bound
-for the $d\times d$ matrix of partial correlations
-corresponding to a sub-Gaussian random vector $X\in\mathbb{R}^d$, which in turns yield simultaneous confidence intervals for the partial correlation parameters.
-\end{itemize}
-\subsection*{Problem Formulation and Notation}
-Let $(X_1,Y_1), \ldots, (X_n,Y_n)$ be a sample of $n$ observations in $\mathbb{R}^{d} \times \mathbb{R}$, not necessarily independent nor identically distributed. If an intercept term is included in the regression fit, as it is customary, the first coordinate of each covariate vector $X_i$ is set to $1$.
-We seek to draw inference on the{\it projection parameter}
-\.
-\]
-If the matrix
-\ \]
-is positive definite, the projection parameter
-is well-defined and equal to $\Sigma_n^{-1} \Gamma_n$, where $\Gamma_n : = n^{-1}\mathbb{E} \left$.
-When the sample points satisfy the linear model
-\ where $\mathbb{E} = 0$ for all $i$, then the projection parameter corresponds to the vector of linear coefficients, i.e. $\beta = \beta^*$. In this paper, we will \emph{not} posit any relationship between the vectors of covariates $X_i$ and the responses. In this case, the projection parameter lacks a direct interpretation. In the i.i.d. setting, if the response variable has finite second moment, then the projection parameter collects the coefficient of the $L_2$ projection of $Y_1$ into the linear space spanned by the coordinates of $X_1$, i.e. $X_1^\top \beta$. See~\cite{Buja14,Buja16} for a discussion on interpretation of $\beta$ in a mis-specified case.
-The projection parameter is traditionally estimated using the ordinary least squares (OLS) estimator
-\ which corresponds to the plug-in estimator of $\beta$.
-Letting
-\ and provided that $\widehat{\Sigma}_n$ is positive definite, the ordinary least squares estimator is well-defined and can be expressed as
-\ \paragraph{Notation} For any $x\in\mathbb{R}^d$ and a positive-definite matrix $A\in\mathbb{R}^{d\times d}$, $\|x\|_A = \sqrt{x^{\top}A x}$ represents the scaled Euclidean norm. If $A$ is a squared matrix, $\mbox{diag}(A)$ is the diagonal matrix with diagonal elements matching those of $A$ and if, in addition, $A$ a positive definite (thus, a covariance matrix), we set $\mbox{Corr}(A) = (\mathrm{diag}(A))^{-1/2}A(\mathrm{diag}(A))^{-1/2}$ to be the corresponding correlation matrix.
-We denote with $S^{d-1} := \{\theta\in\mathbb{R}^d:\,\theta^{\top}\theta = 1\}$ the unit sphere in $\mathbb{R}^d$.
-\paragraph{Outline}
-Section \ref{section::determiniswtic}
-provides the deterministic CLT for
-the OLS estimator normalized by an estimated
-standard deviation.
-Section \ref{section::explicit}
-treats the case of indpendent observations
-and provides explicit rate constraints on
-the growth of dimension $d$ with respect to
-the sample size $n$.
-Section~\ref{sec::confidence-sets-OLS} provides
-explicit confidence sets for the projection
-parameter $\beta_n$; we describe three methods
-based on Bonferroni,{\v{S}}id{\'a}k inequality
-and wild/multiplier bootstrap.
-Section \ref{section::partial}
-derives similar results for partial correlations.
-Concluding remarks and future directions are in
-Section \ref{section::conclusion}.
-\section{Central Limit Theorems using a Deterministic Inequality}
-\label{section::determiniswtic}
-In this section
-we establish a Berry Esseen bound
-for the joint law
-of the entries of $\hat\beta-\beta$ divided elementwise by the estimated
-standard errors.
-The result is deterministic, as it does not hinge upon any distributional
-assumptions on the sample.
-The strategy is to first obtain a deterministic finite sample bound
-for the magnitude of the difference between $\hat\beta-\beta$
-and a sample average of natural quantities akin to evaluations of an influence function
-(Theorem \ref{thm:Basic-deter-ineq}).
-Then the effect of the randomness
-due to the use of the standard errors
-is bounded
-by comparing to the average of the values of the influence function
-divided by its true standard deviation
-(Corollary \ref{cor:Max-Statistic-Correct-Scaling}).
-This leads to the main result,
-Theorem \ref{thm:Berry-Esseen-OLS}.
-In the subsequent section we will describe minimal distributional assumptions
-that will allows us to explicitly bound
-the error terms in
-Theorem \ref{thm:Berry-Esseen-OLS} and derive rates of consistency for the normal approximation.
-The proofs of these results are in Appendix \ref{appendix:deterministic}.
-To introduce our deterministic bound, we first define the matrix
-\ which corresponds to the ``meat'' of the sandwich variance of the OLS estimator in a mis-specified linear models; see~\cite{Buja14}.
-Notice that in the above expression the variance cannot be pushed inside the summation since the observations are not assumed independent. Throughout this section, for any non-singular matrix $A$, we let $\kappa(A) = \|A^{-1}\|_{\mathrm{op}}\|A\|_{\mathrm{op}}$ be its condition number.
-\begin{theorem}\label{thm:Basic-deter-ineq}
-Assume $\Sigma_n$ and $V_n$ to be invertible and set
-\begin{equation}\label{eq:Dn}
-\mathcal{D}_n^{\Sigma} := \|\Sigma_n^{-1/2}\widehat{\Sigma}_n\Sigma_n^{-1/2} - I_d\|_{\mathrm{op}}.
-\end{equation}
-If $\mathcal{D}_n^{\Sigma} < 1$, then
-\ where
-\ \end{theorem}
-The previous
-result immediately implies the following normalized point-wise bound, which also holds deterministically.
-\begin{corollary}\label{cor:Max-Statistic-Correct-Scaling}
-Under the same conditions of Theorem \ref{thm:Basic-deter-ineq}, we have that
-\ where $\psi_{ij}$ represents the $j$-th coordinate of $\psi_i\in\mathbb{R}^d$ and $(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}$ is the $j$-th diagonal element of $\Sigma_n^{-1}V_n\Sigma_n^{-1}$.
-\end{corollary}
-Note that $\Sigma_n^{-1}V_n\Sigma_n^{-1}$ is the variance of $n^{-1}\sum_{i=1}^n \psi_i$ and hence the statistics defined in Corollary~\ref{cor:Max-Statistic-Correct-Scaling} are normalized by their standard deviation. Corollary~\ref{cor:Max-Statistic-Correct-Scaling} is a deterministic inequality and can be used to derive bounds on the Gaussian approximation for the maximum of ``$z$-statistics''. The basic identity is as follows: if $U$, $W$ and $R > 0$ are real-valued random variables such that $|U - W| \le R$ almost surely, then for \emph{any} $\varepsilon > 0$ and \emph{any} function $\Psi(\cdot)$,
-\begin{equation}\label{eq:basic-identity-BE}
-\begin{split}
-\sup_{t\in\mathbb{R}}|\mathbb{P}(U \le t) - \Psi(t)| ~&\le~ \sup_{t\in\mathbb{R}}|\mathbb{P}(W \le t) - \Psi(t)|\\ &\qquad+ \mathbb{P}(R > \varepsilon) + \sup_{t\in\mathbb{R}}\,.
-\end{split}
-\end{equation}
-See Corollary 10 of~\cite{paulauskas1996rates} for details.
-Each term on the right hand side has a natural interpretation. The first term shows how well the distribution of $W$ is approximated by $\Psi$. The second term shows the magnitude of difference between $U$ and $W$. The third term measures the distortion in $\Psi$ because of difference between $U$ and $V$. The third term corresponds to anti-concentration.
-A direct application of the inequality~\eqref{eq:basic-identity-BE} with the bound in Corollary~\ref{cor:Max-Statistic-Correct-Scaling} yields a Gaussian approximation for $U = \max_{1\le j\le d}|\widehat{\beta}_j - \beta_j|/(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}^{1/2}$. This can be seen by
-setting $\Psi(t) = \mathbb{P}(\max_{1\le j\le d}|G_j| \le t)$ for $t\ge0$,
-where $(G_1,\ldots,G_d)$ is a centered Gaussian vector with covariance given by \eqref{eq:cov.G} below and $V = \max_{1\le j\le d}|{ n^{-1}\sum_{i=1}^n \psi_{ij}}|/{(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}^{1/2}}$.
-This result is, of course, only of theoretical interest;
-for practical inferential purposes, we need a stronger distributional approximation result with the true standard errors replaced by their estimators. Towards that end, let $\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}}$ be an estimator of $\Sigma_n^{-1}V_n\Sigma_n^{-1}$ and consider the event
-\begin{equation}\label{eq:key.event}
-\begin{split}
-\mathcal{E}_{\eta_n} &:= \left\{\mathcal{D}_n^{\Sigma} \le
-\frac{1}{2}\right\} \bigcap
-\left\{\mathcal{D}_n^{\Sigma}\left\|\frac{1}{n}\sum_{i=1}^n
-\psi_i\right\|_{\Sigma_n V^{-1}_n\Sigma_n} \le
-\eta_n\right\}
-\bigcap\left\{\max_{1\le j\le
-d}
-\left|\sqrt{\frac{(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}}{(\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}})_{jj}}}- 1\right| \le \eta_n\right\},
-\end{split}
-\end{equation}
-where $\eta_n>0$ is a positive number, possibly depending on $n$.
-The first two
-events in Equation~\eqref{eq:key.event} allow us bound the right hand side of the inequality in Corollary~\ref{cor:Max-Statistic-Correct-Scaling}, while the third event enables us to replace $(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}$ by $(\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}})_{jj}$.
-Next, define
-\ where $G = (G_1,\ldots,G_d)^{\top}$ is a mean zero Gaussian vector such that
-\begin{equation}\label{eq:cov.G}
-\mbox{Var}(G) = \mbox{Corr}\left( \frac{1}{n} \sum_{i=1}^n \psi_i \right) = \mbox{Corr}\left( \Sigma_n^{-1}V_n\Sigma_n^{-1}
-\right),
-\end{equation}
-and further set
-\ as the anti-concentration constant.
-Then, Corollary~\ref{cor:Max-Statistic-Correct-Scaling} and the inequality~\eqref{eq:basic-identity-BE} with $\Psi(t) = \mathbb{P}(\max_{1\le j\le d}|G_j| \le t)$ yields
-the following general Berry-Esseen bound for the normalized entries of the OLS estimator. This is the main result of this section.
-\begin{theorem}\label{thm:Berry-Esseen-OLS}
-For any $\eta_n > 0$,
-\begin{equation}\label{eq:deterministic-BE-bound}
-\begin{split}
-&\sup_{t\ge0}\left|\mathbb{P}\left(\max_{1\le j\le d}\left|\frac{\widehat{\beta}_j - \beta_j}{\sqrt{(\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}})_{jj}}}\right| \le t\right) - \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t\right)\right|
-\\ &\quad\qquad
-\le 2\Delta_n + \mathbb{P}(\mathcal{E}_{\eta_n}^c) + C_n(\eta_n)\eta_n\Phi_{AC} + \frac{d}{n},
-\end{split}
-\end{equation}
-where $\mathcal{E}_{\eta_n}$ is the event given in \eqref{eq:key.event} and $C_n(\eta_n) := 2 \kappa_n + 2 \kappa_n \eta_n + \sqrt{2\log(2
-n)}$, with $\kappa_n = \kappa(\Sigma_n^{-1/2}V_n^{1/2}) $.
-\end{theorem}
-The above result is deterministic and holds with minimal assumptions on the data generating distributions. In particular, it does not require independence or identically distributed observations. Thus a Berry--Esseen type result for $\widehat{\beta}$ can now be proved under various assumptions of dependence among the observations, such as $m$-dependence and time series. Theorem~\ref{thm:Berry-Esseen-OLS} does not even require the sample size $n$ to be fixed number; in case $n$ is a random variable (for example, a stopping time) and $(X_i, Y_i)$ are identically distributed, then the $d/n$ term in~\eqref{eq:deterministic-BE-bound} is replaced by $d/\mathbb{E}$ and $C_n(\eta_n)$ is replaced by $2\kappa_n + 2\kappa_n\eta_n + \sqrt{2\log(2\mathbb{E})}$. In principle, this allows for $n$ to be a stopping time with respect to the filtration generated by $(X_i, Y_i), i\ge1$ or just a random number independent of $(X_i, Y_i), i\ge1$.
-As mentioned before, we took $\Psi(t) = \mathbb{P}(\max_{1\le j\le d}|G_j| \le t)$ in identity~\eqref{eq:basic-identity-BE}, which is arguably a natural choice because $n^{-1}\sum_{i=1}^n \psi_{ij}/(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}^{1/2}$ converges in distribution to $G_j$ for each $1\le j\le d$. There are other choices for $\Psi(\cdot)$ that lead to a faster rate of convergence for $\Delta_n$. Such choices include Edgeworth expansions and moment-matching distributions. Edgeworth expansions can be found in~\citet{bhattacharya2010normal}, but the dependence on the dimension here is not explicit. With moment-matching distributions one replaces the Gaussian vector $G$ by a different one which matches more than the first two moments of $n^{-1}\sum_{i=1}^n \psi_{ij}/(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}^{1/2}$; these can be found in~\cite{boutsikas2015penultimate} and~\cite{zhilova2016non}. We leave these refined Berry-Esseen bounds for future work.
-The four terms appearing in the Berry-Esseen bound~\eqref{eq:deterministic-BE-bound} of Theorem~\ref{thm:Berry-Esseen-OLS} capture different types of approximations, both of deterministic and stochastic nature. Specifically, the quantity
-$C_n(\eta_n)\eta_n$ is a bound on the linearization
-error, appropriately measured in the $\| \cdot \|_{ \Sigma_n V^{-1}_n\Sigma_n }$, stemming from replacing $\widehat{\beta} - \beta$ with its
-linear approximation $n^{-1}\sum_{i=1}^n \psi_i$, and
-$\Delta_n$
-is its corresponding Berry-Esseen bound. The term $\mathbb{P}(\mathcal{E}_{\eta_n}^c)$ collects multiple types of estimation errors: for $\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}}$, $\Sigma_n^{-1/2}\widehat{\Sigma}_n\Sigma_n^{-1/2}$ and for the norm of $n^{-1} \sum_{i=1}^n \psi_i$, which, in the i.i.d. settings studied in the next section, happens to be of the same order of magnitude and are therefore grouped together. The presence of the anti-concentration constant $\Phi_{AC}$ is standard in high-dimensional Berry--Esseen type result \citep{chernozhukov2017detailed}, and allows to separate the effect of the estimation errors from the choice of the value of the threshold $t$ to produce an approximate $1-\alpha$ nominal coverage.
-Under a given dependence assumption on the random vectors $(X_i, Y_i), 1\le i\le n$, the right hand side of~\eqref{eq:deterministic-BE-bound} is bounded as follows. For any $\eta_n > 0$, the quantity $\mathbb{P}(\mathcal{E}_{\eta_n}^c)$ is controlled using concentration inequalities for mean zero random vectors and random matrices. For independent observations, such
-inequalities are well-known and can be found, for example, in~\cite{LED91},~\cite{einmahl2008characterization},~\cite{Ver12,Vershynin18} and~\cite{tropp2016expected}. For data obeying certain types of dependence, analogous concentration inequalities can be found in~\cite{Liu13} and~\citet{Uniform:Kuch18}. Then, choosing $\eta_n$ suitably so that $\mathbb{P}(\mathcal{E}_{\eta_n}^c)$ tends to zero as $n$ and $d$ increase yields that $C_n(\eta_n)\eta_n\Phi_{AC} = o(1)$. Finally, the quantity $\Delta_n$ is controlled using Berry-Esseen bounds for averages of mean zero random vectors with explicit dependence on the dimension. This can be accomplished in more than one way. For independent random vectors, optimal Gaussian approximation bounds holding uniformly over all convex sets as given in ~\cite{bentkus2003dependence} and~\cite{raivc2019multivariate} would imply the requirement that $d = o(n^{2/7})$. When the dimension $d$ is fixed, this rate is parametric in the sample size. However, in high-dimensional settings in which $d$ is permitted to grow with $n$, such scaling is much too pessimistic for our purposes~\citep{MR1115160}. Indeed, in our analysis we only require convergence to standard Gaussian distribution over all symmetric rectangles (and not over the much larger class of convex sets). In this case, we apply the recent high-dimensional Berry--Esseen results by~\cite{Chern17} and~\cite{koike2019notes} \citep{ZhangWu17} where the dependence on the dimension is only poly-logarithmic. Interestingly, these bounds are sub-optimal in the fixed-dimensional case, where the implied rate would scale as $n^{-1/6}$. Recently, improvements to $n^{-1/4}$ for independent sub-Gaussian random vectors are provided in~\cite{chernozhukov2019improved}.
-\section{Explicit Rates in case of Independent Observations}
-\label{section::explicit}
-Theorem~\ref{thm:Berry-Esseen-OLS} in the previous section provides a bound on the difference between the distribution of OLS estimator to that of the Gaussian distribution without assuming any specific dependence structure on the observations $(X_i, Y_i), 1 \le i\le n$. In order to derive concrete rates from this result, it remains to construct an estimator $\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}}$ and to bound $\mathbb{P}(\mathcal{E}_{\eta_n}^c)$ for a suitable chosen $\eta_n > 0$.
-Below, we carry out this program assuming independent and identically distributed observations and in a high-dimensional framework in which the parameters of the data generating distribution, including its dimension, are allowed to vary with the sample size. In this case, letting $(X, Y)$ be identically distributed as the observations $(X_i, Y_i), 1\le i\le n$, we have that
-\ = \mathbb{E}
-\]
-and
-\begin{align*}
-V_n &= \mbox{Var}\left(\frac{1}{n}\sum_{i=1}^n X_i(Y_i - X_i^{\top}\beta)\right)\\ ~&=~ \frac{1}{n^2}\sum_{i=1}^n \mbox{Var}(X_i(Y_i - X_i^{\top}\beta)) ~\overset{(a)}{=}~ \frac{1}{n}\mathbb{E}.
-\end{align*}
-The first equality follows because $(X_i, Y_i), 1\le i\le n$ are independent and $\beta$ satisfies $\sum_{i=1}^n \mathbb{E} = 0$. It is interesting to note that equality (a) holds only because $\mathbb{E} = 0$ for all $i$, which does not follow if the observations are non-identically distributed.
-Furthermore,
-the matrix $\Sigma$ can be estimated by $\widehat{\Sigma}_n$ and the matrix $V$ by the estimator
-\ The final plug-in estimator of the
-asymptotic variance $\Sigma_n^{-1}V_n\Sigma_n^{-1}$ is the classical{\em sandwich estimator}~\citep{White1980,Buja14}:
-\ For notational convenience, set
-\\quad\mbox{and}\quad \widehat{V} := \frac{1}{n}\sum_{i=1}^n X_iX_i^{\top}(Y_i - X_i^{\top}\widehat{\beta})^2,
-\]
-so that $V_n = n^{-1}V$ and $\widehat{V}_n = n^{-1}\widehat{V}$.
-We will impose the following, mild, assumptions on the data generating distribution. In particular, we only require moment conditions
-on the distribution of the response, which can therefore be heavy-tailed. This is a significant weakening of the assumptions commonly used in the literature, where the response variable is often assumed to have moments of all order, independently of $d$ and $n$. In contrast we only assume the response variable to have $q \geq 2 $ moments, whose values may depend on the dimension $d$.
-As for the covariates,
-we assume
-their distribution to be sub-Gaussian, though this could be
-relaxed to weaker types of light-tail behavior.
-We will first bound the probability of event $\mathcal{E}_{\eta_n}^c$ for a specific $\eta_n$ under the following assumptions.
-\begin{description}
-\item The observations $(X_i, Y_i)\in\mathbb{R}^d\times\mathbb{R}, 1\le i\le n$ are independent and identically distributed (i.i.d.).
-\item There exists some $q \ge 2$ and a constant $K_q\in(0, \infty)$ such that
-\\Big)^{1/q} ~\le~ K_q < \infty,\quad\mbox{for all}\quad 1\le i\le n.
-\]
-\item There exists a constant $K_x\in(0, \infty)$ such that
-\ \le 2,\quad\mbox{for all}\quad 1\le i\le n\mbox{ and }u\in S^{d-1}.
-\]
-\item There exist constants $0 < \underline{\lambda} \le \overline{\lambda} < \infty$ such that
-\ \end{description}
-We now provide some comments on these assumptions. Our main result, Theorem~\ref{thm:main-rates-thm-OLS-independence} below, remains true even if the condition~\ref{eq:DGP}
-is weakened by requiring the the observations to the independent and not necessarily identically distributed.
-However, in this case, the parameter $\beta$ will depend on the data generating distributions in complicated ways and only satisfies the optimality condition
-\ = 0,
-\]
-with no control on the expectation of individual summands. This leads to an impossibility in estimating the variance of $n^{-1}\sum_{i=1}^n X_i(Y_i - X_i^{\top}\beta)$, without further assumptions; see~\cite{Liu95} and~\citet{Bac16} for details. Condition~\ref{eq:moments-errors} requires the existence of $q$-th order moment of the ``errors'' $Y_i - X_i^{\top}\beta$ and may be weakened by assuming the response variables $Y_i$'s' to only have a finite $q$-th order moment. Indeed, observe that
-\\Big)^{1/q} \le \left(\mathbb{E}\right)^{1/q} + \left(\mathbb{E}\right)^{1/q}.
-\]
-Now, because $0 \leq \mathbb{E} = \mathbb{E} - \beta^\top \Sigma \beta$, we have $\|\Sigma^{1/2}\beta\| \le (\mathbb{E})^{1/2}$ and hence
-\\Big)^{\frac{1}{q}} \le \left(\mathbb{E}\right)^{\frac{1}{q}} + (\mathbb{E})^{1/2}\sup_{a\in S^{d-1}}\,\left(\mathbb{E}\right)^{1/q}.
-\]
-Therefore, assuming that $(\mathbb{E})^{1/q} \le \overline{K}_x < \infty$ for some $\overline{K}_x$ along with condition~\ref{eq:covariate-subGaussian} implies condition~\ref{eq:moments-errors}. For the sake of readability, we do not make the dependence on the parameter $K_q$ in Condition~\ref{eq:moments-errors} explicit in our bounds, though it could be tracked through the constants in our proofs, allowing in principle for a dependence of $K_q$ on $d$.
-Condition~\ref{eq:covariate-subGaussian} is a rewording of $K_x$-sub-Gaussianity of the response variables $X_1, \ldots, X_n$ and necessarily requires $K_x \ge 1$. The condition number assumption~\ref{eq:bounded-asymptotic-variance} requires $\Sigma$ and $V$ to be of the ``same order'' and appears to be unavoidable.
-Noting that
-\ = \mathbb{E}\left\right],
-\]
-we see that condition~\ref{eq:bounded-asymptotic-variance} is satisfied if
-\ ~\le~ \sup_{x}\mathbb{E} ~\le~ \underline{\lambda}^{-1},
-\]
-where $\inf_x$ and $\sup_x$ should be taken as the essential infimum and supremum with respect to the distribution of $X$.
-In particular, Condition~\ref{eq:bounded-asymptotic-variance} does not rule out the possibility of vanishing eigenvalues (in $n$ and/or $d$). Again, for readability we have not made the dependence on $\underline{\lambda}$ and $\overline{\lambda}$ explicit in our rates. Observe that $\kappa_n = \kappa(\Sigma_n^{-1/2}V_n^{1/2}) = \kappa(\Sigma^{-1/2}V^{1/2}) \le \sqrt{\widebar{\lambda}/\underline{\lambda}}$.
-Finally, it is noteworthy that the constants $K_x$, $\overline{\lambda} K_q^2$, and $\overline{\lambda}/\underline{\lambda}$ are all unitless. Hence the dependence of our rates on these constants is unaffected by any re-scaling of the $X$'s or of the $Y$'s.
-In our first result we will derive a high-probability estimation error bounds which in turn will yield a probability bound for the event $\mathcal{E}^c_{\eta_n}$, as well as a choice for the threshold $\eta_n$. Because we impose only polynomial moment assumptions on the response, these bounds are non-trivial. The proof of the theorem, and of all the results form this section, can be found
-in Appendix~\ref{appendix:main.ols}.
-\begin{theorem}\label{thm:main-rates-thm-OLS-independence}
-Assume conditions~\ref{eq:DGP},~\ref{eq:covariate-subGaussian},~\ref{eq:bounded-asymptotic-variance}. If condition~\ref{eq:moments-errors} holds for some $q \ge 4\log n/(\log n - 2)$, then there exists a positive constant $C = C(q, K_x, \overline{\lambda} K_q^2, \overline{\lambda}/\underline{\lambda}) \ge 1$ depending only on its arguments such that with probability at least $1 - 3d/n - 3\sqrt{d/n}$, we have
-\begin{equation}\label{eq:main-quantity-bounds}
-\begin{split}
-\mathcal{D}_n^{\Sigma} ~&\le~ C\sqrt{(d + \log(n/d))/n},\\ \mathcal{D}_n^{\Sigma}\left\|\frac{1}{n}\sum_{i=1}^n \psi_i\right\|_{\Sigma V_n^{-1}\Sigma} ~&\le~ C\frac{d + \log(n/d)}{\sqrt{n}}
-+ C\frac{d^{1-1/(2q)}\sqrt{\log(n/d)} + d^{1/2 - 1/(2q)}\log(n/d)}{n^{1-3/(2q)}},\\ \sup_{\theta\in\mathbb{R}^d}\left|\frac{\theta^{\top}\widehat{\Sigma}^{-1}_n\widehat{V}\widehat{\Sigma}_n^{-1}\theta}{\theta^{\top}\Sigma^{-1}V\Sigma^{-1}\theta} - 1\right| ~&\le~ C\frac{(1 + d/\sqrt{n})}{(1-4q^{-1})}\sqrt{\frac{d\log(ed) + \log n}{n}}
-+ C\frac{d^{1-1/q}\log(ed)\log n}{n^{1-3/q}},
-\end{split}
-\end{equation}
-whenever all the quantities on the right hand side are smaller than $1/2$ and we recall that $\mathcal{D}_n^{\Sigma}$ is defined in \eqref{eq:Dn}.
-\end{theorem}
-Because $\widehat{V}_n = n^{-1}\widehat{V}$ and $V_n = n^{-1}V$, the last inequality of Theorem~\ref{thm:main-rates-thm-OLS-independence} also holds with $(\widehat{V}, V)$ replaced by $(\widehat{V}_n, V_n)$.
-Note that the bounds in Theorem~\ref{thm:main-rates-thm-OLS-independence} hold only when these bounds are smaller than $1/2$ which, in particular, require that $d \le \sqrt{n}$ (because $C \ge 1$).
-The first inequality of Theorem~\ref{thm:main-rates-thm-OLS-independence} is a standard concentration inequality~\citep{koltchinskii2017a} for the average of the outer product of sub-Gaussian random vectors.
-The second inequality also follows from concentration inequalities for average of zero-mean random vectors but because each terms $Y_i - X_i^{\top}\beta$ involved in the definition of $\psi_i$ only has finite polynomial moments, we require a careful use of the Fuk-Nagaev inequality of~\cite{einmahl2008characterization}. Finally, the third inequality is more complicated because $\widehat{\Sigma}^{-1}_n\widehat{V}_n\widehat{\Sigma}_n^{-1}$ is a non-linear function of averages of random matrices and $\widehat{\beta}$.
-Theorem~\ref{thm:main-rates-thm-OLS-independence} is possibly the first result providing a high-dimensional rate of convergence (in operator norm)
-of the sandwich variance estimator under only polynomial $(q\ge4\log n/(\log n - 2))$ moments on the response.
-In particular, if the response variable is also sub-Gaussian (and thus has moments of all orders) and assuming a uniformly bounded condition number throughout,
-the sandwich variance estimator is consistent at the usual high-dimensional rate of $\sqrt{d/n}$ (ignoring for simplicity $\log$ terms), holding, e.g., for covariance matrix estimation, provided that $d = O(\sqrt{n})$.
-Substituting Theorem~\ref{thm:main-rates-thm-OLS-independence} in Theorem~\ref{thm:Berry-Esseen-OLS}, we are now ready to state a Berry-Esseen bound for the OLS estimator. See Appendix~\ref{appendix:main.ols} for the proof.
-\begin{theorem}\label{thm::berry-esseen}
-Assume conditions~\ref{eq:DGP},~\ref{eq:covariate-subGaussian},~\ref{eq:bounded-asymptotic-variance}. If condition~\ref{eq:moments-errors} holds for some $q \ge 4\log n/(\log n - 2)$, then there exists a constant $C = C(q, K_x, \overline{\lambda} K_q^2, \overline{\lambda}/\underline{\lambda})$ depending only on its arguments such that
-\begin{align*}
-&\sup_{t\ge0}\left|\mathbb{P}\left(\max_{1\le j\le d}\left|\frac{n^{1/2}(\widehat{\beta}_j - \beta_j)}{\sqrt{(\widehat{\Sigma}_n^{-1}\widehat{V}\widehat{\Sigma}_n^{-1})_{jj}}}\right| \le t\right) - \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t\right)\right|\\ &\le C\frac{(\log d)^{7/6}}{n^{1/6}} + C\log(n)\left,
-\end{align*}
-\end{theorem}
-Because $\widehat{V}_n = n^{-1}\widehat{V}$,
-\ for which Theorem~\ref{thm:Berry-Esseen-OLS} applies.
-\begin{remark}\label{rem:scaling-in-d}
-Theorem~\ref{thm::berry-esseen} is proved by combining Theorems~\ref{thm:main-rates-thm-OLS-independence} and~\ref{thm:Berry-Esseen-OLS}. Note that Theorem~\ref{thm:main-rates-thm-OLS-independence} is true only under certain constraints on $d$ and $n$ (in particular, $d \le \sqrt{n}$), but Theorem~\ref{thm::berry-esseen} does not require such constraints. The reason is that if the constraints do not hold, then the bound given in Theorem~\ref{thm::berry-esseen} becomes larger than 1 and hence the claim holds trivially.
-\end{remark}
-Ignoring the $\log d, \log n$ terms, the bound converges to zero if
-\begin{equation}\label{eq:requirement-d-BE-OLS}
-d = o\left(\min\left\{n^{1/2},\, n^{(q-3)/(q-1)},\, n^{(2q-3)/(2q-1)}\right\}\right),
-\end{equation}
-(we remark that $n^{(2q-3)/(2q-1)} \ge n^{(q-3)/(q-1)}$ for all $q\ge1$, so the third term in the above expression is in fact superfluous). Provided that $n, q \ge 5$, requirement~\eqref{eq:requirement-d-BE-OLS} reduces to the scaling $d = o(\sqrt{n})$, which matches the one obtained, in different settings and based on more stringent assumptions and techniques, by~\cite{Portnoy84,Portnoy85,Portnoy86,portnoy1987central,Portnoy88},~\cite{He2000} and~\cite{spokoiny2012parametric}. We point out, however, the important difference that in these and related papers, the authors prove central limit theorems under a well-specified model (e.g., assuming a linear regression function) and for
-estimators normalized by their true but unknown variance. In contrast, we prove a finite-sample Berry-Esseen bound with an estimated variance.
-Importantly,
-Theorem~\ref{thm::berry-esseen} further yields that the length of the individual confidence intervals for the entries of $\beta$ are of order $1/\sqrt{n}$, which amounts to a parametric accuracy rate, independent of the dimension. Indeed, for any fixed $t \in \mathbb{R}$, the length of the interval for the $j$th coordinate is ${2tn^{-1/2}}(\widehat{\Sigma}_n^{-1}\widehat{V}\widehat{\Sigma}_n^{-1})_{jj}^{1/2}$, which is
-\begin{align*}
-\frac{2t}{\sqrt{n}} \sqrt{({\Sigma}^{-1}V{\Sigma}^{-1})_{jj}}
-+ \frac{2t}{\sqrt{n}} \left( \sqrt{(\widehat{\Sigma}_n^{-1}\widehat{V}\widehat{\Sigma}_n^{-1})_{jj}} - \sqrt{({\Sigma}^{-1}V{\Sigma}^{-1})_{jj}}
-\right) = O \left( \sqrt{\frac{({\Sigma}^{-1}V{\Sigma}^{-1})_{jj}}{n}} \right),
-\end{align*}
-where the bound stems from Theorem~\ref{thm:main-rates-thm-OLS-independence}, which
-implies,
-when $d = o(\sqrt{n})$ and since $\underline{\lambda}$, $\overline{\lambda}$, $q$ and $K_x$ are of constant order, that the difference inside the parenthesis in the above equation is vanishing in $n$.
-In both Theorems~\ref{thm:main-rates-thm-OLS-independence} and~\ref{thm::berry-esseen}, we require $q \ge 4\log n/(\log n - 2)$; specifically, this assumption is used in the proof of Lemma \ref{lem:std-err-consistency} in Appendix~\ref{appendix:auxiliary.ols} to demonstrate a consistency rate of the sandwich estimator. For $n$ large, this amounts to requiring $q$ to be strictly larger than $4$ and this conditions seems unavoidable for the following reason. For the rates of the sandwich variance estimator in Theorem~\ref{thm:main-rates-thm-OLS-independence}, it is crucial to attain a dependence of $n^{-1/2}$ on the sample size for the difference between $n^{-1}\sum_{i=1}^n X_iX_i^{\top}(Y_i - X_i^{\top}\beta)^2$ and its expectation. Even if the $X_i$'s are univariate and bounded, the rate of $n^{-1/2}$ still requires two moments on the summands, which amounts to 4 moments on $Y_i - X_i^{\top}\beta$ or, equivalently, to $q \ge 4$. Because the $X_i$'s are not bounded but only sub-Gaussian a requirement of $q \ge 4\log n/(\log n - 2)$ seems unavoidable.
-\begin{remark}
-The first term on the right hand side of the bound given in Theorem~\ref{thm::berry-esseen} is obtained using the high-dimensional Berry-Esseen bound of~\cite{koike2019notes} in order to bound $\Delta_n$ in inequality~\eqref{eq:deterministic-BE-bound}.
-We note that, more recently,~\citet{chernozhukov2019improved} proved a rate of $(B_n^2\log^5(dn)/n)^{1/4}$ for certain deterministic quantities
-$B_n$.
-In particular, the exponent $1/6$ is improved to $1/4$. We could not use Theorem~2.1 of~\cite{chernozhukov2019improved} because it requires sub-Gaussian summands, a condition that does not hold under our assumption~\ref{eq:moments-errors}. However, we strongly believe that the first term in Theorem~\ref{thm::berry-esseen} can be replaced by $(\log^7(dn)/n)^{1/4}$; this requires proving an analogue of Theorem 2.1 of~\cite{chernozhukov2019improved} under weaker moment assumptions which we leave for future research. Finally, note that this improvement does not impact the requirement on the growth of the dimension $d$ with respect to the sample size $n$ in Theorem~\ref{thm::berry-esseen}.
-Rather than deploying the high-dimensional Berry-Esseen bound of \cite{koike2019notes}, the multivariate CLT of \cite{raivc2019multivariate} yields a bound of $O(d^{7/4}/n^{1/2})$ for Gaussian approximation. Relatedly, following the proof of Theorem~\ref{thm:Berry-Esseen-OLS}, one can replace the limiting Gaussian by a different distribution to obtain a faster rate for $\Delta_n$; see, e.g., \cite{zhilova2016non}. This strategy might provide a better rate of convergence for the distributional approximation. However, again, this alternative strategy would not impact the requirement on the growth of the dimension $d$ with respect to the sample size $n$, which mainly stems from the bounds in Theorem~\ref{thm:main-rates-thm-OLS-independence}.
-\end{remark}
-\section{Confidence Sets for the Regression Parameters}\label{sec::confidence-sets-OLS}
-In the previous section, we have proved a Gaussian approximation for the normalized least squares estimator of the projection parameter. To obtain confidence intervals for the coordinates of the projection parameter we further need to know the quantiles of $\max_{1\le j\le d}\,|G_j|$. In the current section, we provide three solutions to this issue. The first two solutions are conservative and are based on Bonferroni and{\v{S}}id{\'a}k inequalities. The final way is asymptotically exact and uses multiplier bootstrap.
-\subsection{Bonferroni and{\v{S}}id{\'a}k Method}\label{subsec:bonferroni.sidak}
-We have proved that
-\ for some rate $r_n$ and mean zero Gaussian random vector $G\in\mathbb{R}^d$ with unit variance on each coordinate. Taking $t = z_{\alpha/(2d)}$, where $z_{\gamma}$ represents the $(1-\gamma)$-th quantile of the standard Gaussian distribution, by symmetry and the union bound we get that
-\begin{align*}
-\mathbb{P}\left(\max_{1\le j\le d}\left|\frac{n^{1/2}(\widehat{\beta}_j - \beta_j)}{\sqrt{(\widehat{\Sigma}_n^{-1}\widehat{V}\widehat{\Sigma}_n^{-1})_{jj}}}\right| \le z_{\alpha/(2d)}\right) &\ge \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le z_{\alpha/(2d)}\right) - r_n\\ &\ge (1 - \alpha) - r_n.
-\end{align*}
-Alternatively, we can sharpen the Bonferroni confidence regions by using instead{\v{S}}id{\'a}k's inequality~\citep{vsidak1967rectangular}, which implies that, for all $t > 0$,
-\ Thus,
-\begin{align*}
-\mathbb{P}\left(\max_{1\le j\le d}\left|\frac{n^{1/2}(\widehat{\beta}_j - \beta_j)}{\sqrt{(\widehat{\Sigma}_n^{-1}\widehat{V}\widehat{\Sigma}_n^{-1})_{jj}}}\right| \le z_{(1 - (1-\alpha)^{1/d})/2}\right) &\ge (1 - \alpha) - r_n.
-\end{align*}
-For any $d \ge 1$, $\alpha\in$, we have $1 - (1 - \alpha)^{1/d} \ge \alpha/d$
-and hence, $z_{(1- (1-\alpha)^{1/d})/2} \le z_{\alpha/(2d)}$. Thus, the confidence sets based on{\v{S}}id{\'a}k's method are always smaller than the ones based on Bonferroni's adjustment and should be preferred.
-The preference of{\v{S}}id{\'a}k's method over Bonferroni's and its possible use have been discussed in~\cite{westfall1993resampling} and~\cite{drton2004model}.
-\subsection{Bootstrap}
-The confidence sets described in the previous section can be conservative because they do not take into account the correlation structure of $G = (G_1, \ldots, G_d)^{\top}$.
-Recall that $(G_1, \ldots, G_d)^{\top}$ has a normal distribution on $\mathbb{R}^d$ with mean zero and unknown covariance matrix given by $\mbox{corr}(\Sigma_n^{-1}V_n\Sigma_n^{-1})$. Hence one way to find the quantiles of $\max_{1\le j\le d}|G_j|$ is to generate Guassian random vectors from the distribution $$N_d(0, \mbox{corr}(\widehat{\Sigma}_n^{-1}\widehat{V}_n\widehat{\Sigma}_n^{-1}))$$ and use the sample quantiles of the maximum norm of these random vectors. This procedure is equivalent to the multiplier bootstrap which is given the following pseudocode:
+In 1975, K. Saito introduced, with deep insight,
+the concept of logarithmic differential forms and that of logarithmic vector fields and studied Gauss-Manin connection associated with the versal deformations of hypersurface singularities of type   and   as applications. These results are published in \cite{S77}. He developed the theory of logarithmic differential forms, logarithmic vector fields and the theory of residues and published in 1980 a landmark paper \cite{S}. One of the motivations of his study, as he himself wrote in \cite{S}, came from the study of Gauss-Manin connections (\cite{B,S73}). Another motivation came from the importance of these concepts he realized.
+Notably the logarithmic residue, interpreted as a meromorphic differential form on a divisor, is regarded as a natural generalization of the classical Poincar\'e residue
+to the singular cases.
+In 1990, A. G. Aleksandrov(\cite{A}) studied Saito theory and gave in particular a characterization of the image of the residue map. He showed
+that the image sheaf of the logarithmic residues coincides with the sheaf of regular meromorphic differential forms introduced by D. Barlet (\cite{B}) and M. Kersken (\cite{K83,K84}).
+We refer the reader to \cite{AT,Bru,CM1,CM2,GS,P} for more recent results on logarithmic residues.
+We consider logarithmic differential forms along a hypersurface with an isolated singularity in the context of computational complex analysis. In our previous paper \cite{TN20}, we study torsion modules and give an effective method for computing them.
+In the present paper, we first consider a method for computing regular meromorphic differential forms. We show that, based on the result of A. G. Aleksandrov mentioned above, representatives of regular meromorphic differential forms can be computed by using the algorithm presented in \cite{TN20} on torsion modules. Main ideas of our approach are the use of the concept of logarithmic residue and that of logarithmic vector field. Next, we show a link between logarithmic differential forms and Gauss-Manin connections, which reveals the role of the torsion module in the computation of a saturation of Brieskorn lattice of Gauss-Manin connection (\cite{B,Sch,Schu}).
+\section{Logarithmic differential forms and residues}
+In this section, we briefly recall the concept of logarithmic differential forms and that of logarithmic residues and fix notation. We refer the reader to
+\cite{S} for details. Next we recall the result on A. G. Aleksandrov on regular meromorphic differential forms. Then, we recall a result of
+G. -M. Greuel on torsion modules.
+Let   be an open neighborhood of the origin   in  .
+Let   be the sheaf on   of holomorphic functions and   the stalk at   of the sheaf  .
+\subsection{Logarithmic residues}
+Let   be a holomorphic function defined on  . Let   denote the hypersurface
+defined by  .
+\begin{definition}
+Let   be a meromorphic differential  -form on  , which may have poles only along  . The form   is a logarithmic differential form along   if it satisfies the following equivalent four conditions:
 \begin{enumerate}
-\item Define the estimated ``score'' vectors
-\ From the definition of $\widehat{\beta}$, we have $\sum_{i=1}^n \widehat{\psi}_i = 0.$
-\item Fix the number of bootstrap samples $B \ge 1$. For each $1 \leq b \leq B$, generate random vectors $e_i^{(b)}\overset{iid}{\sim} N(0, 1)$, $1\le i\le n$ and compute the bootstrap statistics
-\ \end{enumerate}
-Conditionally on the data $\mathcal{D}_n := \{(X_i, Y_i):\,1\le i\le n\}$, the vector
-\ has a normal distribution with mean zero and variance given by $\mbox{corr}(\widehat{\Sigma}_n^{-1}\widehat{V}_n\widehat{\Sigma}_n^{-1})$. This follows from the fact that $$\widehat{\Sigma}_n^{-1}\widehat{V}_n\widehat{\Sigma}_n^{-1} ~=~ \frac{1}{n^2}\sum_{i=1}^n \widehat{\psi}_i\widehat{\psi}_i^{\top}.$$
-The following result proves that the empirical distribution of $T_b, 1\le b\le B$ approximates the distribution of $\max_{1\le j\le d}|G_j|$ and hence provides an approximation to the distribution of $\max_{1\le j\le d}|n^{1/2}\widehat{\beta}_j - \beta_j|/(\widehat{\Sigma}_n^{-1}\widehat{V}\widehat{\Sigma}_n)_{jj}^{1/2}$. The proof is given in Appendix~\ref{appendix:main.ols}.
-\begin{theorem}\label{thm:multiplier-bootstrap-consistency}
-Under the assumptions of Theorem~\ref{thm::berry-esseen}, for every $B \ge 1$, we have
-\begin{align*}
-&\sup_{t\ge0}\,\left|\frac{1}{B}\sum_{b=1}^B \mathbbm{1}\{T_b \le t\} - \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t\right)\right|\\ &\le \sqrt{\frac{\log(2n)}{2B}} + C\log^3(dn)\left,
-\end{align*}
-with probability at least $1 - (d+3)/n - \sqrt{d/n}$. Here $C = C(q, K_x, \overline{\lambda}K_q^2, \overline{\lambda}/\underline{\lambda})$ is a constant depending only on its arguments.
-\end{theorem}
-A consideration similar to the one made in Remark~\ref{rem:scaling-in-d} holds true for Theorem~\ref{thm:multiplier-bootstrap-consistency}: if
-$d>n$, then the result is obvious because we are claiming some event holds true with probability at least 0.
-Comparing the above bootstrap bound with the Berry-Esseeen bound from Theorem~\ref{thm::berry-esseen}, we see that deploying the bootstrap procedure does not add additional requirements on the allowable scaling between $d$ and $n$.
-We further remark that the usual consistency results for the bootstrap imply closeness of $\mathbb{P}(T_b \le t\big|\mathcal{D}_n)$ to $\mathbb{P}(\max_{1\le j\le d}|G_j| \le t)$, uniformly in $t$. In contrast Theorem~\ref{thm:multiplier-bootstrap-consistency} proves (uniform) closeness of the empirical bootstrap distribution $t\mapsto B^{-1}\sum_{b=1}^B \mathbbm{1}\{T_b \le t\}$ to $\mathbb{P}(\max_{1\le j\le d}|G_j| \le t)$, with a rate depending on the number $B$ of the bootstrap repetitions.
-\section{Berry--Esseen bounds for Partial Correlations}
-\label{section::partial}
-It is well known that the vector of projection parameters is related to the
-partial correlations between $Y$ and each component of $X$ given
-the other components.
-This suggests that our results should be generalizable to
-partial correlations.
-In this section we confirm that this is the case.
-This is of interest since partial correlations
-play an important role in graphical models: see, e.g., \cite{Lau96} and~\cite{drton2004model}. The results in this section sharpen complementary results in \cite{wasserman2014berry}.
-Suppose $X_1, \ldots, X_n\in\mathbb{R}^d$ are identically distributed random vectors (but not required to be independent). Let $\Sigma$ denote the $d\times d$ covariance matrix of $X_i$ and let $\Omega = \Sigma^{-1}.$ Then the $d \times d$ matrix of partial correlations is the symmetric matrix given by $\Theta = (\theta_{jk})_{j,k=1,\ldots,d}$ where
-\ and $e_1, \ldots, e_d$ denote the canonical basis of $\mathbb{R}^d$. A natural estimator of $\theta_{jk}$ is given by $\widehat{\theta}_{jk}$ defined as
-\ with $\overline{X}_n$ representing the (sample) average of $X_1, \ldots, X_n$. Notice that in this section, $\Sigma$ and $\widehat{\Sigma}_n$ denote the true and the sample covariance matrices, respectively,
-rather than the corresponding Gram matrices as in the previous sections.
-Berry--Esseen bound for the partial correlation coefficients can be derived from arguments similar, albeit more involved,
-to those used to prove the results in previous sections. We begin by establishing a basic linear representation result for partial correlations. To that effect, we define the intermediate covariance ``estimator'' as
-\.
-\]
-In fact, this is not an estimator because of the unknown vector $\mu_X$ in the definition. For notational convenience, and with a slight abuse of notation, set
-\begin{equation}\label{eq:D-sigma-notation}
-\mathcal{D}_n^{\Sigma} ~:=~ \|\Sigma^{-1/2}\widehat{\Sigma}_n\Sigma^{-1/2} - I_d\|_{\mathrm{op}}.
-\end{equation}
-It is important to realize that this quantity is different from the corresponding one defined in previous sections because $\widehat{\Sigma}_n$ is the sample covariance matrix.
-The following result mirrors Theorem~\ref{thm:Basic-deter-ineq} as it provides a linear approximation to the difference between the the true and estimated partial correlation coefficients in terms of influence-like functions.
-\begin{theorem}\label{thm:linear-expansion-partial-corr}
-Under the assumption that $\mathcal{D}_n^{\Sigma} \le 1/2$, there exists a universal constant $C\in(0, \infty)$ such that
-\ where
-\begin{equation}
-\begin{split}
-\frac{1}{n}\sum_{i=1}^n \psi_{jk}(X_i) ~&:=~ \frac{e_j^{\top}\Sigma^{-1}(\widetilde{\Sigma} - \Sigma)\Sigma^{-1}e_k}{\sqrt{(e_j^{\top}\Sigma^{-1}e_j)(e_k^{\top}\Sigma^{-1}e_k)}}
-- \frac{\theta_{jk}}{2}\left.
-\end{split}
-\end{equation}
-\end{theorem}
-\begin{remark}
-The functions $\psi_{jk} \colon \mathbb{R}^d \rightarrow \mathbb{R}$, $1 \leq j \leq k \leq d$, are linear functions, since the right hand side of the last expression is an average, because $\widetilde{\Sigma}$ is itself an average.
-Furthermore, each
-$\psi_{jk}(X_i)$ has zero expectation.
-\end{remark}
-Using Theorem~\ref{thm:linear-expansion-partial-corr}, we derive a high-dimensional central limit approximation
-for the properly normalized partial correlation coefficients~\eqref{eq:proper-normalized-partial-correlation}. Towards that end, we note that, for each $j \leq k$, the function
-$\psi_{jk}(\cdot)$ from Theorem~\ref{thm:linear-expansion-partial-corr} can be written as
-\begin{equation}\label{eq:def-psi-jk}
-\begin{split}
-\psi_{jk}(x) &= -\bigg\{a_j(x)a_k(x) - \mathbb{E}\bigg\}
-- \frac{\theta_{jk}}{2}\bigg\{a_j^2(x) + a_k^2(x) - \mathbb{E}\bigg\},
-\end{split}
-\end{equation}
-where
-\begin{equation}\label{eq:ajx-function}
-x \in \mathbb{R}^d \mapsto a_j(x) ~:=~ \frac{(x - \mu_X)^{\top}\Sigma^{-1}e_j}{(e_j^{\top}\Sigma^{-1}e_j)^{1/2}}.
-\end{equation}
-Now, for a fixed $x \in \mathbb{R}^d$, define the plug-in estimator of $a_j(x)$ as
-\begin{equation}\label{eq:ajhatx-function}
-\widehat{a}_j(x) ~:=~ \frac{(x - \widebar{X}_n)^{\top}\widehat{\Sigma}^{-1}e_j}{(e_j^{\top}\widehat{\Sigma}^{-1}e_j)^{1/2}}.
-\end{equation}
-In turn, this estimator leads to an estimator $\widehat{\psi}_{jk}(x)$ of $\psi_{jk}(x)$ by replacing $a_j(x)$ and $a_k(x)$ by $\widehat{a}_j(x)$ and $\widehat{a}_k(x)$, respectively.
-Formally, for any $x \in \mathbb{R}$, we let
-\begin{equation}\label{eq:def-widehat-psi-jk}
-\begin{split}
-\widehat{\psi}_{jk}(x) ~&:=~ -\bigg\{\widehat{a}_j(x)\widehat{a}_k(x) - \mathbb{E}_n\bigg\}
-- \frac{\widehat{\theta}_{jk}}{2}\bigg\{\widehat{a}_j^2(x) + \widehat{a}_k^2(x) - \mathbb{E}_n\bigg\},
-\end{split}
-\end{equation}
-where, for any arbitrary, possibly random, function $f \colon \mathbb{R}^d \rightarrow \mathbb{R}$,
-we set $\mathbb{E}_n := n^{-1}\sum_{i=1}^n f(X_i)$. Because the asymptotic variance of $\sqrt{n}(\widehat{\theta}_{jk} - \theta_{jk})$ is $\mathbb{E}$ and its plug-in is estimator is $\sum_{i=1}^n \widehat{\psi}_{jk}^2(X_i)/n$, a proper normalization of the partial correlation coefficient is given by
-\ We are now ready to state the main result of this section, a high-dimensional
-Berry-Esseen bound for the partial correlations of sub-Gaussian vectors. In deriving this bound, we have taken extra care in exhibiting an explicit dependence on the minimal variance of the $\psi_{jk}(X_i)$'s.
-\begin{theorem}\label{thm:Berry-Esseen-bound-partial-corr}
-Suppose $X_1, \ldots, X_n$ are independent and identically distributed random vectors such that
-\begin{equation}\label{eq:centered-subGaussian-x}
-\mathbb{E}\left \le 2\quad\mbox{for all}\quad u\in S^{d-1},
-\end{equation}
-for some constant $K_x\in(0, \infty).$ Assume that $d \leq \sqrt{n}$. Then, there exists a constant $C = C(K_x) \in(0,\infty)$ depending only on $K_x$
-such that
-\begin{align*}
-&\sup_{t\ge0}\left|\mathbb{P}\left(\max_{1\le j < k\le d}\left|\frac{\sqrt{n}(\widehat{\theta}_{jk} - \theta_{jk})}{\widehat{\zeta}_{jk}}\right| \le t\right) - \mathbb{P}\left(\max_{1\le j < k\le d}|G_{jk}| \le t\right)\right|\\ &\qquad\le C \left( \frac{(\log(d\vee n))^{5/6}}{n^{1/6}} + \eta_n \right),
-\end{align*}
-for a mean zero Gaussian vector $(G_{jk})_{1\le j < k\le d}$ with the covariance matrix satisfying $\mathrm{cov}(G_{jk}, G_{j'k'}) = \mathrm{corr}(\psi_{jk}(X_1), \psi_{j'k'}(X_1))$ and where
-\ with
-\\right)^{1/2}.
-\]
-\end{theorem}
-\begin{remark}
-Unlike in Theorem~\ref{thm:linear-expansion-partial-corr}, in Theorem~\ref{thm:Berry-Esseen-bound-partial-corr}, we only consider the maximum over $1\le j < k \le d$ because, by construction, $\widehat{\theta}_{jj} = \theta_{jj} = 1$ for all $1\le j\le d$.
-Ignoring log terms, the upper bound on the distributional approximation holds true when $d = o(\sqrt{n})$. Should the
-assumption of sub-Gaussianity be relaxed to moment bounds only, the requirement on $d$ will depend on the number of moments of the $X_i$'s.
-\end{remark}
-\begin{remark}
-Although Theorem~\ref{thm:Berry-Esseen-bound-partial-corr} is proved for independent random vectors, it is easy to obtain a result similar to Theorem~\ref{thm:Berry-Esseen-OLS} for arbitrary random vectors.
-\end{remark}
-For inference, one needs to estimate the quantiles of $\max_{1\le j < k\le d}|G_{jk}|$ in order to produce simultaneous confidence intervals for the partial correlation coefficients. An easy solution is to simply apply Bonferroni's or{\v{S}}id{\'a}k's correction for multiple parameters -- in this case ${d \choose 2} $--
-as described above in Section~\ref{subsec:bonferroni.sidak}.
-Alternatively, (asymptotically) sharper results may be obtained with the multiplier bootstrap, described as follows:
+\item   and   are holomorphic on  .
+\item   and   are holomorphic on  .
+\item There exists a holomorphic function   and a holomorphic  -form  
+and a holomorphic  -form   on  ,
+such that:
 \begin{enumerate}
-\item Define the estimated ``score'' vectors $\widehat{\psi}_{jk}(X_i)$ as above. From the definition, it follows that $\sum_{i=1}^n \widehat{\psi}_{jk}(X_i) = 0$ for all $1\le j < k\le d$.
-\item Fix the number of bootstrap samples $B \ge 1$. Generate random vectors $e_i^{(b)}\overset{iid}{\sim}N(0, 1)$, $1\le i\le n, 1\le b\le B$ and compute the bootstrap statistics
-\ \end{enumerate}
-The following result proves that the empirical distribution of $T_b, 1\le b\le B$ approximates the distribution of $\max_{1\le j < k\le d}|G_{jk}|$.
-\begin{theorem}\label{eq:multplier-bootstrap-consistency-partial-corr}
-Under the assumptions of Theorem~\ref{thm:Berry-Esseen-bound-partial-corr}, for every $B\ge1$, we have with probability at least $1 - C/n$,
-\begin{align*}
-&\sup_{t\ge0}\left|\frac{1}{B}\sum_{b=1}^B \mathbbm{1}\{T_b \le t\} - \mathbb{P}\left(\max_{1\le j < k\le d}|G_{jk}| \le t\right)\right|\\ &\quad\le \sqrt{\frac{\log(2n)}{2B}} + CK_x^{2}(\log d)^{{2}/{3}}\left(\frac{d + \log n}{n}\right)^{{1}/{6}},
-\end{align*}
-whenever the right hand side is less than 1.
-\end{theorem}
-In Theorem~\ref{eq:multplier-bootstrap-consistency-partial-corr}, we make all the assumptions used in Theorem~\ref{thm:Berry-Esseen-bound-partial-corr}, in particular, we also assume $d \le \sqrt{n}$.
-\section{Conclusion}
-\label{section::conclusion}
-We have provided explicit Berry-Esseen bounds
-for mis-specified linear models. The bounds are
-derived based on deterministic inequalities that do not
-require any specific independence or dependence assumptions
-on the observations.
-Explicit requirements on the growth of dimension $d$
-in terms of the sample size $n$ are given for an asymptotic
-normal approximation when the observations are independent
-and identically distributed.
-The Berry--Esseen bounds as well as the bootstrap consistency guarantees here allow for construction of valid confidence sets
-for the projection parameter provided that $d = o(\sqrt{n})$.
-Using the methods in
-\cite{kuchibhotla2018valid}, confidence sets for the projection parameters can be constructed even for larger $d$ .
-However, these sets are not rectangles and the projected
-confidence intervals for individual projection parameters
-are much wider than those obtained here. The confidence
-intervals we obtained here have width of order $O(1/\sqrt{n})$,
-whenever $d = o(\sqrt{n})$.
-All the results are derived without any structural or sparsity assumptions on the projection parameter $\beta$ (and hence an \emph{assumption-lean} setting), unlike much of the recent literature on high-dimensional linear regression. Because we consider the ordinary least squares as our estimator, imposing any sparsity assumption on $\beta$ will not impact the final results; in particular, the estimator is still asympotically normal when centered at its target. If one uses different estimators designed to produce sparse estimates, then these estimators cannot be uniformly $\sqrt{n}$-consistent; see ~\cite{potscher2009confidence}. Further, if one applies debiasing~\citep{javanmard2014confidence,vandegeer2014asymptotically,zhang2014confidence} on the sparse estimator, then such an estimator has asymptotically the same behavior as the OLS estimator because the OLS estimator is semiparametrically efficient for the projection parameter $\beta$~\cite{Levit76}.
-In the following, we describe two interesting future directions.
-\begin{enumerate}
-\item Our confidence intervals have width of order $n^{-1/2}$ whenever $d = o(\sqrt{n})$. We believe this requirement on the dimension is optimal in order to obtain $n^{-1/2}$ width intervals. This conjecture is obtained from the results of~\cite{cai2017confidence}; the authors prove that the minimax width of a confidence intervals for individual coordinates in a $k$-sparse linear regression is $n^{-1/2} + k(\log d)/n$ whenever $k = O(\min\{d^{\gamma}, n/\log d\})$ (for $\gamma < 1/2$). We believe the correct formulation of the minimax width is $n^{-1/2} + k\log(ed/k)/n$ for all $1\le k\le d$, in which case taking $k = d$ yields the minimax width $n^{-1/2} + k/n$. This rate becomes $n^{-1/2}$ only when $d = O(\sqrt{n})$. This raises several interesting questions: ``What is the analogue of our results when $d \gg \sqrt{n}$? What kind of asymptotic distribution can one expect? What is a confidence set that works simultaneously for all $d \le n$? Does such a set still center at $\widehat{\beta}$?''
-\item It would be interesting to develop similar bounds for
-other mis-specified parametric models such as a generalized linear
-models (GLMs). The deterministic inequalities of~\cite{2018arXiv180905172K}
-imply results similar to Theorem~\ref{thm:Basic-deter-ineq} and hence
-a parallel set of results for GLMs could be obtained. Of course, it involves non-trivial calculations to derive sandwich consistency which is
-relatively easy for linear models because the objective function is quadratic.
+\item $ \dim_{\mathbb C}( S \cap \{x
+\in X \mid g(x)=0 \}) \leq n-2, $
+\item  
 \end{enumerate}
-\newpage
-\begin{appendices}
-\begin{center}{\Large{\bf Appendix}}
-\end{center}
-\section{Proofs of the Results from Section~\ref{section::determiniswtic}}
-\label{appendix:deterministic}
-\begin{proof}
-By the optimality of $\widehat{\beta}$, we have the normal equations $\widehat{\Sigma}_n\widehat{\beta} = \widehat{\Gamma}_n.$
-Subtracting $\widehat{\Sigma}_n\beta\in\mathbb{R}^d$ from both sides, we get
-$\widehat{\Sigma}_n(\widehat{\beta} - \beta) = \widehat{\Gamma}_n - \widehat{\Sigma}_n\beta,$
-which is equivalent to
-\ since $\Sigma_n$ is invertible.
-Adding and subtracting $\Sigma^{-1/2}_n (\widehat{\beta}
-- \beta)$ on both sides further yields the identity
-\ ~=~ (I_d - \Sigma_n ^{-1/2}\widehat{\Sigma}_n \Sigma_n ^{-1/2})\Sigma_n ^{1/2}(\widehat{\beta}
-- \beta ).
-\]
-Taking the Euclidean norm, we see that
-\begin{equation}\label{eq:influence-error-bound}
-\begin{split}
-\|\widehat{\beta} - \beta - \Sigma_n^{-1}(\widehat{\Gamma}_n - \widehat{\Sigma}_n\beta)\|_{\Sigma_n} ~&=~ \|(I_d - \Sigma_n ^{-1/2}\widehat{\Sigma}_n \Sigma_n ^{-1/2})\Sigma_n ^{1/2}(\widehat{\beta}
-- \beta )\|\\ ~&\le~ \|I_d - \Sigma_n ^{-1/2}\widehat{\Sigma}_n \Sigma_n ^{-1/2}\|_{\mathrm{op}}\|\widehat{\beta}
-- \beta\|_{\Sigma_n}\\ ~&=~ \mathcal{D}_n^{\Sigma}\|\widehat{\beta} - \beta\|_{\Sigma_n}.
-\end{split}
-\end{equation}
-The triangle inequality and the previous bound imply that
-\begin{align*}
-\|\widehat{\beta} - \beta\|_{\Sigma_n} ~&\le~ \|\Sigma_n^{-1}(\widehat{\Gamma}_n - \widehat{\Sigma}_n\beta)\|_{\Sigma_n} + \|\widehat{\beta} - \beta - \Sigma_n^{-1}(\widehat{\Gamma}_n - \widehat{\Sigma}_n\beta)\|_{\Sigma_n}\\ ~&\le~ \|\Sigma_n^{-1}(\widehat{\Gamma}_n - \widehat{\Sigma}_n\beta)\|_{\Sigma_n} + \mathcal{D}_n^{\Sigma}\|\widehat{\beta} - \beta\|_{\Sigma_n},
-\end{align*}
-and hence (using the assumption that $\mathcal{D}_n^{\Sigma} < 1$) that
-\begin{equation}\label{eq:bound-on-estimation-error}
-\|\widehat{\beta} - \beta\|_{\Sigma_n} ~\le~ \frac{1}{(1 - \mathcal{D}_n^{\Sigma})}\|\Sigma_n^{-1}(\widehat{\Gamma}_n - \widehat{\Sigma}_n\beta)\|_{\Sigma_n}.
-\end{equation}
-Combining~\eqref{eq:bound-on-estimation-error} and~\eqref{eq:influence-error-bound} we conclude that
-\begin{equation}\label{eq:almost-final-inequality}
-\|\widehat{\beta} - \beta - \Sigma_n^{-1}(\widehat{\Gamma}_n - \widehat{\Sigma}_n\beta)\|_{\Sigma_n} ~\le~ \frac{\mathcal{D}_n^{\Sigma}}{(1 - \mathcal{D}_n^{\Sigma})}\|\Sigma_n^{-1}(\widehat{\Gamma}_n - \widehat{\Sigma}_n\beta)\|_{\Sigma_n}.
-\end{equation}
-To obtain a bound in the $\| \cdot \|_{\Sigma_n V_n^{-1}\Sigma_n}$ norm instead of the $\| \cdot \|_{\Sigma_n}$ norm, note that, for any $\theta\in\mathbb{R}^d$,
-\ and
-\ After substituting these inequalities in~\eqref{eq:almost-final-inequality} we arrive at the bound
-\ The claim now follows because, by definition,
-$n^{-1}\sum_{i=1}^n \psi_i = \Sigma_n^{-1}(\widehat{\Gamma}_n - \widehat{\Sigma}_n\beta)$.
-\end{proof}
-\begin{proof}
-Observe that, for any $x\in\mathbb{R}^{d}$ and any invertible matrix $A$,
-\begin{align}\label{eq:Scaled-Euclidean-Maximum-Comparison}
-\begin{split}
-\|x\|_A = \|A^{1/2}x\| &= \max_{\theta\in\mathbb{R}^{d}}\frac{\theta^{\top}x}{\sqrt{\theta^{\top}A^{-1}\theta}}\\ &\geq \max_{\theta \in \{ \pm e_1,\ldots,\pm e_d \}} \frac{\theta^{\top}x}{\sqrt{\theta^{\top}A^{-1}\theta}} = \max_{1\le j\le d}\,\frac{|x_j|}{\sqrt{(A^{-1})_{jj}}}.
-\end{split}
-\end{align}
-The result follows from Theorem~\ref{thm:Basic-deter-ineq}.
-\end{proof}
-\begin{proof}
-On the event $\mathcal{E}_{\eta_n}$, we have that
-\ Hence Corollary~\ref{cor:Max-Statistic-Correct-Scaling} yields
-\ Notice that the denominator involves an estimator of the ``asymptotic'' standard deviation. Therefore, on the event $\mathcal{E}_{\eta_n}$,
-\begin{align*}
-&\max_{1\le j\le d}\left|\frac{\widehat{\beta}_j - \beta_j}{\sqrt{(\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}})_{jj}}} - \frac{n^{-1}\sum_{i=1}^n \psi_{ij}}{\sqrt{(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}}}\right|\\ &\qquad\le 2\kappa_n\eta_n(1 + \eta_n) ~+~ \max_{1\le j\le d}\left|\frac{n^{-1}\sum_{i=1}^n \psi_{ij}}{\sqrt{(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}}}\right|\times\max_{1\le j\le d}\left|\sqrt{\frac{(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}}{(\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}})_{jj}}} - 1\right|\\ &\qquad\le 2\kappa_n\eta_n(1 + \eta_n) ~+~ \eta_n\max_{1\le j\le d}\left|\frac{n^{-1}\sum_{i=1}^n \psi_{ij}}{\sqrt{(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}}}\right|
-\end{align*}
-By standard Gaussian concentration and a union bound,
-\ and the definition of $\Delta_n$ implies that
-\begin{align*}
-\mathbb{P}\left(\max_{1\le j\le d}\left|\frac{n^{-1}\sum_{i=1}^n \psi_{ij}}{\sqrt{(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}}}\right| \ge \sqrt{2\log(2n)}\right) &\le \mathbb{P}\left(\max_{1\le j\le d}|G_j| \ge \sqrt{2\log(2n)}\right) + \Delta_n\\ &\le \frac{d}{n} + \Delta_n.
-\end{align*}
-Combining
-these inequalities we obtain
-that that there exists an event of probability at least $1 - \Delta_n - d/n - \mathbb{P}(\mathcal{E}_{\eta_n}^c)$ such that, on that event, it holds that
-\begin{align*}
-\max_{1\le j\le d}\left|\frac{\widehat{\beta}_j - \beta_j}{\sqrt{(\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}})_{jj}}} - \frac{n^{-1}\sum_{i=1}^n \psi_{ij}}{\sqrt{(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}}}\right| & \leq
-\eta_n\times \left\\ & = \eta_n C_n(\eta_n),
-\end{align*}
-by the definition of $C(\eta_n)$.
-Hence for any $t \ge 0$ and $\eta_n > 0$, we have that
-\begin{align*}
-\mathbb{P}\left(\max_{1\le j\le d}\left|\frac{\widehat{\beta}_j - \beta_j}{\sqrt{(\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}})_{jj}}}\right| \le t\right) &\le \mathbb{P}\left(\max_{1\le j\le d}\left|\frac{n^{-1}\sum_{i=1}^n \psi_{ij}}{\sqrt{(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}}}\right| \le t + C_n(\eta_n)\eta_n\right)\\ &\qquad+ \mathbb{P}(\mathcal{E}_{\eta_n}^c) + d/n + \Delta_n\\ \mathbb{P}\left(\max_{1\le j\le d}\left|\frac{\widehat{\beta}_j - \beta_j}{\sqrt{(\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}})_{jj}}}\right| \le t\right) &\ge \mathbb{P}\left(\max_{1\le j\le d}\left|\frac{n^{-1}\sum_{i=1}^n \psi_{ij}}{\sqrt{(\Sigma_n^{-1}V_n\Sigma_n^{-1})_{jj}}}\right| \le t - C_n(\eta_n)\eta_n\right)\\ &\qquad- \mathbb{P}(\mathcal{E}_{\eta_n}^c) - d/n - \Delta_n.
-\end{align*}
-Next, from the definition of $\Delta_n$ and $\Phi_{AC}$, we finally obtain that
-\begin{align*}
-\mathbb{P}\left(\max_{1\le j\le d}\left|\frac{\widehat{\beta}_j - \beta_j}{\sqrt{(\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}})_{jj}}}\right| \le t\right) &\le \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t + C_n(\eta_n)\eta_n\right) + 2\Delta_n + \mathbb{P}(\mathcal{E}_{\eta_n}^c) + \frac{d}{n}\\ &\le \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t\right) + 2\Delta_n + \mathbb{P}(\mathcal{E}_{\eta_n}^c) + C_n(\eta_n)\eta_n \Phi_{AC} + \frac{d}{n}\\ \mathbb{P}\left(\max_{1\le j\le d}\left|\frac{\widehat{\beta}_j - \beta_j}{\sqrt{(\widehat{\Sigma_n^{-1}V_n\Sigma_n^{-1}})_{jj}}}\right| \le t\right) &\ge \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t - C_n(\eta_n)\eta_n\right) - 2\Delta_n - \mathbb{P}(\mathcal{E}_{\eta_n}^c) - \frac{d}{n}\\ &\ge \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t\right) - 2\Delta_n - \mathbb{P}(\mathcal{E}_{\eta_n}^c) - C_n(\eta_n)\eta_n \Phi_{AC} - \frac{d}{n},
-\end{align*}
-as claimed.
-\end{proof}
-\section{Proof of the Main Results from Sections~\ref{section::explicit} and~\ref{sec::confidence-sets-OLS} (Projection Parameters)}
-\label{appendix:main.ols}
-\begin{proof}
-The first inequality follows from Lemma~\ref{lem:concentration-of-covariance} with $\delta = \sqrt{d/n}$. The second inequality follows from the first and Lemma~\ref{lem:concentration-influence-function} with $\delta = \sqrt{d/n}, \eta_n = q/(2\log(C_qn^{3/2}/d^{1/2}))$. The third inequality follows from Lemma~\ref{lem:std-err-consistency}.
-\end{proof}
-\begin{proof}
-Define
-\,
-\]
-where the constant $C = C(q, K_x, \widebar{\lambda}K_q^2, \widebar{\lambda}/\underline{\lambda})$ is the same as in Theorem~\ref{thm:main-rates-thm-OLS-independence}.
-We complete the proof by considering two cases (1) $\eta_n \le 1/2$, or (2) $\eta_n > 1/2$.
-\paragraph{Case (1): $\eta_n \le 1/2$} In this case, Theorem~\ref{thm:main-rates-thm-OLS-independence} implies that
-\ and hence Theorem~\ref{thm:Berry-Esseen-OLS} yields
-\begin{align*}
-&\sup_{t\ge 0}\left|\mathbb{P}\left(\max_{1\le j\le d}\left|\frac{\widehat{\beta}_j - \beta_j}{\sqrt{(\widehat{\Sigma}_n^{-1}\widehat{V}_n\widehat{\Sigma}_n^{-1})_{jj}}}\right|\right) - \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t\right)\right|\\ &\quad\le 2\Delta_n + \frac{3d}{n} + \sqrt{\frac{d}{n}} + \frac{d}{n} + C_n(\eta_n)\eta_n\Phi_{AC}.
-\end{align*}
-Because $\eta_n \le 1/2$ and $\kappa_n \ge1$,
-$$
-C_n(\eta_n) \le 3\kappa_n + \sqrt{2\log(2n)} \le 5\kappa_n\sqrt{\log(en)}.
-$$
-Further, note that
-\,
-\]
-for some other constant $C = C(q, K_x, \widebar{\lambda}K_q^2, \widebar{\lambda}/\underline{\lambda})$. We bound $\Phi_{AC}$ as $\Phi_{AC} \le C\sqrt{\log(ed)}$ for some universal constant $C$; see~\cite{Chern15,chernozhukov2017detailed} for details. (The constant $C$ is universal here because the marginal variances of $G_j$'s are all equal to 1.)
-These inequalities imply that
-\begin{align*}
-&\sup_{t\ge 0}\left|\mathbb{P}\left(\max_{1\le j\le d}\left|\frac{\widehat{\beta}_j - \beta_j}{\sqrt{(\widehat{\Sigma}_n^{-1}\widehat{V}_n\widehat{\Sigma}_n^{-1})_{jj}}}\right|\right) - \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t\right)\right|\\ &\le 2\Delta_n + \frac{4d}{n} + \sqrt{\frac{d}{n}}\\ &\quad+ 5C\kappa_n\sqrt{\log(en)\log(ed)}\left.
-\end{align*}
-Observe now that we can assume $d \le n$ because otherwise the bound trivially holds true. This allows us to absorb $4d/n + \sqrt{d/n}$ into the last term above.
-\paragraph{Case (2): $\eta_n > 1/2$} In this case, we use
-\begin{align*}
-&\sup_{t\ge 0}\left|\mathbb{P}\left(\max_{1\le j\le d}\left|\frac{\widehat{\beta}_j - \beta_j}{\sqrt{(\widehat{\Sigma}_n^{-1}\widehat{V}_n\widehat{\Sigma}_n^{-1})_{jj}}}\right|\right) - \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t\right)\right|\\ &\le 1 \le 2\eta_n \le 5C\kappa_n\eta_n\sqrt{\log(en)\log(ed)}\\ &\le \Delta_n + 5C\kappa_n\eta_n\sqrt{\log(en)\log(ed)}.
-\end{align*}
-Now in both cases, it suffices to bound $\Delta_n$. For this purpose, we use Theorem 2.1(b) of~\cite{koike2019notes} by setting, in the notation of that paper, $q = 4$. Then, letting $r = 4q/(q-4),$
-\begin{align*}\textbf{}
-&\left(\mathbb{E}\left\right)^{1/4}\\ &\qquad= \left(\mathbb{E}\left\right)^{1/4}\\ &\qquad\le \left(\mathbb{E}\left\right)^{1/r}\left(\mathbb{E}\right)^{1/q}\\ &\qquad\le CK_qK_x\sqrt{\log d}\max_{1\le j\le d}\frac{\|\Sigma^{-1/2}e_j\|_{I_d}}{\sqrt{e_j^{\top}\Sigma^{-1}V\Sigma^{-1}e_j}}\\ &\qquad\le \frac{C}{\sqrt{\underline{\lambda}}}K_qK_x\sqrt{\log d} \le C\sqrt{\log d},
-\end{align*}
-for a constant $C = C(K_q, K_x, \underline{\lambda})$. Above, the first inequality is H\"{o}lder inequality, the second uses Conditions~\ref{eq:moments-errors} along with the sub-Gaussianity assumption~\ref{eq:covariate-subGaussian}. Specifically, we have used the facts that the maximum of $d$ sub-Gaussian variables is also sub-Gaussian with Orlicz norm proportional to $\sqrt{\log(d)}$ and that the expected value of the the $L_r$ norm of a sub-Gaussian random variable is bounded by its Orlicz norm times a term dependent on $r$ only.
-Finally, the third inequality
-follows from Condition~\ref{eq:bounded-asymptotic-variance}. The final value of the constant $C$ depends on $q$, $\underline{\lambda}$, $K_x$ and $K_q$. This verifies the assumption of~\citet{koike2019notes} for $q = 4$ with $D_n = C\sqrt{\log d}$. Note that using the same steps as above but without the maximum over $1\le j\le d$ yields $B_n = C$ in Theorem 2.1 of~\cite{koike2019notes}. Finally because $\Theta_X = \Phi_{AC} \le C\sqrt{\log d}$, Theorem 2.1(b) of~\cite{koike2019notes} proves
-\ \le C\frac{(\log d)^{7/6}}{n^{1/6}}.
-\]
-This concludes the proof in this case.
-\end{proof}
-\begin{proof}
-Firstly, because $T_b, 1\le b\le B$, are independent and identically distributed random variables in $\mathbb{R}$ conditional on $\mathcal{D}_n$, Corollary 1 of~\cite{massart1990tight} concludes
-\begin{equation}\label{eq:Average-to-conditional-probability}
-\sup_{t\ge 0}\left|\frac{1}{B}\sum_{b=1}^B\mathbbm{1}\{T_b \le t\} - \mathbb{P}(T_b \le t\big|\mathcal{D}_n)\right| \le \sqrt{\frac{\log(2n)}{2B}},
-\end{equation}
-with probability at least $1 - 1/n$.
-Secondly, because $T_b$ is the maximum absolute value of a Gaussian vector with unit variances conditional on $\mathcal{D}_n$, Lemma 3.1 of~\cite{Cher13} yields
-\begin{equation}\label{eq:Gaussian-comparison-bound}
-\sup_{t\ge 0}\,\left|\mathbb{P}(T_b \le t\big|\mathcal{D}_n) - \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t\right)\right| \le C\Delta_0^{1/3}(1\vee \log(d/\Delta_0))^{2/3},
-\end{equation}
+\item There exists an  -dimensional analytic set   such that the germ of   at any point   belongs to   where   denotes the module of germs of holomorphic  -forms on   at  
+\end{enumerate}
+\end{definition}
+For the equivalence of the condition above, see \cite{S}.
+Let   denote the sheaf of logarithmic  -forms along  .
+Let   be the sheaf on   of meromorphic functions, let   be the sheaf on   of holomorphic  -forms defined to be
+\begin{equation*}
+\Omega_{S}^{q} = \Omega_{X}^{q}/(f\Omega_X^{q} + df \wedge \Omega_{X}^{q-1}).
+\end{equation*}
+\begin{definition}
+The residue map   is define as follows:
+For  , there exists   such that
+  Then
+the residue of   is defined to be
+  in  
+\end{definition}
+Note that it is easy to see that the image sheaf of the residue map   of the subsheaf   of   is equal to  
+\begin{equation*}{\rm res}\left( \frac{df}{f}\wedge \Omega_X^{q-1} + \Omega_X^{q}\right) = \Omega_X^{q-1}|_S.
+\end{equation*}
+See also \cite{S} for details on logarithmic residues.
+The concept of residue for logarithmic differential forms can be actually regarded as a natural generalization of the classical Poincar\'e residue.
+\subsection{Barlet sheaf and torsion differential forms}
+In 1978, by using results of F. El Zein on fundamental classes, D. Barlet introduced in \cite{B} the notion of the sheaf of regular meromorphic differential forms   in a
+quite general setting. He showed that for the case  , the sheaf   coincides with the
+Grothendieck dualizing sheaf and   can also be defined in the following manner:
+\begin{definition}
+Let   be a hypersurface
+in   Let   be the Grothendieck dualizing sheaf   Then, the sheaf of regular meromorphic differential forms   on   is defined to be
+\begin{equation*}
+\omega_S^{q} ={\rm Hom}_{{\mathcal O}_S}(\Omega_S^{n-1-q}, \omega_S^{n-1}).
+\end{equation*}
+\end{definition}
+In 1990, A. G. Aleksandrov(\cite{A}) obtained the following result.
+\begin{theorem}
+For any  , there is an isomorphism of   modules
+\begin{equation*}{\rm res}(\Omega_X^{q}(\log S)) \cong \omega_S^{q-1}.
+\end{equation*}
+\end{theorem}
+See \cite{A} or \cite{A05} for the proof.\\ Let   denote the sheaf of torsion differential  -forms of  
+\begin{example}
+Let   be an open neighborhood of the origin   in   Let   and   Then, for stalk at the origin of the sheaves of logarithmic differential forms, we have
+\begin{equation*}
+\Omega_{X,O}^{1}(\log S) \cong{\mathcal O}_{X,O}\left(\frac{df}{f}, \frac{\beta}{f}\right), \ \ \ \Omega_{X,O}^{2}(\log S) \cong{\mathcal O}_{X,O}\left(\frac{dx\wedge dy}{f}\right),
+\end{equation*}
+where   is the stalk at the origin of the sheaf   of holomorphic functions and
+  The differential form  , as an element of  , is a torsion. The differential form   is also a torsion. Since the defining function   is quasi-homogeneous, the dimension of the vector space   is equal to the Milnor number   of   (\cite{M, Z}). Therefore we have
+ 
+\end{example}
+In 1988 \cite{A88}, A. G. Aleksandrov studied logarithmic differential forms and residues and proved in particular the following.
+\begin{theorem}
+Let   be a hypersurface in   For  , there exists an exact sequence of sheaves of   modules,
+\begin{equation*}
+0 \longrightarrow\frac{df}{f} \wedge \Omega_{X}^{q-1}+ \Omega_{X}^{q} \longrightarrow
+\Omega_{X}^{q}(\log S) \stackrel{\cdot f}\longrightarrow{\rm Tor}(\Omega_{S}^{q}) \longrightarrow 0.
+\end{equation*}
+\end{theorem}
+The result above yields the following observation:
+ 
+plays a key role to study the structure of  
+\subsection{Vanishing theorem}
+In 1975, in his study(\cite{G}) on Gauss-Manin connections G. -M. Greuel proved the following results on torsion differential forms.
+\begin{theorem}
+Let   be a hypersurface in  
+with an isolated singularity at  
+Then,
+\begin{enumerate}
+\item
+ 
+\item
+  is a skyscraper sheaf supported at the origin  
+\item
+The dimension, as a vector space over  , of torsion module
+  is equal to   the Tjurina number of the hypersurface   at the origin defined to be
+\begin{equation*}
+\tau(f) = \dim_{{\mathbb C}}\left({\mathcal O}_{X, O}/\left(f, \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2},\ldots,\frac{\partial f}{\partial x_n}\right)\right),
+\end{equation*}
 where
-\ For notational convenience, let
-$A := \widehat{\Sigma}_n^{-1}\widehat{V}_n\widehat{\Sigma}_n^{-1},$ and $B := \Sigma_n^{-1}V_n\Sigma_n^{-1}.$
-Also, set $b_j = B^{1/2}e_j, 1\le j\le d$ with $B^{1/2}$.
-Next, we claim that
-\ Indeed,
-\begin{align*}
-\Delta_0
-&= \max_{1\le j < k\le d}\left|\frac{e_j^{\top}Ae_k}{\sqrt{(e_j^{\top}Ae_j)(e_k^{\top}Ae_k)}} - \frac{e_j^{\top}Be_k}{\sqrt{(e_j^{\top}Be_j)(e_k^{\top}Be_k)}}\right|\\ &= \max_{1\le j\le k \le d}\left|\frac{b_j^{\top}B^{-1/2}AB^{-1/2}b_k}{\sqrt{(b_j^{\top}B^{-1/2}AB^{-1/2}b_j)(b_k^{\top}B^{-1/2}AB^{-1/2}b_k)}} - \frac{b_j^{\top}b_k}{\|b_j\|_{I_d}\|b_k\|_{I_d}}\right|\\ &\le \max_{1\le j < k\le d}\left|\frac{b_j^{\top}B^{-1/2}AB^{-1/2}b_k}{\sqrt{(b_j^{\top}B^{-1/2}AB^{-1/2}b_j)(b_k^{\top}B^{-1/2}AB^{-1/2}b_k)}} - \frac{b_j^{\top}B^{-1/2}AB^{-1/2}b_k}{\sqrt{(b_j^{\top}b_j)(b_k^{\top}b_k)}}\right|\\ &\qquad+ \max_{1\le j < k\le d}\left|\frac{b_j^{\top}B^{-1/2}AB^{-1/2}b_k}{\sqrt{(b_j^{\top}b_j)(b_k^{\top}b_k)}} - \frac{b_j^{\top}b_k}{\|b_j\|_{I_d}\|b_k\|_{I_d}}\right|\\ &\le \max_{1\le j < k\le d}\left|\frac{b_j^{\top}B^{-1/2}AB^{-1/2}b_k}{\sqrt{(b_j^{\top}B^{-1/2}AB^{-1/2}b_j)(b_k^{\top}B^{-1/2}AB^{-1/2}b_k)}}\right|\\ & \times\left|1 - \sqrt{\frac{(b_j^{\top}B^{-1/2}AB^{-1/2}b_j)(b_k^{\top}B^{-1/2}AB^{-1/2}b_k)}{b_j^{\top}b_jb_k^{\top}b_k}}\right|+ \|B^{-1/2}AB^{-1/2} - I_d\|_{\mathrm{op}}
-\end{align*}
-Using Cauchy-Schwarz inequality and the inequality $|1 - \sqrt{x}| \le |1 - x|$, valid for all $x \geq 0$, the previous expression is uper bounded by
-the last expression is bounded by
-\begin{align*}
-&
-\max_{1\le j \le k\le d}\left|1 - \frac{(b_j^{\top}B^{-1/2}AB^{-1/2}b_j)(b_k^{\top}B^{-1/2}AB^{-1/2}b_k)}{b_j^{\top}b_jb_k^{\top}b_k}\right| + \|B^{-1/2}AB^{-1/2} - I_d\|_{\mathrm{op}}\\ &\qquad~ \le \max_{1\le j\le d}\left|1 - \frac{b_j^{\top}B^{-1/2}AB^{-1/2}b_j}{b_j^{\top}b_j}\right| + \max_{1\le k\le d}\left|1 - \frac{b_k^{\top}B^{-1/2}AB^{-1/2}b_k}{b_k^{\top}b_k}\right|\|B^{-1/2}AB^{-1/2}\|_{\mathrm{op}}\\ &\qquad+ \|B^{-1/2}AB^{-1/2} - I_d\|_{\mathrm{op}}\\ &\qquad~ \le 2\|B^{-1/2}AB^{-1/2} - I_d\|_{\mathrm{op}} + \|B^{-1/2}AB^{-1/2} - I_d\|_{\mathrm{op}}\|B^{-1/2}AB^{-1/2}\|_{\mathrm{op}}\\ &\qquad~ = \|B^{-1/2}AB^{-1/2} - I_d\|_{\mathrm{op}}\left(2 + \|B^{-1/2}AB^{-1/2}\|_{\mathrm{op}}\right),
-\end{align*}
-where the first inequality follows form follows from the identity $(1 - ab) = (1 - b) - (a-1)b$ along with the triangle inequality.
-Lemma~\ref{lem:std-err-consistency} now yields the rate of convergence of $\Delta_0$. In detail,
-with probability at least $1 - (d+2)/n - \sqrt{d/n}$,
-\begin{equation}\label{eq:multiplier-bootstrap-bound-1}
-\Delta_0 \le C\sqrt{\frac{d\log(ed) + \log n}{n}} + C\frac{d^{1-1/q}\log(ed)\log n}{n^{1-3/q}}.
-\end{equation}
-Substituting this in~\eqref{eq:Gaussian-comparison-bound} yields with probability at least $1 - (d + 2)/n - \sqrt{d/n}$,
-\begin{equation}\label{eq:multiplier-bootstrap-bound}
-\begin{split}
-&\sup_{t\ge 0}\,\left|\mathbb{P}(T_b \le t\big|\mathcal{D}_n) - \mathbb{P}\left(\max_{1\le j\le d}|G_j| \le t\right)\right|\\ &\qquad\le C\log^3(dn)\left.
-\end{split}
-\end{equation}
-Combining inequalities~\eqref{eq:Average-to-conditional-probability} and~\eqref{eq:multiplier-bootstrap-bound} concludes the proof.
-\end{proof}
-\end{appendices}
-\bibliography{paper_CLT}
-\bibliographystyle{apalike}
-\newpage
-\begin{appendices}
-\begin{center}{\Large{\bf Supplementary Material}}
-\end{center}
-\section{Proof of the Main Results from Section~\ref{section::partial} (Partial Correlations)}
-\label{appendix:main.partial}
-Recall the functions $\psi_{jk}(\cdot)$ and their estimators $\widehat{\psi}_{jk}(\cdot)$ given in~\eqref{eq:def-psi-jk} and~\eqref{eq:def-widehat-psi-jk}, respectively, and, similarly, the definitions of $a_j(\cdot)$ and $\widehat{a}_j(\cdot)$
-in~\eqref{eq:ajx-function} and~\eqref{eq:ajhatx-function}, respectively.
-\begin{proof}
-For notational convenience, let
-$\widehat{\omega}_{jk} := e_j^{\top}\widehat{\Sigma}^{-1}e_k$ and $\omega_{jk} := e_j^{\top}\Sigma^{-1}e_k.$
-Before bounding $\widehat{\theta}_{jk} - \theta_{jk}$, we note a few inequalities related to $\widehat{\omega}_{jk}$ and $\omega_{jk}$ that follow from~\eqref{eq:inv-covariance-error-bound} of Lemma~\ref{lemma:linear-expansion-inv-covariance}:
-\begin{equation}\label{eq:inequalities-omegas}
-\begin{split}
-\max\left\{\left|\sqrt{\frac{\widehat{\omega}_{jj}}{\omega_{jj}}} - 1\right|, \left|\frac{\widehat{\omega}_{jj}}{\omega_{jj}} - 1\right|, \left|\frac{\widehat{\omega}_{jk} - \omega_{jk}}{\sqrt{\omega_{jj}\omega_{kk}}}\right|\right\} ~&\le~ \frac{\mathcal{D}_n^{\Sigma}}{1 - \mathcal{D}_n^{\Sigma}};\\ \max\left\{\left|\sqrt{\frac{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}{\omega_{jj}\omega_{kk}}} - 1\right|, \left|\frac{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}{\omega_{jj}\omega_{kk}} - 1\right|\right\} ~&\le~ \frac{2\mathcal{D}_n^{\Sigma}}{1 - \mathcal{D}_n^{\Sigma}} + \left(\frac{\mathcal{D}_n^{\Sigma}}{1 - \mathcal{D}_n^{\Sigma}}\right)^2;\quad\mbox{and}\\ \frac{1}{1 + \mathcal{D}_n^{\Sigma}} ~\le~ \frac{\widehat{\omega}_{jj}}{\omega_{jj}} ~&\le~ \frac{1}{1 - \mathcal{D}_n^{\Sigma}},\quad\mbox{for all}\quad 1\le j\le d.
-\end{split}
-\end{equation}
-All these inequalities follow from the fact that
-\ Observe that
-\begin{align*}
-\widehat{\theta}_{jk} - \theta_{jk} &= -\frac{\widehat{\omega}_{jk}}{\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}} + \frac{\omega_{jk}}{\sqrt{\omega_{jj}\omega_{kk}}}\\ &= -\frac{\widehat{\omega}_{jk} - \omega_{jk}}{\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}} - \frac{\omega_{jk}}{\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}}\left.
-\end{align*}
-The equation $\sqrt{a} - 1 = (a-1)/2 - (\sqrt{a} - 1)^2/2$ for $a > 0$ yields
-\begin{align*}
-\widehat{\theta}_{jk} - \theta_{jk} &= -\frac{\widehat{\omega}_{jk} - \omega_{jk}}{\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}} - \frac{\omega_{jk}}{2\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}}\left - \frac{\omega_{jk}}{2\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}}\left(1 - \sqrt{\frac{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}{\omega_{jj}\omega_{kk}}}\right)^2.
-\end{align*}
-Finally using $a'b' - 1 = (a' - 1) + (b' - 1) + (a' - 1)(b' - 1)$, we obtain
-\begin{align*}
-&\left|\widehat{\theta}_{jk} - \theta_{jk} + \frac{\widehat{\omega}_{jk} - \omega_{jk}}{\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}} - \frac{\omega_{jk}}{2\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}}\left\right|\\ &\qquad\le \frac{|\omega_{jk}|}{2\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}}\times\left|1 - \frac{\widehat{\omega}_{jj}}{\omega_{jj}}\right|\times\left|1 - \frac{\widehat{\omega}_{kk}}{\omega_{kk}}\right| ~+~ \frac{|\omega_{jk}|}{2\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}}\left|1 - \sqrt{\frac{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}{\omega_{jj}\omega_{kk}}}\right|^2
-\end{align*}
-We now replace $\widehat{\omega}_{jj}, \widehat{\omega}_{kk}$ in the denominator of the left side to get
-\begin{align*}
-&\left|\widehat{\theta}_{jk} - \theta_{jk} + \frac{\widehat{\omega}_{jk} - \omega_{jk}}{\sqrt{{\omega}_{jj}{\omega}_{kk}}} - \frac{\omega_{jk}}{2\sqrt{{\omega}_{jj}{\omega}_{kk}}}\left\right|\\ &\qquad\le \frac{|\omega_{jk}|}{2\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}}\times\left|1 - \frac{\widehat{\omega}_{jj}}{\omega_{jj}}\right|\times\left|1 - \frac{\widehat{\omega}_{kk}}{\omega_{kk}}\right| ~+~ \frac{|\omega_{jk}|}{2\sqrt{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}}\left|1 - \sqrt{\frac{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}{\omega_{jj}\omega_{kk}}}\right|^2\\ &\qquad\qquad+ \frac{|\widehat{\omega}_{jk} - \omega_{jk}|}{\sqrt{\omega_{jj}\omega_{kk}}}\left|\sqrt{\frac{\omega_{jj}\omega_{kk}}{{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}}} - 1\right| + \frac{|\omega_{jk}|}{2\sqrt{\omega_{jj}\omega_{kk}}}\left|\frac{\widehat{\omega}_{jj}}{\omega_{jj}} + \frac{\widehat{\omega}_{kk}}{\omega_{kk}} - 2\right|\times\left|\sqrt{\frac{\omega_{jj}\omega_{kk}}{{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}}} -
-1\right|.
-\end{align*}
-To bound the right hand side we use inequalities~\eqref{eq:inequalities-omegas}. Note that
-\ Further, second and third inequalites of~\eqref{eq:inequalities-omegas} yield
-\begin{align*}
-\left|\sqrt{\frac{\omega_{jj}\omega_{kk}}{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}} - 1\right| &= \left|\sqrt{\frac{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}{\omega_{jj}\omega_{kk}}} - 1\right|\sqrt{\frac{\omega_{jj}\omega_{kk}}{\widehat{\omega}_{jj}\widehat{\omega}_{kk}}}\\ &\le \left(1 + \mathcal{D}_n^{\Sigma}) \le 9\mathcal{D}_n^{\Sigma},
-\end{align*}
-under the assumption $\mathcal{D}_n^{\Sigma} \le 1/2$.
-Combining these inequalities, we conclude
-\begin{equation}\label{eq:prelim-partial-corr-expansion}
-\left|\widehat{\theta}_{jk} - \theta_{jk} + \frac{\widehat{\omega}_{jk} - \omega_{jk}}{\sqrt{{\omega}_{jj}{\omega}_{kk}}} - \frac{\omega_{jk}}{2\sqrt{{\omega}_{jj}{\omega}_{kk}}}\left\right| \le C(\mathcal{D}_n^{\Sigma})^2,
-\end{equation}
-for a universal constant $C \in (0, \infty)$ and for all $1\le j, k\le d$.
-Finally~\eqref{eq:final-linear-expansion-inv-covariance} of Lemma~\ref{lemma:linear-expansion-inv-covariance} implies
-\ Combining this inequality with~\eqref{eq:prelim-partial-corr-expansion} and using $\mathcal{D}_n^{\Sigma} \le 1/2$ concludes
-\begin{align*}
-&\left|\widehat{\theta}_{jk} - \theta_{jk} + \frac{e_j^{\top}\Sigma^{-1}(\widetilde{\Sigma} - \Sigma)\Sigma^{-1}e_k}{\sqrt{\omega_{jj}\omega_{kk}}} - \frac{\theta_{jk}}{2}\left\right|\\ &\qquad\le C(\mathcal{D}_n^{\Sigma})^2 + \|\overline{X}_n - \mu_X\|_{\Sigma^{-1}}^2,
-\end{align*}
-for a universal constant $C \in (0, \infty)$. This concludes the proof.
-\end{proof}
-\begin{proof}
-We will prove the theorem when $C\eta_n \le 1/2$; otherwise the result is trivially true by increasing the constant $C$. For notational convenience, let $\zeta_{jk} := \mathbb{E}$. Theorem~\ref{thm:linear-expansion-partial-corr} implies that
-\begin{equation}\label{eq:proper-normalized-partial-correlation}
-\max_{1\le j < k\le d}\left|\frac{\widehat{\theta}_{jk} - \theta_{jk}}{\widehat{\zeta}_{jk}} + \frac{1}{n\widehat{\zeta}_{jk}}\sum_{i=1}^n \psi_{jk}(X_i)\right| ~\le~ \frac{C(\mathcal{D}_n^{\Sigma})^2 + \|\overline{X}_n - \mu_X\|_{\Sigma^{-1}}^2}{\min_{1\le j < k\le d}\widehat{\zeta}_{jk}},
-\end{equation}
-whenever $\mathcal{D}_n^{\Sigma} \le 1/2$. Furthermore,
-\begin{equation}\label{eq:average-variance-estimator}
-\left|\frac{1}{n\widehat{\zeta}_{jk}}\sum_{i=1}^n \psi_{jk}(X_i) - \frac{1}{n\zeta_{jk}}\sum_{i=1}^n \psi_{jk}(X_i)\right| = \frac{|n^{-1}\sum_{i=1}^n \psi_{jk}(X_i)|}{\widehat{\zeta}_{jk}\zeta_{jk}}\times|\widehat{\zeta}_{jk} - \zeta_{jk}|.
-\end{equation}
-Define the random variable
-\ which may be regarded as a pseudo-estimator of sort, since $\mathbb{E} = \zeta^2_{jk}$. Of course $\widetilde{\zeta}_{jk}^2$ is not a computable
-estimator of $\zeta^2_{jk}$ because it depends on unknown quantities, namely $\Sigma$ and $\mu_X$.
-Equations ~\eqref{eq:proper-normalized-partial-correlation} and \eqref{eq:average-variance-estimator} together imply that
-\begin{equation}\label{eq:combination-influence-fn-exp-partial-correlation}
-\begin{split}
-\max_{1\le j < k\le d}\left|\frac{\widehat{\theta}_{jk} - \theta_{jk}}{\widehat{\zeta}_{jk}} + \frac{1}{n\zeta_{jk}}\sum_{i=1}^n \psi_{jk}(X_i)\right| ~&\le~ \frac{C(\mathcal{D}^{\Sigma})^2 + \|\widebar{X}_n - \mu_X\|_{\Sigma^{-1}}^2}{\min_{1\le j < k\le d}\widehat{\zeta}_{jk}}\\ ~&\qquad+~ \max_{1\le j < k\le d}\frac{|\widehat{\zeta}_{jk} - \zeta_{jk}|}{\widehat{\zeta}_{jk}\zeta_{jk}}\left|\frac{1}{n}\sum_{i=1}^n \psi_{jk}(X_i)\right|.
-\end{split}
-\end{equation}
-Clearly,
-\begin{equation}\label{eq:bound-hat.sigma-sigma}
-\widehat{\zeta}_{jk} = \zeta_{jk}\left(1 + \frac{\widehat{\zeta}_{jk}}{\zeta_{jk}} - 1\right) \ge \zeta_{jk}\left(1 - \left|\frac{\widehat{\zeta}_{jk}}{\zeta_{jk}} - 1\right|\right).
-\end{equation}
-Using the pseudo-estimator $\widetilde{\zeta}_{jk}^2$, we have with probability $1 - C/n$,
-\begin{equation}\label{eq:sigma-hat-to-sigma-tilde}
-\max_{1\le j < k\le d}|\widehat{\zeta}_{jk} - \widetilde{\zeta}_{jk}| \le CK_x^6\sqrt{\frac{d + \log n}{n}} + CK_x^5\frac{d + \log n}{n},
-\end{equation}
-Next, since
-\\right|.
-\]
-we have that
-\\right|.
-\]
-Then, applying
-Lemma~\ref{lemma:Thm3.1.KuchAbhi} with $\alpha = 1/2, q = d^2$ and $t = \log n$,
-we obtain that, with probability at least $1 - 3/n$,
-\begin{equation}\label{eq:sigma-tilde-to-sigma}
-\max_{1\le j < k\le d}\left|\widetilde{\zeta}_{jk} - \zeta_{jk}\right| ~\le~ \frac{CK_x^4}{\zeta_{\min}}\left.
-\end{equation}
-Combining inequalities~\eqref{eq:sigma-hat-to-sigma-tilde} and~\eqref{eq:sigma-tilde-to-sigma} we now conclude that, with probability at least $1 - (C+3)/n$,
-\begin{align*}
-\max_{1\le j < k\le d}\left|\frac{\widehat{\zeta}_{jk}}{\zeta_{jk}} - 1\right| ~&\le~ \frac{CK_x^6}{\zeta_{\min}}\sqrt{\frac{d + \log n}{n}} + \frac{CK_x^5}{\zeta_{\min}}\frac{d + \log n}{n}\\ ~&\qquad+~ \frac{CK_x^4}{\zeta_{\min}^2}\left.
-\end{align*}
-Because $K_x \ge 1$, the previous bound reduces to
-\begin{equation}\label{eq:sigma-hat-to-sigma}
-\max_{1\le j < k\le d}\left|\frac{\widehat{\zeta}_{jk}}{\zeta_{jk}} - 1\right|
-\leq C\left(\frac{K_x^6}{\zeta_{\min}} + \frac{K_x^4}{\zeta_{\min}^2}\right)\left.
-\end{equation}
-Assuming $n$ large enough so that the quantity on the right hand side is bounded by $1/2$ and using the inequality \eqref{eq:bound-hat.sigma-sigma}, we get that, with probability at least $1 - (C + 3)/n$, $\widehat{\zeta}_{jk} \ge \zeta_{jk}/2$ for all $1\le j < k\le d$ and hence,
-\begin{align*}
-&\max_{1\le j < k\le d}\left|\frac{\widehat{\theta}_{jk} - \theta_{jk}}{\widehat{\zeta}_{jk}} + \frac{1}{n\zeta_{jk}}\sum_{i=1}^n \psi_{jk}(X_i)\right|\\ &\qquad\le~ \frac{2C(\mathcal{D}^{\Sigma})^2 + 2\|\widebar{X}_n - \mu_X\|_{\Sigma^{-1}}^2}{\zeta_{\min}}
-+ 2\max_{1\le j < k\le d}\frac{|\widehat{\zeta}_{jk} - \zeta_{jk}|}{\zeta_{jk}^2}\left|\frac{1}{n}\sum_{i=1}^n \psi_{jk}(X_i)\right|.
-\end{align*}
-We now proceed to derive a high probability bound for the last display. The term $\max_{1\le j < k\le d}{|\widehat{\zeta}_{jk} - \zeta_{jk}|}/{\zeta_{jk}^2}$ can be bounded as in equation~\eqref{eq:sigma-hat-to-sigma}, with probability at least
-$1 - (C+3)/n$. Next, Lemma~\ref{lemma:Thm3.1.KuchAbhi} with $\alpha=1$ gives that, with probability at least $1 - 3/n$,
-\begin{equation}\label{eq:bound-on-sum-psi}
-\max_{1\le j < k\le d}\left|\frac{1}{n}\sum_{i=1}^n \psi_{jk}(X_i)\right| ~\le~ CK_x^2\sqrt{\frac{\log(dn)}{n}} + CK_x^2\frac{\log(dn)}{n}.
-\end{equation}
-To bound $(\mathcal{D}_n^{\Sigma})^2 + \|\overline{X}_n - \mu_X\|_{\Sigma^{-1}}^2$, we notice that, by Proposition~\ref{prop:bounding-D-sigma}
-\ Next, Lemma~\ref{lem:concentration-of-covariance} yields that
-\ and the sub-Gaussianity assumption further implies that
-\ Therefore,
-\begin{equation}\label{eq:linear-rep-error-partial-corr}
-\mathbb{P}\left(n^{1/2}(\mathcal{D}_n^{\Sigma})^2 + n^{1/2}\|\overline{X}_n - \mu_X\|_{\Sigma^{-1}}^2 \ge C(K_x^2 + K_x^4)\frac{d + \log(n)}{\sqrt{n}}\right) \le \frac{1}{n}.
-\end{equation}
-Combining the bounds \eqref{eq:sigma-hat-to-sigma}, \eqref{eq:bound-on-sum-psi} and \eqref{eq:linear-rep-error-partial-corr}, we
-conclude that, with probability at least $1 - C/n$,
-\begin{align*}
-&\max_{1\le j < k\le d}\left|\frac{n^{1/2}(\widehat{\theta}_{jk} - \theta_{jk})}{\widehat{\zeta}_{jk}} + \frac{1}{\sqrt{n}\zeta_{jk}}\sum_{i=1}^n \psi_{jk}(X_i)\right|\\ ~&\le~ \frac{CK_x^4}{\zeta_{\min}}\frac{d + \log n}{\sqrt{n}}\\ ~&+~ C\left(\frac{K_x^8\sqrt{\log(dn)}}{\zeta_{\min}^2} + \frac{K_x^6\sqrt{\log(dn)}}{\zeta_{\min}^3}\right)\left\left(1 + \sqrt{\frac{\log(dn)}{n}}\right),
-\end{align*}
-whenever the right hand side is smaller than $1/2$.
-Because $d \le n$, ${d/n} \le \sqrt{d/n}$ and
-\ we have that
-\ Thus we have shown that, with probability at least $1 - C/n$,
-\begin{align*}
-&\max_{1\le j < k\le d}\left|\frac{n^{1/2}(\widehat{\theta}_{jk} - \theta_{jk})}{\widehat{\zeta}_{jk}} + \frac{1}{\sqrt{n}\zeta_{jk}}\sum_{i=1}^n \psi_{jk}(X_i)\right|\\ ~&\le~ \frac{CK_x^4}{\zeta_{\min}}\frac{d + \log n}{\sqrt{n}} ~+~ C\left(\frac{K_x^8}{\zeta_{\min}^2} + \frac{K_x^6}{\zeta_{\min}^3}\right)\sqrt{\frac{(d + \log n)\log(dn)}{n}}\\ ~& = \eta_n.
-\end{align*}
-By the same arguments used in the proof of Theorem ~\ref{thm:Berry-Esseen-OLS},
-\begin{equation}\label{eq:penultimate-partial-correlation11}
-\begin{split}
-&\sup_{t\ge0}\left|\mathbb{P}\left(\max_{1\le j < k\le d}\left|\frac{n^{1/2}(\widehat{\theta}_{jk} - \theta_{jk})}{\widehat{\zeta}_{jk}}\right| \le t\right) - \mathbb{P}\left(\max_{1\le j < k\le d}|G_{jk}| \le t\right)\right|\\ &\qquad\le \mathbb{P}\left(t - \eta_n \le \max_{1\le j \le k\le d}|G_{jk}| \le t + \eta_n\right) + \frac{C}{n}\\ &\qquad\qquad+ \sup_{t\ge0}\left|\mathbb{P}\left(\max_{1\le j\le k \le d}|G_{jk}| \le t\right) - \mathbb{P}\left(\max_{1\le j < k\le d}\left|\frac{1}{\sqrt{n}}\sum_{i=1}^n \frac{\psi_{jk}(X_i)}{\zeta_{jk}}\right| \le t\right)\right|.
-\end{split}
-\end{equation}
-By Nazarov's inequality
-\citep{chernozhukov2017detailed},
-\ for a universal constant $C>0$.
-To bound the last term of~\eqref{eq:penultimate-partial-correlation11}, we use Theorem 2.1(a) of~\cite{koike2019notes}. Firstly, note that $a_j(X)$ (in~\eqref{eq:ajx-function}) is sub-Gaussian by assumption and hence $\psi_{jk}(X)$ is sub-exponential satisfying $\|\psi_{jk}(X)\|_{\psi_1} \le CK_x^2$ for some universal constant $C$; this also implies that $B_n = CK_x^2$ in Theorem 2.1(a) of~\cite{koike2019notes}. Thus, Theorem 2.1(a) of~\cite{koike2019notes} yields
-\begin{equation}
-\begin{split}
-&\sup_{t\ge0}\left|\mathbb{P}\left(\max_{1\le j\le k \le d}|G_{jk}| \le t\right) - \mathbb{P}\left(\max_{1\le j < k\le d}\left|\frac{1}{\sqrt{n}}\sum_{i=1}^n \frac{\psi_{jk}(X_i)}{\zeta_{jk}}\right| \le t\right)\right|\\ &\quad\le C(\log d)^{2/3}\left\\ &\quad\le CK_x^{4/3}\left \le CK_x^{4/3}\frac{(\log(d\vee n))^{5/6}}{n^{1/6}}.
-\end{split}
-\end{equation}
-Substituting this bound in~\eqref{eq:penultimate-partial-correlation11} completes the proof.
-\end{proof}
-\begin{proof}
-By Corollary 1 of~\cite{massart1990tight}, we obtain
-\ with probability at least $1 - 1/n$.
-By Lemma 3.1 of~\cite{Cher13}, we obtain
-\begin{equation}\label{eq:gaussian-comparison-partial-corr}
-\sup_{t\ge0}\left|\mathbb{P}(T_b \le t|X_1,\ldots,X_n) - \mathbb{P}\left(\max_{1\le j < k\le d}|G_{jk}| \le t\right)\right| \le C\Delta_0^{1/3}(1\vee\log(d^2/\Delta_0))^{2/3},
-\end{equation}
-where
-\ with $\widehat{\mbox{corr}}$
-defined as the sample correlation between $(\widehat{\psi}_{jk}(X_i), 1\le i\le n)$ and $(\widehat{\psi}_{j'k'}(X_i), 1\le i\le n)$. The rest of the proof is devoted to bounding the term $\Delta_0$.
-Towards that end, Lemma~\ref{lem:correlations-from-covariances}
-yields that
-\begin{equation}\label{eq:Delta_zero-Delta_tilde-bound}
-\Delta_0 ~\le~ 4\widetilde{\Delta}_0 := 4\max_{\substack{1\le j,k\le d,\\1\le j',k' \le d}}\,\left|\frac{\widehat{\mbox{cov}}(\widehat{\psi}_{jk}, \widehat{\psi}_{j'k'}) - \mbox{cov}(\psi_{jk}\psi_{j'k'})}{\sqrt{\mbox{Var}(\psi_{jk})\mbox{Var}(\psi_{j'k'})}}\right|,
-\end{equation}
-whenever $\widetilde{\Delta}_0 \le 1/2$.
-Below we will derive a high-probability bound for $\tilde{\Delta}_0$, which is shown to be vanishing provided that $d \le \sqrt{n}$.
-Because $\sum_{i=1}^n \widehat{\psi}_{jk}(X_i) = 0$, the empirical covariance is given by
-\ and similarly, $\mbox{cov}(\psi_{jk}, \psi_{j'k'}) = \mathbb{E}$. These equalities lead to
-\begin{equation}\label{eq:basic-decomposition-partial-correlation}
-\begin{split}
-\widehat{\mbox{cov}}(\widehat{\psi}_{jk}, \widehat{\psi}_{j'k'}) - \mbox{cov}(\psi_{jk}, \psi_{j'k'}) &= \frac{1}{n}\sum_{i=1}^n \left\{\widehat{\psi}_{jk}(X_i)\widehat{\psi}_{j'k'}(X_i) - \psi_{jk}(X_i)\psi_{j'k'}(X_i)\right\}\\ &\qquad+ \frac{1}{n}\sum_{i=1}^n \Big\{\psi_{jk}(X_i)\psi_{j'k'}(X_i) - \mathbb{E}\left\Big\}.
-\end{split}
-\end{equation}
-By Lemma~\ref{lemma:Thm3.1.KuchAbhi}, with probability at least $1 - 3/n$,
-\\right\}\right| \le CK_x^4\left.
-\]
-We now bound the first term in~\eqref{eq:basic-decomposition-partial-correlation} as follows:
-\begin{align*}
-&\left|\frac{1}{n}\sum_{i=1}^n \left\{\widehat{\psi}_{jk}(X_i)\widehat{\psi}_{j'k'}(X_i) - \psi_{jk}(X_i)\psi_{j'k'}(X_i)\right\}\right|\\ &\qquad\le \left|\frac{1}{n}\sum_{i=1}^n \left(\widehat{\psi}_{jk}(X_i) - \psi_{jk}(X_i)\right)\psi_{j'k'}(X_i)\right|\\ &\qquad\qquad+ \left|\frac{1}{n}\sum_{i=1}^n \left(\widehat{\psi}_{j'k'}(X_i) - \psi_{j'k'}(X_i)\right)\psi_{jk}(X_i)\right|\\ &\qquad\qquad+ \left|\frac{1}{n}\sum_{i=1}^n \left(\widehat{\psi}_{j'k'}(X_i) - \psi_{j'k'}(X_i)\right)\left(\widehat{\psi}_{jk}(X_i) - \psi_{jk}(X_i)\right)\right|\\ &\qquad\le 2\max_{1\le j < k\le d}\,\sqrt{\frac{1}{n}\sum_{i=1}^n \left(\widehat{\psi}_{jk}(X_i) - \psi_{jk}(X_i)\right)^2}\max_{1\le j < k\le d}\,\sqrt{\frac{1}{n}\sum_{i=1}^n \psi_{jk}^2(X_i)}\\ &\qquad\qquad+ \max_{1\le j < k\le d}\,{\frac{1}{n}\sum_{i=1}^n \left(\widehat{\psi}_{jk}(X_i) - \psi_{jk}(X_i)\right)^2}.
-\end{align*}
-Applying Lemma~\ref{lem:application-theorem8} with $W_i = \psi_{jk}^2(X_i)$, which by assumption is sub-Weibull$(1/2)$, we have that for all $t > 0$,
-\ + \frac{4etK_w\log^2n}{n} + \frac{4et^3K_w}{n}\right) \le 3e^{-t}.
-\]
-By union bound over $1\le j < k\le d$, i.e., taking $t = \log(d^2)$, this implies that, with probability at least $1 - 3/n$,
-\begin{align*}
-\max_{1\le j < k\le d}\frac{1}{n}\sum_{i=1}^n \psi_{jk}^2(X_i) &\le 2e\max_{1\le j < k\le d}\mathbb{E}\left + \frac{8e\log(d)K_w\log^2n}{n} + \frac{32e\log^3dK_w}{n}\\ &\le 2eK_w + \frac{8eK_w\log^3(nd)}{n} + \frac{32eK_w\log^3(dn)}{n}\\ &= CK_w\left(1 + \frac{\log^3(nd)}{n}\right).
-\end{align*}
-Hence with probability at least $1 - 3/n$,
-\begin{equation}\label{eq:square-power-psi}
-\max_{1\le j < k\le d}\sqrt{\frac{1}{n}\sum_{i=1}^n \psi_{jk}^2(X_i)} \le C\sqrt{K_w}\left(1 + \sqrt{\frac{\log^3(nd)}{n}}\right).
-\end{equation}
-Hence with probability at least $1 - 3/n,$
-\begin{equation}\label{eq:first-term-decomposition-first}
-\begin{split}
-&\left|\frac{1}{n}\sum_{i=1}^n \left\{\widehat{\psi}_{jk}(X_i)\widehat{\psi}_{j'k'}(X_i) - \psi_{jk}(X_i)\psi_{j'k'}(X_i)\right\}\right|\\ &\qquad\le C\sqrt{K_x}\left(\sqrt{\frac{\log^3(dn)}{n}} + 1\right)\max_{1\le j < k\le d}\sqrt{\frac{1}{n}\sum_{i=1}^n \left(\widehat{\psi}_{jk}(X_i) - \psi_{jk}(X_i)\right)^2}\\ &\qquad\qquad+ \max_{1\le j < k\le d}\,{\frac{1}{n}\sum_{i=1}^n \left(\widehat{\psi}_{jk}(X_i) - \psi_{jk}(X_i)\right)^2}.
-\end{split}
-\end{equation}
-Assuming $d \le \sqrt{n}$, Lemma~\ref{lem:rate-of-convergence-psihat-minus-psi} proves that with probability at least $1 - C/n$,
-\ Substituting this in~\eqref{eq:first-term-decomposition-first} and then in~\eqref{eq:Delta_zero-Delta_tilde-bound} proves that with probability at least $1 - C/n$,
-\ whenever
-$d \le \sqrt{n}$ (required for Lemma~\ref{lem:rate-of-convergence-psihat-minus-psi}) and the right hand side is less than 1. Hence,
-\ \end{proof}
-\begin{lemma}\label{lem:correlations-from-covariances}
-Suppose $X_1, \ldots, X_n\in\mathbb{R}^d$ are independent and identically distributed random vectors. Set
-\ to be the empirical covariance between $(X_{ij}, 1\le i\le n)$ and $(X_{ik}, 1\le i\le n)$. The empirical correlation $\widehat{\sigma}_{jk}/\sqrt{\widehat{\sigma}_{jj}\widehat{\sigma}_{kk}}$ is denoted by $\widehat{\rho}_{jk}$. Let $\sigma_{jk}$ and $\rho_{jk}$ represent the corresponding population covariance and correlations. Then
-\ whenever
-\ \end{lemma}
-\begin{proof}
-Fix $1\le j < k\le d$ and set
-\ Then,
-\begin{equation}\label{eq:Delta-definition}
-\frac{1}{1 + \Delta} ~\le~ \frac{\sigma_{jj}}{\widehat{\sigma}_{jj}} ~\le~ \frac{1}{1-\Delta}\quad\mbox{for all}\quad 1\le j\le d.
-\end{equation}
-Observe that
-\begin{align*}
-\left|\widehat{\rho}_{jk} - \rho_{jk}\right| &\le \frac{|\widehat{\sigma}_{jk} - \sigma_{jk}|}{\sqrt{\widehat{\sigma}_{jj}\widehat{\sigma}_{kk}}} + \frac{\sigma_{jk}}{\sqrt{\sigma_{jj}\sigma_{kk}}}\left|\sqrt{\frac{\sigma_{jj}\sigma_{kk}}{\widehat{\sigma}_{jj}\widehat{\sigma}_{kk}}} - 1\right|\\ &\le \Delta\sqrt{\frac{\sigma_{jj}\sigma_{kk}}{\widehat{\sigma}_{jj}\widehat{\sigma}_{kk}}} + \left|\sqrt{\frac{\sigma_{jj}\sigma_{kk}}{\widehat{\sigma}_{jj}\widehat{\sigma}_{kk}}} - 1\right|.
-\end{align*}
-To bound the last term, we see from~\eqref{eq:Delta-definition} that, for all $j$ and $k$,
-\ which implies that
-\ Therefore, provided that $\Delta \leq 1/2$,
-\ \end{proof}
-\begin{lemma}\label{lem:psihat-minus-psi-part1}
-For functions $\widehat{a}, \widehat{b}, a, b$ and scalars $\hat{\theta}, \theta\in$, let
-\begin{align*}
-\widehat{\psi}(x) &:= \widehat{a}(x) - \mathbb{E}_n - \widehat{\theta}\left\{\widehat{b} - \mathbb{E}_n\right\},\\ \psi(x) &:= a(x) - \mathbb{E} - \theta\left\{b(x) - \mathbb{E}\right\}.
-\end{align*}
-Then
-\begin{align*}
-\|\widehat{\psi} - \psi\|_{n} &\le \|\widehat{a} - a\|_n + |\mathbb{E}_n - \mathbb{E}| + \|\widehat{b} - b\|_n + |\mathbb{E}_n - \mathbb{E}|\\ &\qquad+ |\theta - \widehat{\theta}|\;\|b - \mathbb{E}\|_n,
-\end{align*}
-where for any function $f$, $\|f\|_n := \sqrt{n^{-1}\sum_{i=1}^n f^2(X_i)}.$
-\end{lemma}
-\begin{proof}
-The proof is mostly algebraic manipulation. For notational ease, we write $\widehat{\psi}$ for $\widehat{\psi}(x)$ and similarly for other functions. Firstly,
-\begin{align*}
-\widehat{\psi} - \psi &= \widehat{a} - a - \mathbb{E}_n + \mathbb{E} - \widehat{\theta}(\widehat{b} - \mathbb{E}_n) + \theta(b - \mathbb{E})\\ &= (\widehat{a} - a) - \mathbb{E}_n - (\mathbb{E}_n - \mathbb{E}) - \widehat{\theta}(\widehat{b} - b - \mathbb{E}_n + \mathbb{E})\\ &\qquad+ (\theta - \widehat{\theta})(b - \mathbb{E})\\ &= (\widehat{a} - a) - \mathbb{E}_n - (\mathbb{E}_n - \mathbb{E}) - \widehat{\theta}(\widehat{b} - b - \mathbb{E}_n)\\ &\qquad + \widehat{\theta}(\mathbb{E}_n - \mathbb{E}) + (\theta - \widehat{\theta})(b - \mathbb{E}).
-\end{align*}
-Observe now that
-\\|_n \le \|\widehat{a} - a\|_n.
-\]
-Using the fact $\widehat{\theta}, \theta\in$ concludes the proof.
-\end{proof}
-\begin{lemma}\label{lem:psihat-minus-psi-part2}
-In the notation of~\eqref{eq:ajx-function} and~\eqref{eq:ajhatx-function}, for any $1\le j < k\le d$, we have
-\begin{align*}
-\|\widehat{a}_j\widehat{a}_k - a_ja_k\|_n &\le 2\max_{1\le j\le d}\left(\frac{1}{n}\sum_{i=1}^n a_j^4(X_i)\right)^{1/4}\left(\frac{1}{n}\sum_{i=1}^n (\widehat{a}_j(X_i) - a_j(X_i))^4\right)^{1/4}\\ &\qquad+ \max_{1\le j\le d}\left(\frac{1}{n}\sum_{i=1}^n (\widehat{a}_j(X_i) - a_j(X_i))^4\right)^{1/2}.
-\end{align*}
-Consequently, there exists a universal constant $C\in(0, \infty)$ such that for all $1\le j < k\le d$,
-\begin{align*}
-\|\widehat{\psi}_{jk} - \psi_{jk}\|_n &\le C\max_{1\le j\le d}\left(\frac{1}{n}\sum_{i=1}^n a_j^4(X_i)\right)^{1/4}\left(\frac{1}{n}\sum_{i=1}^n (\widehat{a}_j(X_i) - a_j(X_i))^4\right)^{1/4}\\ &\qquad+ C\max_{1\le j\le d}\left(\frac{1}{n}\sum_{i=1}^n (\widehat{a}_j(X_i) - a_j(X_i))^4\right)^{1/2}\\ &\qquad+ C\max_{1\le j\le d}|\mathbb{E}_n - \mathbb{E}|\\ &\qquad+ C\max_{1\le j < k\le d}|\theta_{jk} - \widehat{\theta}_{jk}|\max_{1\le j\le d}\|a_j^2 - \mathbb{E}\|_n.
-\end{align*}
-\end{lemma}
-\begin{proof}
-Clearly,
-\begin{align*}
-|\widehat{a}_j\widehat{a}_k - a_j a_k| &\le |\widehat{a}_j||\widehat{a}_k - a_k| + |a_k||\widehat{a}_j - a_j|\\ &\le |a_j||\widehat{a}_k - a_k| + |a_k||\widehat{a}_j - a_j| + |\widehat{a}_j - a_j||\widehat{a}_k - a_k|.
-\end{align*}
-Applying $\|\cdot\|_n$ on both sides and using Cauchy-Schwarz inequality concludes the proof of the first inequality. The second part follows from an application of Lemma~\ref{lem:psihat-minus-psi-part1}.
-\end{proof}
-\begin{lemma}\label{lem:ajhat-minus-aj}
-For any $1\le j\le d$,
-\begin{align*}
-&\left(\frac{1}{n}\sum_{i=1}^n (\widehat{a}_j(X_i) - a_j(X_i))^4\right)^{1/4}\\ ~&\qquad\le~ \frac{2\mathcal{D}_n^{\Sigma}}{1 - \mathcal{D}_n^{\Sigma}}\sup_{\theta:\|\theta\| \le 1}\left(\frac{1}{n}\sum_{i=1}^n{\{\theta^{\top}\Sigma^{-1/2}(X_i - \mu_X)\}^4}\right)^{1/4} ~+~ \frac{\|\Sigma^{-1/2}(\overline{X}_n - \mu_X)\|}{1 - \mathcal{D}_n^{\Sigma}}.
-\end{align*}
-\end{lemma}
-\begin{proof}
-Recall that
-\ We will now bound $\widehat{a}_j(x) - a_j(x)$. Note that
-\begin{align*}
-\sup_{x}\left|\widehat{a}_j(x) - \frac{(x - \mu_{X})^{\top}\widehat{\Sigma}^{-1}e_j}{\sqrt{e_j^{\top}\widehat{\Sigma}^{-1}e_j}}\right| &= \left|\frac{(\overline{X}_n - \mu_X)^{\top}\widehat{\Sigma}^{-1}e_j}{\sqrt{e_j^{\top}\widehat{\Sigma}^{-1}e_j}}\right|\\ ~&\le~ \|\widehat{\Sigma}^{-1/2}(\overline{X}_n - \mu_X)\| ~\le~ \frac{\|\Sigma^{-1/2}(\overline{X}_n - \mu_X)\|}{1 - \mathcal{D}_n^{\Sigma}}.
-\end{align*}
-Furthermore,
-\begin{align*}
-\frac{(x - \mu_X)^{\top}\widehat{\Sigma}^{-1}e_j}{\sqrt{e_j^{\top}\widehat{\Sigma}^{-1}e_j}} - a_j(x) &= \frac{(x - \mu_X)^{\top}(\widehat{\Sigma}^{-1} - \Sigma^{-1})e_j}{\sqrt{e_j^{\top}\widehat{\Sigma}^{-1}e_j}} + \frac{(x - \mu_X)^{\top}\Sigma^{-1}e_j}{\sqrt{e_j^{\top}\Sigma^{-1}e_j}}\left.
-\end{align*}
-Combining these two steps yields
-\begin{align*}
-&\left(\frac{1}{n}\sum_{i=1}^n (\widehat{a}_j(X_i) - a_j(X_i))^4\right)^{1/4}\\ ~&\qquad\le~ \frac{1}{\sqrt{e_j^{\top}\widehat{\Sigma}^{-1}e_j}}\left(\frac{1}{n}\sum_{i=1}^n \left\{(\Sigma^{-1/2}(X_i - \mu_X))^{\top}(\Sigma^{1/2}\widehat{\Sigma}^{-1}\Sigma^{1/2} - I_d)\Sigma^{1/2}e_j\right\}^4\right)^{1/4}\\ ~&\qquad\qquad+~ \left|\sqrt{\frac{e_j^{\top}\Sigma^{-1}e_j}{e_j^{\top}\widehat{\Sigma}^{-1}e_j}} - 1\right|\left(\frac{1}{n}\sum_{i=1}^n \frac{\{(X_i - \mu_X)^{\top}\Sigma^{-1}e_j\}^4}{(e_j^{\top}\Sigma^{-1}e_j)^2}\right)^{1/4} + \frac{\|\Sigma^{-1/2}(\overline{X}_n - \mu_X)\|}{1 - \mathcal{D}_n^{\Sigma}}.
-\end{align*}
-The first term can be further bounded by
-\begin{align*}
-&\frac{\|(\Sigma^{1/2}\widehat{\Sigma}^{-1}\Sigma^{1/2} - I_d)\Sigma^{1/2}e_j\|}{\sqrt{e_j^{\top}\widehat{\Sigma}^{-1}e_j}}\sup_{\theta:\|\theta\| \le 1}\left(\frac{1}{n}\sum_{i=1}^n \left\{(\Sigma^{-1/2}(X_i - \mu_X))^{\top}\theta\right\}^4\right)^{1/4}\\ &\qquad\le \frac{\mathcal{D}_n^{\Sigma}}{1 - \mathcal{D}_n^{\Sigma}}\sqrt{\frac{e_j^{\top}\Sigma^{-1}e_j}{e_j^{\top}\widehat{\Sigma}^{-1}e_j}}\sup_{\theta:\|\theta\| \le 1}\left(\frac{1}{n}\sum_{i=1}^n \left\{(\Sigma^{-1/2}(X_i - \mu_X))^{\top}\theta\right\}^4\right)^{1/4}.
-\end{align*}
-Similarly, the second term is bounded by
-\ Also, we use the fact that
-\ Therefore,
-\begin{align*}
-&\left(\frac{1}{n}\sum_{i=1}^n (\widehat{a}_j(X_i) - a_j(X_i))^4\right)^{1/4}\\ &\qquad\le \frac{2\mathcal{D}_n^{\Sigma}}{1 - \mathcal{D}_n^{\Sigma}}\sup_{\theta:\|\theta\| \le 1}\left(\frac{1}{n}\sum_{i=1}^n{\{(\Sigma^{-1/2}(X_i - \mu_X))^{\top}\theta\}^4}\right)^{1/4} + \frac{\|\Sigma^{-1/2}(\overline{X}_n - \mu_X)\|}{1 - \mathcal{D}_n^{\Sigma}}.
-\end{align*}
-\end{proof}
-\begin{lemma}\label{lem:rate-of-convergence-psihat-minus-psi}
-Under the assumptions of Theorem~\ref{thm:Berry-Esseen-bound-partial-corr}, there exists a universal constant $C\in(0,\infty)$ such that with probability at least $1 - C/n$,
-\ whenever the right hand side is less than 1 and $d \le \sqrt{n}$.
-\end{lemma}
-\begin{proof}
-The calculations that lead to~\eqref{eq:quantity-M-4} imply that with probability $1 - 1/n$,
-\ for some universal constant $C\in(0, \infty)$. Further Lemma~\ref{lem:concentration-of-covariance} yields with probability $1 - 1/n$,
-\ Finally,
-\ where $\mathcal{N}_{1/2}$ is the $1/2$-net of $\{\theta\in\mathbb{R}^d:\,\|\theta\| \le 1\}$ with cardinality $|\mathcal{N}_{1/2}| \le 5^d$. Hence with probability at least $1 - 1/n$,
-\ Combining these inequalities with Lemma~\ref{lem:ajhat-minus-aj} concludes that with probability at least $1 - 3/n$,
-\begin{align*}
-\max_{1\le j\le d}\,\left(\frac{1}{n}\sum_{i=1}^n (\widehat{a}_j(X_i) - a_j(X_i))^4\right)^{\frac{1}{4}} &\le CK_x^3\frac{d + \sqrt{n}}{\sqrt{n}}\left + CK_x\sqrt{\frac{d + \log n}{n}}\\ &\le CK_x^3\left(1 + \frac{d}{\sqrt{n}}\right)\sqrt{\frac{d + \log n}{n}} + CK_x\sqrt{\frac{d + \log n}{n}}\\ &\le CK_x^3\left(1 + \frac{d}{\sqrt{n}}\right)\sqrt{\frac{d + \log n}{n}},
-\end{align*}
-assuming
-$d + \log n \le n$. Lemma~\ref{lem:psihat-minus-psi-part2} now yields with probability at least $1 - 3/n$,
-\begin{align}
-\max_{1\le j < k\le d}\,\|\widehat{\psi}_{jk} - \psi_{jk}\|_n &\le C\max_{1\le j\le d}\left(\frac{1}{n}\sum_{i=1}^n a_j^4(X_i)\right)^{1/4}K_x^3\sqrt{\frac{d + \log n}{n}} + CK_x^6\frac{d + \log n}{n}\nonumber\\ &\qquad+ C\max_{1\le j\le d}\left|\frac{1}{n}\sum_{i=1}^n a_j^2(X_i) - \mathbb{E}\right|\label{eq:first-part-psihat-minus-psi}\\ &\qquad+ C\max_{1\le j < k\le d}|\theta_{jk} - \widehat{\theta}_{jk}|\max_{1\le j\le d}\left(\frac{1}{n}\sum_{i=1}^n \{a_j^2(X_i) - \mathbb{E}\}^2\right)^{1/2}.\nonumber
-\end{align}
-The calculations leading to~\eqref{eq:square-power-psi} now yields with probability at least $1 - 6/n$,
-\\right\}^2\right)^{1/4} \le CK_x\left(1 + \sqrt{\frac{(\log(dn))^9}{n}}\right),
-\]
-and
-\ Because $a_j^2(X_i)$ is sub-exponential with parameter $K_x^2$, using Theorem 2.8.1 of~\cite{Vershynin18}, we get with probability at least $1 - 1/n$
-\\right| \le CK_x^2\sqrt{\frac{\log(dn)}{n}} + CK_x^2\frac{\log(dn)}{n}.
-\]
-Substituting these in~\eqref{eq:first-part-psihat-minus-psi} concludes with probability at least $1 - C/n$,
-\begin{equation}
-\begin{split}
-\max_{1\le j < k\le d}\,\|\widehat{\psi}_{jk} - \psi_{jk}\|_n &\le CK_x^4\sqrt{\frac{d + \log n}{n}} + CK_x^6\frac{d + \log n}{n}\\ &\qquad+ CK_x^2\sqrt{\frac{\log(dn)}{n}} + CK_x^2\frac{\log(dn)}{n} + CK_x\max_{1\le j < k\le d}|\theta_{jk} - \widehat{\theta}_{jk}|.
-\end{split}
-\end{equation}
-Using
-$d \le \sqrt{n}$ as well as $K_x \ge 1$, we can simplify the terms above and write
-\begin{equation}\label{eq:second-part-psihat-minus-psi}
-\begin{split}
-\max_{1\le j < k\le d}\,\|\widehat{\psi}_{jk} - \psi_{jk}\|_n &\le CK_x^6\sqrt{\frac{d + \log n}{n}} + CK_x^2\sqrt{\frac{\log(dn)}{n}} + CK_x\max_{1\le j < k\le d}|\theta_{jk} - \widehat{\theta}_{jk}|.
-\end{split}
-\end{equation}
-The last term can be bounded based on Theorem~\ref{thm:linear-expansion-partial-corr} and~\eqref{eq:linear-rep-error-partial-corr} to get with probability at least $1 - 1/n$,
-\ Because $\psi_{jk}(X_i), 1\le i\le n$ are sub-exponential with parameter $K_x^2$, Theorem 2.8.1 of~\cite{Vershynin18} implies that with probability $1 - C/n$,
-\ Substituting this in~\eqref{eq:second-part-psihat-minus-psi} concludes with probability at least $1 - C/n$,
-\ This concludes the proof.
-\end{proof}
-\section{Proof of the Auxiliary Results from Section ~\ref{section::explicit} (Projection Parameters)}
-\label{appendix:auxiliary.ols}
-In this section, we provide various lemmas used in the proofs of Theorems~\ref{thm:main-rates-thm-OLS-independence} and~\ref{thm:Berry-Esseen-OLS}. These lemmas prove concentration inequalities for the quantities that appear in the inequalities in previous sections.
-\begin{proposition}\label{prop:implication-moments-influence-function}
-Under assumptions~\ref{eq:covariate-subGaussian} and~\ref{eq:moments-errors}, for every $\eta > 0$,
-\ \le \left\{CK_qK_x\sqrt{q/\eta}\right\}^{q/(1+\eta)},
-\]
-where $C\in(0, \infty)$ is a universal constant.
+$ (f, \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2},\ldots,
+\frac{\partial f}{\partial x_n}) $
+is an ideal in   generated by \\  
+\end{enumerate}
+\end{theorem}
+Note that the first result was obtained by U. Vetter in \cite{V} and the last result above is a generalization of a result of O. Zariski (\cite{Z}).
+G.-M. Greuel obtained
+much more general results on torsion modules. See \cite{G} (Proposition 1.11, p. 242).
+Assume that the hypersurface   has an isolated singularity at the origin.
+We thus have, by combining the results of G. -M. Greuel above and of A. G. Aleksandrov presented in the previous subsection, the followings.
+\begin{enumerate}
+\item $\Omega_{X,O}^{q}(\log S)= \frac{df}{f} \wedge \Omega_{X,O}^{q-1}+\Omega_{X,O}^{q},
+\ q=1,2,\ldots, n-2, $
+\item $
+0 \longrightarrow\frac{df}{f} \wedge \Omega_{X,O}^{n-2} +
+\Omega_{X,O}^{n-1}\longrightarrow
+\Omega_{X,O}^{n-1}(\log S) \stackrel{\cdot f}\longrightarrow{\rm Tor}(\Omega_{S}^{n-1}) \longrightarrow 0. $
+\end{enumerate}
+Accordingly we have the following.
+\begin{proposition} Let
+  be a hypersurface in  
+with an isolated singularity at   Then,
+  hold.
 \end{proposition}
 \begin{proof}
-Fix $a\in\mathbb{R}^d$ with Euclidean norm bounded by 1. H{\"o}lder's inequality yields
-\begin{align*}
-\left(\mathbb{E}\left\right)^{(1+\eta_n)/q} &\le (\mathbb{E})^{1/q}\left(\mathbb{E}\right)^{\eta/q}\\ &\le K_q(CK_x\sqrt{q/\eta}),
-\end{align*}
-where the second inequality follows from the fact that condition~\ref{eq:covariate-subGaussian} implies $a^{\top} \Sigma^{-1/2}X_i$ is $K_x$-sub-Gaussian.
+Since  
+the result of A. G. Aleksandrov presented in the last subsection yields the result.
 \end{proof}
-\begin{lemma}\label{lem:concentration-of-covariance}
-Under assumption~\ref{eq:covariate-subGaussian}, there exists a universal constant $C \in (0, \infty)$ such that
-\ \end{lemma}
+\section{Description via logarithmic residues}
+In this section, we recall results given in \cite{TN20} to show that torsion differential forms can be described
+in terms of non-trivial logarithmic vector fields. We also recall basic idea for computing non-trivial logarithmic vector fields. As an application,
+we give a method for computing logarithmic residues.
+\subsection{Logarithmic vector fields}
+A vector field   on   with holomorphic coefficients is called
+logarithmic
+along the hypersurface  , if the holomorphic function   is in the ideal   generated by   in
+ . Let   denote the sheaf of modules on   of logarithmic
+vector fields along   (\cite{S}).
+Let   For a holomorphic vector field  ,
+let   denote the inner product of   by  .
+\begin{proposition}
+Let   be a hypersurface with an isolated singularity at the origin. Then,
+\begin{equation*}
+\Omega_{X, O}^{n-1}(\log S) = \left\{ \frac{i_{v}(\omega_X)}{f} \middle| \ v \in{\mathcal Der}_{X, O}(-\log S) \right\}
+\end{equation*}
+holds.
+\end{proposition}
 \begin{proof}
-This results is standard: see, e.g., Theorem 4.7.1 of~\cite{Vershynin18} or Theorem 1 of~\cite{koltchinskii2017a}.
+Let   and set   Then,   is a holomorphic differential form. Therefore, the meromorphic differential   form
+  is logarithmic if and only if   is a holomorphic differential  -form.
+Since  , we have  . Hence, the condition above means   is in the ideal   generated by  .
+This completes the proof.
 \end{proof}
-\begin{lemma}\label{lem:concentration-influence-function}
-Under assumptions~\ref{eq:DGP},~\ref{eq:covariate-subGaussian},~\ref{eq:moments-errors} and~\ref{eq:bounded-asymptotic-variance}, there exists a constant $C_q\in(0,\infty)$ depending only on $q$ such that for any $\eta > 0$ and $\delta\in(0, 1)$,
-\ \end{lemma}
-\begin{proof}
-We apply Theorem 3.1 of~\cite{einmahl2008characterization}. Take
-\begin{align*}
-Z_i &:=
-n^{-1/2}V^{-1/2}X_i(Y_i - X_i^{\top}\beta).
-\end{align*}
-The definition of $\beta$ implies $\mathbb{E} = 0$ and the definition of $V$ implies $\mbox{Var}(Z_i) = n^{-1}I_d$. Then, $\left\|{n}^{-1}\sum_{i=1}^n \psi_i\right\|_{\Sigma V^{-1}_n\Sigma} = \| \sum_{i=1}^n Z_i\|_{I_d} $, so that
-\ \le \left(\mathbb{E}\left\right)^{1/2} = \left(\sum_{i=1}^n \mbox{tr}(\mbox{Var}(Z_i))\right)^{1/2} = \sqrt{d}.
-\]
-Theorem 3.1 of~\cite{einmahl2008characterization} with $\eta = \delta = 1$ implies that
-\begin{equation}\label{eq:tail-inequality-influence}
-\mathbb{P}\left(\left\|\frac{1}{n}\sum_{i=1}^n \psi_i\right\|_{\Sigma V^{-1}_n\Sigma} \ge 2\sqrt{d} + t\right) \le \exp\left(-\frac{t^2}{3}\right) + \frac{C}{t^s}\sum_{i=1}^n \mathbb{E},
-\end{equation}
-for any $s > 2$ such that $\mathbb{E}$ is finite. Here $C\in(0, \infty)$ is a constant depending only on $s$. It is clear that
-\ and because of assumption~\ref{eq:DGP},
-\begin{align*}
-\sum_{i=1}^n \mathbb{E} ~&=~ \frac{d^{s/2}}{n^{(s-2)/2}}\mathbb{E}\left\\ ~&\le~ \frac{d^{s/2}}{n^{(s-2)/2}}\max_{1\le j\le d} \mathbb{E}\left,
-\end{align*}
-where $a_j := \Sigma^{1/2}V^{-1/2}e_j$. Assumption~\ref{eq:bounded-asymptotic-variance} implies that $\|a\|_{I_d} = \sqrt{e_j^{\top}V^{-1/2}\Sigma V^{-1/2}e_j} \le \sqrt{\lambda_{\max}(V^{-1/2}\Sigma V^{-1/2})} \le \overline{\lambda}^{1/2}$. Therefore, for any $s \ge 2$,
-\ ~\le~ \frac{\overline{\lambda}^{s/2}d^{s/2}}{n^{(s-2)/2}}\max_{1\le j\le d}\mathbb{E}\left.
-\]
-Fix $\eta > 0$. Taking $s = q/(1 + \eta)$ and applying Proposition~\ref{prop:implication-moments-influence-function} provides a bound on the right hand side. Further, taking (for a possibly different constant $C\in(0,\infty)$)
-\ in~\eqref{eq:tail-inequality-influence} yields for any $\eta > 0$,
-\ \end{proof}
-\begin{lemma}\label{lem:std-err-consistency}
-Assume conditions~\ref{eq:DGP},~\ref{eq:covariate-subGaussian},~\ref{eq:bounded-asymptotic-variance}. If condition~\ref{eq:moments-errors} holds for some $q \ge 4\log n/(\log n - 2)$, then there exists a constant $C = C(q, K_x, \overline{\lambda} K_q^2, \overline{\lambda}/\underline{\lambda})$ depending only on its arguments such that with probability at least $1 - (d+2)/n - \sqrt{d/n}$,
-\begin{align*}
-\sup_{\theta\in\mathbb{R}^d}\left|\frac{\theta^{\top}\widehat{\Sigma}_n^{-1}\widehat{V}\widehat{\Sigma}_n^{-1}\theta}{\theta^{\top}\Sigma^{-1}V\Sigma^{-1}\theta} - 1\right| &\le \frac{C(1 + d/\sqrt{n})}{(1-4q^{-1})}\sqrt{\frac{d\log(ed) + \log n}{n}}\\ &\qquad+ C(1 + d/\sqrt{n})\frac{d^{1-1/q}\log(ed)\log n}{n^{1-3/q}},
-\end{align*}
-whenever the right hand side is less than $1$.
+A germ of logarithmic vector field   generated over   by
+\begin{equation*}
+f\frac{\partial}{\partial x_i}, \ i=1,2,\ldots,n, \ \frac{\partial f}{\partial x_j}\frac{\partial}{\partial x_i} - \frac{\partial f}{\partial x_i}\frac{\partial}{\partial x_j}
+\ 1 \leq i
+< j \leq n,
+\end{equation*}
+is called trivial.
+\begin{lemma}
+Let   be a germ of a logarithmic vector field. Then, the following conditions are equivalent.
+\begin{enumerate}
+\item
+  belongs to
+$\frac{df}{f} \wedge \Omega_{X,O}^{n-2}+
+\Omega_{X,O}^{n-1}$
+\item \   is a trivial vector field.
+\end{enumerate}
 \end{lemma}
 \begin{proof}
-Because the sandwich estimator is a complicated non-linear function of the estimators $\widehat{\Sigma}_n, \widehat{V}$ and $\widehat{V}$ is not a sum of independent matrices, we first reduce the problem into basic components which are more easily controllable using results from sum of independent random variables/vectors/matrices.
-Observe that
-\begin{align*}
-&\|(\Sigma^{-1}V\Sigma^{-1})^{-1/2}(\widehat{\Sigma}_n^{-1}\widehat{V}\widehat{\Sigma}_n^{-1})(\Sigma^{-1}V\Sigma^{-1})^{-1/2} - I_d\|_{\mathrm{op}}\\ &\qquad= \|V^{-1/2}\Sigma\widehat{\Sigma}_n^{-1}\widehat{V}\widehat{\Sigma}_n^{-1}\Sigma V^{-1/2} - I_d\|_{\mathrm{op}} ~=~ \|AA^{\top} - I_d\|_{\mathrm{op}},
-\end{align*}
-where $A = V^{-1/2}\Sigma\widehat{\Sigma}_n^{-1}\widehat{V}^{1/2}$ with $\widehat{V}^{1/2}$ representing the symmetric square root of $\widehat{V}$. Symmetry of $AA^{\top} - I_d$ and the definition of $\|\cdot\|_{\mathrm{op}}$ implies
-\ Using the fact $$A^{\top}\theta ~=~ \widehat{V}^{1/2}V^{-1/2}V^{1/2}(\widehat{\Sigma}_n^{-1}\Sigma - I_d)V^{-1/2}\theta ~+~ \widehat{V}^{1/2}V^{-1/2}\theta,$$ we get
-\begin{align*}
-\left|\frac{\|A^{\top}\theta\|^2}{\|\theta\|^2} - 1\right| ~&\le~ \left|\frac{\|\widehat{V}^{1/2}V^{-1/2}\theta\|^2}{\|\theta\|^2} - 1\right| ~+~ \frac{\|\widehat{V}^{1/2}V^{-1/2}V^{1/2}(\widehat{\Sigma}_n^{-1}\Sigma - I_d)V^{-1/2}\theta\|^2}{\|\theta\|^2}\\ ~&\qquad+~ 2\times\frac{\theta^{\top}V^{-1/2}\widehat{V}(\widehat{\Sigma}_n^{-1}\Sigma - I_d)V^{-1/2}\theta}{\|\theta\|^2}\\ ~&\le~ \left|\frac{\theta^{\top}V^{-1/2}\widehat{V}V^{-1/2}\theta}{\theta^{\top}\theta} - 1\right| ~+~ \|\widehat{V}^{1/2}V^{-1/2}\|_{\mathrm{op}}^2\frac{\|V^{1/2}(\widehat{\Sigma}_n^{-1}\Sigma - I_d)V^{-1/2}\theta\|^2}{\|\theta\|^2}\\ ~&\qquad+~ 2\times\frac{\|V^{-1/2}\widehat{V}V^{-1/2}\theta\|}{\|\theta\|}\times\frac{\|V^{1/2}(\widehat{\Sigma}_n^{-1}\Sigma - I_d)V^{-1/2}\theta\|}{\|\theta\|}.
-\end{align*}
-Taking the supremum over $\theta\in\mathbb{R}^d$ yields
-\begin{equation}\label{eq:main-inequality-sandwich}
-\begin{split}
-\|AA^{\top} - I_d\|_{\mathrm{op}} &\le \sup_{\theta\in\mathbb{R}^d}\left|\frac{\|\widehat{V}^{1/2}V^{-1/2}\theta\|^2}{\|\theta\|^2} - 1\right|\\ &\qquad+ \|\widehat{V}^{1/2}V^{-1/2}\|_{\mathrm{op}}^2\left\{\|\widehat{\Sigma}_n^{-1}\Sigma - I_d\|_{\mathrm{op}}^2 + 2\|\widehat{\Sigma}_n^{-1}\Sigma - I_d\|_{\mathrm{op}}\right\}\\ &= \mathbf{I} ~+~ (\mathbf{I} + 1)\left\{\mathbf{II}^2 + 2\mathbf{II}\right\},
-\end{split}
-\end{equation}
-where
-\begin{equation}\label{eq:decomposition-sandwich-error}
-\mathbf{I} := \sup_{\theta\in\mathbb{R}^d}\left|\frac{\|\widehat{V}^{1/2}V^{-1/2}\theta\|^2}{\|\theta\|^2} - 1\right|\quad\mbox{and}\quad \mathbf{II} := \|\widehat{\Sigma}_n^{-1}\Sigma - I_d\|_{\mathrm{op}}.
-\end{equation}
-Based on this inequality, it suffices to bound $\mathbf{I}$ and $\mathbf{II}$.
-Regarding $\mathbf{II}$, we note that $\mathbf{II} \le \mathcal{D}_n^{\Sigma}/(1 - \mathcal{D}_n^{\Sigma})$ and hence
-\begin{equation}\label{eq:First-implication}
-\{\mathcal{D}_n^{\Sigma} \le 1/2\}\quad\Rightarrow\quad \mathbf{II}\le1\quad\Rightarrow\quad \|AA^{\top} - I_d\|_{\mathrm{op}} \le \mathbf{I} + 6(\mathbf{I} + 1)\mathcal{D}_n^{\Sigma}.
-\end{equation} To bound $\mathbf{I}$, define
-\ The definition of $\overline{V}$ differs from $\widehat{V}$ in the use of $\beta$ in place of $\widehat{\beta}$ which yields an average of independent random matrices. Observe that
-\ Lemma~\ref{lem:operator-norm-Vhat-Vbar} proves
-\ for a quantity $\mathcal{M}_4$ defined in Lemma~\ref{lem:operator-norm-Vhat-Vbar}. Thus,
-\begin{equation}\label{eq:Second-implication}
-\begin{split}
-\left\{\mathbf{I}_1 \le \frac{1}{2}\right\}\cap\{\mathcal{M}_4^{1/2}\|\widehat{\beta} - \beta\|_{\Sigma V^{-1}\Sigma} \le 1\}\quad\Rightarrow\quad\mathbf{I} &\le \mathbf{I}_1 + 3\mathcal{M}_4^{1/2}\|\widehat{\beta} - \beta\|_{\Sigma V^{-1}\Sigma},\\ &\le 1/2 + 3 = 7/2.
-\end{split}
-\end{equation}
-This combined with~\eqref{eq:First-implication} implies that if $\mathcal{A}$ holds then
-\begin{equation}\label{eq:main-decomposition-sandwich}
-\|AA^{\top} - I_d\|_{\mathrm{op}} \le \mathbf{I}_1 + 3\mathcal{M}_4^{1/2}\|\widehat{\beta} - \beta\|_{\Sigma V^{-1}\Sigma} + 21\mathcal{D}_n^{\Sigma},
-\end{equation}
-where
-\begin{equation}\label{eq:crucial-event-sandwich}
-\mathcal{A} := \left\{\mathcal{D}_n^{\Sigma} \le \frac{1}{2}\right\}\cap\left\{\mathbf{I}_1 \le \frac{1}{2}\right\}\cap\left\{\mathcal{M}_4^{1/2}\|\widehat{\beta} - \beta\|_{\Sigma V^{-1}\Sigma} \le 1\right\}.
-\end{equation}
-In the following we tackle each of the terms as well as the events.
-\paragraph{Quantity $\mathcal{D}_n^{\Sigma}$} From Lemma~\ref{lem:concentration-of-covariance},
-\ This implies that if $(d + \log n) \le n/(4CK_x^2)^2$ then with probability at least $1 - 1/n$,
-\begin{equation}\label{eq:quantity-D-Sigma}
-\mathcal{D}_n^{\Sigma} \le 2CK_x^2\sqrt{\frac{d + \log n}{n}} \le \frac{1}{2}.
-\end{equation}
-\paragraph{Quantity $\mathcal{M}_4$} From Inequality (3.9) of~\cite{mendelson2010empirical}, there exists a universal constant $C\in(0,\infty)$ such that for any $t > 0$, with probability at least $1 - \exp(-t\log n)$,
-\ by taking $F = \{x\mapsto \theta^{\top}\Sigma^{-1/2}x:\,\theta\in\mathbb{R}^d, \|\theta\|_{I_d} \le 1\}$ and $|I| = n$. We refer the reader to~\cite{guedon2007lp} and~\cite{vershynin2011approximating} for similar results. Hence with probability at least $1 - 1/n$,
-\begin{equation}\label{eq:quantity-M-4}
-\mathcal{M}_4^{1/2} \le CK_x^2\sqrt{\frac{\overline{\lambda}}{\underline{\lambda}}}\left(\frac{d}{\sqrt{n}} + 1\right),
-\end{equation}
-for a possibly different constant $C\in(0,\infty)$.
-\paragraph{Quantity $\|\widehat{\beta} - \beta\|_{\Sigma V^{-1}\Sigma}$} The triangle inequality combined with
-Theorem~\ref{thm:Basic-deter-ineq} yields that
-\ Because $V_n = nV$, this implies that
-\ From inequality~\eqref{eq:quantity-D-Sigma} we get that, with probability at least $1 - 1/n$, $\mathcal{D}_n^{\Sigma} \le 1/2$ while Lemma~\ref{lem:concentration-influence-function} ensures that, with probability at least $1 - d/n$,
-\ for some constant $C_q\in(0, \infty)$ depending only on $q$. Hence with probability at least $1 - (d+1)/n$, we get
-\ This bound holds for all $\eta_n > 0$ and choosing $\eta_n$ to minimize the right hand side yields $\eta_n = q/(2\log(C_qn^2/d))$ and hence with probability at least $1 - (d + 1)/n$,
-\ Combining this inequality with~\eqref{eq:quantity-M-4} shows that, with probability at least $1 - (d + 2)/n$,
-\begin{equation}\label{eq:M-4-times-betahat-error}
-\mathcal{M}_4^{{1}/{2}}\|\widehat{\beta} - \beta\|_{\Sigma V^{-1}\Sigma} \le C_qK_x^2\sqrt{\frac{\overline{\lambda}}{\underline{\lambda}}}\left,
-\end{equation}
-if $d \le \sqrt{n}$.
-\paragraph{Quantity $\mathbf{I}_1$} We provide a tail bound for $\mathbf{I}_1$ using Theorem 3.1 of~\cite{einmahl2008characterization}.
-Observe that
-\\right\|_{\mathrm{op}},
-\]
-For an application of Theorem 3.1 of~\cite{einmahl2008characterization}, it is crucial to bound the expectation of $\mathbf{I}_1$ which we achieve by applying Theorem 5.1(2) of~\cite{tropp2016expected}. By this result,
-\begin{align*}
-\mathbb{E} &\le \sqrt{\frac{12\log(ed)}{n}}\left\|\mathbb{E}\right\|_{\mathrm{op}}^{1/2}\\ &\qquad+ \frac{24\log(ed)}{n}\left(\mathbb{E}\left\right)^{1/2}\\ &\le \sqrt{\frac{12d\log(ed)}{n}}\sup_{\theta\in\mathbb{R}^d,\|\theta\|_{I_d} \le 1}\,\left(\mathbb{E}\left\right)^{1/2}\\ &\qquad+ \frac{24d\log(ed)}{n}\sup_{\theta\in\mathbb{R}^d,\|\theta\|_{I_d} \le 1}\left(\sum_{i=1}^n \mathbb{E}\left\right)^{2(1 + \eta_n)/q}\\ &\overset{(a)}{\le} C\overline{\lambda}K_x^2K_q^2(1-4q^{-1})^{-1}\sqrt{d\log(ed)/n} + C\overline{\lambda}\frac{d\log(ed)}{n}n^{2(1+\eta_n)/q}K_x^2K_q^2\frac{q}{\eta_n},
-\end{align*}
-for some universal constant $C\in(0,\infty)$. The inequality (a) for the first term follows from Proposition~\ref{prop:implication-moments-influence-function} by taking $\eta_n = (q/4) - 1$ and for the second term follows from Proposition~\ref{prop:implication-moments-influence-function} for general $\eta_n > 0$. Minimizing the second term over all $\eta_n > 0$ yields the optimal choice of $\eta_n = q/(2\log n)$ and hence
-\ \le C\overline{\lambda}K_x^2K_q^2\left.
-\]
-Observe that for the preceding inequalities to apply, we need $4 \le q/(1 + \eta_n)$ and thus the feasibility of the optimal choice of $\eta_n$ then requires $q \ge 4(\log n)/(\log n - 2)$. An application of Theorem 3.1 of~\cite{einmahl2008characterization} now concludes
-\begin{equation}
-\begin{split}
-&\mathbb{P}\left(\mathbf{I}_1 \ge 2\mathbb{E} + t\right) \le \exp\left(-\frac{nt^2(1-4q^{-1})^2}{C\overline{\lambda}^2K_x^4K_q^4}\right) + C\frac{\mathbb{E}}{n^{s-1}t^s},
-\end{split}
-\end{equation}
-for some constant $C\in(0,\infty)$ depending only on $s$. Taking $s = q/(2(1+\eta_n))$ and inverting the tail bound implies for any $\eta_n > 0$,
-\begin{equation}\label{eq:quantity-I-1}
-\begin{split}
-&\mathbb{P}\left(\mathbf{I}_1 \ge C\overline{\lambda}K_x^2K_q^2\left\right) \le \delta.
-\end{split}
-\end{equation}
-Taking $\delta = \sqrt{d/n}$ and $\eta_n = q/(2\log(n^{3/2}/d^{1/2}))$ yields with probability $1 - \sqrt{d/n}$
-\begin{equation}\label{eq:quantity-I-1-again}
-\mathbf{I}_1 \le C_q\overline{\lambda}K_x^2K_q^2\left.
-\end{equation}
-Substituting inequalities~\eqref{eq:quantity-D-Sigma},~\eqref{eq:quantity-M-4},~\eqref{eq:M-4-times-betahat-error}, and~\eqref{eq:quantity-I-1-again} in~\eqref{eq:main-decomposition-sandwich} yields with probability $1 - (d+2)/n - \sqrt{d/n}$,
-\begin{equation}
-\begin{split}
-&\|AA^{\top} - I_d\|_{\mathrm{op}}\\ &\quad\le C_q\overline{\lambda}K_x^2K_q^2\left\\ &\quad\qquad+ C_qK_x^2\sqrt{\frac{\overline{\lambda}}{\underline{\lambda}}}\left(1 + \frac{d}{\sqrt{n}}\right)\left\\ &\quad\qquad+ 2CK_x^2\sqrt{\frac{d + \log n}{n}}\\ &\quad\le \frac{C_qK_x^2}{(1-4q^{-1})}\sqrt{\frac{d\log(ed) + \log(n/d)}{n}}\left\\ &\quad\qquad+ C_qK_x^2\frac{d\log(ed)\log n}{n^{1-2/q}}\left + C_qK_x^2\overline{\lambda}K_q^2\frac{d^{1-1/q}\log(n/d)}{n^{1-3/q}}\\ &\quad\le \frac{C_qK_x^2}{(1-4q^{-1})}\sqrt{\frac{d\log(ed) + \log(n/d)}{n}}\left\\ &\quad\qquad+ C_qK_x^2\frac{d^{1-1/q}\log(ed)\log n}{n^{1-3/q}}\left.
-\end{split}
-\end{equation}
+The logarithmic differential form
+  is in
+  if and only if the numerator
+  is in
+  The last condition is
+equivalent to the triviality of the vector field  , which completes the proof.
 \end{proof}
-\begin{lemma}\label{lem:operator-norm-Vhat-Vbar}
+For   let $
+  \Omega_{S, O}^{n-1} $
+defined by   that is, $
+$ is the equivalence class in
+  of  
+The lemma above amount to say that, for logarithmic vector fields  ,
+$
+$ is a non-zero torsion differential form
+in   if and only if   is a non-trivial logarithmic vector field.
+We say that germs of two logarithmic vector fields   are
+equivalent, denoted by  , if   is trivial.
+Let   denote the quotient by the equivalence relation  . (See
+\cite{T}.)
+Now consider the following map
+\begin{equation*}
+\Theta:{\mathcal Der}_{X, O}(-\log S)/\sim \ \longrightarrow
+\Omega_{X, O}^{n-1} /(f \Omega_{X, O}^{n-1} + df \wedge \Omega_{X, O}^{n-2})
+\end{equation*}
+defined to be   where $
+$
+is the equivalence class in \\  
+of   It is easy to see that the map   is well-defined.
+We arrive at the following description of the torsion module.
+\begin{theorem}
+The map
+\begin{equation*}
+\Theta :{\mathcal Der}_{X, O}(-\log S)/\sim \ \longrightarrow{\rm Tor}(\Omega_{S}^{n-1})
+\end{equation*}
+is an isomorphism.
+\end{theorem}
+\subsection{Polar method}
+In \cite{T}, based on the concept of polar variety,
+logarithmic vector fields are studied and an effective and constructive method is considered. Here in this section, following \cite{NT19a, T} we recall some basics and give a description of non-trivial logarithmic vector fields.
+Let   be a hypersurface with an isolated singularity. In what follows,
+we assume that  
+is a regular sequence and the common locus
+   
+is the origin  .\\ Let     denote the ideal quotient, in the local ring  ,
+of
+$(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,
+\frac{\partial f}{\partial x_{n}})   (\frac{\partial f}{\partial x_1}) $
+.\\ We have the followings
+\begin{lemma}
+Let   be a germ of holomorphic function in  Then, the following are equivalent.
+\begin{enumerate}
+\item  
+\item There exists a germ of logarithmic vector field   in   s.t.
+\begin{equation*}
+v= a(x)\frac{\partial }{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2} + \cdots + a_{n-1}(x)\frac{\partial}{\partial x_{n-1}}+ a_n(x)\frac{\partial}{\partial x_n},
+\end{equation*}
+where $
+a_2(x), \ldots , a_{n}(x) \in{\mathcal O}_{X, O}. $
+\end{enumerate}
+\end{lemma}
+Since the sequence
+  is assumed to be
+regular, we also have the following.
+\begin{lemma}
+Let   be a logarithmic vector fields in
+  of the form
+\begin{equation*}
+v^{\prime}= a_2(x)\frac{\partial }{\partial x_2} + a_3(x)\frac{\partial}{\partial x_3} + \cdots +a_{n}(x)\frac{\partial}{\partial x_{n}}.
+\end{equation*}
+Then,   is trivial.
+\end{lemma}
+Accordingly, we have the following result.
+\begin{proposition}
 Let
-\ Then
-\begin{align*}
-\|V^{-1/2}(\widehat{V} - \overline{V})V^{-1/2}\|_{\mathrm{op}} &\le \frac{1}{2}\mathcal{M}_4\|\widehat{\beta} - \beta\|_{\Sigma V^{-1}\Sigma}^2\\ &\qquad+ \sqrt{2}\mathcal{M}_4^{1/2}\|\widehat{\beta} - \beta\|_{\Sigma V^{-1}\Sigma}\|\overline{V}^{1/2}V^{-1/2}\|_{\mathrm{op}},
-\end{align*}
+$ f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,
+\frac{\partial f}{\partial x_{n}}   v $ be a germ of logarithmic
+vector field along   of the form
+\begin{equation*}
+v= \displaystyle{a_1(x)\frac{\partial }{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2} + \cdots +
+a_{n-1}(x)\frac{\partial}{\partial x_{n-1}}+ a_n(x)\frac{\partial}{\partial x_n}}.
+\end{equation*}
+Then, the following conditions are equivalent.
+\begin{enumerate}
+\item  is trivial,
+\item $ a_1(x) \in
+(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}).
+$ \\ \end{enumerate}
+\end{proposition}
+The discussion above leads a method for computing non-trivial logarithmic vector fields:
+\vspace{1ex}
+\noindent{\rm Step 1} \ Compute a basis  , as a vector space, of the quotient
+\begin{equation*}
+\left(\left(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}\right) : \left(\frac{\partial f}{\partial x_1}\right)\right)/\left(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}\right).
+\end{equation*}{\rm Step 2} \ For each  , compute $ a_2(x), a_3(x),...,a_n(x), b(x)
+\in{\mathcal O}_{X,O} $, such that
+\begin{equation*}
+a(x)\frac{\partial f}{\partial x_1} + a_2(x)\frac{\partial f}{\partial x_2} + \cdots + a_{n-1}(x)\frac{\partial f}{\partial x_{n-1}}+ a_n(x)\frac{\partial f}{\partial x_n} - b(x)f(x) =0.
+\end{equation*}
+Then, since
+  is isomorphic to
+\begin{equation*}
+\left(\left(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}\right) : \left(\frac{\partial f}{\partial x_1}\right)\right)/\left(f, \frac{\partial f}{\partial x_2}, \frac{\partial f}{\partial x_3},\ldots,\frac{\partial f}{\partial x_{n}}\right).
+\end{equation*}
+the   vector fields,
+\begin{equation*}
+v= a(x)\frac{\partial }{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2} + \cdots +a_{n-1}(x)\frac{\partial}{\partial x_{n-1}}+ a_n(x)\frac{\partial}{\partial x_n}, \ a(x) \in A
+\end{equation*}
+give rise to a basis of  .
+Note that algorithms for computing non-trivial logarithmic vector fields is described in \cite{TN20}.
+\subsection{Regular meromorphic differential forms}
+Now we are ready to consider a method for computing regular meromorphic differential forms. For simplicity, we first consider three dimensional case.
+Assume that a non-trivial logarithmic vector field   is given.
+\begin{equation*}
+v=a_1(x)\frac{\partial}{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2}+a_3(x)\frac{\partial}{\partial x_3}.
+\end{equation*}
+Let   and   where  
+We have  
+We introduce differential forms   and   as
+\begin{equation*}
+\xi=-a_2(x)dx_3+a_3(x)dx_2, \ \eta =b(x)dx_2\wedge dx_3.
+\end{equation*}
+Let   Then, the following holds.
+\begin{equation*}
+g(x)\beta= df \wedge \xi + f(x)\eta.
+\end{equation*}
+Accordingly, the logarithmic differential form   satisfies
+\begin{equation*}
+g(x)\omega=\frac{df}{f} \wedge \xi + \eta
+\end{equation*}
+Since   we have, by definition, the following:
+\begin{equation*}{\rm res}\left(\frac{\beta}{f}\right) = \frac{\xi}{\frac{\partial f}{\partial x_1}}|_S.
+\end{equation*}
+Notice that the differential form
+  above is directly defined from the coefficients of
+the logarithmic vector field  .
+\begin{proposition}\label{pro4}
+Let   be a hypersurface with an isolated singularity at the origin   Let
+\begin{equation*}
+v=a_1(x)\frac{\partial}{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2}+ \cdots +a_n(x)\frac{\partial}{\partial x_n}
+\end{equation*}
+be a germ of
+non-trivial logarithmic vector field along  . Let  ,   and   Let   denote the differential form defined to be
+\begin{eqnarray*}
+\xi &=& -a_2(x)dx_3 \wedge dx_4 \wedge \cdots \wedge dx_n +a_3(x)dx_2 \wedge dx_4 \wedge \cdots \wedge dx_n - \cdots \\ & & +(-1)^{(n+1)}a_n(x)dx_2 \wedge dx_3 \wedge \cdots \wedge dx_{n-1}, \\ \eta &=& b(x) dx_2 \wedge dx_3 \wedge \cdots \wedge dx_n.
+\end{eqnarray*}
+Then,
+ 
+and   hold.
+\end{proposition}
+\begin{theorem}
+Let   be a hypersurface with an isolated singularity at the origin   Let   be a set of non-trivial logarithmic vector fields such that
+the class $ , , \cdots,
+ {\mathcal Der}_{X,O}(-\log S)/\sim$, where
+  stands for the Tjurina number of  . Let   be the differential forms correspond to
+  defined in{\bf Proposition}~\ref{pro4}.
+Then, any logarithmic residue in  , or a regular meromorphic differential form   in   can be represented as
+\begin{equation*}
+\gamma = \left(\frac{1}{\frac{\partial f}{\partial x_1}}(c_1\xi_1+c_2\xi_2+ \cdots +c_{\tau}\xi_{\tau})\right)|_S + \alpha,
+\end{equation*}
+where   and  
+\end{theorem}
+\section{Examples}
+In this section, we give
+examples of computation for illustration. Data is an
+extraction from \cite{TN20}.
+Let   and let  
+where   is a deformation parameter. We regard   as the first variable. Then,   is a weighted homogeneous polynomial with respect to a weight
+vector   and   is a  -constant deformation of  , called   singularity. The Milnor number
+  of   singularity is equal to 12. In contrast, the Tjurina number
+  depends on the parameter   In fact,
+if   then   and if   then   In the computation, we fix a term order   on  
+which is compatible with the weigh vector  
+We consider these two cases separately.
+\begin{example}
+Let   Then,  
+The monomial basis   with respect to the term ordering   of the quotient space
+  is
+\begin{equation*}{\rm M} = \{ x^i y^j z^k \mid \ i=0,1, \ j=0,1, \ k=0,1,2,3 \}.
+\end{equation*}
+The standard basis   of the ideal quotient
+$ (f_0, \frac{\partial f_0}{\partial x}, \frac{\partial f_0}{\partial y}): (\frac{\partial f_0}{\partial z})
+$ is
+\begin{equation*}{\rm Sb} = \{ x^2, y^2, z \}
+\end{equation*}
+The normal form in
+  of   and   are
+\begin{equation*}{\rm NF}_{\succ^{-1}}(x^2) ={\rm NF}_{\succ^{-1}}(y^2) = 0,{\rm NF}_{\succ^{-1}}(z) = z.
+\end{equation*}
+Therefore,
+  Notice that   consists of   elements. It is easy to see that the Euler vector field
+\begin{equation*}
+v= 4x\frac{\partial}{\partial x} + 4y\frac{\partial}{\partial y} +3z\frac{\partial}{\partial z}
+\end{equation*}
+that corresponds to the element   is a non-trivial logarithmic vector field. Therefore, the torsion module of the hypersurface
+  is given by
+\begin{equation*}{\rm Tor}(\Omega_{S_0}^2) = \{ x^iy^jz^k i_v(\omega_X) \mid i=0,1, \ j=0,1, \ k=1,2,3 \},
+\end{equation*}
+where  
+Let   Then   Computation of other logarithmic residues are same.
+\end{example}
+\begin{example}
+Let   Then,  The monomial basis   with respect to the term ordering   of the quotient space
+  is
+\begin{equation*}{\rm M} = \{ x^i y^j z^k \mid \ i=0,1, \ j=0,1, \ k=0,1,2,3 \}.
+\end{equation*}
+The standard basis of the ideal quotient  
+in the local ring   is
+\begin{equation*}{\rm Sb} = \left\{ z^2-\dfrac{t}{6}xy, \ xz, \ yz, \ x^2, \ y^2 \right\}.
+\end{equation*}
+From   and  , we have
+\begin{equation*}{\rm A} =\left\{ z^2-\dfrac{t}{6}xy, \ xz, \ yz, \ z^3, \ xz^2, \ yz^2, \ xyz, \ xz^3, \ yz^3, \ xyz^2, xyz^3 \right\}.
+\end{equation*}
+These 11 elements in   are used to construct non-trivial logarithmic vector fields and regular meromorphic differential forms.
+We give the results of computation.\\ \noindent
+(i) Let   Then,
+\begin{equation*}
+v=\frac{d_1}{27+t^3z^2}\frac{\partial}{\partial x} +\frac{d_2}{27+t^3z^2}\frac{\partial}{\partial y} +(6z^2-txy)\frac{\partial}{\partial z}
+\end{equation*}
+is a non-trivial logarithmic vector field, where
+\begin{equation*}
+d_1= 216xz-6t^2y^2z-2t^4x^2yz, \ d_2=216yz+24t^2x^2z+10t^3yz^3-2t^4xy^2z
+\end{equation*}
+\noindent
+(ii) Let   Then,
+\begin{equation*}
+v=\frac{d_1}{27+t^3z^2}\frac{\partial}{\partial x} +\frac{d_2}{27+t^3z^2}\frac{\partial}{\partial y} +xz\frac{\partial}{\partial z}
+\end{equation*}
+is a non-trivial logarithmic vector field, where
+\begin{equation*}
+d_1=36x^2-6yz^2-6t^2xy^2, \ d_2=36xy+2t^2x^3-4t^2y^3-2t^2z^4.
+\end{equation*}
+We omit the other nine cases.
+\end{example}
+\section{Brieskorn formula}
+In 1970, B. Brieskorn studied the monodromy of Milnor fibration and developed the theory of Gauss-Manin connection (\cite{Br}). He proved the regularity of the connection and proposed an algebraic framework
+for computing the monodromy via Gauss-Manin connection. He gave in particular a basic formula, now called Brieskorn formula, for computing Gauss-Manin connection.
+We show in this section a link between Brieskorn formula, torsion differential forms and logarithmic vector fields. We present an alternative method for computing non-trivial logarithmic vector fields. We also present some examples for illustration.
+\subsection{Brieskorn lattices and Gauss-Manin connection}
+We briefly recall some basics on Brieskorn lattice and Brieskorn formula. We refer to \cite{BS, Br, Schu}.
+Let   be a holomorphic function on   with an isolated singularity at the origin   where   is an open neighborhood of   in  
+Let
+\begin{equation*}
+H_{0}^{\prime} = \Omega_{X, O}^{n-1}/(df \wedge \Omega_{X,O}^{n-2} + d \Omega_{X,O}^{n-2}, \ H_{0}^{\prime\prime}=\Omega_{X,O}^{n}/df \wedge \Omega_{X,O}^{n-2}.
+\end{equation*}
+Then, $df \wedge
+H_{0}^{\prime} \subset H_{0}^{\prime\prime}. $
+A map   is defined as follows.
+\begin{equation*}
+D(df \wedge \varphi) = , \quad \varphi \in \Omega_{X,O}^{n-1}.
+\end{equation*}
+Let   Then
+\begin{equation*}
+df \wedge \varphi = \left(\sum_{i=1}^{n} h_i(x)\frac{\partial f}{\partial x_i}\right) \omega_X,
+\end{equation*}
+where   Therefore
+in terms of the coordinate we have the following, known as Brieskorn formula.
+\begin{equation*}
+D(df\wedge \varphi) = \left(\sum_{i}^{n} \frac{\partial h_i}{\partial x_i}\right)\omega_X. \end{equation*}
+\begin{example}
+Let  and   where   is an open neighborhood of the origin  . Then   is a logarithmic vector field along  .
+Let   Then,  
+Since   we have   where  
+By Brieskorn formula, we have
+\begin{equation*}
+D(f\omega_X) = D(df \wedge \beta) =\dfrac{5}{6}\omega_X.
+\end{equation*}
+Note that the formula above is equivalent   with  
+Likewise, for  , we have   and
+\begin{equation*}
+D(f(y\omega_X)) = D(df \wedge (y\beta)) = \dfrac{7}{6}\omega_X,
+\end{equation*}
+which is equivalent to
+  with  
+Notice that   are non-zero torsion differential forms in  
+\end{example}
+The observation above can be generalized as follows.
+\begin{proposition}
+Let $ S=\{x
+\in X \mid f(x)=0 \}  O \in X,   X \subset{\mathbb C}^n. $ Let
+\begin{equation*}
+v=a_1(x)\frac{\partial}{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2}+ \cdots +a_n(x)\frac{\partial}{\partial x_n}
+\end{equation*}
+be a germ of
+non-trivial logarithmic vector field along  
+Let
+  and   where  
+Then,
+\begin{equation*}
+D(f(b(x)\omega_X)) = \left( \sum_{i=1}^{n} \frac{\partial a_i}{\partial x_i} \right) \omega_X
+\end{equation*}
+holds.
+\end{proposition}
+\begin{proof}
+Since $ df \wedge \beta = v(f) \omega_X,
+ \displaystyle
+df \wedge \beta = \left( \sum_{i=1}^{n} a_i(x)\frac{\partial f}{\partial x_i} \right)\omega_X.   v(f) =b(x)f(x), $ Brieskorn formula implies the result.
+\end{proof}
+Now we present an alternative method for computing the module of germs of non-trivial logarithmic vector fields. \\ \noindent{\rm Step 1} Compute a monomial basis   of the quotient space
+\begin{equation*}{\mathcal O}_{X,O}/\left(\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \cdots, \frac{\partial f}{\partial x_n}\right).
+\end{equation*}
+\noindent{\rm Step 2} Compute a standard basis   of the ideal quotient
+\begin{equation*}
+\left(\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \cdots, \frac{\partial f}{\partial x_n}\right) : (f).
+\end{equation*}
+\noindent{\rm Step 3} \ Compute a basis   of the vector space by using   and  
+\begin{equation*}
+\left(\left(\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \cdots, \frac{\partial f}{\partial x_n}\right) : (f)\right)/
+\left(\frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \cdots, \frac{\partial f}{\partial x_n}\right)
+\end{equation*}
+\noindent{\rm Step 4} For each   compute a logarithmic vector field along   such that
+\begin{equation*}
+v(f)=b(x)f(x).
+\end{equation*}
+The method above computes a set of basis of non-trivial logarithmic vector fields. Note that, the number of logarithmic vector fields in the output is, as proved in \cite{M, T}, equals to the Tjurina number  
+Let
+\begin{equation*}
+v=a_1(x)\frac{\partial}{\partial x_1} + a_2(x)\frac{\partial}{\partial x_2}+ \cdots +a_n(x)\frac{\partial}{\partial x_n}
+\end{equation*}
+be a germ of
+non-trivial logarithmic vector field along   such that   Then from the Proposition above,
+we have
+\begin{equation*}
+D(f(b(x)\omega_X)) =
+\left( \sum_{i=1}^{n} \frac{\partial a_i}{\partial x_i} \right) \omega_X
+\end{equation*}
+Therefore, the proposed method can be used as a basic procedure for computing Gauss-Manin connection.
+Each step can be effectively executable, as in \cite{TN20},
+by utilizing algorithms described in \cite{NT16a,NT16b,NT17a,TNN}.
+One of the advantage of the proposed method
+lies in the fact that the resulting algorithm can handle parametric cases.
+\subsection{Examples}
+Let us recall that   is the standard normal form of semi quasi-homogeneous
+  singularity. The weight vector of
+is   and the weighted degree of the quasi-homogeneous part is equal to   and the weighted degree of the upper monomial   is equal to  . We examine here, by contrast, the case where the weighted degree of an upper monomial is bigger than  
+\begin{example}
+Let   where   is a parameter. Notice that the polynomial   is not weighted homogeneous. The weighted degree of the upper monomial
+  is equal to  , Accordingly   is a quasi homogeneous function. In fact, by using an algorithm described in \cite{NT16a,T14}, we find that
+  is in the ideal   Therefore, by a classical result of K. Saito (\cite{S71}),   is
+quasi-homogeneous. The Milnor number   is equal to  .
+A monomial basis   of
+  is
+\begin{equation*}{\rm M} = \{1, y, y^2, x, y^3, xy, y^4, xy^2, y^5, xy^3, xy^4, xy^5 \}.
+\end{equation*}
+Since a standard basis   of $ (\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) : (f)
+  \{ 1 \},$
+a basis   of the vector space
+  is
+equal to   that consists of   elements.
+By using an algorithm given in \cite{NT16b}, we compute
+a logarithmic vector field which plays the role of Euler vector field.
+The result of computation is the following.
+\begin{equation*}
+v= \frac{d_1}{3(49+12t^3y^4)}\frac{\partial}{\partial x} + \frac{d_2}{3(49+12t^3y^4)}\frac{\partial}{\partial y},
+\end{equation*}
 where
-\ \end{lemma}
-\begin{proof}
-The definition of the operator norm and the symmetry of $V^{-1/2}(\widehat{V} - \overline{V})V^{-1/2}$ implies
-\ Fix $\theta\in\mathbb{R}^d$ such that $\|\theta\|_{I_d} = 1$.
-Expanding $(Y_i - X_i^{\top}\widehat{\beta})^2$ in $\widehat{V}$ by adding and subtracting $X_i^{\top}\beta$ to $X_i^{\top}\widehat{\beta}$ yields
-\begin{align*}
-&\left|{\theta^{\top}V^{-1/2}(\widehat{V} - \overline{V})V^{-1/2}\theta}\right|\\ &\quad\le \frac{1}{n}\sum_{i=1}^n{(\theta^{\top}V^{-1/2}X_i)^2}\left\\ &\quad\le \frac{1}{n}\sum_{i=1}^n{(\theta^{\top}V^{-1/2}X_i)^2}(X_i^{\top}(\widehat{\beta} - \beta))^2\\ &\quad\qquad+ \frac{1}{n}\sum_{i=1}^n{(\theta^{\top}V^{-1/2}X_i)^2}\left\\ &\quad\le \frac{(1 + L)}{n}\sum_{i=1}^n{(\theta^{\top}V^{-1/2}X_i)^2}(X_i^{\top}(\widehat{\beta} - \beta))^2 + \frac{1}{nL}\sum_{i=1}^n{(\theta^{\top}V^{-1/2}X_i)^2}(Y_i - X_i^{\top}\beta)^2\\ &\quad\le \frac{(1 + L)}{n}\sum_{i=1}^n{(\theta^{\top}V^{-1/2}X_i)^2}(X_i^{\top}(\widehat{\beta} - \beta))^2 + \frac{1}{L}\times{\theta^{\top}V^{-1/2}\bar{V}V^{-1/2}\theta}.
-\end{align*}
-We write $X_i^{\top}(\widehat{\beta} - \beta)$ as $(V^{1/2}\Sigma^{-1}X_i)^{\top}(V^{-1/2}\Sigma(\widehat{\beta} - \beta))$ and bound the first term on the right hand side as
-\ where $u = V^{-1/2}\Sigma(\widehat{\beta} - \beta)/\|\widehat{\beta} - \beta\|_{\Sigma V^{-1}\Sigma}$ is of unit norm. The right hand side (without the factor $\|\widehat{\beta} - \beta\|_{\Sigma V^{-1}\Sigma}^2$) can be further bounded by
-\begin{align*}
-&\sup_{\theta, u\in\mathbb{R}^d}\,\frac{1}{n}\sum_{i=1}^n \frac{(\theta^{\top}V^{-1/2}X_i)^2(u^{\top}V^{1/2}\Sigma^{-1}X_i)^2}{(\theta^{\top}\theta)(u^{\top}u)}\\ &\quad= \sup_{\gamma, v\in\mathbb{R}^d}\,\frac{1}{n}\sum_{i=1}^n \frac{(\gamma^{\top}\Sigma^{-1/2}X_i)^2(v^{\top}\Sigma^{-1/2}X_i)^2}{(\gamma^{\top}\Sigma^{-1/2}V\Sigma^{-1/2}\gamma)(v^{\top}\Sigma^{1/2}V^{-1}\Sigma^{1/2}v)}\\ &\quad\le \sup_{\gamma, v\in\mathbb{R}^d}\,\frac{1}{n}\sum_{i=1}^n \frac{(\gamma^{\top}\Sigma^{-1/2}X_i)^2(v^{\top}\Sigma^{-1/2}X_i)^2}{(\gamma^{\top}\gamma)(v^{\top}v)}\times\frac{(\gamma^{\top}\gamma)(v^{\top}v)}{(\gamma^{\top}\Sigma^{-1/2}V\Sigma^{-1/2}\gamma)(v^{\top}\Sigma^{1/2}V^{-1}\Sigma^{1/2}v)}\\ &\quad\le \sup_{\theta\in\mathbb{R}^d,\|\theta\|_{I_d} \le 1}\,\frac{1}{n}\sum_{i=1}^n (\theta^{\top}\Sigma^{-1/2}X_i)^4\times\frac{\overline{\lambda}}{\underline{\lambda}}.
-\end{align*}
-Combining these to bounds into~\eqref{eq:First-bound-Operator-norm-Vhat-Vbar} concludes
-\begin{equation}\label{eq:First-bound-Operator-norm-Vhat-Vbar}
-\|V^{-1/2}(\widehat{V} - \overline{V})V^{-1/2}\|_{\mathrm{op}} \le \frac{(1 + L)}{2}\mathcal{M}_4\|\widehat{\beta} - \beta\|_{\Sigma V^{-1}\Sigma}^2 + \frac{\|\overline{V}^{1/2}V^{-1/2}\|_{\mathrm{op}}^2}{L},
-\end{equation}
-Minimizing over $L > 0$ concludes the result.
-\end{proof}
-\section{Proofs of Auxiliary Results for Section~\ref{section::partial} (Partial Correlations)}
-\label{appendix:auxiliary.partial}
-We begin by bounding $\mathcal{D}_n^{\Sigma}$ in terms of the intermediate Gram matrix $\widetilde{\Sigma}$. These bounds and associated derivations are be used repeatedly in the proofs of the results from Section~\ref{section::partial}.
-\begin{proposition}\label{prop:bounding-D-sigma}
-For every $n\ge1$,
-\ \end{proposition}
-\begin{proof}
-The triangle inequality implies that
-\ The definition of $\widetilde{\Sigma}$ yields.
-\ This concludes the proof.
-\end{proof}
-\begin{lemma}\label{lemma:linear-expansion-inv-covariance}
-Under the assumption that $\widehat{\Sigma}_n$ is invertible and $\mathcal{D}_n^{\Sigma} <1$,
-\begin{equation}\label{eq:inv-covariance-error-bound}
-\|\Sigma^{1/2}(\widehat{\Sigma}_n^{-1} - \Sigma^{-1})\Sigma^{1/2}\|_{\mathrm{op}} ~\le~ \frac{\mathcal{D}_n^{\Sigma}}{1 - \mathcal{D}_n^{\Sigma}}.
-\end{equation}
-and
-\begin{equation}\label{eq:final-linear-expansion-inv-covariance}
-\left\|\Sigma^{1/2}\left\{\widehat{\Sigma}_n^{-1} - \Sigma^{-1} + \Sigma^{-1}(\widetilde{\Sigma} - \Sigma)\Sigma^{-1}\right\}\Sigma^{1/2}\right\|_{\mathrm{op}} \le \|\overline{X}_n - \mu_X\|^2_{\Sigma^{-1}} + \frac{(\mathcal{D}_n^{\Sigma})^2}{1 - \mathcal{D}_n^{\Sigma}}.
-\end{equation}
-\end{lemma}
-\begin{proof}
-We start with the following equality:
-\begin{align*}
-\widehat{\Sigma}_n^{-1} - \Sigma^{-1} ~&=~ \widehat{\Sigma}_n^{-1}(\Sigma - \widehat{\Sigma}_n)\Sigma^{-1}\\ ~&=~ \Sigma^{-1}(\Sigma - \widehat{\Sigma}_n)\Sigma^{-1} + (\widehat{\Sigma}_n^{-1} - \Sigma^{-1})(\Sigma - \widehat{\Sigma}_n)\Sigma^{-1}\\ ~&=~ \Sigma^{-1}(\Sigma - \widehat{\Sigma}_n)\Sigma^{-1} + \widehat{\Sigma}_n^{-1}\Sigma^{1/2}(I_d - \Sigma^{-1/2}\widehat{\Sigma}_n\Sigma^{-1/2})(I_d - \Sigma^{-1/2}\widehat{\Sigma}_n\Sigma^{-1/2})\Sigma^{-1/2}.
-\end{align*}
-The first equality implies
-\ which proves~\eqref{eq:inv-covariance-error-bound}. The last equality above implies
-\begin{equation}\label{eq:linear-expansion-partial-corr}
-\begin{split}
-\left\|\Sigma^{1/2}\left\{\widehat{\Sigma}_n^{-1} - \Sigma^{-1} + \Sigma^{-1}(\widehat{\Sigma}_n - \Sigma)\Sigma^{-1}\right\}\Sigma^{1/2}\right\|_{\mathrm{op}} ~&\le~ \|\Sigma^{1/2}\widehat{\Sigma}_n^{-1}\Sigma^{1/2}\|_{\mathrm{op}}\|\Sigma^{-1/2}\widehat{\Sigma}_n\Sigma^{-1/2} - I_d\|_{\mathrm{op}}^2\\ ~&\le~ \frac{\|\Sigma^{-1/2}\widehat{\Sigma}_n\Sigma^{-1/2} - I_d\|_{\mathrm{op}}^2}{1 - \|\Sigma^{-1/2}\widehat{\Sigma}_n\Sigma^{-1/2} - I_d\|_{\mathrm{op}}}.
-\end{split}
-\end{equation}
-\textcolor{blue}{assuming $\|\Sigma^{-1/2}\widehat{\Sigma}_n\Sigma^{-1/2} - I_d\|_{\mathrm{op}} < 1$} and using the fact that $\|A^{-1}\|_{\mathrm{op}} \le (1 - \|I - A\|_{\mathrm{op}})^{-1}$ whenever $\|I - A\|_{\mathrm{op}} < 1$.
-This inequality almost proves a linear representation of $\widehat{\Sigma}_n^{-1} - \Sigma^{-1}$ except that $\widehat{\Sigma}_n - \Sigma$ is \emph{not} an average of independent random matrices. Using $\widetilde{\Sigma}$, we get
-\ Combining this equality with~\eqref{eq:linear-expansion-partial-corr} concludes the proof.
-\end{proof}
-\section{Auxiliary Results}
-\label{appendix:auxiliary}
-The following result is an application of Theorem 3.1 in \cite{KuchAbhi17}.
-\begin{lemma}\label{lemma:Thm3.1.KuchAbhi}
-Suppose $W_1, \ldots, W_n\in\mathbb{R}^q$ are independent mean zero random vectors such that each of their coordinate is sub-Weibull$(\alpha)$, that is, $\|W_i(j)\|_{\alpha} \le K_w$ for $1\le j\le q$ and for
-some $\alpha\in (0, 1]$, , then for all $t\ge0$,
-\ \end{lemma}
-\begin{proof}
-Theorem 3.1 and Proposition A.3 of~\cite{KuchAbhi17} jointly give that
-\ for all $t > 0$ and for some universal constant $C\in(0, \infty)$. The result now follows from a union bound.
-\end{proof}
-The next bound is an application of Theorem 8 of~\cite{Bouch05}.
-\begin{lemma}\label{lem:application-theorem8}
-Suppose $W_1, \ldots, W_n$ are non-negative sub-Weibull$(1/2)$ random variables, that is, $\|W_i\|_{\psi_{1/2}} \le K_w < \infty$, then for all $t \ge 0$,
-\begin{equation}\label{eq:to-be-proved-theorem-8}
-\mathbb{P}\left(\frac{1}{n}\sum_{i=1}^n W_i \ge \frac{2}{n}\sum_{i=1}^n \mathbb{E} + K_w\frac{t^3(\log n)^2}{n}\right) \le ee^{-t}.
-\end{equation}
-\end{lemma}
-\begin{proof}
-Theorem 8 of~\cite{Bouch05} implies
-\begin{equation}\label{eq:main-implication-thereom8}
-\left\|\frac{1}{n}\sum_{i=1}^n W_i\right\|_q \le \frac{2}{n}\sum_{i=1}^n \mathbb{E} + \frac{2q}{n}\left\|\max_{1\le i\le n} W_i\right\|_q.
-\end{equation}
-(This follows by taking, following the notation of that paper, $\theta = 1$ and noting that $\kappa/2 < 1$). Because the $W_i$'s are sub-Weibull$(1/2)$, that is, $\mathbb{E}\left \le 2$,
-\ Hence by a union bound
-\ This yields
-\ or in other words, $(\max_{1\le i\le n}W_i - 2K_w\log^2n)_+$ is sub-Weibull$(1/2)$ with parameter $2K_w$. Therefore, for all $q \ge 1$,
-\ Substituting this inequality in~\eqref{eq:main-implication-thereom8} concludes for all $q \ge 1$,
-\ + \frac{4qK_w\log^2n}{n} + \frac{4q^3K_w}{n}.
-\]
-For any random variable $R$, Markov's inequality implies
-\ Therefore, for all $t\ge 1$,
-\ + \frac{4etK_w\log^2n}{n} + \frac{4et^3K_w}{n}\right) \le e^{-t}.
-\]
-To make this valid over all $t > 0$, we use the fact that probabilities are bounded by 1 and multiply the right hand side by $e$ so that for $t < 1$, $ee^{-t} > 1$. This completes the proof of~\eqref{eq:to-be-proved-theorem-8}.
-\end{proof}
-\end{appendices}
+\begin{equation*}
+d_1=49x+8t^2y^5+12t^3xy^4, \quad d_2=21y-4tx+4t^3y^5.
+\end{equation*}
+The vector field   enjoys
+  Note also that for the case   we have
+\begin{equation*}
+v= \frac{1}{21}\left(7x\frac{\partial}{\partial x} + 3y\frac{\partial}{\partial y}\right). \end{equation*}
+The other non-trivial logarithmic vector fields can be obtained from  . Gauss-Manin connection can be determined explicitly by using these non-trivial logarithmic vector fields,
+\end{example}
+\begin{remark*}
+Let   denote the set of local cohomology classes in   that are killed by the Jacobi ideal $
+(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}) : $
+\begin{equation*}
+H_J = \left\{ \psi \in
+H_{}^{2}({\mathcal O}_{X}) \middle|
+\frac{\partial f}{\partial x}\psi = \frac{\partial f}{\partial y}\psi = 0 \right\}.
+\end{equation*}
+Then, by using an algorithm given in \cite{NT17a,TNN}, a basis as a vector space of   is computed as
+\vspace{1ex}
+\noindent
+   
+   
+   
+   
+\vspace{1ex}
+   
+ 
+$\left -\dfrac{6}{7}t\left
++\dfrac{2}{7}t^2\left
+$
+\vspace{1ex}
+\noindent
+where   stands for Grothendieck symbol.
+These local cohomology classes can be used for computing normal forms in the computation of Gauss-Manin connection in an effective manner (\cite{TNN}).
+\end{remark*}
+J. Scherk studied in \cite{Sch} the following case.
+\begin{example}
+Let   Then, the Milnor number   is equal to 11 and the Tjurina number   is equal to 10. A monomial basis   of   is
+  A standard basis   of the ideal quotient
+  is   A basis   of the vector space
+  is
+\begin{equation*}{\rm B} = \{ x, x^2, x^3, x^4, x^5, xy, y, y^2, y^3, y^4 \}.
+\end{equation*}
+\noindent
+(i) For   we have
+\begin{equation*}
+v=\frac{d_1}{5(4-25xy)}\frac{\partial}{\partial x} + \frac{d_2}{5(4-25xy)}\frac{\partial}{\partial y},
+\end{equation*}
+where
+ 
+By a direct computation, we have
+\begin{equation*}
+D(f(x\omega_X)) = \left(\dfrac{7}{10}x-\dfrac{3\times25}{16}y^4\right)\omega_X
+\mod \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right) .
+\end{equation*}
+\noindent
+(ii) For   we have
+\begin{equation*}
+v=\frac{d_1}{5(4-25xy)}\frac{\partial}{\partial x} + \frac{d_2}{5(4-25xy)}\frac{\partial}{\partial y},
+\end{equation*}
+where
+  and
+\begin{equation*}
+D(f(y\omega_X)) = \left(\dfrac{7}{10}y-\dfrac{3\times25}{16}x^4\right)\omega_X \mod \left(\frac{\partial f}{\partial x}, \frac{\partial f}{\partial y}\right) .
+\end{equation*}
+We omit the other cases.
+\end{example}
+\begin{remark*}
+By using an algorithm given in \cite{NT20}, we have the following integral dependence relation
+\begin{equation*}
+25(4-25xy)f^2 = 10x\left(\frac{\partial f}{\partial x}\right)f+10y\left(\frac{\partial f}{\partial y}\right)f+d_{2,0}\left(\frac{\partial f}{\partial x}\right)^2+d_{1,1}\left(\frac{\partial f}{\partial x}\right)\left(\frac{\partial f}{\partial y}\right)+d_{0,2}\left(\frac{\partial f}{\partial y}\right)^2,
+\end{equation*}
+where
+\begin{equation*}
+d_{2,0}=2x^2-25x^3y-10y^3, \ d_{1,1}=11xy-50x^2y^2, \ d_{0,2}=2y^2-25xy^3-10x^3
+\end{equation*}
+The use of the integral dependence relation, or the integral equation leads an effective method for computing
+  and  
+\end{remark*}
+\subsection*{Acknowledgements}
+This work has been partly supported by JSPS Grant-in-Aid for
+Scientific Research (C) (18K03320 and 18K03214).
+\pdfbookmark{References}{ref}
+\begin{thebibliography}{99}
+\footnotesize\itemsep=0pt
+\providecommand{\eprint}{\href{http://arxiv.org/abs/#2}{arXiv:#2}}
+\bibitem{A88}
+Aleksandrov, A. G.:
+\newblock A de Rham complex of nonisolated singularities,
+\newblock Funct. Anal. Appl.
+Vol.{\bf 22}, pp. 131-133 (1988)
+\bibitem{A}
+Alexsandrov, A. G.:
+\newblock Nonisolated hypersurface singularities,
+\newblock Adv. Soviet Math.
+Vol{\bf 1}, pp. 211--246 (1990)
+\bibitem{A05}
+Aleksandrov, A. G.:
+\newblock Logarithmic differential forms, torsion differentials and residue,
+\newblock Complex Var. Theory Appl.
+Vol.{\bf 50}, pp. 777--802 (2005)
+\bibitem{A12}
+Aleksandrov, A. G.:
+\newblock Multidimensional residue theory and the logarithmic de Rham complex,
+\newblock J. Singularities
+Vol.{\bf 5}, pp. 1-18 (2012)
+\bibitem{AT}
+Aleksandrov, A. G. et Tsikh, A. K.:
+\newblock Th\'eorie des r\'esidus de Leray et formes de Barlet sur une intersection compl\`ete singuli\`ere,
+\newblock C. R. Acad. Sci. Paris S\'er. I Math.,
+Vol.{\bf 333}, pp. 973--978 (2001)
+\bibitem{B}
+Barlet, D.:
+\newblock Le faisceau   sur un espace analytique   de dimension pure,
+\newblock Lecture Notes in Math.
+Vol{\bf 670}, pp. 187--204 (1978)
+\bibitem{BS}
+Brasselet, J.-P. and Sebastiani, M.:
+\newblock Brieskorn and the monodromy,
+\newblock J. Singularities
+Vol.{\bf 18}, pp. 84--104 (2018)
+\bibitem{Br}
+Brieskorn, E.:
+\newblock Die Monodromie der isolierten Singularit\"aten von Hyperfl\"achen,
+\newblock Manuscripta Math.
+Vol.{\bf 2}, pp. 103--161 (1970)
+\bibitem{Bru}
+Brunella, M.
+\newblock Some remarks on indices of holomorphic fields,
+\newblock Publ. Matem\`atiques,
+Vol.{\bf 41}, pp. 527--544 (1997)
+\bibitem{CM1}
+Corr\^ea, M.
+and Machado, D. S.:
+\newblock Residue formula for logarithmic foliations and applications,
+\newblock Trans. Amer. Math. Soc.
+Vol.{\bf 371}, pp. 6403--6420 (2019)
+\bibitem{CM2}
+Corr\^ea, M.
+and Machado, D. S.:
+\newblock GSV-index for holomorphic Pfaff systems,
+\newblock arXiv:1611.09376v4 (2020)
+\bibitem{E}
+El Zein, F.:
+\newblock La classe fondamentale d'un cycle,
+\newblock Compositio Math.
+Vol.{\bf 29}, pp. 9--33 (1974)
+\bibitem{GS}
+Granger, M. and
+and Schulze, M.:
+\newblock
+Normal crossing properties of complex hypersurfaces via logarithmic residues,
+\newblock Compos. Math.
+Vol.{\bf 150}, pp. 1607--1622 (2014)
+\bibitem{G}
+Greuel, G. M.:
+\newblock Der Gauss-Manin Zusammenhang isolierter Singularit\"aten von vollst\"andigen Durchschnitten.
+\newblock Mat. Ann.
+Vol.{\bf 214}, pp. 235--266 (1975)
+\bibitem{K83}
+Kersken, M.:
+\newblock Der Residuenkomplex in der lokalen algebraischen und analytischen Geometrie,
+\newblock Math. Ann. Vol.{\bf 265}, pp. 423--455 (1983)
+\bibitem{K84}
+Kersken, M.:
+\newblock Regul\"are Differentialformen,
+\newblock Manuscripta Math.
+Vol.{\bf 46}, pp. 1--25 (1984)
+\bibitem{M}
+Michler, R.:
+\newblock Torsion of differentials of hypersurfaces with isolated singularities,
+\newblock J. Pure Appl. Algebra,
+Vol.{\bf 104}, pp. 81--88 (1995)
+\bibitem{NT16a}
+Nabeshima, K.
+and Tajima, S.:
+\newblock Computing Tjurina stratifications of  -constant
+deformations via parametric local cohomology systems,
+\newblock Applicable Algebra in Engineering, Computation and Computing.
+Vol.{\bf 27}, pp. 451--467 (2016)
+\bibitem{NT16b}
+Nabeshima, K.
+and Tajima, S.:
+\newblock Solving extended ideal membership problems in rings of
+convergent power series via Gr\"obner bases,
+\newblock Lecture Notes in Computer Sciences
+Vol.{\bf 9582} (2016), pp. 252--267 (2016)
+\bibitem{NT17a}
+Nabeshima, K.
+and Tajima, S.:
+\newblock Algebraic local cohomology with parameters and
+parametric standard bases for zero-dimensional ideals,
+\newblock Journal of Symbolic Computation,
+Vol.{\bf 82}, pp. 91--122 (2017)
+\bibitem{NT19a}
+Nabeshima, K. and Tajima, S.:
+\newblock Computing logarithmic vector fields and Bruce-Roberts Milnor numbers via local cohomology classes.
+\newblock Revue Roumaine Math. Pures et Appl.,
+Vol.{\bf 64}, pp. 521--538 (2019)
+\bibitem{NT20}
+Nabeshima, K.
+and Tajima, S.:
+\newblock Generalized integral dependence relations,
+\newblock Lecture Notes in Computer Science.
+Vol.{\bf 11989}, pp. 48--63 (2020)
+\bibitem{P}
+Pol, D.:
+\newblock On the values of logarithmic residues along curves,
+\newblock Ann. Inst. Fourier (Grenoble),
+Vol.{\bf 68}, pp. 725--766 (2018)
+\bibitem{S71}
+Saito, K.:
+\newblock Quasihomogene isolierte Singularit\"aten von Hyperfl\"achen,
+\newblock Invent. Math.,
+Vol.{\bf 14}, pp.123--142 (1971)
+\bibitem{S73}
+Saito, K.:
+\newblock Calcul alg\'ebrique de la monodromie, dans Singularit\'es \` a Carg\`ese,
+\newblock Ast\'erisque
+Vol.{\bf 7} et{\bf 8}, pp. 195--211, Soc. Math. France '1973)
+\bibitem{S77}
+Saito, K.:
+\newblock On the uniformization of complements of discriminant loci,
+\newblock Preprint, Williamstone, Williams College, S1-KS, pp. 1--21, (1975) and
+\newblock in Hyperfunctions and Linear Partial Differential Equations, RIMS Kokyuroku,
+Vol.{\bf 287}, pp. 117--137 (1977)
+\bibitem{S}
+Saito, K.:
+\newblock Theory of logarithmic differential forms and logarithmic vector fields,
+\newblock J. Fac. Sci. Univ. Tokyo, Sect. IA Math.,
+Vol \textbf{27}, pp. 265--291 (1980)
+\bibitem{Sch}
+Scherk, J.:
+\newblock On the Gauss-Manin connection of an isolated hypersurface singularity,
+\newblock Math. Ann.
+Vol.{\bf 238}, pp. 23--32 (1978)
+\bibitem{Schu}
+Schulze, M.:
+\newblock Algorithms for the Gauss-Manin connection,
+\newblock J. of Symbolic Computation
+Vol.{\bf 32}, pp. 549--564 (2001)
+\bibitem{T}
+Tajima, S.:
+\newblock
+On polar varieties, logarithmic vector fields and holonomic D-modules,
+\newblock RIMS Kokyuroku Bessatsu
+Vol.{\bf 40}, pp.
+41--51 (2013)
+\bibitem{T14}
+Tajima, S.:
+\newblock Parametric local cohomology classes and Tjurina stratifications for  -constant deformations of
+quasi-homogeneous singularities,
+\newblock Several Topics on Real and Complex Singularities,
+pp. 189--200, World Scientific (2014)
+\bibitem{TNN}
+Tajima, S., Nakamura, Y. and
+and Nabeshima, K.:
+\newblock Standard bases and algebraic local cohomology for zero dimensional ideals,
+\newblock Advanced Studies in Pure Math.,
+Vol.{\bf 56}, pp. 341--361 (2009)
+\bibitem{TN20}
+Tajima, S
+and Nabeshima, K.:
+\newblock An algorithm for computing torsion differential forms associated to
+an isolated hypersurface singularity,
+\newblock to appear in Mathematics in Computer Scinece \\ (DOI: 10.1007/s11786-020-00486-w)
+\bibitem{V}
+Vetter, U.:
+\newblock \"Aussere Potenzen von Differentialmoduln reduzierter vollst\"andiger Durchschnitte,
+\newblock Manuscripta Math.
+Vol.{\bf 2}, pp. 67--75 (1970)
+\bibitem{Z}
+Zariski, O.:
+\newblock Characterization of plane algebroid curves whose module of differentials has maximum torsion,
+\newblock Proc. Nat. Acad. Sci. U.S.A.
+Vol.{\bf 56}, pp. 781--786 (1966)
+\end{thebibliography}\LastPageEnding
 \end{document}
