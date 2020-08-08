@@ -1,0 +1,70 @@
+---
+title: "K-means"
+author: "Yeyubei Zhang,Yuchen Zhang"
+date: "2020/8/7"
+output: html_document
+---
+# 1. Load library and read data 
+```{r}
+# setwd("C:\\Users\\weiba\\OneDrive\\Desktop")
+library(data.table)
+library(stats)
+library(factoextra)
+```
+
+```{r}
+summary <- read.csv("Summary.csv")
+dt <- fread("Summary.csv",select=c(3,4,5,6,7,8,9,10,11))
+dt
+```
+
+# 2. Find optimal number of clusters
+```{r}
+fviz_nbclust(dt[,2:ncol(dt)],FUNcluster = kmeans, method = "wss")
+```
+
+The plot above represents the variance within the clusters. It decreases as k increases, but it can be seen a bend at k = 4, indicating that additional clusters beyond the 4th have little value. According to the plot, we choose 4 as our intended number of clusters.
+
+# 3. Clustering
+```{r}
+set.seed(123)
+km.res <- kmeans(dt[,2:ncol(dt)], centers=4, nstart = 1)
+print(km.res)
+```
+
+
+```{r}
+aggregate(dt[,2:ncol(dt)], by=list(cluster=km.res$cluster), mean)
+```
+Above shows the mean of each variables by clusters using the original data
+
+```{r}
+dd <- cbind(dt[,2:ncol(dt)], cluster = km.res$cluster)
+head(dd)
+```
+Above shows the which cluster each sample belongs to
+
+# 4. Visualization
+```{r}
+for (i in seq(2, ncol(dt))) {
+  i = 2
+  j =3
+  for (j in seq(i+1, ncol(dt))) {
+    plot(dt[,c(i,j)],
+         col = c("red", "green", "blue", "yellow")[unclass(km.res$cluster)],
+         pch = c(23, 24, 21, 10)[unclass(km.res$cluster)],
+         main = "2-vectors generated from Mixture",
+         xlab = colnames(dt)[i],
+         ylab = colnames(dt)[j])
+    legend("topleft", c("cluster 1","cluster 2","cluster 3","cluster 4"),
+           pch=c(23, 24, 21, 10)) 
+    legend("bottomright", c("cluster 1","cluster 2","cluster 3","cluster 4"),
+           pch=c("R","G","B","Y"), col=c("red", "green", "blue", "yellow"))
+  }
+}
+
+dt[,c(9,9)]
+```
+
+
+
