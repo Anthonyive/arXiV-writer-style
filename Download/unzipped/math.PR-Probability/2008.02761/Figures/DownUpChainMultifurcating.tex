@@ -1,0 +1,367 @@
+\chapter{Down-up Chains for Multifurcating Trees: introducing the $(\alpha, \gamma)$-chain}\label{ch:downupmultifurcating}
+
+To introduce an appropriate down-move in the multifurcating case we start by introducing a more detailed version of the $(\alpha, \gamma)$-growth model.
+The main inspiration for what we will call the \textit{planar $(\alpha, \gamma)$-growth model} is the properties of the $(\alpha, \gamma)$-growth model given in Theorem~\ref{spinaldecomp}.
+Here we basically characterize the tree structure in terms of an $\ocrp$, a $\crp$, and the weights associated with branch points and edges.
+The main aim in the following will be to use a version of an $\ocrp$ instead of a $\crp$, whilst retaining the structure determined by first mentioned $\ocrp$ and the weights.\\
+
+\noindent
+The outline of this chapter is as follows:
+%
+\begin{enumerate}
+  \item Introduce a planar $(\alpha, \gamma)$-growth model.
+  \item Motivated by the definition of the $\alpha$-chain, generalize this label swapping approach to the multifurcating setting using this additional detail of the tree.
+\end{enumerate}
+
+\section{A planar $\left( \alpha, \gamma \right)$-growth model}
+%
+We begin by defining planar trees which will provide the state space for the process we are studying later on.
+%
+\fxnote*{New definition of planar trees, building on Chapter 2.}{%
+\begin{defi}[Planar Tree]\label{planartree}
+  Let $A$ be a finite set and fix $\tree \in \T_A$.
+  Let $\treen = {\left( n_B \right)}_{B \in \tree}$ be a collection of non-negative integers, satisfying that for any collection of siblings $C_1, \ldots, C_k \in \tree$ it holds that $\left(n_{C_1}, \ldots, n_{C_k}\right)$ is a permutation of $\left( 1, \ldots, k \right)$. 
+  We call $\hat{\tree} = (\tree, \treen)$ a \textit{planar tree}, and denote the space of planar trees with $n$ leaves by $\widehat{\T_n}$.
+\end{defi}
+%
+To limit notation in the remainder of this exposition, we will introduce some vocabulary for planar trees, so let $\hat{\tree} = \left( \tree, \treen \right) \in \widehat{\T_A}$ be given.
+If $C, D \in \tree$ such that $\overleftarrow{C} = \overleftarrow{D}$ and $n_{C} < n_{D}$ we will say that $C$ is \textit{to the left of} $D$.
+An important note is, that we will often use this term to mean \textit{to the immediate left of}, which is the case if $n_{C} = n_{D} - 1$.
+In the exact same manner, we can talk about edges being \textit{to the right} or even \textit{immediate right} of other edges.
+A natural consequence is that we can define the \textit{leftmost} and \textit{rightmost} edge in collection of siblings $C_1, \ldots, C_k$.
+The leftmost edge will be the unique $C \in \left\{ C_1, \ldots, C_k \right\}$ satisfying that $n_C = 1$, while the rightmost is of course the one satisfying that $n_C = k$. \\
+}
+
+\noindent
+It is clear that there is a surjective projection map from the space of planar trees to the space of trees, $\rho \colon \widehat{\T_n} \to \T_n$, defined by
+%
+\begin{align}\label{projectionmap}
+  \rho \left( \hat{\tree} \right) = \rho \left( \tree, \treen \right) = \tree
+\end{align}
+%
+Note that this map is clearly \textit{not} injective for $n > 3$, which is illustrated in Figure~\ref{fig:planartree}.
+We will continue to use the terms \textit{ancestral line} and \textit{spine} in some planar tree, $\hat{\tree}$.
+By this we will simply mean the corresponding version $\rho{\hat{\tree}}$, defined earlier, which still makes fine sense for planar trees. \\
+%
+\begin{figure}[t]
+    \centering
+    \input{Figures/planartree}
+    \captionsetup{singlelinecheck=off}
+    \caption[fig:planartree]{Four different elements of $\widehat{\T_3}$, $\hat{\tree}_1, \hat{\tree}_2, \hat{\tree}_3, \hat{\tree}_4$, where the non-planar version is the same tree, i.e.\ $\rho\left( \hat{\tree}_1 \right) = \rho\left( \hat{\tree}_2 \right) = \rho\left( \hat{\tree}_3 \right) = \rho\left( \hat{\tree}_4 \right) = \tree$.
+        Specifically, we have for all $i \in [4]$ that $\hat{\tree}_i = \left( \tree, \treen^i \right)$ where $\treen^i = \left( n_1^i, n_2^i, n_3^i \right)$ are
+    \begin{align*}
+        \treen^1 = \left( 1, 2, 3 \right),
+        \quad
+        \treen^2 = \left( 2, 1, 3 \right),
+        \quad
+        \treen^3 = \left( 1, 3, 2 \right),
+        \quad \text{and} \quad
+        \treen^4 = \left( 3, 2, 1 \right).
+    \end{align*}
+}\label{fig:planartree}
+\end{figure}
+%
+Before introducing a planar version of the $(\alpha, \gamma)$-growth model, let us transfer the insertion and deletion operations to this richer setting.
+In the following, recall that $\pi$ and $\varphi$ denotes the deletion and insertion map, respectively, in the setting of Chapter~\ref{ch:prelims}.
+%
+\fxwarning*{I've changed these definitions quite a lot.}{%
+\begin{defi}[Deletion of leaf in $\widehat{\T}$]\label{deletionplanar}
+    Let $A$ be a finite set and fix $\hat{\tree} \in \widehat{\T_A}$.
+    The operation of deleting a leaf, $\{ \tildei \} \subseteq A$, from $\hat{\tree}$ is a map
+    %
+    \begin{align}
+        \hat{\pi} \left( \hat{\tree}, \tildei \right)
+        = \hat{\pi} \left( \tree, \treen, \tildei \right)
+        \overset{\hat{\pi}}{\mapsto}
+        \left( \pi \left( \tree, \tildei \right), \treen^\pi \right)
+        \in \widehat{\T_{A \setminus \{\tildei\}}}
+        \label{deletionmapplanar}
+    \end{align}
+    %
+    where $\treen^\pi = {\left( n_B^\pi \right)}_{B \in \pi\left( \tree, \tildei \right)}$ is defined by setting
+    %
+    \begin{align}
+        n_B^\pi
+        =
+        \begin{cases}
+            n_B - 1 & \text{if}\ \overleftarrow{\{\tildei\}} = \overleftarrow{B}\ \text{and}\ n_{\{\tildei\}} > n_B \\
+            n_B & \text{otherwise} 
+        \end{cases}
+    \end{align}
+    %
+    for each $B \in \pi\left( \tree, \tildei \right)$.
+\end{defi}
+%
+\begin{defi}[Insertion of leaf in $\widehat{\T}$]\label{insertionplanar}
+    Let $A$ be a finite set and fix $\hat{\tree[s]} = \left( \tree[s], \treen \right) \in \widehat{\T_A}$.
+    The operation of inserting a leaf, $\{ j \} \subseteq \N \setminus A$, to the vertex or edge, $C \in \tree[s]$, is a map
+    %
+    \begin{align}
+        \left( \hat{\tree[s]}, C, j, l \right)
+        =
+        \left( \tree[s], \treen, C, j, l \right)
+        \overset{\hat{\varphi}}{\mapsto}
+        \left( \varphi \left( \tree[s], C, j \right), \treen^\varphi \right) \in \widehat{\T_{A \cup \{j\}}}
+        \label{insertionsmapplanar}
+    \end{align}
+    %
+    where $\treen^\varphi$ is obtained in the following way:
+    %
+    \begin{itemize}
+        \item If $C$ is a vertex with $k$ children, $l \in [k+1]$ is allowed, and we set $\treen^\varphi = {\left( n_B^\varphi \right)}_{B \in \varphi \left( \tree[s], C, j \right)}$ with
+            %
+            \begin{align}
+                n_B^\varphi
+                =
+                \begin{cases}
+                    l & \text{if}\ B = \{j\} \\
+                    n_B + 1 & \text{if}\ C = \overleftarrow{B}\ \text{and}\ n_B \geq l \\
+                    n_{B \setminus \{j\}} & \text{otherwise}
+                \end{cases}
+                \label{insertionnumbersplanar1}
+            \end{align}
+            %
+            for each $B \in \varphi \left( \tree[s], C, j \right)$.
+            %
+        \item If $C$ is an edge, $l \in \{1, 2\}$ is allowed, and we set $\treen^\varphi = {\left( n_B^\varphi \right)}_{B \in \varphi \left( \tree[s], C, j \right)}$ with
+            %
+            \begin{align}
+                n_B^\varphi
+                =
+                \begin{cases}
+                    l & \text{if}\ B = \{j\} \\
+                    3 - l & \text{if}\ B = C \\
+                    n_{B \setminus \{j\}} & \text{otherwise}
+                \end{cases}
+                \label{insertionnumbersplanar2}
+            \end{align}
+            %
+            for each $B \in \varphi \left( \tree[s], C, j \right)$.
+            %
+    \end{itemize}
+    %
+\end{defi}
+%
+The above definitions are notionally very heavy but this is mainly due to the attempt on making it a formal definition.
+However, one should keep in mind that the actual insertion or deletion procedure is quite simpel.
+If $B_l$ and $B_r$ was to the immediate left and immediate right, respectively, of a leaf $\{ \tildei \}$ before deletion, we are simply saying that $B_l$ is to the immediate left of $B_r$ after deletion.
+Similarly, when inserting a new leaf $\{j\}$ into a vertex we can insert it to the left or right, respectively, or inbetween (meaning the obvious thing) any two children of that vertex.
+And finally, when inserting $\{j\}$ to an edge, we allow it to be the left- or rightmost, respectively, child of the newly created vertex.
+}
+%
+We are now ready to define a down-up chain in this more detailed setting:
+%
+\begin{defi}[Planar $(\alpha, \gamma)$-growth model]
+    Let $\hat{T}_1$ be the deterministic elements of $\widehat{\T_1}$.
+    For any $\nin$ construct $\hat{T}_{n+1}$ conditional on $\hat{T}_n = \hat{\tree}$, by for each $C \in \tree$ setting 
+    %
+    \begin{align}
+        w_{C, l}
+        =
+        \begin{cases}
+            1 - \alpha & \text{if}\ C = C_e\ \text{is a leaf edge and}\ l = 2 \\
+            \gamma & \text{if}\ C = C_e\ \text{is an internal edge and}\ l = 2 \\
+            \alpha - \gamma & \text{if}\ C = C_v\ \text{with $k$ children and}\ l = 1 \\
+            \alpha & \text{if}\ C = C_v\ \text{with $k$ children and}\ 1 < l < k \\
+            0 & \text{otherwise}
+        \end{cases}
+        \label{weightsplanar}
+    \end{align}
+    %
+    and then defining the distribution of $\hat{T}_{n+1}$ by
+    %
+    \begin{align}
+        \P \left( \hat{T}_{n+1} = \hat{\varphi} \left( \hat{\tree}, C, j, l \right) \mid \hat{T}_n = \hat{\tree} \right)
+        = \frac{w_{C,l}}{n - \alpha}
+        \label{InsertionPlanarAlphaGamma}
+    \end{align}
+    %
+    for each $C \in \rho \left( \tree \right)$.
+    The sequence ${\left( \hat{T}_n \right)}_\nin$ is referred to as the \textit{planar $(\alpha, \gamma)$-growth model}.
+\end{defi}
+%
+While we have not shown any results about the planar $(\alpha, \gamma)$-growth model, ${\left( \hat{T}_n \right)}_\nin$, we showed numerous results on ${\left( \rho \left( \hat{T}_n \right) \right)}_\nin$ in Chapter~\ref{ch:prelims}, since using the projection map simply corresponds to forgetting the internal structure amongst siblings, and the weights defined for the planar $(\alpha, \gamma)$-growth rule is on aggregate exactly the same as for the $(\alpha, \gamma)$-gamma growth
+rule of Chapter~\ref{ch:prelims}.
+This will play a significant role later on. \\
+
+One of the advantages of working with planar trees as opposed to regular trees, is that we are able to make a total ordering of all subtrees along the spine from any leaf.
+%
+\begin{defi}[Total ordering from leaf]\label{totalordering}
+  %
+  Fix $\tree \in \T_n$ and some leaf $\{i\} \in \tree$ and form the spine $\{i\}, B_1, \ldots, B_k$.
+  We will say that any subtree of $B_j$ is to \textit{left} of any subtree in $B_i$ for $j > i \geq 1$, which combined with the ordering inherited from the definition of a planar tree, gives a \textit{total ordering} of any subtree encountered on the spine from ${i}$.    
+  %
+\end{defi}
+%
+\section{A down-up chain for planar $(\alpha, \gamma)$-trees}
+%
+The entire motivation for introducing a planar version of the $(\alpha, \gamma)$-growth model, was fundamentally to arrive at the total ordering described in Definition~\ref{totalordering}, so that we can generalize the $\alpha$-chain from Definition~\ref{alphachain} and thereby obtain a result similar to Theorem~\ref{StatDistBin}.
+The definition of a general $(f, G)$-down-up chain from Definition~\ref{downupchain_general} carries over without any difficulty to the planar setting, by using the corresponding growth rules and deletions maps, and will therefore not be repeated here.
+We will however update the notion of label swapping to avoid any ambiguity.
+%
+\begin{defi}[Label swapping in $\widehat{\T_A}$]\label{labelswappingplanar}
+  Let $A$ be a finite set and fix $\hat{\tree} \in \widehat{\T_A}$.
+  The operation of \textit{swapping labels} is a map $\hat{\tau} \colon \widehat{\T_A} \times A \times A \to \widehat{\T_A}$ defined by
+  %
+  \begin{align*}
+  \hat{\tau} \left( \hat{\tree}, i, j \right)
+  = \left( \tau(\tree), \treen^\tau \right)
+  \end{align*}
+  %
+  where $\treen^\tau = {\left( n_B^\tau \right)}_{B \in \tau(\tree, i, j)}$ with
+  %
+  \begin{align}
+    n_B^\tau
+    =
+    \begin{cases}
+      n_{\{j\}} & \text{if}\ B = \{i\} \\
+      n_{\{i\}} & \text{if}\ B = \{j\} \\
+      n_B & \text{otherwise}
+    \end{cases}
+    \label{labelswappingnumbers}
+  \end{align}
+  %
+  for each $B \in \tau(\tree, i, j)$.
+  %
+\end{defi}
+%
+We are now ready to introduce a down-up chain for the planar $(\alpha, \gamma)$-trees.
+%
+% It turns out that under fairly weak assumptions a down-up chain will be Markovian, and so it is natural to ask what properties this Markov Chain holds.
+%
+\begin{defi}[$(\alpha, \gamma)$-chain]
+  The \textit{$(\alpha, \gamma)$-chain} is an $(f, (\alpha, \gamma))$-down-up chain where $f$ is defined by setting $f(\hat{\tree[s]}, i) = \left( \tau\left( \hat{\tree[s]}, i, \tildei \right), \tildei \right)$, with
+  %
+  \begin{align}
+    &a = \min
+    \begin{Bmatrix}
+      \text{leaves in 1st spinal bush} \\ \text{on spine from}\ i
+    \end{Bmatrix}, \\
+    &b = \min
+    \begin{Bmatrix}
+      \text{leaves in 1st subtree to the} \\ \text{left of $i$ not containing $a$}
+    \end{Bmatrix},
+    \label{searchplanar}
+  \end{align}
+  %
+  and $\tildei = \max \left\{ i, a, b \right\}$.
+\end{defi}
+%
+Using the proof technique from Theorem~\ref{StatDistBin} (Theorem 3 of~\cite{RefWorks:doc:5b4cbc93e4b07f5746e47014}) we recently managed to prove the following result:
+%
+\begin{thm}\label{StationarityTheorem}
+  Fix $n \geq 3$, let $\hat{T}_n$ denote the $n$'th step of the planar $(\alpha, \gamma)$-growth model and let $\hat{T} = {\left( \hat{T}_n(m) \right)}_{m \in \N_0}$ be the $(\alpha, \gamma)$-chain.
+  It holds that $\hat{T}$ has a stationary distribution, and that $\hat{T}_n(m) \dcon \hat{T}_n$ as $m \to \infty$.
+\end{thm}
+%
+In our approach to prove the statement above, we will need the following seemingly technical lemma.
+The statement of the lemma as well as the proof technique is an adaption of Lemma $4$ in~\cite{RefWorks:doc:5b4cbc93e4b07f5746e47014}.
+%
+\begin{lemma}\label{StatImportantLemma}
+  Fix $\nin$ and let ${\left( \hat{T}_m \right)}_{1 \leq m \leq  n}$ be the first $n$ steps of a planar $(\alpha, \gamma)$-growth model.
+    Fix $1 \leq i \leq \tildei \leq n$ and define
+    %
+    \begin{align}
+        E_{i, \tildei} = \left( \tildei = \max\left\{ i, a, b \right\}\ \text{in}\ \hat{T}_n \right)
+        \label{LemmaEii}
+    \end{align}
+    %
+    It holds that $E_{i, \tildei} \independent \hat{T}_{\tildei - 1}$ and that $\hat{\pi} \left( \hat{\tau} \left( \hat{T}_n, i, \tildei \right), \tildei \right) \mid E_{i, \tildei} \deq \hat{T}_{n-1}$.
+\end{lemma}
+%
+\begin{proof}
+    We will prove the first assertion by splitting up in two cases.
+    The overall proof technique will be to translate $E_{i, \tildei}$ to facts regarding the growth process --- and use this characterization to achieve the result.
+    %
+    \begin{itemize}
+      \item[Case 1: $i < \tildei$.] In this case $E_{i, \tildei}$ is equivalent to either
+            %
+            \begin{itemize}
+              \item inserting $\tildei$ to the immediate left of $i$ in the first branch point on the ancenstral path from $i$ in $\hat{T}_{\tildei - 1}$, and
+              \item \textit{not} inserting $\tildei + 1, \ldots, n$ on leaf $i$ or between $i$ and the subtree containing $\tildei$ in the first branch point on the ancestral path from $i$ in $\hat{T}_{\tildei}, \ldots, \hat{T}_{n-1}$, respectively.
+            \end{itemize}
+            %
+            or
+            %
+            \begin{itemize}
+              \item inserting $\tildei$ on leaf $i$ in $\hat{T}_{\tildei - 1}$, and
+              \item \textit{not} inserting $\tildei + 1, \ldots, n$ on the first two edges nor in the first branch point on the ancenstral path from $i$ in $\hat{T}_{\tildei}, \ldots, \hat{T}_{n-1}$, respectively.
+            \end{itemize}
+            %
+            or if $i$ is located leftmost in the branch point
+            %
+            \begin{itemize}
+              \item inserting $\tildei$ on second edge on the ancestral path from $i$ in $\hat{T}_{\tildei - 1}$, and
+              \item \textit{not} inserting $\tildei + 1, \ldots, n$ on the first two edges nor to the left of $i$ in the first branch point on the ancenstral path from $i$ in $\hat{T}_{\tildei}, \ldots, \hat{T}_{n-1}$, respectively.
+            \end{itemize}
+            %
+            \begin{figure}[t]
+                \centering
+                \input{ForbiddenEdges_i_leftmost}
+                \caption{Test}
+                \label{fig:ForbiddenEdges_1}
+            \end{figure}
+            %
+            Since we have now characterized the event $E_{i,\tildei}$ in terms of insertions to specific edges summing to a total weight of $1$ in all cases --- and the fact that all of these insertion are independent of one another --- this is enough to argue that $\hat{T}_{\tildei - 1} \independent E_{i, \tildei}$ when $i < \tildei$.
+
+          \item[Case 2: $i = \tildei$.] Here $E_{i, \tildei}$ is equivalent to
+            %
+            \begin{itemize}
+              \item \textit{not} inserting $\tildei + 1, \ldots, n$ on the first two edges nor to the left of $i = \tildei$ in the first branch point on the ancestral path from $i$ in $\hat{T}_{\tildei}, \ldots \hat{T}_{n-1}$, respectively, if $i = \tildei$ is placed leftmost in the branch point.
+            \end{itemize}
+            %
+            or
+            \begin{itemize}
+              \item \textit{not} inserting $\tildei + 1, \ldots, n$ on the leaf or to the immediate left of $i = \tildei$ in the first branch point on the ancestral path from $i$ in $\hat{T}_{\tildei}, \ldots \hat{T}_{n-1}$, respectively, if $i = \tildei$ is places anywhere else.
+            \end{itemize}
+            %
+            Following this characterization we have shown that $\hat{T}_{\tildei - 1} \independent E_{i, \tildei}$ for all $1 \leq i \leq \tildei \leq n$, proving the first assertion of the lemma.
+            
+            For the second assertion we start by noting that
+            %
+            \begin{align}\label{ImpLemmaStartPoint}
+              \P \left( \hat{T}_{\tildei - 1} \in \cdot \mid E_{i,\tildei} \right) = \P \left( \hat{T}_{\tildei - 1} \in \cdot \right)
+            \end{align}
+            %
+            due to the independence proven above.
+            Now that we can construct $\tau \left( \hat{T}_n, i, \tildei \right)$ from $\hat{T}_{\tildei - 1}$ under the conditional law of $E_{i, \tildei}$:
+            The leaf $\tildei$ is never attached and so the `forbidden edges', characterized above, does not exist.
+            But every leaf that was previously labelled $\tildei, \ldots, n$ will still be attached according to the $(\alpha, \gamma)$-growth rule.
+            \fxfatal{Should this argument be more elaborate? Maybe provide figures for the various cases?}
+            This shows that
+            %
+            \begin{align}\label{ImpLemmaEnd}
+              \P \left( \hat{\pi} \left( \hat{\tau} \left( \hat{T}_n, i, \tildei \right) \right) \in \cdot \mid E_{i, \tildei} \right)
+              = \P \left( \hat{T}_{n-1} \in \cdot \right)
+            \end{align}
+            %
+            finalizing the proof.
+    \end{itemize}
+\end{proof}
+%
+With the above lemma in hand Theorem~\ref{StationarityTheorem} is within reach, by conditioning on $E_{i, \tildei}$ for fixed values of $i$ and $\tildei$:
+%
+\begin{proof}[Proof of Theorem~\ref{StationarityTheorem}]
+    Fix $n \in \N$.
+    That the $(\alpha, \gamma)$-chain on $\T_n^*$ is stationary is easily seen, since the state space is finite and there is a unique, recurrent communicating class for
+    %
+    \begin{itemize}
+        \item $\alpha = 1$ and all $\gamma \in (0,1)$ (only insertions in branch points or internal edges allowed),
+        \item $\gamma = 0$ and all $\alpha \in (0,1)$ (only insertions in branch points or leaves allowed),
+        \item $\gamma = \alpha$ and all $\alpha \in (0,1)$ (binary trees),
+    \end{itemize}
+    %
+    and that the Markov Chain is irreducible otherwise.
+    Thus we are done if we can show that $T_1^n \deq T_0^n = T_n$, which we will do by utilizing Lemma~\ref{StatImportantLemma}.
+    Let $U$ be a uniform random variable on $[n]$, independent of everything else, and note that for all $t \in \T_{n-1}$ it holds that
+    %
+    \begin{align*}
+        \P \left( \tau \left( T_n, U \right) = t \right)
+        &= \sum_{1 \leq i \leq \tildei \leq n} \P \left( \tau \left( T_n, i, \tildei \right) = t \mid E_{i, \tildei} \cap (U = i) \right) \P \left( E_{i, \tildei} \cap (U = i) \right) \\
+        &= \sum_{1 \leq i \leq \tildei \leq n} \P \left( T_{n-1} = t \right) \P \left( E_{i, \tildei} \cap (U = i) \right) \\
+        &= \P \left( T_{n-1} = t \right)
+    \end{align*}
+    %
+    where we have used the independence of $U$ as well as Lemma~\ref{StatImportantLemma}.
+    This shows that $\tau \left( T_n, U \right) \deq T_{n-1}$, and since $T_1^n$ is constructed from the former using the exact same operation as $T_n$ is constructed from the latter, this finishes our proof.
+\end{proof}

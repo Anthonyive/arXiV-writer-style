@@ -1,0 +1,171 @@
+\begin{tikzpicture}[
+    bp/.style={rectangle, fill, inner sep=0pt, minimum width=2pt, minimum height=2pt},
+    comment/.style={circle, draw, color=orange},
+    leaf/.style={inner sep=1pt},
+    weights/.style={auto, swap, orange, inner sep = 1pt},
+    label/.style={text=oxfordblue},
+    line/.style={-, line width = 2pt, color = oxfordblue},
+    arrowline/.style={->, line width = 1pt, color = oxfordblue, >=stealth},
+    scale=1
+  ]
+  \tikzstyle{every node}=[font=\tiny]
+
+  %
+  % Tree shape
+  %
+
+  \begin{scope}[xscale = -1]
+    %
+    \node (0) at (0,0) {};
+    \node (bp) at (0,1) {};
+    \node[leaf] (4) at (-1,2) {$4$};
+    \node (v) at (1,2) {};
+
+  % 1 subtree (from left)
+    \node (bp2) at (0,2.3) {};
+    \node[leaf] (8) at (-0.5, 3) {$8$};
+    \node[leaf] (6) at (0.5, 3) {$6$};
+
+  % 2 subtree (from left)
+    \node[leaf] (3) at (0.85,3) {$3$};
+
+  % 3 subtree (from left)
+    \node (bp3) at (1.7,3) {};
+    \node[leaf] (7) at (1.2, 4) {$7$};
+    \node[leaf] (5) at (1.7, 4) {$5$};
+    \node[leaf] (2) at (2.2, 4) {$2$};
+
+  % 4 subtree (from left)
+    \node[leaf] (1) at (2.1,2.3) {$1$};
+
+    \draw[line] (0.mid) to (bp.mid) to (4);
+    \draw[line] (bp.mid) to (v.mid) to (bp2.mid) to (8);
+    \draw[line] (bp2.mid) to (6);
+    \draw[line] (v.mid) to (3);
+    \draw[line] (v.mid) to (bp3.mid) to (7);
+    \draw[line] (bp3.mid) to (5);
+    \draw[line] (bp3.mid) to (2);
+    \draw[line] (v.mid) to (1);
+
+    \node[orange] at (v.south west) {$v$};
+
+    \node at (1,0.5) {\normalsize $\tree$};
+  %
+  \end{scope}
+  %
+  % Semi-planar version
+  %
+
+  \begin{scope}[shift = {(9,0)}, xscale = -1]
+
+    \node (0) at (0,0) {};
+
+    \node[bp] (bp_1) at (0,1) {};
+    \node[bp] (bp_2) at (1,1) {};
+    \node[leaf] (4) at (0.5,2.1) {$4$};
+
+    \node[bp] (v_1) at (1.8,2) {};
+    \node[bp] (v_2) at (3,2) {};
+    \node[bp] (v_3) at (4,2) {};
+    \node[bp] (v_4) at (6.5,2) {};
+
+  % 1 subtree (from left) (v_1)
+    \node[bp] (bp2_1) at (4,3) {};
+    \node[bp] (bp2_2) at (5,3) {};
+    \node[leaf] (8) at (4.5, 4) {$8$};
+    \node[leaf] (6) at (5.5, 4) {$6$};
+
+  % 2 subtree (from left) (v_2)
+    \node[leaf] (3) at (3,3) {$3$};
+
+  % 3 subtree (from left) (v_3)
+    \node[bp] (bp3_1) at (5.8,3) {};
+    \node[bp] (bp3_2) at (6.7,3) {};
+    \node[bp] (bp3_3) at (7.5,3) {};
+    \node[leaf] (7) at (6.7, 4) {$7$};
+    \node[leaf] (5) at (7, 4) {$5$};
+    \node[leaf] (2) at (8, 4) {$2$};
+
+  % 4 subtree (from left)
+    \node[leaf] (1) at (7,2.7) {$1$};
+
+    \draw[line] (0) to (bp_1);
+    \draw[line] (bp_2.center) to (4);
+
+    \draw[line] (bp_2.center) to (v_1.center);
+    \draw[line] (v_2.center) to (3);
+    \draw[line] (bp2_2.center) to (8);
+    \draw[line] (bp2_2.center) to (6);
+
+    \draw[line] (v_3.center) to (bp2_1.center);
+
+    \draw[line] (v_4.center) to (bp3_1.center);
+    \draw[line] (bp3_2.center) to (7);
+    \draw[line] (bp3_3.center) to (5);
+    \draw[line] (bp3_3.center) to (2);
+
+    \draw[line] (v_4.center) to (1);
+
+    \draw[line, orange] (bp_1.east) to node[weights] {$\alpha - \gamma$} (bp_2.west);
+    \draw[line, orange] (v_1.east) to node[weights] {$\alpha - \gamma$} (v_2) to node[weights] {$\alpha$} (v_3) to node[weights] {$\alpha$} (v_4.west);
+    \draw[line, orange] (bp2_1.east) to node[weights] {$\alpha - \gamma$} (bp2_2.west);
+    \draw[line, orange] (bp3_1.east) to node[weights] {$\alpha - \gamma$} (bp3_2) to node[weights] {$\alpha$} (bp3_3.west);
+    
+    \node at (4,0.5) {\normalsize $\that = (\tree, \treesigma)$};
+  \end{scope}
+%  \begin{scope}[shift = {(9,0)}, xscale = -1]
+%
+%    \node (0) at (0,0) {};
+%
+%    \node[bp] (bp_1) at (0,1) {};
+%    \node[bp] (bp_2) at (1,1) {};
+%    \node[leaf] (4) at (0.5,2.1) {$4$};
+%
+%    \node[bp] (v_1) at (1.8,2) {};
+%    \node[bp] (v_2) at (3,2) {};
+%    \node[bp] (v_3) at (5,2) {};
+%    \node[bp] (v_4) at (6.5,2) {};
+%
+%  % 1 subtree (from left) (v_1)
+%    \node[bp] (bp2_1) at (3,3) {};
+%    \node[bp] (bp2_2) at (4,3) {};
+%    \node[leaf] (8) at (4.5, 4) {$8$};
+%    \node[leaf] (6) at (5.5, 4) {$6$};
+%
+%  % 2 subtree (from left) (v_2)
+%    \node[leaf] (3) at (5,3) {$3$};
+%
+%  % 3 subtree (from left) (v_3)
+%    \node[bp] (bp3_1) at (5.8,3) {};
+%    \node[bp] (bp3_2) at (6.7,3) {};
+%    \node[bp] (bp3_3) at (7.5,3) {};
+%    \node[leaf] (7) at (6.7, 4) {$7$};
+%    \node[leaf] (5) at (7, 4) {$5$};
+%    \node[leaf] (2) at (8, 4) {$2$};
+%
+%  % 4 subtree (from left)
+%    \node[leaf] (1) at (7,2.7) {$1$};
+%
+%    \draw[line] (0) to (bp_1);
+%    \draw[line] (bp_2.center) to (4);
+%
+%    \draw[line] (bp_2.center) to (v_1.center);
+%    \draw[line] (v_2.center) to (bp2_1.center);
+%    \draw[line] (bp2_2.center) to (8);
+%    \draw[line] (bp2_2.center) to (6);
+%
+%    \draw[line] (v_3.center) to (3);
+%
+%    \draw[line] (v_4.center) to (bp3_1.center);
+%    \draw[line] (bp3_2.center) to (7);
+%    \draw[line] (bp3_3.center) to (5);
+%    \draw[line] (bp3_3.center) to (2);
+%
+%    \draw[line] (v_4.center) to (1);
+%
+%    \draw[line, orange] (bp_1.east) to node[weights] {$\alpha - \gamma$} (bp_2.west);
+%    \draw[line, orange] (v_1.east) to node[weights] {$\alpha - \gamma$} (v_2) to node[weights] {$\alpha$} (v_3) to node[weights] {$\alpha$} (v_4.west);
+%    \draw[line, orange] (bp2_1.east) to node[weights] {$\alpha - \gamma$} (bp2_2.west);
+%    \draw[line, orange] (bp3_1.east) to node[weights] {$\alpha - \gamma$} (bp3_2) to node[weights] {$\alpha$} (bp3_3.west);
+%  \end{scope}
+\end{tikzpicture}

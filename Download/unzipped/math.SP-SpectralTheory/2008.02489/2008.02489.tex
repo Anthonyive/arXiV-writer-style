@@ -1,0 +1,2058 @@
+\documentclass[11pt,a4paper]{amsart}
+\usepackage{amsfonts,amsmath,amssymb,amsthm,mathtools}
+\usepackage[noadjust]{cite}
+\usepackage[textsize=tiny]{todonotes}
+
+\numberwithin{equation}{section}
+
+\DeclareMathOperator{\Ker}{Ker}
+\DeclareMathOperator{\Ran}{Ran}
+\DeclareMathOperator{\Dom}{Dom}
+\DeclareMathOperator{\spec}{spec}
+\DeclareMathOperator{\sign}{sign}
+\DeclareMathOperator{\Tan}{Tan}
+\DeclareMathOperator{\divgc}{div}
+\DeclareMathOperator{\grad}{grad}
+
+\DeclareSymbolFont{SY}{U}{psy}{m}{n}
+\DeclareMathSymbol{\emptyset}{\mathord}{SY}{'306}
+
+\DeclarePairedDelimiter{\abs}{|}{|}
+\DeclarePairedDelimiter{\norm}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\scprod}{\langle}{\rangle}
+
+\newcommand{\dd}{\mathrm d}
+\newcommand{\eps}{\varepsilon}
+
+\newcommand{\ess}{\mathrm{ess}}
+
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\NN}{\mathbb{N}}
+\newcommand{\RR}{\mathbb{R}}
+\newcommand{\CC}{\mathbb{C}}
+\newcommand{\EE}{\mathsf{E}}
+
+\newcommand{\cC}{{\mathcal C}}
+\newcommand{\cD}{{\mathcal D}}
+\newcommand{\cH}{{\mathcal H}}
+\newcommand{\cK}{{\mathcal K}}
+%\newcommand{\cM}{{\mathcal M}}
+\newcommand{\cQ}{{\mathcal Q}}
+
+\newcommand{\fa}{{\mathfrak a}}
+\newcommand{\fb}{{\mathfrak b}}
+\newcommand{\fv}{{\mathfrak v}}
+\newcommand{\fD}{{\mathfrak D}}
+\newcommand{\fM}{{\mathfrak M}}
+
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{hypothesis}[theorem]{Hypothesis}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Title and other information on the work
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title[On a minimax principle in spectral gaps]{On a minimax principle in spectral gaps}
+\subjclass[2010]{Primary 49Rxx; Secondary 47A10, 47A75}
+\keywords{Minimax values, eigenvalues in gap of the essential spectrum, block diagonalization, Stokes operator}
+\date{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Author
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\author[A.\ Seelmann]{Albrecht Seelmann}
+\address{A.~Seelmann,
+ Technische Univer\-si\-t\"at Dortmund, Fakult\"at f\"ur Mathematik, D-44221 Dortmund, Germany}
+\email{albrecht.seelmann@math.tu-dortmund.de}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Begin of the work
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Abstract
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+  The minimax principle for eigenvalues in gaps of the essential spectrum by Griesemer, Lewis, and Siedentop
+  in~[Doc.~Math.~\textbf{4} (1999), 275--283] is adapted to cover certain abstract perturbative settings with bounded or
+  unbounded perturbations, in particular ones that are off-diagonal with respect to the spectral gap under consideration. This in
+  part builds upon and extends the considerations in the author's appendix to~[arXiv:1804.07816]. Several monotonicity and
+  continuity properties of eigenvalues in gaps of the essential spectrum are deduced, and the Stokes operator is revisited as an
+  example.
+\end{abstract}
+
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Introduction
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction and main result}\label{sec:intro}
+
+The standard Courant minimax values $\lambda_k(A)$ of a lower semibounded operator $A$ on a Hilbert space $\cH$ are given by
+\begin{equation*}
+  \lambda_k(A)
+  =
+  \inf_{\substack{\fM\subset\Dom(A)\\ \dim\fM=k}} \sup_{\substack{x\in\fM\\ \norm{x}=1}} \scprod{ x , Ax }
+  =
+  \inf_{\substack{\fM\subset\Dom(|A|^{1/2})\\ \dim\fM=k}} \sup_{\substack{x\in\fM\\ \norm{x}=1}} \fa[x,x]
+\end{equation*}
+for $k\in\N$ with $k\le\dim\cH$, see, e.g.,~\cite[Theorem~12.1]{LL01} and also~\cite[Section~12.1 and Exercise~12.4.2]{Schm12}.
+Here, $\langle\cdot,\cdot\rangle$ denotes the inner product of $\cH$, and $\fa$ with
+$\fa[x,x] = \scprod{ \abs{A}^{1/2}x , \sign(A)\abs{A}^{1/2}x }$ for $x\in\Dom(\abs{A}^{1/2})$ is the form associated with $A$.
+
+The above minimax values have proved to be a powerful description of the eigenvalues below the essential spectrum of $A$; in
+fact, they agree with these eigenvalues in nondecreasing order counting multiplicities. A standard application in this context is
+that these eigenvalues exhibit a monotonicity with respect to the operator: for two self-adjoint operators $A$ and $B$ with
+$A\le B$ in the sense of quadratic forms one has $\lambda_k(A) \le \lambda_k(B)$ for all $k$, see,
+e.g.,~\cite[Corollary~12.3]{Schm12}.
+
+Matters get, however, much more complicated when eigenvalues in a gap of the essential spectrum are considered. If $A_+$ is the
+(lower semibounded) part of $A$ with spectrum in an interval of the form $(\gamma,\infty)$, $\gamma\in\R$, then the minimax
+values for $A_+$ still describe the eigenvalues of $A_+$ below its essential spectrum and thus the eigenvalues of $A$ in
+$(\gamma, \infty)$ below the essential spectrum of $A$ above $\gamma$. However, the subspaces over which the corresponding
+infimum is taken are chosen within the spectral subspace for $A$ associated with the interval $(\gamma,\infty)$ and therefore
+usually depend on the operator itself rather than just its domain. This makes it difficult to compare minimax values in spectral
+gaps of two different operators $A$ and $B$, even if their domains agree.
+
+In~\cite{GLS99}, Griesemer, Lewis, and Siedentop devised an abstract minimax principle for eigenvalues in spectral gaps that
+allows to overcome these problems. However, the corresponding hypotheses seem to be hard to verify on an abstract level,
+cf.~Remark~\ref{rem:neg}\,(2) below. In the particular situation of bounded additive perturbations, the present author has
+adapted this abstract minimax principle in the appendix to~\cite{NSTTV18} with hypotheses that can in some cases be verified
+explicitly by means of the Davis-Kahan $\sin2\Theta$ theorem from~\cite{DK70} and variants thereof. This has been successfully
+applied in~\cite{NSTTV18} to study lower bounds on the movement of eigenvalues in gaps of the essential spectrum and of edges of
+the essential spectrum. In the present note, the considerations from~\cite[Appendix~A]{NSTTV18} are supplemented and extended to
+cover also certain unbounded perturbations, in particular ones that are off-diagonal with respect to the spectral gap under
+consideration. It should be mentioned that some of the results discussed here might also be obtained with the alternative
+approaches from~\cite{DES00, DES06, MM15, LS16}. However, the present work focuses on~\cite{GLS99} as a starting point since the
+techniques employed to apply that abstract minimax principle promise to be of a broader interest.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Main results
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{Main results}
+In order to formulate our main results, it is convenient to fix the following notational setup in the case where $\gamma = 0$;
+the case of general $\gamma \in \RR$ can of course always be reduced to this situation by spectral shift,
+cf.~Remark~\ref{rem:spectralShift} and also the proofs of Proposition~\ref{prop:boundedPert} below.
+
+\begin{hypothesis}\label{hyp:minimax}
+  Let $A$ be a self-adjoint operator on a Hilbert space. Denote the spectral projectors for $A$ associated with the intervals
+  $(0,\infty)$ and $(-\infty,0]$ by $P_+$ and $P_-$, respectively, that is,
+  \begin{equation*}
+    P_+ := \EE_A\bigl((0,\infty)\bigr)
+    ,\quad
+    P_- := I-P_+
+    ,
+  \end{equation*}
+  and let
+  \begin{equation*}
+    \cD_\pm := \Ran P_\pm \cap \Dom(A)
+    ,\quad
+    \fD_\pm := \Ran P_\pm \cap \Dom(\abs{A}^{1/2})
+    .
+  \end{equation*}
+  Moreover, let $B$ be another self-adjoint operator on the same Hilbert space with analogously defined spectral projections
+  \begin{equation*}
+    Q_+ := \EE_B\bigl((0,\infty)\bigr)
+    ,\quad
+    Q_- := I - Q_+
+    ,
+  \end{equation*}
+  and denote by $\fb$ the form associated with $B$, that is,
+  \begin{equation*}
+    \fb[x,y] = \scprod{ \abs{B}^{1/2}x , \sign(B)\abs{B}^{1/2}y }
+  \end{equation*}
+  for $x,y\in\Dom(\fb) = \Dom(\abs{B}^{1/2})$.
+\end{hypothesis}
+
+Here, $\EE_A$ and $\EE_B$ stand for the projection-valued spectral measures for the operators $A$ and $B$, respectively, and
+$\Ran P_\pm$ denotes the range of $P_\pm$. We have also used the notation $I$ for the identity operator.
+
+Denoting the form associated with $A$ by $\fa$, the minimax values of the positive part $A|_{\Ran P_+}$ of $A$ can clearly be
+written as
+\begin{equation*}
+  \lambda_k(A|_{\Ran P_+})
+  =
+  \inf_{\substack{\fM_+\subset\cD_+\\ \dim\fM_+=k}} \sup_{\substack{x\in\fM_+ \oplus \cD_-\\ \norm{x}=1}} \scprod{ x , Ax }
+  =
+  \inf_{\substack{\fM_+\subset\fD_+\\ \dim\fM_+=k}} \sup_{\substack{x\in\fM_+ \oplus \fD_-\\ \norm{x}=1}} \fa[x,x]
+\end{equation*}
+for $k\in\N$ with $k \le \dim \Ran P_+$. In our main results below we give conditions on $B$ under which the minimax values for
+the positive part $B|_{\Ran Q_+}$ of $B$ admit the same representations with $\scprod{x , Ax }$ and $\fa[x , x]$ replaced by
+$\scprod{x , Bx}$ and $\fb[x , x]$, respectively, but with the infima taken over the same respective families of subspaces as for
+$A$. It is natural to consider this in an perturbative framework where $B$ is obtained by an operator or form perturbation of $A$
+and, thus, one has $\Dom(A) = \Dom(B)$ and/or $\Dom(\abs{A}^{1/2}) = \Dom(\abs{B}^{1/2})$.
+
+Four results in this direction are presented here, each addressing different situations. We first treat the case of operator
+perturbations and start with the direct extension of~\cite[Theorem~A.2]{NSTTV18} to infinitesimal perturbations. Recall that an
+operator $V$ is called $A$-bounded with $A$-bound $b_* \ge 0$ if $\Dom(V) \supset \Dom(A)$ and for all $b > b_*$ there is some
+$a \ge 0$ with
+\begin{equation*}
+  \norm{ Vx }
+  \le
+  a\norm{x} + b\norm{Ax}
+  \quad\text{ for all }\
+  x \in \Dom(A)
+  .
+\end{equation*}
+If $b_* = 0$, then $V$ is called infinitesimal with respect to $A$.
+
+\begin{theorem}\label{thm:genOpInfinitesimal}
+  Assume Hypothesis~\ref{hyp:minimax}. Suppose, in addition, that $B$ is of the form $B = A + V$ with some symmetric operator $V$
+  that is infinitesimal with respect to $A$. Furthermore, suppose that $\norm{P_+Q_-} < 1$ and that
+  \begin{equation*}
+    \scprod{ x , Bx } \le 0 \quad\text{ for all }\ x \in \cD_-.
+  \end{equation*}
+  Then,
+  \begin{equation*}
+    \lambda_k(B|_{\Ran Q_+})
+    =
+    \inf_{\substack{\fM_+\subset\cD_+\\ \dim\fM_+=k}} \sup_{\substack{x\in\fM_+ \oplus \cD_-\\ \norm{x}=1}} \scprod{ x , Bx }
+    =
+    \inf_{\substack{\fM_+\subset\fD_+\\ \dim\fM_+=k}} \sup_{\substack{x\in\fM_+ \oplus \fD_-\\ \norm{x}=1}} \fb[x,x]
+  \end{equation*}
+  for all $k \in \NN$ with $k \le \dim\Ran P_+$.
+\end{theorem}
+
+Two remarks regarding Theorem~\ref{thm:genOpInfinitesimal} are in order:
+(1)
+also certain perturbations $V$ that are not infinitesimal with respect to $A$ can be considered here, but at the cost of a
+stronger assumption on $\norm{P_+Q_-}$, see Remark~\ref{rem:relBoundK} below;
+(2)
+the condition $\norm{P_+Q_-} < 1$ is satisfied if the stronger inequality $\norm{P_+-Q_+} < 1$ holds. In the latter case, the
+subspaces $\Ran P_+$ and $\Ran Q_+$ have the same dimension, that is, $\dim \Ran P_+ = \dim \Ran Q_+$, see
+Remark~\ref{rem:PQbij}\,(a) below.
+
+The stronger condition~$\norm{P_+-Q_+} < 1$ just mentioned in fact also opens the way to employ a different approach than the one
+used to prove Theorem~\ref{thm:genOpInfinitesimal}. This alternative approach has previously been used in the context of block
+diagonalization of operators and forms, see Section~\ref{sec:blockDiag} below, and is particularly attractive if the unperturbed
+operator $A$ is semibounded.
+
+\begin{theorem}\label{thm:genSemibounded}
+  Assume Hypothesis~\ref{hyp:minimax}. Suppose, in addition, that $A$ is semibounded and that $\norm{P_+ - Q_+} < 1$.
+
+  If $\Dom(\abs{A}^{1/2}) = \Dom(\abs{B}^{1/2})$ and $\fb[ x , x ] \le 0$ for all $x \in \fD_-$, then
+  \begin{equation}\label{eq:genSemibounded:form}
+    \lambda_k(B|_{\Ran Q_+})
+    =
+    \inf_{\substack{\fM_+\subset\fD_+\\ \dim\fM_+=k}} \sup_{\substack{x\in\fM_+ \oplus \fD_-\\ \norm{x}=1}} \fb[x,x]
+  \end{equation}
+  for all $k \le \dim\Ran P_+ = \dim\Ran Q_+$. If even $\Dom(A) = \Dom(B)$ and $\scprod{ x , Bx } \le 0$ for all $x \in \cD_-$,
+  then also
+  \begin{equation}\label{eq:genSemibounded:op}
+    \lambda_k(B|_{\Ran Q_+})
+    =
+    \inf_{\substack{\fM_+\subset\cD_+\\ \dim\fM_+=k}} \sup_{\substack{x\in\fM_+ \oplus \cD_-\\ \norm{x}=1}} \scprod{ x , Bx }
+  \end{equation}
+  for all $k \le \dim\Ran P_+ = \dim\Ran Q_+$.
+\end{theorem}
+
+It should be emphasized that the conditions $\Dom(A) = \Dom(B)$ and $\scprod{ x , Bx } \le 0$ for all $x \in \cD_-$ in
+Theorem~\ref{thm:genSemibounded} indeed imply that one has also $\Dom(\abs{A}^{1/2}) = \Dom(\abs{B}^{1/2})$ and
+$\fb[ x , x ] \le 0$ for all $x \in \fD_-$, see Lemma~\ref{lem:GLS} below. Note also that in contrast to
+Theorem~\ref{thm:genOpInfinitesimal}, Theorem~\ref{thm:genSemibounded} makes no assumptions on how the operator $B$ is obtained
+from $A$. The latter will, however, be relevant when the hypotheses of Theorem~\ref{thm:genSemibounded} are to be verified in
+concrete situations.
+
+The condition $\scprod{ x , Bx } \le 0$ for all $x \in \cD_-$ plays an important role in both
+Theorems~\ref{thm:genOpInfinitesimal} and~\ref{thm:genSemibounded}. In the case where $B = A + V$ with some $A$-bounded symmetric
+operator $V$ as in Theorem~\ref{thm:genOpInfinitesimal}, this condition is automatically satisfied if $\scprod{ x , Vx } \le 0$
+for all $x \in \cD_-$ since $\scprod{ x , Ax } \le 0$ holds for all $x \in \cD_-$ by definition. A particular instance of such
+perturbations $V$ are so-called~\emph{off-diagonal} perturbations with respect to the decomposition $\Ran P_+ \oplus \Ran P_-$,
+in which case also the condition $\norm{P_+-Q_+} < 1$ can be verified efficiently. In comparison with
+Theorem~\ref{thm:genOpInfinitesimal}, we may even relax the assumption on the $A$-bound of $V$ here.
+
+\begin{theorem}\label{thm:offdiagOp}
+  Assume Hypothesis~\ref{hyp:minimax}. Suppose, in addition, that $B$ has the form $B = A + V$ with some symmetric $A$-bounded
+  operator $V$ with $A$-bound smaller than $1$ and which is off-diagonal on $\Dom(A)$ with respect to the decomposition
+  $\Ran P_+ \oplus \Ran P_-$, that is,
+  \begin{equation*}
+    P_-VP_- x = 0 = P_+VP_+ x \quad\text{ for all }\ x \in \Dom(A).
+  \end{equation*}
+  Then, one has $\dim\Ran P_+ = \dim\Ran Q_+$ and
+  \begin{equation*}
+    \lambda_k(B|_{\Ran Q_+})
+    =
+    \inf_{\substack{\fM_+\subset\cD_+\\ \dim\fM_+=k}} \sup_{\substack{x\in\fM_+ \oplus \cD_-\\ \norm{x}=1}} \scprod{ x , Bx }
+    =
+    \inf_{\substack{\fM_+\subset\fD_+\\ \dim\fM_+=k}} \sup_{\substack{x\in\fM_+ \oplus \fD_-\\ \norm{x}=1}} \fb[x,x]
+  \end{equation*}
+  for all $k \in \NN$ with $k \le \dim\Ran Q_+$.
+\end{theorem}
+
+The last theorem can to some extend be formulated also for off-diagonal form perturbations, at least in the semibounded setting.
+The latter restriction is commented on in Section~\ref{sec:blockDiag} below.
+
+\begin{theorem}\label{thm:offdiagForm}
+  Assume Hypothesis~\ref{hyp:minimax}. Suppose, in addition, that $B$ is semibounded and that its form $\fb$ is given by
+  $\fb = \fa + \fv$, where $\fa$ is the form associated with $A$ and $\fv$ is a symmetric sesquilinear form satisfying
+  \begin{equation*}
+    \fv[ P_+x , P_+y ]
+    =
+    0
+    =
+    \fv[ P_-x , P_-y ]
+    \quad\text{ for all }\
+    x,y \in \Dom[\fa] \subset \Dom[\fv]
+  \end{equation*}
+  and
+  \begin{equation}\label{eq:formRelBound}
+    \abs{ \fv[ x , x ] }
+    \le
+    a\norm{x}^2 + b\abs{\fa[ x , x ]}
+    \quad\text{ for all }\
+    x \in \Dom(\abs{A}^{1/2}) = \Dom[\fa]
+  \end{equation}
+  with some constants $a,b \ge 0$.
+
+  Then, one has $\dim\Ran P_+ = \dim\Ran Q_+$ and
+  \begin{equation*}
+    \lambda_k(B|_{\Ran Q_+})
+    =
+    \inf_{\substack{\fM_+\subset\fD_+\\ \dim\fM_+=k}} \sup_{\substack{x\in\fM_+ \oplus \fD_-\\ \norm{x}=1}} \fb[x,x]
+  \end{equation*}
+  for all $k \in \NN$ with $k \le \dim\Ran Q_+$.
+\end{theorem}
+
+The semiboundedness of $B$ in Theorem~\ref{thm:offdiagForm} forces $A$ to be semibounded as well, see the proof of
+Theorem~\ref{thm:offdiagForm} below. In turn, it is natural to suppose that $A$ is semibounded and then to guarantee the
+semiboundedness of $B$ via the well-known KLMN theorem by ensuring~\eqref{eq:formRelBound} with $b < 1$. In this regard,
+Theorem~\ref{thm:offdiagForm} can be interpreted as a particular case of Theorem~\ref{thm:genSemibounded} with
+$\Dom(\abs{A}^{1/2}) = \Dom(\abs{B}^{1/2})$, in which the remaining hypotheses are automatically satisfied due to the structure
+of the perturbation. 
+
+The rest of this note is organized as follows. In Section~\ref{sec:applications} we discuss applications of the main theorems and
+revisit the Stokes operator as an example in the framework of Theorem~\ref{thm:offdiagForm}.
+%
+Section~\ref{sec:abstrMinimax} is devoted to an abstract minimax principle based on~\cite{GLS99}.
+%
+Two approaches are then used to verify the hypotheses of this abstract minimax principle, the~\emph{graph norm approach} and
+the~\emph{block diagonalization approach}, respectively, which are discussed separately in Sections~\ref{sec:graphNorm}
+and~\ref{sec:blockDiag} below.
+%
+Theorem~\ref{thm:genOpInfinitesimal} is proved in Section~\ref{sec:graphNorm}, which is based on the author's appendix
+to~\cite{NSTTV18} and extends the corresponding considerations to certain unbounded perturbations $V$.
+%
+Theorems~\ref{thm:genSemibounded}--\ref{thm:offdiagForm} are proved in
+Section~\ref{sec:blockDiag}, which builds upon recent developments on block diagonalization of operators and forms
+from~\cite{MSS16} and~\cite{GKMSV17}, respectively.
+%
+Finally, Appendix~\ref{sec:heinz} provides some consequences of the well-known Heinz inequality that are used at various spots in
+this note and are probably folklore.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Applications
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Applications and examples}\label{sec:applications}
+
+In this section, we use the main results from Section~\ref{sec:intro} to prove monotonicity and continuity properties of minimax
+values in gaps of the essential spectrum in various situations and also revisit the well-known Stokes operator in the framework
+of Theorem~\ref{thm:offdiagForm} as an example. We first consider the situation of indefinite or semidefinite bounded
+perturbations, which has essentially been discussed in a slightly different form in~\cite{NSTTV18}.
+
+For a bounded self-adjoint operator $V$ we define bounded nonnegative operators $V^{(p)}$ and $V^{(n)}$ with
+$V = V^{(p)} - V^{(n)}$ via functional calculus by
+\begin{equation}\label{eq:defVpVn}
+  V^{(p)} := (1 + \sign(V))V / 2
+  ,\quad
+  V^{(n)} := (\sign(V) - 1)V / 2
+  .
+\end{equation}
+We clearly have $\norm{ V^{(p)} } \le \norm{V}$ and $\norm{ V^{(n)} } \le \norm{V}$.
+
+\begin{proposition}\label{prop:boundedPert}
+  Let the finite interval $(c,d)$ belong to the resolvent set of the self-adjoint operator $A$, and let $V$ be a bounded
+  self-adjoint operator on the same Hilbert space. Define $\cD_+ := \Ran \EE_A([d,\infty)) \cap \Dom(A)$ and
+  $\cD_- := \Ran \EE_A((-\infty,c]) \cap \Dom(A)$.
+
+  If $\norm{V^{(p)}} + \norm{V^{(n)}} < d - c$ with $V^{(p)}$ and $V^{(n)}$ as in~\eqref{eq:defVpVn}, then the interval
+  $(c+\norm{V^{(p)}} , d-\norm{V^{(n)}})$ belongs to the resolvent set of the operator $A + V$, and one has
+  $\dim\Ran \EE_A([d,\infty)) = \dim \Ran\EE_{A+V}([d-\norm{V^{(n)}},\infty))$ and
+  \begin{equation*}
+    \lambda_k\bigl ((A+V)|_{\Ran\EE_{A+V}([d-\norm{V^{(n)}},\infty))} \bigr)
+    =
+    \inf_{\substack{\fM_+ \subset \cD_+\\ \dim\fM_+ = k}} \sup_{\substack{x \in \fM_+ \oplus \cD_-\\ \norm{x}=1}}
+      \scprod{ x , (A+V)x }
+  \end{equation*}
+  for all $k \in \NN$ with $k \le \dim \Ran\EE_{A+V}([d-\norm{V^{(n)}},\infty))$.
+\end{proposition}
+
+\begin{remark}
+  A corresponding representation of the minimax values in terms of the form associated with $A+V$ as in
+  Theorems~\ref{thm:genOpInfinitesimal}--\ref{thm:offdiagOp} holds here as well. However, for the sake of simplicity and since
+  this is not needed in Corollaries~\ref{cor:monotonicity} and~\ref{cor:continuity} below, this has not been formulated in
+  Proposition~\ref{prop:boundedPert}.
+\end{remark}
+
+The above proposition includes the particular cases where $V$ satisfies $\norm{V} < (d - c)/2$ and where $V$ is semidefinite with
+$\norm{V} < d - c$, which essentially have been discussed in the proofs of Theorems~3.14 and~3.15 in~\cite{NSTTV18}; cf.~also the
+discussion after Corollaries~\ref{cor:monotonicity} and~\ref{cor:continuity} below. However, Proposition~\ref{prop:boundedPert}
+allows also certain indefinite perturbations $V$ with $(d - c)/2 \le \norm{V} < d - c$ that were not covered before.
+
+We discuss here two proofs of Proposition~\ref{prop:boundedPert}, one based on Theorem~\ref{thm:genOpInfinitesimal} that is close
+to the proofs of Theorems~3.14 and~3.15 in~\cite{NSTTV18} and the other one based on Theorem~\ref{thm:offdiagOp}. Both emphasize
+different aspects on how to deal with the perturbation $V$.
+
+\begin{proof}[Proof of Proposition~\ref{prop:boundedPert} based on Theorem~\ref{thm:genOpInfinitesimal}]
+  By Proposition~2.1 in~\cite{Seel20}, the interval $(c + \norm{V^{(p)}} , d - \norm{V^{(n)}})$ belongs to the resolvent set of
+  the operator $A + V$.
+
+  Pick $\gamma \in (c + \norm{V^{(p)}} , d - \norm{V^{(n)}})$. We then have $\EE_{A-\gamma}((0,\infty)) = \EE_A([d,\infty))$ as
+  well as $\EE_{A-\gamma}((-\infty,0]) = \EE_A((-\infty,c])$.
+
+  For $x \in \cD_-$ we clearly have
+  \begin{align*}
+    \scprod{ x , (A+V-\gamma)x }
+    &=
+    \scprod{ x , (A-\gamma)x } + \scprod{ x , V^{(p)}x } - \scprod{ x , V^{(n)}x }\\
+    &\le
+    (c - \gamma + \norm{V^{(p)}}) \norm{x}^2
+    <
+    0
+    .    
+  \end{align*}
+  Moreover, with $P_+ := \EE_A([d,\infty))$ and $Q_+ := \EE_{A+V}([d-\norm{V^{(n)}},\infty))$, the variant of the Davis-Kahan
+  $\sin2\Theta$ theorem in~\cite[Theorem~1.1]{Seel20} implies that
+  \begin{equation*}
+  		\norm{ P_+ - Q_+ }
+  		\le
+  		\sin\Bigl( \frac{1}{2} \arcsin \frac{\norm{V^{(p)}} + \norm{V^{(n)}}}{d-c} \Bigr)
+  		<
+  		\frac{\sqrt{2}}{2}
+  		<
+  		1
+    .
+  \end{equation*}
+	Taking into account that $\EE_{A+V-\gamma}((0,\infty)) = Q_+$ and
+  \begin{equation*}
+    \lambda_k((A+V-\gamma)|_{\Ran Q_+}) = \lambda_k((A+V)|_{\Ran Q_+}) - \gamma
+  \end{equation*}
+  for all $k \le \dim\Ran Q_+$, the claim now follows by applying Theorem~\ref{thm:genOpInfinitesimal}; cf.~also
+  Remark~\ref{rem:PQbij}\,(1) below.
+\end{proof}%
+
+\begin{proof}[Proof of Proposition~\ref{prop:boundedPert} based on Theorem~\ref{thm:offdiagOp}]
+  As in the first proof, the interval $(c+\norm{V^{(p)}} , d-\norm{V^{(n)}})$ belongs to the resolvent set of the operator $A+V$.
+  Pick again $\gamma \in (c+\norm{V^{(p)}} , d-\norm{V^{(n)}})$.
+
+  Let $A_+ := A|_{\Ran\EE_A([d,\infty))}$ and $A_- := A|_{\Ran\EE_A((-\infty,c])}$ denote the parts of $A$ associated with
+  $\Ran \EE_{A}([d,\infty))$ and $\Ran \EE_A((-\infty,c])$, respectively. Moreover, for $\bullet \in \{p,n\}$, decompose
+  $V^{(\bullet)}$ as
+  \begin{equation*}
+    V^{(\bullet)}
+    =
+    V_{\text{diag}}^{(\bullet)} + V_{\text{off}}^{(\bullet)}
+    ,
+  \end{equation*}
+  where $V_{\text{diag}}^{(\bullet)} = V_+^{(\bullet)} \oplus V_-^{(\bullet)}$ is the diagonal part of $V^{(\bullet)}$ and
+  $V_{\text{off}}^{(\bullet)}$ is the off-diagonal part of $V^{(\bullet)}$ with respect to
+  $\Ran \EE_A([d,\infty)) \oplus \Ran \EE_A((-\infty,c])$. We clearly have $V_\pm^{(\bullet)} \ge 0$ and
+  $\norm{V_\pm^{(\bullet)}} \le \norm{V^{(\bullet)}}$. Thus,
+  \begin{equation*}
+    A_- + V_-^{(p)} - V_-^{(n)}
+    \le
+    c + \norm{V^{(p)}}
+    <
+    \gamma
+    <
+    d - \norm{V^{(n)}}
+    \le
+    A_+ + V_+^{(p)} - V_+^{(n)}
+    ,
+  \end{equation*}
+  so that
+  \begin{equation*}
+    \EE_A([d,\infty))
+    =
+    \EE_{A + V_{\text{diag}}^{(p)} - V_{\text{diag}}^{(n)}}((\gamma,\infty))
+  \end{equation*}
+  and
+  \begin{equation*}
+    \EE_A((-\infty,c])
+    =
+    \EE_{A + V_{\text{diag}}^{(p)} - V_{\text{diag}}^{(n)}}((-\infty,\gamma])
+    ,
+  \end{equation*}
+  cf.~the proof of~\cite[Proposition~2.1]{Seel19}. Taking into account that $V_\text{off}^{(p)} - V_\text{off}^{(n)}$ is
+  off-diagonal with respect to $\Ran \EE_A([d,\infty)) \oplus \Ran \EE_A((-\infty,c])$ and that
+  $A+V = (A + V_{\text{diag}}^{(p)} - V_{\text{diag}}^{(n)}) + V_\text{off}^{(p)} - V_\text{off}^{(n)}$, the claim now follows
+  from Theorem~\ref{thm:offdiagOp} via a spectral shift by $\gamma$ as in the first proof.
+\end{proof}%
+
+As corollaries to Proposition~\ref{prop:boundedPert}, we obtain the following monotonicity and continuity statements for the
+minimax values in gaps of the essential spectrum.
+
+\begin{corollary}[{cf.~\cite[Theorem~3.15\,(2) and Theorem~3.14]{NSTTV18}}]\label{cor:monotonicity}
+  Let $A$ be as in Proposition~\ref{prop:boundedPert}, and let $V_0$ and $V_1$ be bounded self-adjoint operators on the same
+  Hilbert space satisfying $\max\{ \norm{V_0^{(p)}} + \norm{V_0^{(n)}} , \norm{V_1^{(p)}} + \norm{V_1^{(n)}} \} < d - c$.
+
+  If, in addition, $V_0 \le V_1$, then
+  \begin{equation*}
+    \lambda_k\bigl( (A+V_0)|_{\Ran\EE_{A+V_0}([d-\norm{V_0^{(n)}},\infty))} \bigr)
+    \le
+    \lambda_k\bigl( (A+V_1)|_{\Ran\EE_{A+V_1}([d-\norm{V_1}^{(n)},\infty))} \bigr)
+  \end{equation*}
+  for $k \le \dim\Ran\EE_A([d,\infty)) = \dim\Ran\EE_{A+V_j}([d-\norm{V_j^{(n)}},\infty))$, $j\in\{0,1\}$.
+\end{corollary}
+
+\begin{corollary}\label{cor:continuity}
+  Let $A$ and $V$ be as in Proposition~\ref{prop:boundedPert}. Then, the interval $(c+\norm{V^{(p)}} , d-\norm{V^{(n)}})$ belongs
+  to the resolvent set of every $A+tV$, $t \in [0,1]$, and for each
+  $k \le \dim \Ran \EE_A([d,\infty)) = \dim \Ran \EE_{A+tV}([d-t\norm{V^{(n)}},\infty))$, $t \in [0,1]$, the mapping
+  \begin{equation*}
+    [0,1]
+    \ni
+    t
+    \mapsto
+    \lambda_k((A+tV)|_{\Ran\EE_{A+tV}([d-t\norm{V^{(n)}},\infty))})
+  \end{equation*}
+  is Lipschitz continuous with Lipschitz constant $\norm{V}$.
+\end{corollary}
+
+\begin{proof}
+  Taking into account that
+  \begin{equation*}
+    \scprod{ x , (A+sV)x } - \abs{t-s}\norm{V}
+    \le
+    \scprod{ x , (A+tV)x }
+    \le
+    \scprod{ x , (A+sV)x } + \abs{t-s}\norm{V}
+  \end{equation*}
+  for all $x \in \Dom(A)$, the claim follows immediately from Proposition~\ref{prop:boundedPert}.
+\end{proof}%
+
+It should again be mentioned that the above statements include the particular cases where the norm of the perturbations is less
+than $(d - c)/2$ or where the perturbations are semidefinite with a norm less than $d - c$. These cases have essentially been
+discussed in~\cite{NSTTV18}. There, especially lower bounds on the movement of eigenvalues in gaps of the essential spectrum
+under certain conditions and the behaviour of edges of the essential spectrum have been studied. However, since this is not the
+main focus of the present note, this is not pursued further here.
+
+The second proof of Proposition~\ref{prop:boundedPert} discussed above is flexible enough to handle also unbounded
+perturbations that are small enough in a certain sense, at least in the semibounded setting. This is demonstrated in the
+following result for the case where $A$ is lower semibounded.
+
+\begin{proposition}\label{prop:unboundedPert}
+  Let $A$, $(c,d)$, and $\cD_\pm$ be as in Proposition~\ref{prop:boundedPert}, and suppose, in addition, that $A$ is lower
+  semibounded. Let $V$ be a symmetric operator that is $A$-bounded with $A$-bound smaller than $1$. Moreover, suppose that there
+  are constants $a, b \ge 0$, $b < 1$, with
+  \begin{equation*}
+    \abs{ \scprod{ x , Vx } }
+    \le
+    a \norm{x}^2 + b \scprod{ x , Ax }
+    \quad\text{ for all }\
+    x \in \Dom(A)
+  \end{equation*}
+  and
+  \begin{equation}\label{eq:unboundedPert}
+    2a + b(c+d) < d - c.
+  \end{equation}
+  Then, the interval $(a+(1+b)c , (1-b)d-a)$ belongs to the resolvent set of $A+V$, and one has
+  $\dim \Ran \EE_A( [d,\infty) ) = \dim \EE_{A+V}( [(1-b)d-a,\infty) )$ and
+  \begin{equation*}
+    \lambda_k((A+V)|_{\Ran\EE_{A+V}([(1-b)d-a,\infty))})
+    =
+    \inf_{\substack{\fM_+ \subset \cD_+\\ \dim\fM_+ = k}} \sup_{\substack{x\in\fM_+\oplus\cD_-\\ \norm{x}=1}}
+      \scprod{ x , (A+V)x }
+  \end{equation*}
+  for all $k \in \NN$ with $k \le \dim\Ran \EE_{A+V}([(1-b)d-a,\infty))$.
+\end{proposition}
+
+\begin{proof}
+  For $x \in \Dom(A) = \Dom(A+V)$, we clearly have
+  \begin{equation*}
+    (1-b)\scprod{ x , Ax } - a\norm{x}^2
+    \le
+    \scprod{ x , (A+V)x }
+    \le
+    (1+b)\scprod{ x , Ax } + a\norm{x}^2
+    .
+  \end{equation*}
+  According to~\eqref{eq:unboundedPert}, we may pick $\gamma \in \RR$ satisfying the two-sided inequality
+  $a + (1+b)c < \gamma < (1-b)d - a$. Let $A_\pm$ be as in the second proof of Proposition~\ref{prop:boundedPert}, and again
+  decompose the perturbation $V$ as $V = V_\text{diag} + V_\text{off}$ with diagonal part $V_\text{diag} = V_+ \oplus V_-$
+  and off-diagonal part $V_\text{off}$. The above then gives
+  \begin{equation*}
+    A_- + V_-
+    \le
+    a + (1+b)c
+    <
+    \gamma
+    <
+    (1-b)d - a
+    \le
+    A_+ + V_+
+    ,
+  \end{equation*}
+  so that $\EE_A([d,\infty)) = \EE_{A+V_\text{diag}}((\gamma,\infty)) = \EE_{A+V_\text{diag}}([(1-b)d-a,\infty))$ and
+  $\EE_A((-\infty,c]) = \EE_{A+V_\text{diag}}((-\infty,\gamma])$, and the interval $(a + (1+b)c , (1-b)d - a)$ belongs to the
+  resolvent set of $A+V_\text{diag}$. By~\cite[Theorem~1]{MS06} (cf.~also~\cite[Theorem~2.1]{AL95}), the interval
+  $(a + (1+b)c , (1-b)d - a)$ then belongs also to the resolvent set of $A + V = (A+V_\text{diag}) + V_\text{off}$. The rest of
+  the claim is now proved as in the second proof of Proposition~\ref{prop:boundedPert} via Theorem~\ref{thm:offdiagOp} and a
+  spectral shift by $\gamma$.
+\end{proof}%
+
+\begin{remark}\label{rem:unboundedPert}
+  (1)
+  If $A$ is lower semibounded and the symmetric operator $V$ is $A$-bounded with $A$-bound smaller than $1$, then constants
+  $a, b \ge 0$, $b < 1$, with
+  \begin{equation*}
+    \abs{ \scprod{ x , Vx } }
+    \le
+    a\norm{x}^2 + b \scprod{ x , Ax }
+    \quad\text{ for all }\
+    x \in \Dom(A)
+  \end{equation*}
+  exist by~\cite[Theorem~VI.1.38]{Kato95}. Condition~\eqref{eq:unboundedPert} can then be guaranteed for $tV$ instead of $V$ for
+  $t \in \RR$ with sufficiently small modulus.
+
+  (2)
+  A similar result as in Proposition~\ref{prop:unboundedPert} holds also if instead $A$ is upper semibounded. In this case, one
+  requires constants $a, b \ge 0$, $b < 1$, satisfying $\abs{ \scprod{ x , Vx } } \le a\norm{x}^2 - b \scprod{ x , Ax }$ for all
+  $x \in \Dom(A)$ and $2a - b(c+d) < d-c$. We then get in a completely analogous way a representation for the minimax values of
+  $(A+V)|_{\Ran\EE_{A+V}([(1+b)d-a))}$.
+\end{remark}
+
+As another consequence of Theorem~\ref{thm:offdiagOp}, we obtain the following lower bound for the minimax values in the setting
+of off-diagonal operator perturbations.
+\begin{corollary}\label{cor:lowerboundOffOp}
+  In the situation of Theorem~\ref{thm:offdiagOp}, we have
+  \begin{equation*}
+    \lambda_k(A|_{\Ran P_+})
+    \le
+    \lambda_k(B|_{\Ran Q_+})
+  \end{equation*}
+  for all $k \le \dim\Ran P_+ = \dim \Ran Q_+$.
+\end{corollary}
+
+\begin{proof}
+  Let $\fM_+ \subset \cD_+$ with $\dim\fM_+ = k$. Since $\scprod{ x , Vx } = 0$ for all $x \in \cD_+$ by hypothesis, we have
+  \begin{equation*}
+    \sup_{\substack{x \in \fM_+\\ \norm{x}=1}} \scprod{ x , Ax }
+    =
+    \sup_{\substack{x \in \fM_+\\ \norm{x}=1}} \scprod{ x , (A+V)x }
+    \le
+    \sup_{\substack{x \in \fM_+ \oplus \cD_-\\ \norm{x}=1}} \scprod{ x , (A+V)x }
+    .
+  \end{equation*}
+  Taking the infimum over all such subspaces $\fM_+$ proves the claim by Theorem~\ref{thm:offdiagOp}.
+\end{proof}%
+
+As in Corollary~\ref{cor:continuity}, we also obtain a continuity statement in the situation of Theorem~\ref{thm:offdiagOp} with
+bounded off-diagonal perturbations. Here, however, we do not have to impose any condition on the norm of the perturbation.
+
+\begin{corollary}\label{cor:continuityOffOp}
+  Let $A$ and $V$ be as in Theorem~\ref{thm:offdiagOp}, and suppose that $V$ is bounded. Then, for each
+  $k \le \dim \Ran\EE_A((0,\infty)) = \dim \Ran\EE_{A+tV}((0,\infty))$, $t \in \RR$, the mapping
+  \begin{equation*}
+    \RR
+    \ni
+    t
+    \mapsto
+    \lambda_k\bigl( (A+tV)|_{\Ran\EE_{A+tV}((0,\infty))} \bigr)
+  \end{equation*}
+  is Lipschitz continuous with Lipschitz constant $\norm{V}$.
+\end{corollary}
+
+In the particular case where $B$ is semibounded, Theorem~\ref{thm:offdiagForm} allows us to extend
+Corollaries~\ref{cor:lowerboundOffOp} and~\ref{cor:continuityOffOp} to some degree to off-diagonal form perturbations. Recall
+here, that semiboundedness of $B$ implies that also $A$ is semibounded, see the proof of Theorem~\ref{thm:offdiagForm} below.
+
+\begin{corollary}\label{cor:offForm}
+  Assume the hypotheses of Theorem~\ref{thm:offdiagForm}.
+  \begin{enumerate}
+    \renewcommand{\theenumi}{\alph{enumi}}
+
+    \item For each $k \in \NN$ with $k \le \dim\Ran P_+ = \dim\Ran Q_+$ one has
+          $\lambda_k(A|_{\Ran P_+}) \le \lambda_k(B|_{\Ran Q_+})$.
+
+    \item Denote for $t \in (-1/b , 1/b)$ by $B_t$ the self-adjoint operator associated with the form $\fb_t := \fa + t\fv$ with
+          form domain $\Dom[\fb_t] := \Dom[\fa]$. Then, for each
+          $k \le \dim\Ran\EE_A((0,\infty)) = \dim\Ran\EE_{B_t}((0,\infty))$, the mapping
+          \begin{equation*}
+            ( -1/b , 1/b )
+            \ni
+            t
+            \mapsto
+            \lambda_k(B_t|_{\Ran\EE_{B_t}((0,\infty))})
+          \end{equation*}
+          is locally Lipschitz continuous.
+
+  \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+  (a).
+  Taking into account that $\fv[ x , x ] = 0$ for all $x \in \fD_+$ by hypothesis, the inequality
+  $\lambda_k(A|_{\Ran P_+}) \le \lambda_k(B|_{\Ran Q_+})$ is proved by means of Theorem~\ref{thm:offdiagForm} in a way analogous
+  to Corollary~\ref{cor:lowerboundOffOp}.
+
+  (b).
+  Upon a rescaling, we may assume without loss of generality that $b < 1$. Also recall that each $B_t$ is indeed a semibounded
+  self-adjoint operator with $\Dom[\fb_t] = \Dom(\abs{B_t}^{1/2})$ by the well-known KLMN theorem, and note that each $t\fv$
+  satisfies the hypotheses of Theorem~\ref{thm:offdiagForm}.
+  %
+  Pick $t,s \in (-1/b , 1/b)$ with $b\abs{t-s} \le 1-b\abs{s}$.
+  
+  Consider first the case where $A$ (and hence $\fa$) is lower semibounded with lower bound $m \in \RR$. We then have
+  $\abs{\fa[x,x]} \le \fa[x,x] + (\abs{m}-m)\norm{x}^2$ for all $x \in \Dom[\fa]$. With $\tilde{a} := a + \abs{m} - m$, this
+  gives
+  \begin{equation*}
+    \abs{\fv[x,x]}
+    \le
+    \tilde{a}\norm{x}^2 + b\fa[x,x]
+    \le
+    \tilde{a}\norm{x}^2 + b\fb_s[x,x] + b\abs{s}\abs{\fv[x,x]}
+  \end{equation*}
+  and, hence,
+  \begin{equation*}
+    \abs{\fv[x,x]}
+    \le
+    \frac{\tilde{a}}{1-b\abs{s}}\norm{x}^2 + \frac{b}{1-b\abs{s}}\fb_s[x,x]
+  \end{equation*}
+  for all $x \in \Dom[\fa] = \Dom[\fb_s]$. Since $\fb_t = \fb_s + (t-s)\fv$, we thus obtain
+  \begin{equation*}
+    -\frac{\tilde{a}\abs{t-s}}{1-b\abs{s}} + \Bigl( 1 - \frac{b\abs{t-s}}{1-b\abs{s}} \Bigr) \fb_s
+    \le
+    \fb_t
+    \le
+    \frac{\tilde{a}\abs{t-s}}{1-b\abs{s}} + \Bigl( 1 + \frac{b\abs{t-s}}{1-b\abs{s}} \Bigr) \fb_s
+    .
+  \end{equation*}
+  Abbreviating $\lambda_k(t):=\lambda_k(B_t|_{\Ran\EE_{B_t}((0,\infty))})$, Theorem~\ref{thm:offdiagForm} then implies that
+  \begin{equation*}
+    -\frac{\tilde{a}\abs{t-s}}{1-b\abs{s}} + \Bigl( 1 - \frac{b\abs{t-s}}{1-b\abs{s}} \Bigr) \lambda_k(s)
+    \le
+    \lambda_k(t)
+    \le
+    \frac{\tilde{a}\abs{t-s}}{1-b\abs{s}} + \Bigl( 1 + \frac{b\abs{t-s}}{1-b\abs{s}} \Bigr) \lambda_k(s)
+  \end{equation*}
+  and, therefore,
+  \begin{equation}\label{eq:Lipschitz}
+    \abs{\lambda_k(t) - \lambda_k(s)}
+    \le
+    \frac{\tilde{a}\abs{t-s}}{1-b\abs{s}} + \frac{b\abs{t-s}}{1-b\abs{s}} \abs{\lambda_k(s)}
+    .
+  \end{equation}
+  This proves that $t \mapsto \lambda_k(t)$ is continuous on $(-1/b,1/b)$ and, in particular, bounded on every compact
+  subinterval of $(-1/b , 1/b)$. In turn, it then easily follows from~\eqref{eq:Lipschitz} that this mapping is even locally
+  Lipschitz continuous, which concludes the case where $A$ is lower semibounded.
+
+  If $A$ is upper semibounded with upper bound $m \in \RR$, we proceed similarly. We then have
+  $\abs{\fa[x,x]} \le -\fa[x,x] + (m+\abs{m})\norm{x}^2$ for all $x \in \Dom[\fa]$. With $\tilde{a} := a + m + \abs{m}$, this
+  leads to
+  \begin{equation*}
+    \abs{\fv[x,x]}
+    \le
+    \frac{\tilde{a}}{1-b\abs{s}}\norm{x}^2 - \frac{b}{1-b\abs{s}}\fb_s[x,x]
+  \end{equation*}
+  for all $x \in \Dom[\fa] = \Dom[\fb_s]$. Analogously as above, we then eventually obtain again~\eqref{eq:Lipschitz}, which
+  proves the claim in the case where $A$ is upper semibounded. This completes the proof.
+\end{proof}%
+
+\begin{remark}\label{rem:offForm}
+  (1)
+  In part~(a) of Corollary~\ref{cor:offForm}, one can also give an upper bound for $\lambda_k(B|_{\Ran Q_+})$ in terms of the
+  form bounds of $\fv$: If $A$ is lower semibounded with lower bound $m \in \RR$, then
+  \begin{align*}
+    \abs{ \fv[ x , x ] }
+    &\le
+    (a + b\abs{m})\norm{x}^2 + b(\fa-m)[ x , x ]\\
+    &=
+    (a + b\abs{m} - bm)\norm{x}^2 + b\fa[ x , x ]
+  \end{align*}
+  for all $x \in \Dom[\fa]$, leading to
+  \begin{equation*}
+    \lambda_k(B|_{\Ran Q_+})
+    \le
+    (1+b)\lambda_k(A|_{\Ran P_+}) + (a + b\abs{m} - bm)
+  \end{equation*}
+  for all $k \le \dim\Ran P_+ = \dim\Ran Q_+$. Similarly, if $A$ is upper semibounded with upper bound $m \in \RR$, we have
+  \begin{align*}
+    \abs{ \fv[ x , x ] }
+    &\le
+    (a + b\abs{m})\norm{x}^2 + b(m-\fa)[ x , x ]\\
+    &=
+    (a + b\abs{m} + bm)\norm{x}^2 - b\fa[ x , x ]
+  \end{align*}
+  for all $x \in \Dom[\fa]$. If, in addition, $b \le 1$, this then leads to
+  \begin{equation*}
+    \lambda_k(B|_{\Ran Q_+})
+    \le
+    (1-b)\lambda_k(A|_{\Ran P_+}) + (a + b\abs{m} + bm)
+  \end{equation*}
+  for all $k \le \dim\Ran P_+ = \dim\Ran Q_+$.
+
+  (2)
+  A similar continuity result as in part~(b) of Corollary~\ref{cor:offForm} can be formulated also in the framework of
+  Proposition~\ref{prop:unboundedPert}: in addition to the hypotheses of Proposition~\ref{prop:unboundedPert}, let
+  $I \subset (-1/b,1/b)$ be an interval such that for all $t \in I$ we have $2a\abs{t} + b\abs{t}(c+d) < d-c$. Then, for all
+  $k \in \NN$ satisfying $k \le \dim \Ran \EE_A([d,\infty)) = \dim \EE_{A+tV}([(1-b\abs{t})d-a\abs{t},\infty))$, the mapping
+  \begin{equation*}
+    I \ni t
+    \mapsto
+    \lambda_k((A+tV)|_{\Ran\EE_{A+tV}([(1-b\abs{t})d-a\abs{t},\infty))})
+  \end{equation*}
+  is locally Lipschitz continuous. The proof is analogous to the one of part~(b) of Corollary~\ref{cor:offForm}.
+
+  A corresponding result can be formulated also in the framework of Theorem~\ref{thm:genSemibounded}, provided that the interval
+  $I \subset (-1/b,1/b)$ is then chosen such that for all $t \in I$ we have $\norm{\EE_A((0,\infty))-\EE_{A+tV}((0,\infty))} < 1$
+  and $\scprod{ x , (A+tV)x } \le 0$ for all $x \in \cD_-$.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Example: Stokes operator
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection*{An example. The Stokes operator}
+We now briefly revisit the Stokes operator in the framework of Theorem~\ref{thm:offdiagForm}. Here, we mainly rely
+on~\cite{GKMSV19}, but the reader is referred also to~\cite[Section~7]{GKMSV17},~\cite[Chapter~5]{SchmDiss},
+~\cite{FFMM00}, and the references cited therein.
+
+Let $\Omega \subset \RR^n$, $n \ge 2$, be a bounded domain with $C^2$-boundary, and let $\nu > 0$ and $v_* \ge 0$. On the Hilbert
+space $\cH = \cH_+ \oplus \cH_-$ with $\cH_+ = L^2(\Omega)^n$ and $\cH_- = L^2(\Omega)$, we consider the closed, densely defined,
+and nonnegative form $\fa$ with $\Dom[\fa] := H_0^1(\Omega)^n \oplus L^2(\Omega)$ and
+\begin{equation*}
+  \fa[ v \oplus q , u \oplus p ]
+  :=
+  \nu \sum_{j=1}^n \int_\Omega \scprod{ \partial_j v(x) , \partial_j u(x) }_{\CC^n} \,\dd x
+\end{equation*}
+for $u \oplus p, v \oplus q \in \Dom[\fa]$. Clearly, $\fa$ is the form associated to the nonnegative self-adjoint operator
+$A := -\nu\mathbf{\Delta} \oplus 0$ on the Hilbert space $\cH = \cH_+ \oplus \cH_-$ with
+$\Dom(A) := (H^2(\Omega) \cap H_0^1(\Omega))^n \oplus L^2(\Omega)$ and $\Dom(\abs{A}^{1/2}) = \Dom[\fa]$, where
+$\mathbf{\Delta} = \Delta\cdot I_{\CC^n}$ is the vector-valued Dirichlet Laplacian on $\Omega$. Moreover,
+$P_+ := \EE_A((0,\infty))$ and $P_- := \EE_A((-\infty,0]) = \EE_A(\{0\})$ are the orthogonal projections onto $\cH_+$ and
+$\cH_-$, respectively. In particular, we have
+\begin{equation*}
+  \fD_+
+  :=
+  \Ran P_+ \cap \Dom(\abs{A}^{1/2})
+  =
+  H_0^1(\Omega)^n \oplus 0
+\end{equation*}
+and
+\begin{equation*}
+  \fD_-
+  :=
+  \Ran P_- \cap \Dom(\abs{A}^{1/2})
+  =
+  0 \oplus L^2(\Omega)
+  .
+\end{equation*}
+
+Define the symmetric sesquilinear form $\fv$ on $\cH = \cH_+ \oplus \cH_-$ with domain $\Dom[\fv] := \Dom[\fa]$ by
+\begin{equation*}
+  \fv[ v \oplus q , u \oplus p ]
+  :=
+  -v_* \scprod{ \divgc v , p }_{L^2(\Omega)} - v_* \scprod{ q , \divgc u }_{L^2(\Omega)}
+\end{equation*}
+for $u \oplus p, v \oplus q \in \Dom[\fa]$. One can show that
+$\nu\norm{\divgc u}_{L^2(\Omega)}^2 \le \fa[u \oplus 0 , u \oplus 0]$ for all $u \in \fD_+ = H_0^1(\Omega)^n$, see,
+e.g.,~\cite[Proof of Theorem~5.12]{SchmDiss}. Using Young's inequality, this then implies that $\fv$ is infinitesimally form
+bounded with respect to $\fa$, see~\cite[Remark~5.1.3]{SchmDiss}; cf.~also~\cite[Section~2]{GKMSV19}. Indeed, for $\eps > 0$ and
+$f = u \oplus p \in \Dom[\fa]$ we obtain
+\begin{equation}\label{eq:StokesRelBound}
+ \begin{aligned}
+  \abs{\fv[f , f]}
+  &\le
+  2 v_* \abs{ \scprod{ p , \divgc u }_{L^2(\Omega)} }
+    \le
+    2 v_* \norm{p}_{L^2(\Omega)} \norm{\divgc u}_{L^2(\Omega)}\\
+  &\le
+  \eps \nu \norm{\divgc u}_{L^2(\Omega)}^2 + \eps^{-1} \nu^{-1} v_*^2 \norm{p}_{L^2(\Omega)}^2\\
+  &\le
+  \eps \fa[ u \oplus 0 , u \oplus 0 ] + \eps^{-1} \nu^{-1} v_*^2 \norm{f}_\cH^2\\
+  &=
+  \eps \fa[ f , f ] + \eps^{-1} \nu^{-1} v_*^2 \norm{f}_\cH^2
+  .
+ \end{aligned}
+\end{equation}
+Thus, by the well-known KLMN theorem, the form $\fb_S := \fa + \fv$ with $\Dom[\fb_S] = \Dom[\fa] = \Dom(\abs{A}^{1/2})$ is
+associated to a unique lower semibounded self-adjoint operator $B_S$ on $\cH$ with $\Dom(\abs{B_S}^{1/2}) = \Dom(\abs{A}^{1/2})$,
+the so-called~\emph{Stokes operator}. It is a self-adjoint extension of the (non-closed) upper dominant block operator matrix
+\begin{equation*}
+  \begin{pmatrix}
+    -\nu\mathbf{\Delta} & v_*\grad\\
+    -v_*\divgc & 0
+  \end{pmatrix}
+\end{equation*}
+defined on $(H^2(\Omega) \cap H_0^1(\Omega))^n \oplus H^1(\Omega)$. In fact, the closure of the latter is a self-adjoint
+operator, see~\cite[Theorems~3.7 and~3.9]{FFMM00}, which yields another characterization of the Stokes operator $B_S$.
+
+By rescaling, one obtains from~\cite[Theorem~3.15]{FFMM00} that the essential spectrum of $B_S$ is given by
+\begin{equation*}
+  \spec_\ess(B_S)
+  =
+  \Bigl\{ -\frac{v_*^2}{\nu} , -\frac{v_*^2}{2\nu}  \Bigr\}
+  ,
+\end{equation*}
+see~\cite[Remark~2.2]{GKMSV19}. In particular, the essential spectrum of $B_S$ is purely negative. In turn, the positive spectrum
+of $B_S$, that is, $\spec(B_S) \cap (0,\infty)$, is discrete~\cite[Theorem~2.1\,(i)]{GKMSV19}.
+
+The above shows that the hypotheses of Theorem~\ref{thm:offdiagForm} are satisfied in this situation, so that we obtain from
+Theorem~\ref{thm:offdiagForm} and Corollary~\ref{cor:offForm} the following result.
+
+\begin{proposition}\label{prop:Stokes}
+  Let $B_S$ be the Stokes operator as above. Then, the positive spectrum of $B_S$, $\spec(B_S) \cap (0,\infty)$, is discrete, and
+  the positive eigenvalues $\lambda_k(B_S|_{\Ran\EE_{B_S}((0,\infty))})$, $k \in \NN$, of $B_S$, enumerated in nondecreasing
+  order and counting multiplicities, admit the representation
+  \begin{equation*}
+    \lambda_k(B_S|_{\Ran\EE_{B_S}((0,\infty))})
+    =
+    \inf_{\substack{\fM_+ \subset H_0^1(\Omega)^n\\ \dim\fM_+ = k}}
+      \sup_{\substack{u \oplus p \in \fM_+ \oplus L^2(\Omega)\\ \norm{u}_{L^2(\Omega)^n}^2 + \norm{p}_{L^2(\Omega)}^2 = 1}}
+      \fb_S[ u \oplus p , u \oplus p ]
+    .
+  \end{equation*}
+  The latter depend locally Lipschitz continuously on $\nu$ and $v_*$ and satisfy the two-sided estimate
+  \begin{equation*}
+    \nu\lambda_k(-\mathbf{\Delta})
+    \le
+    \lambda_k(B_S|_{\Ran\EE_{B_S}((0,\infty))})
+    \le
+    \nu\lambda_k(-\mathbf{\Delta}) + \frac{v_*^2}{\nu}
+    .
+  \end{equation*}
+\end{proposition}
+
+\begin{proof}
+  In view the above considerations, the representation of the eigenvalues, the continuity statement, and the lower bound on the
+  eigenvalues follow from Theorem~\ref{thm:offdiagForm} and Corollary~\ref{cor:offForm}. It remains to show the upper bound on
+  the eigenvalues. To this end, let $\fM_+ \subset H_0^1(\Omega)^n$ with $\dim \fM_+ = k \in \NN$, and let
+  $f = u \oplus p \in H_0^1(\Omega)^n \oplus L^2(\Omega)$ be a normalized vector with $u \neq 0$. Then,
+  $\mu := \fa[ u \oplus 0 , u \oplus 0 ] / \norm{u}_{L^2(\Omega)^n}^2 = \fa[ f , f ] / \norm{u}_{L^2(\Omega)^n}^2$ is positive
+  and satisfies
+  \begin{equation}\label{eq:muBound}
+    \mu
+    \le
+    \sup_{\substack{v \in \fM_+\\ \norm{v}_{L^2(\Omega)^n}^2 = 1}} \fa[ v \oplus 0 , v \oplus 0 ]
+  \end{equation}
+  and
+  \begin{equation*}
+    \frac{\nu\norm{\divgc u}_{L^2(\Omega)}^2}{\mu}
+    =
+    \frac{\norm{u}_{L^2(\Omega)^n}^2 \nu \norm{\divgc u}_{L^2(\Omega)}^2}{\fa[ u \oplus 0 , u \oplus 0 ]}
+    \le
+    \norm{u}_{L^2(\Omega)^n}^2
+    \le
+    1
+    .
+  \end{equation*}
+  Similarly as in~\eqref{eq:StokesRelBound}, we now obtain by means of Young's inequality that
+  \begin{align*}
+    \abs{ \fv[ f , f ] }
+    &\le
+    2v_*\norm{p}_{L^2(\Omega)} \norm{\divgc u}_{L^2(\Omega)}
+      \le
+      \mu \norm{p}_{L^2(\Omega)}^2 + \frac{v_*^2 \norm{\divgc u}_{L^2(\Omega)}^2}{\mu}\\
+    &\le
+    \mu \norm{p}_{L^2(\Omega)}^2 + \frac{v_*^2}{\nu}
+    .
+  \end{align*}
+  Since $\fa[ f , f ] = \mu\norm{u}_{L^2(\Omega)^n}^2$, this gives
+  \begin{equation}\label{eq:StokesFormUpperBound}
+    \fb_S[ f , f ]
+    \le
+    \fa[ f , f ] + \mu \norm{p}_{L^2(\Omega)}^2 + \frac{v_*^2}{\nu}
+    =
+    \mu + \frac{v_*^2}{\nu}
+    .
+  \end{equation}
+  In light of $\fb_S[ 0 \oplus p , 0 \oplus p ] = \fa[ 0 \oplus p , 0 \oplus p ] = 0$, we conclude from~\eqref{eq:muBound}
+  and~\eqref{eq:StokesFormUpperBound} that
+  \begin{equation*}
+    \sup_{\substack{u \oplus p \in \fM_+ \oplus L^2(\Omega)\\ \norm{u}_{L^2(\Omega)^2}^2 + \norm{p}_{L^2(\Omega)}^2 = 1}}
+      \fb_S[ u \oplus p , u \oplus p ]
+    \le
+    \sup_{\substack{v \in \fM_+\\ \norm{v}_{L^2(\Omega)^n}^2 = 1}} \fa[ v \oplus 0 , v \oplus 0 ] + \frac{v_*^2}{\nu}
+    ,
+  \end{equation*}
+  and taking the infimum over subspaces $\fM_+ \subset H_0^1(\Omega)^n$ with $\dim\fM_+ = k$ proves the upper bound. This
+  completes the proof.
+\end{proof}%
+
+\begin{remark}
+  (1)
+  Choosing $\eps = 1$ in~\eqref{eq:StokesRelBound}, the upper bound from Remark~\ref{rem:offForm}\,(1) reads
+  \begin{equation*}
+    \lambda_k(B_S|_{\Ran\EE_{B_S}((0,\infty))})
+    \le
+    2\nu\lambda_k(-\mathbf{\Delta}) + \frac{v_*^2}{\nu}
+  \end{equation*}
+  for all $k \in \NN$, while the choice $\eps = v_*$ in~\eqref{eq:StokesRelBound} leads to
+  \begin{equation*}
+    \lambda_k(B_S|_{\Ran\EE_{B_S}((0,\infty))})
+    \le
+    (1+v_*)\nu\lambda_k(-\mathbf{\Delta}) + \frac{v_*}{\nu}
+  \end{equation*}
+  for all $k \in \NN$.
+
+  (2)
+  For the particular case of $k = 1$, a similar upper bound has been established in the proof
+  of~\cite[Theorem~2.1\,(i)]{GKMSV19}:
+  \begin{equation*}
+    \nu\lambda_1(-\Delta)
+    \le
+    \lambda_1(B_S|_{\Ran\EE_{B_S}((0,\infty))})
+    \le
+    \nu\lambda_1(-\Delta) + v_*\norm{\divgc u_0}_{L^2(\Omega)}
+    ,
+  \end{equation*}
+  where $u_0 \in (H^2(\Omega) \cap H_0^1(\Omega))^n$ is a normalized eigenfunction for $-\mathbf{\Delta}$ corresponding to the
+  first positive eigenvalue $\lambda_1(-\mathbf{\Delta}) = \lambda_1(-\Delta)$.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Abstract minimax principle
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{An abstract minimax principle in spectral gaps}\label{sec:abstrMinimax}
+
+We rely on the following abstract minimax principle in spectral gaps, part~(a) of which is extracted from~\cite{GLS99} and
+part~(b) of which is its natural adaptation to the operator framework; cf.~also~\cite[Proposition~A.3]{NSTTV18}.
+
+\begin{proposition}[{cf.~\cite[Theorem 1]{GLS99},~\cite[Proposition~A.3]{NSTTV18}}]\label{prop:GLS}
+  Assume Hypothesis \ref{hyp:minimax}.
+  \begin{enumerate}
+    \renewcommand{\theenumi}{\alph{enumi}}
+
+    \item
+    If we have $\Dom(\abs{B}^{1/2}) = \Dom(\abs{A}^{1/2})$, $\fb[x,x]\le0$ for all $x\in\fD_-$, and
+    $\Ran(P_+Q_+|_{\fD_+}) \supset \fD_+$, then
+    \begin{equation*}
+      \lambda_k(B|_{\Ran Q_+})
+      =
+      \inf_{\substack{\fM_+\subset\fD_+\\ \dim(\fM_+)=k}} \sup_{\substack{x\in\fM_+\oplus\fD_-\\ \norm{x}=1}} \fb[x,x]
+    \end{equation*}
+    for all $k \in \NN$ with $k \le \dim\Ran P_+$.
+
+    \item
+    If we have $\Dom(B) = \Dom(A)$, $\scprod{ x , Bx } \le 0$ for all $x \in \cD_-$, and $\Ran(P_+Q_+|_{\cD_+}) \supset \cD_+$,
+    then
+    \begin{equation*}
+      \lambda_k(B|_{\Ran Q_+})
+      =
+      \inf_{\substack{\fM_+\subset\cD_+\\ \dim(\fM_+)=k}} \sup_{\substack{x\in\fM_+\oplus\cD_-\\ \norm{x}=1}}
+        \scprod{ x , Bx }
+    \end{equation*}
+    for all $k \in \NN$ with $k \le \dim\Ran P_+$.
+
+  \end{enumerate}
+\end{proposition}
+
+\begin{proof}
+  For part~(a), we first recall that the spectral projections $P_+$ and $Q_+$ map
+  $\fD := \Dom(\abs{A}^{1/2}) = \Dom(\abs{B}^{1/2})$ into itself, so that $P_+$ maps $\Ran Q_+ \cap \fD$ into $\fD_+$. Next, we
+  observe that under the hypotheses of part~(a) the restriction
+  \begin{equation}\label{eq:restriction}
+    P_+|_{\Ran Q_+\cap\fD} \colon \Ran Q_+\cap\fD\to\fD_+
+  \end{equation}
+  is bijective. Indeed, its surjectivity follows directly from the hypothesis $\Ran(P_+Q_+|_{\fD_+}) \supset \fD_+$. For the
+  injectivity, we follow Step~2 of the proof of~\cite[Theorem~1]{GLS99}: assume to the contrary that $P_+x = 0$ for some non-zero
+  $x \in \Ran Q_+ \cap \fD$. Then, on the one hand we have $\fb[x , x] > 0$, and on the other hand $x \in \Ran P_-$, that is,
+  $x \in \fD_-$. The latter gives $\fb[x , x] \le 0$ by hypothesis, a contradiction. The claim of part~(a) now follows by Step~1
+  of the proof of~\cite[Theorem~1]{GLS99}.
+
+  Replacing form domains with operator domains in the above reasoning and the cited Step~1 of the proof in~\cite{GLS99}, that is,
+  $\fD$ by $\Dom(A)=\Dom(B)$ and $\fD_\pm$ by $\cD_\pm$, part~(b) can be proved in the same manner.
+\end{proof}%
+
+\begin{remark}\label{rem:spectralShift}
+  The above proposition is tailored towards spectral gaps around zero, but by a spectral shift we can of course handle also
+  spectral gaps around any point $\gamma \in \RR$. Indeed, we have $\EE_{A-\gamma}((0,\infty)) = \EE_A((\gamma,\infty))$ for
+  $\gamma \in \RR$ and analogously for $B$. Moreover, the form associated to the operator $B - \gamma$ is known to agree with the
+  form $\fb - \gamma$. The latter can be seen for instance with an analogous reasoning as
+  in~\cite[Proposition~10.5\,(a)]{Schm12}; cf.~also Lemma~\ref{cor:formpert} in Appendix~\ref{sec:heinz} below.
+\end{remark}
+
+\begin{remark}\label{rem:neg}
+  (1)
+  The hypothesis $\fb[x,x]\le0$ for all $x\in\fD_-$ in part~(a) of Proposition~\ref{prop:GLS} is used not only to verify the
+  injectivity of the restriction~\eqref{eq:restriction} but is also a crucial ingredient in the cited Step~1 of the proof
+  of~\cite[Theorem~1]{GLS99}. The same applies for the hypothesis $\langle x,Bx \rangle\le 0$ for all $x\in\cD_-$ in part~(b).
+
+  (2)
+  Since $P_+$ and $Q_+$ are spectral projections for the respective operators, we always have
+  $\Ran(P_+Q_+|_{\fD_+}) \subset \fD_+$ and $\Ran(P_+Q_+|_{\cD_+}) \subset \cD_+$. In this respect, the
+  condition $\Ran(P_+Q_+|_{\fD_+}) \supset \fD_+$ in part~(a) of Proposition~\ref{prop:GLS} actually means that the restriction
+  $P_+Q_+|_{\fD_+} \colon \fD_+ \to \fD_+$ is surjective. This has not been formulated explicitly in the statement
+  of~\cite[Theorem~1]{GLS99} but has instead been guaranteed by the stronger condition
+  \begin{equation}\label{eq:GLS}
+    \norm{(\abs{A}+I)^{1/2}P_+Q_-(\abs{A}+I)^{-1/2}} < 1.
+  \end{equation}
+  Since $\fD_+ = \Ran ((\abs{A}+I)^{-1/2}|_{\Ran P_+})$, a standard Neumann series argument then even gives bijectivity of the
+  restriction $P_+Q_+|_{\fD_+}$, see Step~2 of the proof of~\cite[Theorem~1]{GLS99}. In this reasoning, the operators
+  $(\abs{A}+I)^{\pm 1/2}$ can be replaced by $(\abs{A}+\alpha I)^{\pm 1/2}$ for any $\alpha>0$; if $\abs{A}$ has a bounded
+  inverse, also $\alpha=0$ can be considered here.
+  
+  Of course, the above reasoning also applies in the situation of part~(b) of Proposition~\ref{prop:GLS}, but with
+  $(\abs{A}+\alpha I)^{\pm 1/2}$ replaced by $(\abs{A}+\alpha I)^{\pm 1}$.
+
+  Condition~\eqref{eq:GLS} has been considered in~\cite{GLS99} in the setting of Dirac operators, but it seems to be hard to
+  verify it on an abstract level. This approach is therefore not pursued further here.
+\end{remark}
+
+In the context of our main theorems, the restriction $P_+Q_+|_{\Ran P_+}$, understood as an endomorphism of $\Ran P_+$, will
+always be bijective, cf.~Remark~\ref{rem:PQbij}\,(1) below. It turns out that then the hypotheses of part~(b) in
+Proposition~\ref{prop:GLS} imply those of part~(a), in which case both representations for the minimax values in
+Proposition~\ref{prop:GLS} are valid. More precisely, we have the following lemma, essentially based on the well-known Heinz
+inequality, cf.~Appendix~\ref{sec:heinz} below.
+
+\begin{lemma}\label{lem:GLS}
+  Assume Hypothesis~\ref{hyp:minimax} with $\Dom(A) = \Dom(B)$.
+  \begin{enumerate}
+    \renewcommand{\theenumi}{\alph{enumi}}
+    
+    \item One has $\Dom(\abs{A}^{1/2}) = \Dom(\abs{B}^{1/2})$.
+
+    \item If $\scprod{x , Bx} \le 0$ for all $x \in \cD_-$, then $\fb[x , x] \le 0$ for all $x \in \fD_-$.
+
+    \item If the restriction $P_+Q_+|_{\Ran P_+} \colon \Ran P_+ \to \Ran P_+$ is bijective and
+          $\Ran(P_+Q_+|_{\cD_+}) \supset \cD_+$, then also $\Ran(P_+Q_+|_{\fD_+}) \supset \fD_+$.
+
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  (a).
+  This is a consequence of the well-known Heinz inequality, see, e.g., Corollary~\ref{cor:SchmDiss} below. Alternatively, this
+  follows by classical considerations regarding operator and form boundedness, see Remark~\ref{rem:SchmDiss} below.
+  
+  (b).
+  It follows from part~(a) that the operator $\abs{B}^{1/2} ( \abs{A}^{1/2} + I )^{-1}$ is closed and everywhere defined, hence
+  bounded by the closed graph theorem. Thus,
+  \begin{equation*}
+    \norm{\abs{B}^{1/2}x} \le \norm{\abs{B}^{1/2}(\abs{A}^{1/2}+I)^{-1}}\cdot \norm{(\abs{A}^{1/2}+I)x}
+  \end{equation*}
+  for all $x\in \Dom(\abs{A}^{1/2})=\Dom(\abs{B}^{1/2})$. Since $\cD_-$ is a core for the operator
+  $\abs{A|_{\Ran P_-}}^{1/2}=\abs{A}^{1/2}|_{\Ran P_-}$ with $\Dom(\abs{A}^{1/2}|_{\Ran P_-})=\fD_-$, the inequality
+  $\fb[x,x]\le 0$ for $x\in\fD_-$ now follows from the hypothesis $\scprod{ x,Bx } \le 0$ for all $x\in\cD_-$ by approximation.
+
+  (c).
+  We clearly have $\Ran(P_+Q_+|_{\cD_+})=\cD_+$, $\cD_+=\Dom(A|_{\Ran P_+})$, and $\fD_+=\Dom(\abs{A|_{\Ran P_+}}^{1/2})$.
+  Applying Corollary~\ref{cor:fracBij} below with the choices $\Lambda_1=\Lambda_2=A|_{\Ran P_+}$ and $S = P_+Q_+|_{\Ran P_+}$
+  therefore implies that $\Ran(P_+Q_+|_{\fD_+})=\fD_+$, which proves the claim.
+\end{proof}%
+
+\begin{remark}\label{rem:PQbij}
+  (1)
+  In light of the identity $P_+Q_+ = P_+ - P_+Q_-$, the bijectivity of $P_+Q_+|_{\Ran P_+} \colon \Ran P_+ \to \Ran P_+$ can be
+  guaranteed, for instance, by the condition $\norm{P_+Q_-} < 1$ via a standard Neumann series argument. Since
+  $P_+-Q_+=P_+Q_- - P_-Q_+$ and, in particular, $\norm{P_+Q_-}\le\norm{P_+-Q_+}$, this condition holds if the stronger inequality
+  $\norm{P_+-Q_+}<1$ is satisfied. In the latter case, there is a unitary operator $U$ with $Q_+U=UP_+$, see,
+  e.g.,~\cite[Theorem~I.6.32]{Kato95}, which implies that $\dim \Ran P_+=\dim\Ran Q_+$. It is this situation we encounter in
+  Theorems~\ref{thm:genSemibounded}--\ref{thm:offdiagForm}.
+ 
+  (2)
+  In the case where $B$ is an infinitesimal operator perturbation of $A$, the inequality $\norm{P_+Q_-}<1$ already implies that
+  $\Ran(P_+Q_+|_{\cD_+}) \supset \cD_+$, see the following section; the particular case where $B$ is a bounded perturbation of
+  $A$ has previously been considered in~\cite[Lemma~A.6]{NSTTV18}. For more general, not necessarily infinitesimal,
+  perturbations, this remains so far an open problem.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Graph norm approach
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Proof of Theorem~\ref{thm:genOpInfinitesimal}: The graph norm approach}\label{sec:graphNorm}
+
+In this section we show that the inequality $\norm{P_+Q_-} < 1$ in the context of Theorem~\ref{thm:genOpInfinitesimal} implies
+that $\Ran(P_+Q_+|_{\cD_+}) \supset \cD_+$, which is essentially what is needed to deduce Theorem~\ref{thm:genOpInfinitesimal}
+from Proposition~\ref{prop:GLS} and Lemma~\ref{lem:GLS}. The main technique used to accomplish this can in fact be formulated in
+a much more general framework:
+
+Recall that for a closed operator $\Lambda$ on a Banach space with norm $\norm{\,\cdot\,}$, its domain $\Dom(\Lambda)$ can be
+equipped with the~\emph{graph norm}
+\begin{equation*}
+ \norm{x}_\Lambda := \norm{x} + \norm{\Lambda x},\quad x\in\Dom(\Lambda),
+\end{equation*}
+which makes $(\Dom(\Lambda),\norm{\,\cdot\,}_\Lambda)$ a Banach space. Also recall that a linear operator $K$ with
+$\Dom(K) \supset \Dom(\Lambda)$ is called~\emph{$\Lambda$-bounded with $\Lambda$-bound $\beta_* \ge 0$} if for all
+$\beta > \beta_*$ there is an $\alpha \ge 0$ with
+\begin{equation}\label{eq:relBound}
+  \norm{Kx}
+  \le
+  \alpha \norm{x} + \beta \norm{\Lambda x}
+  \quad\text{ for all }\
+  x \in \Dom(\Lambda)
+  .
+\end{equation}
+
+The following lemma extends part~(a) of~\cite[Proposition~A.5]{NSTTV18}, taken from Lemma~3.9 in the author's
+Ph.D.~thesis~\cite{SeelDiss}, to relatively bounded commutators.
+
+\begin{lemma}\label{lem:specRad}
+  Let $\Lambda$ be a closed operator on a Banach space, $K$ be $\Lambda$-bounded with $\Lambda$-bound $\beta_* \ge 0$, and let
+  $S$ be bounded with $\Ran(S|_{\Dom(\Lambda)})\subset\Dom(\Lambda)$ and
+  \begin{equation*}
+    \Lambda Sx - S\Lambda x
+    =
+    Kx
+    \quad\text{ for all }\
+    x\in\Dom(\Lambda)
+    .
+  \end{equation*}
+  Then, $S|_{\Dom(\Lambda)}$ is bounded on $\Dom(\Lambda)$ with respect to the graph norm for $\Lambda$, and the corresponding
+  spectral radius satisfies
+  \begin{equation*}
+    r_\Lambda(S)
+    :=
+    \lim_{k\to\infty} \norm{(S|_{\Dom(\Lambda)})^k}_\Lambda^{1/k}\le\norm{S} + \beta_*
+    .
+  \end{equation*}
+\end{lemma}
+
+\begin{proof}
+  Only small modifications to the reasoning from~\cite[Lemma~3.9]{SeelDiss},~\cite[Proposition~A.5]{NSTTV18} are necessary. For
+  the sake of completeness, we reproduce the full argument here:
+  
+  Let $\beta > \beta_*$ and $\alpha \ge 0$ such that~\eqref{eq:relBound} holds. Then, for $x\in\Dom(\Lambda)$ one has
+  \begin{equation*}%\label{eq:Sgraph}
+   \norm{\Lambda Sx} \le \norm{S}\norm{\Lambda x} + \norm{Kx} \le (\norm{S}+\beta)\norm{\Lambda x} + \alpha\norm{x},
+  \end{equation*}
+  so that
+  \begin{equation*}
+    \norm{Sx}_\Lambda = \norm{Sx} + \norm{\Lambda Sx} \le \bigl(\norm{S}+\beta\bigr)\norm{x}_\Lambda + \alpha\norm{x}.
+  \end{equation*}
+  In particular, $S|_{\Dom(\Lambda)}$ is bounded with respect to the graph norm $\norm{\,\cdot\,}_\Lambda$ with
+  $\norm{S}_\Lambda\le \norm{S} + \beta + \alpha$.
+
+  Now, a straightforward induction yields
+  \begin{equation*}
+    \norm{S^kx}_\Lambda
+    \le
+    \bigl(\norm{S} + \beta\bigr)^k\norm{x}_\Lambda + k\alpha\bigl(\norm{S}+\beta\bigr)^{k-1}\norm{x},
+    \quad x\in\Dom(\Lambda),
+  \end{equation*}
+  for $k\in\N$. Hence, $\norm{(S|_{\Dom(\Lambda)})^k}_\Lambda \le (\norm{S}+\beta)^k + k\alpha(\norm{S}+\beta)^{k-1}$, so that
+  \begin{align*}
+    r_\Lambda(S)
+    &=
+    \lim_{k\to\infty} \norm{(S|_{\Dom(\Lambda)})^k}_\Lambda^{1/k}
+      \le
+      \lim_{k\to\infty} \bigl( (\norm{S}+\beta)^k+k\alpha(\norm{S}+\beta)^{k-1} \bigr)^{1/k}\\
+    &=
+    \norm{S}+\beta
+    .
+  \end{align*}
+  Since $\beta > \beta_*$ was chosen arbitrarily, this proves the claim.
+\end{proof}%
+
+We are now in position to prove Theorem~\ref{thm:genOpInfinitesimal}.
+
+\begin{proof}[Proof of Theorem~\ref{thm:genOpInfinitesimal}]
+  We mainly follow the line of reasoning in the proof of~\cite[Lemma~A.6]{NSTTV18}. Only a few additional considerations are
+  necessary in order to accommodate unbounded perturbations $V$ by means of Lemma~\ref{lem:specRad}. For convenience of the
+  reader, we nevertheless reproduce the whole argument here.
+ 
+  Define $S,T \colon \Ran P_+ \to \Ran P_+$ by
+  \begin{equation*}
+    S := P_+Q_-|_{\Ran P_+},\quad T := P_+Q_+|_{\Ran P_+} = I_{\Ran P_+} - S.
+  \end{equation*}
+  By hypothesis, we have $\norm{S} \le \norm{P_+Q_-} < 1$, so that $T$ is bijective. In light of Proposition~\ref{prop:GLS} and
+  Lemma~\ref{lem:GLS}, it now remains to show the inclusion $\Ran(P_+Q_+|_{\cD_+}) \supset \cD_+$, that is,
+  $\Ran(T^{-1}|_{\cD_+})\subset\cD_+$. To this end, we rewrite $T^{-1}$ as a Neumann series,
+  \begin{equation*}
+    T^{-1}
+    =
+    (I_{\Ran P_+} - S)^{-1}
+    =
+    \sum_{k=0}^\infty S^k
+    .
+  \end{equation*}
+  Clearly, $S$ maps the domain $\cD_+=\Dom(A|_{\Ran P_+})$ into itself, so that the inclusion $\Ran(T^{-1}|_{\cD_+})\subset\cD_+$
+  holds if the above series converges also with respect to the graph norm for the closed operator $\Lambda:=A|_{\Ran P_+}$. This,
+  in turn, is the case if the corresponding spectral radius $r_\Lambda(S)$ of $S$ is smaller than $1$.
+
+  For $x\in\cD_+\subset\Ran P_+$ we compute
+  \begin{align*}
+    \Lambda Sx
+    &=
+    AP_+Q_-x
+      = P_+(A+V)Q_-x - P_+VQ_-x\\
+    &=
+    P_+Q_-(A+V)x - P_+VQ_-x\\
+    &=
+    S\Lambda x + Kx
+  \end{align*}
+  with
+  \begin{equation*}
+    K := (P_+Q_-V - P_+VQ_-)|_{\Ran P_+}.
+  \end{equation*}
+  We show that the operator $K$ is $\Lambda$-bounded with $\Lambda$-bound $0$. Indeed, let $b > 0$, and choose $a\ge0$ with
+  $\norm{Vx}\le a\norm{x}+b\norm{Ax}$ for all $x\in\Dom(A)$; recall that $V$ is infinitesimal with respect to $A$ by hypothesis.
+  Then,
+  \begin{equation*}
+    \norm{VQ_-x}
+    \le
+    a\norm{Q_-x} + b\norm{AQ_-x}
+    \le
+    a\norm{x} + b\norm{(A+V)x} + b\norm{VQ_-x},
+  \end{equation*}
+  so that
+  \begin{align*}
+    \norm{VQ_-x}
+    &\le
+    \frac{a}{1-b}\norm{x} + \frac{b}{1-b}\bigl(\norm{Ax}+\norm{Vx}\bigr)\\
+    &\le
+    \frac{a(1+b)}{1-b}\norm{x} + \frac{b(1+b)}{1-b}\norm{Ax}.
+  \end{align*}
+  Thus,
+  \begin{equation}\label{eq:relBoundK}
+   \begin{aligned}
+    \norm{Kx}
+    &\le
+    \norm{P_+Q_-}\norm{Vx} + \norm{VQ_-x}\\
+    &\le
+    a\Bigl(\norm{P_+Q_-} + \frac{1+b}{1-b}\Bigr)\norm{x} + b\Bigl(\norm{P_+Q_-}+\frac{1+b}{1-b}\Bigr)\norm{\Lambda x}
+   \end{aligned}
+  \end{equation}
+  for $x\in\Dom(\Lambda)=\cD_+$. Since $b>0$ was chosen arbitrarily, this implies that $K$ is $\Lambda$-bounded with
+  $\Lambda$-bound $0$. It therefore follows from Lemma~\ref{lem:specRad} that $r_\Lambda(S)\le\norm{S}<1$, which completes the
+  proof.
+\end{proof}%
+
+\begin{remark}\label{rem:relBoundK}
+  (1)
+  Estimate~\eqref{eq:relBoundK} suggests that also relatively bounded perturbations $V$ that are not necessarily infinitesimal
+  with respect to $A$ can be considered here. In fact, if $b_*\in[0,1)$ is the $A$-bound of $V$, then by~\eqref{eq:relBoundK} and
+  Lemma~\ref{lem:specRad} we have
+  \begin{equation*}
+    r_\Lambda(S)
+    \le
+    \norm{P_+Q_-} + b_*\Bigl(\norm{P_+Q_-}+\frac{1+b_*}{1-b_*}\Bigr)
+    ,
+  \end{equation*}
+  and the right-hand side of the latter is smaller than $1$ if and only if
+  \begin{equation*}
+    \norm{P_+Q_-} < \frac{1-2b_*-b_*^2}{1-b_*^2}.
+  \end{equation*}
+  This is a reasonable condition on the norm $\norm{P_+Q_-}$ only for $b_*<\sqrt{2}-1$.
+
+  (2)
+  A similar result as in (1) can be obtained in terms of the $(A+V)$-bound of $V$: If for some $\tilde{b}\in[0,1)$ and
+  $\tilde{a}\ge 0$ one has $\norm{Vx} \le \tilde{a}\norm{x} + \tilde{b}\norm{(A+V)x}$ for all $x\in\Dom(A)=\Dom(A+V)$, then
+  standard arguments as in the above proof of Theorem~\ref{thm:genOpInfinitesimal} show that
+  \begin{equation*}
+    \norm{Vx}
+    \le
+    \frac{\tilde{a}}{1-\tilde{b}}\norm{x} + \frac{\tilde{b}}{1-\tilde{b}}\norm{Ax}
+  \end{equation*}
+  and, in turn,
+  \begin{align*}
+    \norm{VQ_-x}
+    &\le
+    \tilde{a}\norm{x} + \tilde{b}\norm{(A+V)x}
+      \le
+      \tilde{a}\norm{x} + \tilde{b}\norm{Ax} + \tilde{b}\norm{Vx}\\
+    &\le
+    \tilde{a}\Bigl( 1 + \frac{\tilde{b}}{1-\tilde{b}} \Bigr)\norm{x}
+      + \tilde{b}\Bigl( 1 + \frac{\tilde{b}}{1-\tilde{b}} \Bigr)\norm{Ax}\\
+    &=
+    \frac{\tilde{a}}{1-\tilde{b}}\norm{x} + \frac{\tilde{b}}{1-\tilde{b}}\norm{Ax}
+  \end{align*}
+  for all $x\in\Dom(A)$. Plugging these into~\eqref{eq:relBoundK} gives
+  \begin{align*}
+    \norm{Kx}
+    &\le
+    \norm{P_+Q_-}\norm{Vx} + \norm{VQ_-x}\\
+    &\le
+    (1+\norm{P_+Q_-})\Bigl( \frac{\tilde{a}}{1-\tilde{b}}\norm{x} + \frac{\tilde{b}}{1-\tilde{b}}\norm{\Lambda x} \Bigr)
+  \end{align*}
+  for all $x \in \Dom(\Lambda) = \cD_+$, which eventually leads to
+  \begin{equation*}
+    r_\Lambda(S)
+    \le
+    \norm{P_+Q_-} + \frac{\tilde{b}(1+\norm{P_+Q_-})}{1-\tilde{b}}
+    =
+    \frac{\norm{P_+Q_-}+\tilde{b}}{1-\tilde{b}}
+    .
+  \end{equation*}
+  The right-hand side of the latter is smaller than $1$ if and only if
+  \begin{equation*}
+    \norm{P_+Q_-} < 1-2\tilde{b}.
+  \end{equation*}
+  This is a reasonable condition on $\norm{P_+Q_-}$ only for $\tilde{b} < 1/2$.
+\end{remark}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Block diagonalization approach
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{The block diagonalization approach}\label{sec:blockDiag}
+
+In this section, we discuss an approach to verify the hypotheses of Proposition~\ref{prop:GLS} and Lemma~\ref{lem:GLS} which
+relies on techniques previously discussed in the context of block diagonalizations of operators and forms, for instance
+in~\cite{MSS16} and~\cite{GKMSV17}, respectively; see also Remark~\ref{rem:MSS16} below.
+
+Recall that for the two orthogonal projections $P_+$ and $Q_+$ from Hypothesis~\ref{hyp:minimax} the inequality
+$\norm{P_+-Q_+}<1$ holds if and only if $\Ran Q_+$ can be represented as
+\begin{equation}\label{eq:graph}
+  \Ran Q_+ = \{ f \oplus Xf \mid f\in\Ran P_+ \}
+\end{equation}
+with some bounded linear operator $X\colon\Ran P_+\to\Ran P_-$; in this case, one has
+\begin{equation}\label{eq:normPQX}
+  \norm{P_+-Q_+}
+  =
+  \frac{\norm{X}}{\sqrt{1+\norm{X}^2}}
+  ,
+\end{equation}
+see, e.g.,~\cite[Corollary~3.4\,(i)]{KMM03:181}. The orthogonal projection $Q_+$ can then be represented as the $2\times2$ block
+operator matrices
+\begin{equation}\label{eq:reprQ}
+ \begin{aligned}
+  Q_+
+  &=
+  \begin{pmatrix}
+    (I_{\Ran P_+}+X^*X)^{-1} & (I_{\Ran P_+}+X^*X)^{-1}X^*\\
+    X(I_{\Ran P_+}+X^*X)^{-1} & X(I_{\Ran P_+}+X^*X)^{-1}X^*
+  \end{pmatrix}\\
+  &=
+  \begin{pmatrix}
+    (I_{\Ran P_+}+X^*X)^{-1} & X^*(I_{\Ran P_-}+XX^*)^{-1}\\
+    (I_{\Ran P_-}+XX^*)^{-1}X & XX^*(I_{\Ran P_-}+XX^*)^{-1}
+  \end{pmatrix}
+ \end{aligned}
+\end{equation}
+with respect to $\Ran P_+\oplus\Ran P_-$, see, e.g.,~\cite[Remark~3.6]{KMM03:181}. In particular, we have
+\begin{equation}\label{eq:PQY}
+  P_+Q_+|_{\Ran P_+}
+  =
+  (I_{\Ran P_+} + X^*X)^{-1}
+  ,
+\end{equation}
+which is in fact the starting point for the current approach. With regard to the desired relations
+$\Ran (P_+Q_+|_{\cD_+}) \supset \cD_+$ and $\Ran (P_+Q_+|_{\fD_+}) \supset \fD_+$, we need to establish that the operator
+$I_{\Ran P_+} + X^*X$ maps $\cD_+$ and $\fD_+$ into $\cD_+$ and $\fD_+$, respectively.
+
+Define the skew-symmetric operator $Y$ via the $2\times2$ block operator matrix
+\begin{equation}\label{eq:defY}
+  Y
+  =
+  \begin{pmatrix} 0 & -X^*\\ X & 0 \end{pmatrix}
+\end{equation}
+with respect to $\Ran P_+\oplus\Ran P_-$. Then, the operators $I\pm Y$ are bijective with
+\begin{equation}\label{eq:Ypm}
+  (I-Y)(I+Y)
+  =
+  \begin{pmatrix}
+    I_{\Ran P_+}+X^*X & 0\\
+    0 & I_{\Ran P_-}+XX^*
+  \end{pmatrix}
+  .
+\end{equation}
+
+The following lemma is extracted from various sources. We comment on this afterwards in Remark~\ref{rem:PQXY} below.
+\begin{lemma}\label{lem:PQXY}
+  Suppose that the projections $P_+$ and $Q_+$ from Hypothesis~\ref{hyp:minimax} satisfy $\norm{P_+ - Q_+} < 1$, and let the
+  operators $X$ and $Y$ be as in~\eqref{eq:graph} and~\eqref{eq:defY}, respectively. Moreover, let $\cC$ be an invariant subspace
+  for $P_+$ and $Q_+$ such that $\cC = (\cC \cap \Ran P_+) \oplus (\cC \cap \Ran P_-) =: \cC_+ \oplus \cC_-$.
+  
+  Then, the following are equivalent:
+  \begin{enumerate}
+    \renewcommand{\theenumi}{\roman{enumi}}
+
+    \item $I_{\Ran P_+} + X^*X$ maps $\cC_+$ into itself;
+
+    \item $I_{\Ran P_-} + XX^*$ maps $\cC_-$ into itself;
+
+    \item $Y$ maps $\cC$ into itself;
+
+    \item $(I+Y)$ maps $\cC$ into itself;
+
+    \item $(I-Y)$ maps $\cC$ into itself.
+
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  Clearly, the hypotheses imply that $P_+Q_+$ maps $\cC$ into $\cC_+$ and $P_-Q_+$ maps $\cC$ into $\cC_-$.
+  
+  (i)$\Rightarrow$(ii).
+  Let $g \in \cC_-$. Using the first representation in~\eqref{eq:reprQ}, we then have
+  $(I_{\Ran P_+} + X^*X)^{-1}X^*g = (P_+Q_+|_{\Ran P_-})g \in \cC_+$. Hence, $X^*g \in \cC_+$ by~(i) and, in turn,
+  $h := (I_{\Ran P_+} + X^*X)X^*g \in \cC_+$. Using again~\eqref{eq:reprQ}, this yields
+  \begin{align*}
+    (I_{\Ran P_-} + XX^*)g
+    &=
+    g + XX^*g
+      =
+      g + X(I_{\Ran P_+}+X^*X)^{-1}h\\
+    &=
+    g + (P_-Q_+|_{\Ran P_+})h \in \cC_-
+    .
+  \end{align*}
+  As a byproduct, we have also shown that $X^*$ maps $\cC_-$ into $\cC_+$.
+
+  (ii)$\Rightarrow$(i).
+  Using the identities $(I_{\Ran P_-} + XX^*)^{-1}X = P_-Q_+|_{\Ran P_+}$ and $X^*(I_{\Ran P_-}+XX^*)^{-1} = P_+Q_+|_{\Ran P_-}$
+  taken from the second representation in~\eqref{eq:reprQ}, the proof is completely analogous to the implication
+  (i)$\Rightarrow$(ii). In particular, we likewise obtain as a byproduct that $X$ maps $\cC_+$ into $\cC_-$.
+
+  (i),(ii)$\Rightarrow$(iii).
+  We have already seen that $X$ maps $\cC_+$ into $\cC_-$ and that $X^*$ maps $\cC_-$ into $\cC_+$. Taking into account that
+  $\cC = \cC_+ \oplus \cC_-$, this means that $Y$ maps $\cC$ into itself.
+
+  (iii)$\Leftrightarrow$(iv),(v).
+  This is clear.
+
+  (iv),(v)$\Rightarrow$(i),(ii).
+  This follows immediately from identity~\eqref{eq:Ypm}.
+\end{proof}%
+
+\begin{remark}\label{rem:PQXY}
+  The proof of the equivalence (i)$\Leftrightarrow$(ii) and the one of the implication (i),(ii)$\Rightarrow$(iii) in
+  Lemma~\ref{lem:PQXY} are extracted from the proof of~\cite[Theorem~5.1]{GKMSV17}; see also~\cite[Theorem~6.3.1 and
+  Lemma~6.3.3]{SchmDiss}.
+
+  The equivalence (iv)$\Leftrightarrow$(v) can alternatively be directly obtained from the identity
+  \begin{equation*}
+    \begin{pmatrix}
+      I_{\Ran P_+} & 0\\
+      0 & -I_{\Ran P_-}
+    \end{pmatrix}
+    (I + Y)
+    \begin{pmatrix}
+      I_{\Ran P_+} & 0\\
+      0 & -I_{\Ran P_-}
+    \end{pmatrix}
+    =
+    I - Y
+    .
+  \end{equation*}
+  Such an argument has been used in the proof of~\cite[Proposition~3.3]{MSS16}.
+
+  The implication (iv),(v)$\Rightarrow$(i) can essentially be found in the proof of~\cite[Theorem~5.1]{GKMSV17}
+  and~\cite[Remark~6.3.2]{SchmDiss}.
+\end{remark}
+
+Below, we apply Lemma~\ref{lem:PQXY} with $\cC = \Dom(A) = \Dom(B) = \cD_+ \oplus \cD_-$ or
+$\cC = \Dom(\abs{A}^{1/2}) = \Dom(\abs{B}^{1/2}) = \fD_+ \oplus \fD_-$, depending on the situation. The easiest case is
+encountered in Theorem~\ref{thm:genSemibounded}:
+
+\begin{proof}[Proof of Theorem~\ref{thm:genSemibounded}]
+  Let $\Dom(\abs{A}^{1/2}) = \Dom(\abs{B}^{1/2})$ and $\fb[x , x] \le 0$ for all $x \in \fD_-$. We then have $\fD_- = \Ran P_-$
+  if $A$ is bounded from below and $\fD_+ = \Ran P_+$ if $A$ is bounded from above. Hence, item~(ii) or (i) in
+  Lemma~\ref{lem:PQXY}, respectively, with $\cC = \fD_+ \oplus \fD_-$ is automatically satisfied. In any case, we have by
+  Lemma~\ref{lem:PQXY} that $I_{\Ran P_+} + X^*X$ maps $\fD_+$ into $\fD_+$, which by identity~\eqref{eq:PQY} means that
+  $\Ran (P_+Q_+|_{\fD_+}) \supset \fD_+$. The representation~\eqref{eq:genSemibounded:form} now follows from
+  Proposition~\ref{prop:GLS}\,(a) and Remark~\ref{rem:PQbij}\,(1). If even $\Dom(A) = \Dom(B)$ and $\scprod{ x , Bx } \le 0$ for
+  all $x \in \cD_-$, we use the same reasoning as above with $\fD_+$ and $\fD_-$ replaced by $\cD_+$ and $\cD_-$, respectively,
+  and obtain representation~\eqref{eq:genSemibounded:op} from Proposition~\ref{prop:GLS}\,(b) and Remark~\ref{rem:PQbij}\,(1).
+  The representation~\eqref{eq:genSemibounded:form} is then still valid by Lemma~\ref{lem:GLS} and the first part of the proof.
+\end{proof}%
+
+While certain conditions for Proposition~\ref{prop:GLS} and Lemma~\ref{lem:GLS} are part of the hypotheses of
+Theorems~\ref{thm:genOpInfinitesimal} and~\ref{thm:genSemibounded}, in the situations of Theorems~\ref{thm:offdiagOp}
+and~\ref{thm:offdiagForm} these need to be verified explicitly from the specific hypotheses at hand. Here, we rely on previous
+considerations on block diagonalizations for block operator matrices and forms. In case of Theorem~\ref{thm:offdiagOp}, the
+crucial ingredient is presented in the following result, extracted from~\cite{MSS16}. An earlier result in this direction is
+commented on in Remark~\ref{rem:MSS16}\,(2) below.
+
+\begin{proposition}[see~{\cite[Theorem~6.1]{MSS16}}]\label{prop:MSS16}
+  In the situation of Theorem~\ref{thm:offdiagOp} one has $\norm{P_+-Q_+} \le \sqrt{2}/2 <1$, and the operator identity
+  \begin{equation}\label{eq:blockDiag}
+    (I-Y)(A+V)(I-Y)^{-1} = A-YV
+  \end{equation}
+  holds with $Y$ as in~\eqref{eq:defY}.
+\end{proposition}
+
+\begin{proof}
+  Set $V_{\text{off}} := V|_{\Dom(A)}$, so that we have $B = A+V = A+V_\text{off}$ as well as $A-YV = A-YV_\text{off}$. Clearly,
+  the hypotheses on $V$ ensure that $V_\text{off}$ is $A$-bounded with $A$-bound $b_*<1$ and off-diagonal with respect to the
+  decomposition $\Ran P_+\oplus\Ran P_-$. By~\cite[Lemma~6.3]{MSS16} we now have 
+  \begin{equation*}
+    \Ker(A+V_\text{off})
+    \subset
+    \Ker A
+    \subset
+    \Ran P_-
+    .
+  \end{equation*}
+  In light of~\eqref{eq:normPQX}, the claim therefore is just an instance of~\cite[Theorem~6.1]{MSS16}.
+\end{proof}%
+
+\begin{remark}\label{rem:MSS16}
+  (1)
+  Let $A_\pm:=A|_{\Ran P_\pm}$ be the parts of $A$ associated with the subspaces $\Ran P_\pm$, and write
+  \begin{equation*}
+    V|_{\Dom(A)}
+    =
+    \begin{pmatrix} 0 & W\\ W^* & 0 \end{pmatrix}
+    ,
+  \end{equation*}
+  where $W\colon \Ran P_-\supset\cD_-\to\Ran P_+$ is given by $Wx:=P_+Vx$, $x\in\cD_-$. Then,
+  \begin{equation*}
+    A - YV
+    =
+    \begin{pmatrix}
+      A_+ - X^*W^* & 0\\
+      0 & A_- + XW
+    \end{pmatrix}
+    .
+  \end{equation*} 
+  In this sense, identity~\eqref{eq:blockDiag} can be viewed as a block diagonalization of the operator $A+V$. For a more
+  detailed discussion of block diagonalizations and operator Riccati equations in the operator setting, the reader is referred
+  to~\cite{MSS16} and the references cited therein.
+
+  (2)
+  In the particular case where $0$ belongs to the resolvent set of $A$, the conclusion of Proposition~\ref{prop:MSS16} can be
+  inferred also from~\cite[Theorems~2.7.21 and~2.8.5]{Tre08}.
+\end{remark}
+
+\begin{proof}[Proof of Theorem~\ref{thm:offdiagOp}]
+  For $x \in \cD_-$, we have
+  \begin{equation*}
+    \scprod{ x , Vx }
+    =
+    \scprod{ P_-x , VP_-x }
+    =
+    \scprod{ x , P_-VP_-x }
+    =
+    0
+  \end{equation*}
+  and, thus,
+  \begin{equation*}
+    \scprod{ x , (A+V)x }
+    =
+    \scprod{ x , Ax }
+    \le
+    0
+    .
+  \end{equation*}
+  Moreover, by Proposition~\ref{prop:MSS16} the inequality $\norm{P_+-Q_+}<1$ is satisfied. Let $Y$ be as in~\eqref{eq:defY}.
+  Since $\Dom(A+V)=\Dom(A)=\Dom(A-YV)$, it then follows from identity~\eqref{eq:blockDiag} that $I-Y$ maps
+  $\cC := \Dom(A) = \cD_+ \oplus \cD_-$ into itself. In turn, Lemma~\ref{lem:PQXY} implies that $I_{\Ran P_+} + X^*X$ maps
+  $\cD_+$ into itself, which by identity~\eqref{eq:PQY} means that $\Ran(P_+Q_+|_{\cD_+}) \supset \cD_+$. The claim now follows
+  from Proposition~\ref{prop:GLS}, Lemma~\ref{lem:GLS}, and Remark~\ref{rem:PQbij}\,(1).
+\end{proof}
+
+To the best of the author's knowledge, no direct analogue of Proposition~\ref{prop:MSS16} is known so far in the setting of form
+rather than operator perturbations. Although the inequality $\norm{P_+-Q_+} \le \sqrt{2}/2$ can be established here as well under
+fairly reasonable assumptions, see~\cite[Theorem~3.3]{GKMSV17}, the mapping properties of the operators $I \pm Y$ connected with
+a corresponding diagonalization related to~\eqref{eq:blockDiag} are much harder to verify. The situation is even more subtle
+there since also the domain equality $\Dom(\abs{A}^{1/2}) = \Dom(\abs{B}^{1/2})$ needs careful treatment. The latter is
+conjectured to hold in a general off-diagonal form perturbation framework~\cite[Remark~2.7]{GKMV13}. Some characterizations have
+been discussed in~\cite[Theorem~3.8]{Schm15}, but they all are hard to verify in a general abstract setting. A compromise in this
+direction is to require that the form $\fb$ is semibounded, see~\cite[Lemma~3.9]{Schm15} and~\cite[Lemma~2.7]{GKMSV17}, which
+forces the diagonal form $\fa$ to be semibounded as well, see below. As in the proof of Theorem~\ref{thm:genSemibounded} above,
+this simplifies the situation immensely:
+
+\begin{proof}[Proof of Theorem~\ref{thm:offdiagForm}]
+  Set $\fv_{\text{off}} := \fv|_{\Dom[\fa]}$, so that $\fb = \fa + \fv = \fa + \fv_{\text{off}}$. For
+  $x \in \fD_- = \Ran P_- \cap \Dom[\fa]$ we have
+  \begin{equation*}
+    \fv_{\text{off}}[ x , x ]
+    =
+    \fv[ P_-x , P_-x ]
+    =
+    0
+  \end{equation*}
+  and, thus,
+  \begin{equation*}
+    \fb[ x , x ]
+    =
+    \fa[ x , x ]
+    \le
+    0
+    .
+  \end{equation*}
+  In the same way, we see that $\fb[ x , x ] = \fa[ x , x ]$ for $x \in \fD_+$, which by the identity
+  $\fa[ x , x ] = \fa[ P_+x , P_+x ] + \fa[ P_-x , P_-x ]$ for all $x \in \Dom[\fa]$ implies that along with $\fb$ the form $\fa$
+  is semibounded as well; cf.~also the proof of~\cite[Lemma~2.7]{GKMSV17}. In particular, we have $\fD_- = \Ran P_-$ if $\fa$ is
+  bounded from below and $\fD_+ = \Ran P_+$ if $\fa$ is bounded from above.
+
+  Let $m \in \RR$ be the lower (resp.~upper) bound of $\fa$. We then have
+  \begin{equation*}
+    \abs{(\fa-m)[ x , x ]}
+    =
+    \norm{ \abs{A-m}^{1/2}x }^2
+    \le
+    \norm{ \abs{A-m}^{1/2}(\abs{A}^{1/2}+I)^{-1} } \norm{ (\abs{A}^{1/2}+I)x }^2
+  \end{equation*}
+  for all $x \in \Dom[\fa]$, where $\abs{A-m}^{1/2}(\abs{A}^{1/2}+I)^{-1}$ is closed and everywhere defined, hence bounded by the
+  closed graph theorem. From this and the hypothesis on $\fv$ we see that
+  \begin{equation*}
+    \abs{ \fv[ x , x ] }
+    \le
+    \beta\bigl( \norm{\abs{A}^{1/2}x}^2 + \norm{x}^2 \bigr)
+  \end{equation*}
+  for some $\beta \ge 0$ and all $x \in \Dom[\fa]$, which means that $\fb = \fa + \fv$ is a semibounded saddle-point form in the
+  sense of~\cite[Section~2]{GKMSV17}.
+
+  Since $\Dom(\abs{B}^{1/2}) = \Dom[\fb] = \Dom[\fa] = \Dom(\abs{A}^{1/2})$ by hypothesis, $\cC = \Dom[\fa]$ is invariant for
+  both $P_+$ and $Q_+$. Moreover, by~\cite[Theorem~3.3]{GKMSV17} (cf.~also~\cite[Theorem~2.13]{Schm15}) we have
+  \begin{equation*}
+    \Ker B
+    \subset
+    \Ker A
+    \subset
+    \Ran P_-
+  \end{equation*}
+  and $\norm{ P_+ - Q_+ } \le \sqrt{2}/2 < 1$. Taking into account that $\fa$ is semibounded as observed above,
+  Lemma~\ref{lem:PQXY} with $\cC = \Dom[\fa] = \fD_+ \oplus \fD_-$ and identity~\eqref{eq:PQY} then imply as in the proof of
+  Theorem~\ref{thm:genSemibounded} that $\Ran(P_+Q_+|_{\fD_+}) \supset \fD_+$. The claim now follows from
+  Proposition~\ref{prop:GLS}\,(a) and Remark~\ref{rem:PQbij}\,(1).
+\end{proof}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\appendix
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Appendix: Heinz inequality
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Heinz inequality}\label{sec:heinz}
+
+In this appendix we discuss some consequences of the well-known Heinz inequality. These consequences or particular cases thereof
+are used at various spots of the main part of the paper, but they may also be of independent interest. Although probably
+folklore, in lack of a suitable reference they are nevertheless presented here in full detail.
+
+Throughout this appendix, we denote the norm associated with the inner product of a Hilbert space $\cH$ by
+$\norm{\,\cdot\,}_\cH$.
+
+The following variant of the Heinz inequality is taken from~\cite{Kre71}.
+
+\begin{proposition}[{\cite[Theorem~I.7.1]{Kre71}}]\label{propHeinz}
+  Let $\Lambda_1$ and $\Lambda_2$ be strictly positive self-adjoint operators on Hilbert spaces $\cH_1$ and $\cH_2$,
+  respectively. Moreover, let $S\colon\cH_1\to\cH_2$ be a bounded operator mapping $\Dom(\Lambda_1)$ into $\Dom(\Lambda_2)$, and
+  suppose that there is a constant $C\ge0$ such that
+  \begin{equation*}
+    \norm{\Lambda_2Sx}_{\cH_2}
+    \le
+    C\cdot\norm{\Lambda_1x}_{\cH_1}
+    \quad\text{ for all }\quad
+    x\in\Dom(\Lambda_1)
+    .
+  \end{equation*}
+  Then, for all $\nu\in[0,1]$, the operator $S$ maps $\Dom(\Lambda_1^\nu)$ into $\Dom(\Lambda_2^\nu)$, and for all
+  $x\in\Dom(\Lambda_1^\nu)$ one has
+  \begin{equation*}
+    \norm{\Lambda_2^\nu Sx}_{\cH_2}
+    \le
+    C^\nu\norm{S}_{\cH_1\to\cH_2}^{1-\nu}\norm{\Lambda_1^\nu x}_{\cH_1}
+    .
+  \end{equation*}
+\end{proposition}
+
+The above result admits the following extension to closed densely defined operators between Hilbert spaces. For a generalization
+of Proposition~\ref{propHeinz} to maximal accretive operators, see~\cite{Kato61}.
+
+\begin{proposition}\label{prop:heinz}
+  Let $\cH_1$, $\cH_2$, $\cK_1$, and $\cK_2$ be Hilbert spaces, and let $\Lambda_1\colon\cH_1\supset\Dom(\Lambda_1)\to\cK_1$ and
+  $\Lambda_2\colon\cH_2\supset\Dom(\Lambda_2)\to\cK_2$ be closed densely defined operators. Moreover, let $S\colon\cH_1\to\cH_2$
+  be a bounded operator mapping $\Dom(\Lambda_1)$ into $\Dom(\Lambda_2)$, and suppose that there is a constant $C\ge0$ such that
+  \begin{equation*}
+    \norm{\Lambda_2Sx}_{\cK_2}
+    \le
+    C\cdot\norm{\Lambda_1x}_{\cK_1}
+    \quad\text{ for all }\quad
+    x\in\Dom(\Lambda_1)
+    .
+  \end{equation*}
+  Then, for all $\nu\in[0,1]$, the operator $S$ maps $\Dom(\abs{\Lambda_1}^\nu)$ into $\Dom(\abs{\Lambda_2}^\nu)$.
+\end{proposition}
+
+\begin{proof}
+  Recall that $\norm{\Lambda_jy}_{\cK_j}=\norm{\abs{\Lambda_j}y}_{\cH_j}$ for all $y\in\Dom(\Lambda_j)=\Dom(\abs{\Lambda_j})$,
+  $j=1,2$. Moreover, the operator $S$ maps $\Dom(\abs{\Lambda_1}+I_{\cH_1})=\Dom(\Lambda_1)$ into
+  $\Dom(\abs{\Lambda_2}+I_{\cH_2})=\Dom(\Lambda_2)$ by hypothesis. We estimate
+  \begin{align*}
+    \norm{(\abs{\Lambda_2}+I_{\cH_2})Sx}_{\cH_2}
+    &\le
+    \norm{\Lambda_2Sx}_{\cK_2} + \norm{Sx}_{\cH_2} \le C \norm{\Lambda_1x}_{\cK_1} + \norm{Sx}_{\cH_2}\\
+    &\le
+    \widetilde{C} \norm{(\abs{\Lambda_1}+I_{\cH_1})x}_{\cH_1}
+  \end{align*}
+  for all $x\in\Dom(\Lambda_1)$ with
+  \begin{equation*}
+    \widetilde{C}
+    :=
+    C\norm{\Lambda_1(\abs{\Lambda_1}+I_{\cH_1})^{-1}}_{\cH_1\to\cK_1} + \norm{S(\abs{\Lambda_1}+I_{\cH_1})^{-1}}_{\cH_1\to\cH_2}
+    .
+  \end{equation*}
+  Here, we have taken into account that $\Lambda_1(\abs{\Lambda_1}+I_{\cH_1})^{-1}$ is a closed and everywhere defined operator
+  from $\cH_1$ to $\cK_1$, hence bounded by the closed graph theorem.
+
+  Applying Proposition~\ref{propHeinz} now yields that $S$ maps $\Dom((\abs{\Lambda_1}+I_{\cH_1})^\nu)$ into
+  $\Dom((\abs{\Lambda_2}+I_{\cH_2})^\nu)$ for all $\nu\in[0,1]$. It remains to observe that by functional calculus one has
+  $\Dom((\abs{\Lambda_j}+I_{\cH_j})^\nu)=\Dom(\abs{\Lambda_j}^\nu)$ for $j\in\{1,2\}$, which completes the proof.
+\end{proof}%
+
+We now obtain several easy corollaries.
+
+\begin{corollary}[{cf.~\cite[Corollary 2.1.3]{SchmDiss}}]\label{cor:SchmDiss}
+  Let $\cH$, $\cK_1$, and $\cK_2$ be Hilbert spaces, and let $\Lambda_1\colon\cH\supset\Dom(\Lambda_1)\to\cK_1$ and
+  $\Lambda_2\colon\cH\supset\Dom(\Lambda_2)\to\cK_2$ be closed densely defined operators.
+
+  If $\Dom(\Lambda_1) \subset \Dom(\Lambda_2)$, then $\Dom(\abs{\Lambda_1}^\nu) \subset \Dom(\abs{\Lambda_2}^\nu)$ for all
+  $\nu \in [0,1]$. If even $\Dom(\Lambda_1) = \Dom(\Lambda_2)$, then also
+  $\Dom(\abs{\Lambda_1}^\nu) = \Dom(\abs{\Lambda_2}^\nu)$ for all $\nu \in [0,1]$.
+\end{corollary}
+
+\begin{proof}
+  Suppose that $\Dom(\Lambda_1) \subset \Dom(\Lambda_2)$. Since $\Dom(\abs{\Lambda_1}) = \Dom(\Lambda_1)$, we have as in the
+  proof of the preceding proposition that $\Lambda_2(\abs{\Lambda_1}+I_\cH)^{-1}$ is a closed everywhere defined, hence bounded,
+  operator from $\cH$ to $\cK_2$. Thus,
+  \begin{equation*}
+    \norm{\Lambda_2x}_{\cK_2}
+    \le
+    \norm{\Lambda_2(\abs{\Lambda_1}+I_\cH)^{-1}}_{\cH\to\cK_2} \cdot \norm{(\abs{\Lambda_1}+I_\cH)x}_{\cH}
+  \end{equation*}
+  for all $x\in\Dom(\Lambda_1)$, and applying Proposition~\ref{prop:heinz} with $S=I_\cH$ yields that
+  \begin{equation*}
+    \Dom(\abs{\Lambda_1}^\nu)
+    =
+    \Dom((\abs{\Lambda_1}+I_\cH)^\nu)\subset\Dom(\abs{\Lambda_2}^\nu)
+    .
+  \end{equation*}
+  If also $\Dom(\Lambda_1) \supset \Dom(\Lambda_2)$, the above with switched roles of $\Lambda_1$ and $\Lambda_2$ yields that
+  also $\Dom(\abs{\Lambda_2}^\nu) \subset \Dom(\abs{\Lambda_1}^\nu)$, which completes the proof.
+\end{proof}%
+
+\begin{remark}\label{rem:SchmDiss}
+  For the particular case of $\nu = 1/2$, Corollary~\ref{cor:SchmDiss} can alternatively also be proved with classical
+  considerations regarding operator and form boundedness:
+
+  If $\Dom(\Lambda_1) \subset \Dom(\Lambda_2)$, then also $\Dom(\abs{\Lambda_1}) \subset \Dom(\abs{\Lambda_2})$, so that
+  $\abs{\Lambda_2}$ is relatively operator bounded with respect to $\abs{\Lambda_1}$, see, e.g.,~\cite[Remark~IV.1.5]{Kato95}. In
+  turn, by~\cite[Theorem~VI.1.38]{Kato95}, $\abs{\Lambda_2}$ is also form bounded with respect to $\abs{\Lambda_1}$, which
+  extends to the closure of the forms. The latter includes that
+  $\Dom(\abs{\Lambda_1}^{1/2}) \subset \Dom(\abs{\Lambda_2}^{1/2})$.
+\end{remark}
+
+\begin{corollary}\label{cor:fracBij}
+  Let $\Lambda_1$ and $\Lambda_2$ be as in Proposition~\ref{prop:heinz}, and suppose that $S\colon\cH_1\to\cH_2$ is bounded and
+  bijective with $\Ran(S|_{\Dom(\Lambda_1)})=\Dom(\Lambda_2)$. Then, one has
+  $\Ran(S|_{\Dom(\abs{\Lambda_1}^\nu)})=\Dom(\abs{\Lambda_2}^\nu)$ for all $\nu\in[0,1]$.
+\end{corollary}
+
+\begin{proof}
+  Consider the closed densely defined operator $\Lambda_3 := \Lambda_1S^{-1}$ with domain
+  $\Dom(\Lambda_3) = \Ran(S|_{\Dom(\Lambda_1)}) = \Dom(\Lambda_2)$. By definition, $S$ maps $\Dom(\Lambda_1)$ onto
+  $\Dom(\Lambda_3)$. Moreover, we have $\Lambda_3 Sx = \Lambda_1 x$ and, in particular,
+  \begin{equation*}
+    \norm{ \Lambda_3 Sx }_{\cK_1} = \norm{\Lambda_1x}_{\cK_1}
+  \end{equation*}
+  for all $x\in\Dom(\Lambda_1)$. Proposition~\ref{prop:heinz} now implies that $S$ maps $\Dom(\abs{\Lambda_1}^\nu)$ into
+  $\Dom(\abs{\Lambda_3}^\nu)$. Since $\Dom(\abs{\Lambda_3}^\nu)=\Dom(\abs{\Lambda_2}^\nu)$ for all $\nu \in [0,1]$ in light of
+  Corollary~\ref{cor:SchmDiss}, this proves the inclusion $\Ran(S|_{\Dom(\abs{\Lambda_1}^\nu)})\subset\Dom(\abs{\Lambda_2}^\nu)$.
+
+  Since $S$ is bijective and $S^{-1}$ maps $\Dom(\Lambda_2)$ onto $\Dom(\Lambda_1)$ by hypothesis, one verifies in an analogous
+  way that $S^{-1}$ maps $\Dom(\abs{\Lambda_2}^\nu)$ into $\Dom(\abs{\Lambda_1}^\nu)$. This shows the converse inclusion and,
+  hence, completes the proof.
+\end{proof}%
+
+The last corollary discussed here is related to the question whether an operator sum agrees with the operator associated to the
+sum of the corresponding forms, at least in the semibounded setting. Part~(b) of this corollary can in some sense also be
+regarded as an extension of~\cite[Lemma~2.2.7]{SchmDiss} to not necessarily off-diagonal perturbations.
+
+\begin{corollary}[{cf.~\cite[Lemma~2.2.7]{SchmDiss}}]\label{cor:formpert}
+  Let $\Lambda$ be a self-adjoint operator on a Hilbert space with inner product $\scprod{\cdot , \cdot}$, and let $K$ be an
+  operator on the same Hilbert space.
+
+  \begin{enumerate}
+    \renewcommand{\theenumi}{\alph{enumi}}
+
+    \item
+    If $K$ is symmetric with $\Dom(K) \supset \Dom(\abs{\Lambda}^{1/2})$, then the operator sum $\Lambda + K$ defines a
+    self-adjoint operator with
+    \begin{equation*}
+      \scprod{ \abs{ \Lambda + K }^{1/2}x , \sign( \Lambda + K )\abs{ \Lambda + K}^{1/2}y }
+      =
+      \scprod{ \abs{\Lambda}^{1/2}x , \sign(\Lambda)\abs{\Lambda}^{1/2}y } + \scprod{ x, Ky }
+    \end{equation*}
+    for all $x,y \in \Dom(\abs{\Lambda}^{1/2}) = \Dom(\abs{\Lambda+K}^{1/2})$.
+
+    \item
+    If $K$ is self-adjoint and $\Lambda$-bounded with $\Lambda$-bound smaller than $1$, then $\Lambda + K$ is self-adjoint with
+    \begin{multline*}
+      \scprod{ \abs{ \Lambda + K }^{1/2}x , \sign( \Lambda + K )\abs{ \Lambda + K }^{1/2}y }\\
+      =
+      \scprod{ \abs{\Lambda}^{1/2}x , \sign(\Lambda)\abs{\Lambda}^{1/2}y } +
+        \scprod{ \abs{K}^{1/2}x, \sign(K)\abs{K}^{1/2}y }
+    \end{multline*}
+    for all $x,y \in \Dom(\abs{\Lambda}^{1/2}) = \Dom(\abs{\Lambda+K}^{1/2})$.
+
+  \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+  (a).
+  Since $\Dom(\abs{\Lambda}^{1/2}) \subset \Dom(K)$ by hypothesis, Corollary~2.1.20 in~\cite{Tre08} yields that $K$ is operator
+  infinitesimal with respect to $\Lambda$. In particular, the operator sum $\Lambda+K$ is self-adjoint on
+  $\Dom(\Lambda+K) = \Dom(\Lambda)$ by the well-known Kato-Rellich theorem. In turn, Corollary~\ref{cor:SchmDiss} implies that
+  $\Dom(\abs{\Lambda+K}^{1/2}) = \Dom(\abs{\Lambda}^{1/2})$. In particular, $\abs{\Lambda+K}^{1/2}$ is relatively operator
+  bounded with respect to $\abs{\Lambda}^{1/2}$, see, e.g.,~\cite[Remark~IV.1.5 and Section~V.3.3]{Kato95}. Since the symmetric
+  operator $K$ satisfies the inclusion $\Dom(\abs{\Lambda}^{1/2}) \subset \Dom(K)$ by hypothesis, $K$ is likewise relatively
+  bounded with respect to $\abs{\Lambda}^{1/2}$.
+
+  Now, for $x,y \in \Dom(\Lambda) = \Dom(\Lambda+K)$, both sides of the claimed identity clearly agree. For
+  $x,y \in \Dom(\abs{\Lambda}^{1/2}) = \Dom(\abs{\Lambda+K}^{1/2})$, this identity then follows by approximation, taking into
+  account that $\Dom(\Lambda)$ is an operator core for $\abs{\Lambda}^{1/2}$.
+
+  (b).
+  The operator sum $\Lambda+K$ with $\Dom(\Lambda+K) = \Dom(\Lambda)$ is self-adjoint by the well-known Kato-Rellich theorem, and
+  Corollary~\ref{cor:SchmDiss} implies that $\Dom(\abs{\Lambda+K}^{1/2}) = \Dom(\abs{\Lambda}^{1/2})$ and
+  $\Dom(\abs{\Lambda}^{1/2}) \subset \Dom(\abs{K}^{1/2})$. In turn, as in part~(a), both $\abs{\Lambda+K}^{1/2}$ and
+  $\abs{K}^{1/2}$ are relatively bounded with respect to $\abs{\Lambda}^{1/2}$. The claimed identity now follows just as in
+  part~(a) by approximation upon observing that it certainly holds for $x,y \in \Dom(\Lambda)$.
+\end{proof}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Acknowledgements
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{Acknowledgements}
+The author is grateful to Ivan Veseli\'c, Matthias T\"aufer and Stephan Schmitz for fruitful and inspiring discussions. He is
+especially indebted to Stephan Schmitz for also commenting on an earlier version of this manuscript.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% Bibliography
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{thebibliography}{[10]}
+
+  \bibitem{AL95} V.~M.~Adamjan, H.~Langer,
+    \emph{Spectral properties of a class of rational operator valued functions},
+    J.~Operator Theory~\textbf{33} (1995), 259--277.
+
+  \bibitem{DK70} C.~Davis, W.~M.~Kahan,
+    \emph{The rotation of eigenvectors by a perturbation.~III},
+    SIAM J.~Numer.~Anal.~\textbf{7} (1970), 1--46.  
+
+  \bibitem{DES00} J.~Dolbeault, M.~J.~Esteban, E.~S\'er\'e,
+    \emph{On the eigenvalues of operators with gaps. Application to Dirac Operators},
+    J.~Funct.~Anal.~\textbf{174} (2000), 208--226.
+
+  \bibitem{DES06} J.~Dolbeault, M.~J.~Esteban, E.~S\'er\'e,
+    \emph{General results on the eigenvalues of operators with gaps, arising from both ends of the gaps. Application to Dirac
+      operators},
+    J.~Eur.~Math.~Soc.~(JEMS) \textbf{8} (2006), 243--251.
+
+  \bibitem{FFMM00} M.~Faierman, R.~J.~Fries, R.~Mennicken, M.~M\"oller,
+    \emph{On the essential spectrum of the linearized Navier-Stokes operator},
+    Integral Equations Operator Theory~\textbf{38} (2000), 9--27.
+
+  \bibitem{GKMV13} L.~Grubi\v{s}i\'c, V.~Kostrykin, K.~A.~Makarov, K.~Veseli\'c,
+    \emph{The $\Tan 2\Theta$ Theorem for indefinite quadratic forms},
+    J.~Spectr.~Theory~\textbf{3} (2013), 83--100.
+
+  \bibitem{GKMSV17} L.~Grubi\v{s}i\'c, V.~Kostrykin, K.~A.~Makarov, S.~Schmitz, K.~Veseli\'c,
+    \emph{Diagonalization of indefinite saddle point forms},
+    In: Analysis as a Tool in Mathematical Physics: in Memory of Boris Pavlov,
+    Oper.~Theory Adv.~Appl., vol.~276, Birkh\"auser, Basel, 2020, pp.~373--400.
+
+  \bibitem{GKMSV19} L.~Grubi\v{s}i\'c, V.~Kostrykin, K.~A.~Makarov, S.~Schmitz, K.~Veseli\'c,
+    \emph{The $\Tan2\Theta$ Theorem in fluid dynamics},
+    J.~Spectr.~Theory~\textbf{9} (2019), 1431--1457.
+
+  \bibitem{GLS99} M.~Griesemer, R.~T.~Lewis, H.~Siedentop,
+    \emph{A minimax principle for eigenvalues in spectral gaps: Dirac operators with Coulomb potentials},
+    Doc.~Math.~\textbf{4} (1999), 275--283.
+
+  \bibitem{Kato61} T.~Kato,
+    \emph{A generalization of the Heinz inequality},
+    Proc.~Japan Acad.~\textbf{37} (1961), 305--308.
+
+  \bibitem{Kato95} T.~Kato,
+    \emph{Perturbation Theory for Linear Operators},
+    Classics Math., Springer, Berlin, 1995.
+
+  \bibitem{KMM03:181} V.~Kostrykin, K.~A.~Makarov, A.~K.~Motovilov,
+    \emph{Existence and uniqueness of solutions to the operator Riccati equation. A geometric approach},
+    In: Advances in Differential Equations and Mathematical Physics (Birmingham, AL, 2002),
+    Contemp.~Math., vol.~327, Amer.~Math.~Soc., Providence, RI, 2003, pp.~181--198.
+
+  \bibitem{Kre71} S.~G.~Kre{\u\i}n,
+    \emph{Linear Differential Equations in Banach Space},
+    Transl.~Math.~Monogr., vol.~29, Amer.~Math.~Soc., Providence, RI, 1969.
+
+  \bibitem{LL01} E.~H.~Lieb, M.~Loss,
+    \emph{Analysis}, second edition,
+    Grad.~Stud.~Math., vol.~14, Amer.~Math.~Soc., Providence, RI, 2001.
+
+  \bibitem{LS16} M.~Langer, M.~Strauss,
+    \emph{Triple variational principles for self-adjoint operator functions},
+    J.~Funct.~Anal.~\textbf{270} (2016), 2019--2047.
+
+  \bibitem{MSS16} K.~A.~Makarov, S.~Schmitz, A.~Seelmann,
+    \emph{On invariant graph subspaces},
+    Integral Equations Operator Theory~\textbf{85} (2016), 399--425.
+
+  \bibitem{MM15} S.~Morozov, D.~M\"uller,
+    \emph{On the minimax principle for Coulomb-Dirac operators},
+    Math.~Z.~\textbf{280} (2015), 733--747.
+
+  \bibitem{MS06} A.~K.~Motovilov, A.~V.~Selin,
+    \emph{Some sharp norm estimates in the subspace perturbation problem},
+    Integral Equations Operator Theory~\textbf{56} (2006), 511--542.
+
+  \bibitem{NSTTV18} I.~Naki\'c, M.~T\"aufer, M.~Tautenhahn, I.~Veseli\'c,
+    \emph{Unique continuation and lifting of spectral band edges of Schr\"odinger operators on unbounded domains},
+    with an appendix by Albrecht Seelmann,
+    to appear in J.~Spectr.~Theory. E-print arXiv:1804.07816 [math.SP] (2018).
+
+  \bibitem{Schm12} K.~Schm\"udgen,
+    \emph{Unbounded Self-Adjoint Operators on Hilbert Space},
+    Grad.~Texts in Math., vol.~265, Springer, Dordrecht, 2012.  
+
+  \bibitem{SchmDiss} S.~Schmitz,
+    \emph{Representation theorems for indefinite quadratic forms and applications},
+    Dissertation, Johannes Gutenberg-Universit\"at Mainz, 2014.
+
+  \bibitem{Schm15} S.~Schmitz,
+    \emph{Representation theorems for indefinite quadratic forms without spectral gap},
+    Integral Equations Operator Theory~\textbf{83} (2015), 73--94.
+
+  \bibitem{SeelDiss} A.~Seelmann,
+    \emph{Perturbation theory for spectral subspaces},
+    Dissertation, Johannes Gutenberg-Universit\"at Mainz, 2014.
+
+  \bibitem{Seel19} A.~Seelmann,
+    \emph{Semidefinite perturbations in the subspace perturbation problem},
+     J.~Operator Theory~\textbf{81} (2019), 321--333.
+
+	\bibitem{Seel20} A.~Seelmann,
+		\emph{Unifying the treatment of indefinite and semidefinite perturbations in the subspace perturbation problem},
+		e-print arXiv:2006.16102 [math.SP] (2020). (submitted)
+
+  \bibitem{Tre08} C.~Tretter,
+    \emph{Spectral Theory of Block Operator Matrices and Applications},
+    Imperial College Press, London, 2008.
+
+\end{thebibliography}
+
+\end{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%% End of file
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

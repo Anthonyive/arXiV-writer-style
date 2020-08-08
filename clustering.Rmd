@@ -10,6 +10,7 @@ output: html_document
 library(data.table)
 library(stats)
 library(factoextra)
+library(tidyverse)
 ```
 
 ```{r}
@@ -46,11 +47,9 @@ Above shows the which cluster each sample belongs to
 
 # 4. Visualization
 ```{r}
-for (i in seq(2, ncol(dt))) {
-  i = 2
-  j =3
+for (i in seq(2, ncol(dt)-2)) {
   for (j in seq(i+1, ncol(dt))) {
-    plot(dt[,c(i,j)],
+    plot(select(dt, i, j),
          col = c("red", "green", "blue", "yellow")[unclass(km.res$cluster)],
          pch = c(23, 24, 21, 10)[unclass(km.res$cluster)],
          main = "2-vectors generated from Mixture",

@@ -1,0 +1,252 @@
+\begin{tikzpicture}[
+    bp/.style={rectangle, fill, inner sep=0pt, minimum width=2pt, minimum height=2pt},
+    comment/.style={circle, draw, color=red},
+    leaf/.style={inner sep=1pt},
+    weights/.style={auto, swap, red, inner sep = 1pt},
+    label/.style={text=oxfordblue},
+    line/.style={-, line width = 2pt, color = oxfordblue},
+    arrowline/.style={->, line width = 1pt, color = oxfordblue, >=stealth},
+    scale=1
+  ]
+  \tikzstyle{every node}=[font=\tiny]
+
+  %
+  % Semi-planar version
+  %
+
+  \begin{scope}[xscale = -0.6, yscale = 0.8]
+
+    \node (0) at (0,0) {};
+
+    \node[bp] (bp_1) at (0,1) {};
+    \node[bp] (bp_2) at (1,1) {};
+    \node[leaf] (4) at (0.5,2.1) {$4$};
+
+    \node[bp] (v_1) at (1.8,2) {};
+    \node[bp] (v_2) at (3,2) {};
+    \node[bp] (v_3) at (4,2) {};
+    \node[bp] (v_4) at (6.5,2) {};
+
+  % 1 subtree (from left) (v_1)
+    \node[bp] (bp2_1) at (4,3) {};
+    \node[bp] (bp2_2) at (5,3) {};
+    \node[leaf] (8) at (4.5, 4) {$8$};
+    \node[leaf] (6) at (5.5, 4) {$6$};
+
+  % 2 subtree (from left) (v_2)
+    \node[leaf] (3) at (3,3) {$3$};
+
+  % 3 subtree (from left) (v_3)
+    \node[bp] (bp3_1) at (5.8,3) {};
+    \node[bp] (bp3_2) at (6.7,3) {};
+    \node[bp] (bp3_3) at (7.5,3) {};
+    \node[leaf] (7) at (6.7, 4) {$7$};
+    \node[leaf] (5) at (7, 4) {$5$};
+    \node[leaf] (2) at (8, 4) {$2$};
+
+  % 4 subtree (from left)
+    \node[leaf] (1) at (7,2.7) {$1$};
+
+    \draw[line] (0) to (bp_1);
+    \draw[line] (bp_2.center) to (4);
+
+    \draw[line] (bp_2.center) to (v_1.center);
+    \draw[line] (v_2.center) to (3);
+    \draw[line] (bp2_2.center) to (8);
+    \draw[line] (bp2_2.center) to (6);
+
+    \draw[line] (v_3.center) to (bp2_1.center);
+
+    \draw[line] (v_4.center) to (bp3_1.center);
+    \draw[line] (bp3_2.center) to (7);
+    \draw[line] (bp3_3.center) to (5);
+    \draw[line] (bp3_3.center) to (2);
+
+    \draw[line] (v_4.center) to (1);
+
+    \draw[line, red] (bp_1.east) to (bp_2.west);
+    \draw[line, red] (v_1.east) to (v_2) to (v_3) to (v_4.west);
+    \draw[line, red] (bp2_1.east) to (bp2_2.west);
+    \draw[line, red] (bp3_1.east) to (bp3_2) to (bp3_3.west);
+  \end{scope}
+  
+  %
+  % Semi-planar version after down-step
+  %
+
+  \begin{scope}[shift = {(-2,-5)}, xscale = -1]
+    %
+    \node (0) at (0,0) {};
+    \node (bp) at (0,1) {};
+    \node[leaf] (4) at (-1,2) {$4$};
+    \node (v) at (1,2) {};
+
+  % 1 subtree (from left)
+    \node (bp2) at (0,2.3) {};
+    \node[leaf] (8) at (-0.5, 3) {$8$};
+    \node[leaf] (6) at (0.5, 3) {$6$};
+
+  % 2 subtree (from left)
+    \node[leaf] (3) at (0.85,3) {$3$};
+
+  % 3 subtree (from left)
+    \node (bp3) at (1.7,3) {};
+    \node[leaf] (7) at (1.2, 4) {$7$};
+    \node[leaf] (5) at (1.7, 4) {$5$};
+    \node[leaf] (2) at (2.2, 4) {$2$};
+
+  % 4 subtree (from left)
+    \node[leaf] (1) at (2.1,2.3) {$1$};
+
+    \draw[line] (0.mid) to (bp.mid) to (4);
+    \draw[line] (bp.mid) to (v.mid) to (bp2.mid) to (8);
+    \draw[line] (bp2.mid) to (6);
+    \draw[line] (v.mid) to (3);
+    \draw[line] (v.mid) to (bp3.mid) to (7);
+    \draw[line] (bp3.mid) to (5);
+    \draw[line] (bp3.mid) to (2);
+    \draw[line] (v.mid) to (1);
+
+    \node[red] at (v.south west) {$v$};
+  %
+  \end{scope}
+  %
+  % First decorated tree
+  %
+  \begin{scope}[shift = {(-2,-9)}]
+    %
+    \node (0) at (0,0) {};
+    \node (v) at (0,1) {};
+    \node[leaf] (1) at (-1,2) {$1$};
+    \node[leaf, anchor = south] (2) at (0, 2) {$2$};
+    \node[leaf] (3) at (1, 2) {$3$};
+
+    \draw[line] (0.mid) to node[weights] {$\{4\}$} (v.mid) to node[weights, swap] {$\{1\}$} (1);
+    \draw[line] (v.mid) to node[weights, rotate=45, shift={(0.1,0)}] {$\{2,5,7\}$} (2);
+    \draw[line] (v.mid) to node[weights] {$\{3\}$} (3);
+    %
+    \node[red, shift={(0.3,0)}] at (v.east) {$\{6,8\}$};
+  \end{scope}
+  %
+  \begin{scope}[shift = {(-2,-13)}]
+    %
+    \node (0) at (0,0) {};
+    \node (v) at (0,1) {};
+    \node[leaf] (1) at (-1,2) {$1$};
+    \node[leaf, anchor = south] (2) at (0, 2) {$2$};
+    \node[leaf] (3) at (1, 2) {$3$};
+
+    \draw[line] (0.mid) to node[weights] {$1$} (v.mid) to node[weights, swap] {$1$} (1);
+    \draw[line] (v.mid) to node[weights] {$3$} (2);
+    \draw[line] (v.mid) to node[weights] {$1$} (3);
+    %
+    \node[red] at (v.east) {$2$};
+  \end{scope}
+  %
+  %%% 2nd column, 1st row
+  %
+  \begin{scope}[shift ={(2,0)}]
+
+    \node (0) at (0,0) {};
+
+    \node[leaf] (1) at (0,1) {$1$};
+
+    \draw[line] (0) to (1.south);
+    
+    \node at (0,-0.5) {\normalsize $\intstruct \left( e_{1\downarrow} \right)$};
+  \end{scope}
+  %
+  \begin{scope}[shift={(5.5,0)}]
+    \node (0) at (0,0) {};
+
+    \node[bp] (bp_l3) at (0,1) {};
+    \node[bp] (bp_l2) at (-1,1) {};
+    \node[bp] (bp_l1) at (-2,1) {};
+    
+    \node[leaf] (1) at (-2.5,2) {$1$};
+    \node[leaf] (2) at (-1.5,2) {$2$};
+    \node[leaf] (3) at (-1,2) {$3$};
+    
+    \draw[line] (0) to (bp_l3.center);
+    \draw[line, red] (bp_l3.west) to (bp_l2.center) to (bp_l1.west);
+    \draw[line] (bp_l1.center) to (1);
+    \draw[line] (bp_l1.center) to (2);
+    \draw[line] (bp_l2.north) to (3);
+
+    \node at (-1.25,-0.5) {\normalsize $\intstruct \left( e_{2\downarrow} \right)$};
+  \end{scope}
+  %
+  \begin{scope}[shift ={(6.8,0)}]
+
+    \node (0) at (0,0) {};
+
+    \node[leaf] (1) at (0,1) {$1$};
+
+    \draw[line] (0) to (1);
+    
+    \node at (0,-0.5) {\normalsize $\intstruct \left( e_{3\downarrow} \right)$};
+  \end{scope}
+  %
+  \begin{scope}[shift={(6.5,-6)}]
+    \node (0) at (0,0) {};
+
+    \node[bp] (bp_l4) at (0,1) {};
+    \node[bp] (bp_l3) at (-1,1) {};
+    \node[bp] (bp_l2) at (-2,1) {};
+    \node[bp] (bp_l1) at (-4,1) {};
+    \node[leaf] (1) at (-4.5,2) {$1$};
+    \node[leaf] (2) at (-3.5,2) {$2$};
+    \node[leaf] (3) at (-1,2) {$3$};
+
+    \node[bp] (bp2_l1) at (-3,2) {};
+    \node[bp] (bp2_l2) at (-2,2) {};
+    \node[leaf] (4) at (-3.5,3) {$4$};
+    \node[leaf] (5) at (-2.5,3) {$5$};
+    
+    \draw[line] (0) to (bp_l4.center);
+    \draw[line, red] (bp_l4.west) to (bp_l3.center) to (bp_l2.center) to (bp_l1.west);
+    \draw[line] (bp_l1.center) to (1);
+    \draw[line] (bp_l1.center) to (2);
+    \draw[line] (bp_l2.north) to (bp2_l2.center);
+    \draw[line] (bp_l3.north) to (3);
+    \draw[line, red] (bp2_l2.center) to (bp2_l1.west);
+    \draw[line] (bp2_l1.center) to (4);
+    \draw[line] (bp2_l1.center) to (5);
+
+    \node at (-1.75,-0.5) {\normalsize $\intstruct \left( v \right)$};
+  \end{scope}
+  %
+  \begin{scope}[shift={(5.2,-11)}]
+    \node (0) at (0,0) {};
+
+    \node[bp] (bp_l2) at (0,1) {};
+    \node[bp] (bp_l1) at (-1,1) {};
+    
+    \node[leaf] (1) at (-1.5,2) {$1$};
+    \node[leaf] (2) at (-0.5,2) {$2$};
+    
+    \draw[line] (0) to (bp_l2.center);
+    \draw[line, red] (bp_l2.west) to (bp_l1.west);
+    \draw[line] (bp_l1.center) to (1);
+    \draw[line] (bp_l1.center) to (2);
+
+    \node at (-0.5,-0.5) {\normalsize $\intstruct \left( e_{\emptyset \uparrow} \right)$};
+  \end{scope}
+  %
+  %
+  % Semi-planar version after down-step
+  %
+
+%  \node[inner sep=0] (split) at (-0.2,-2) {};
+%  \draw[arrowline] (-2,0.5) to node[auto, swap] {\normalsize $\pi$} (-2, -1.5);
+  \draw[arrowline] (-3,-4) to [bend right] node[auto] {\normalsize $\pi_{[3]}^{* 8}$} (-3, -6);
+  \draw[arrowline] (-3,-8.5) to [bend right] node[auto] {\normalsize $h$} (-3, -10.5);
+  \draw[arrowline] (-3,-4) to [bend right] node[auto, swap] {\normalsize $\pi_{[3]}^{\bullet 8}$} (-3, -10.5);
+%  \draw[arrowline] (-2,0.5) to (split.north west) to [bend left] node[auto, swap] {\normalsize $\hat{\pi}_{[3]}^{* 8}$} (-0.5, -6);
+%  \draw[arrowline] (split.north west) to [bend left] node[auto, swap] {\normalsize $\hat{\pi}_{[3]}^{\bullet 8}$} (-0.5, -11);
+
+  \draw[arrowline] (-0.5,0) to [bend left] node[auto, swap] {\normalsize $\hat{\pi}$} (-1, -2.3);
+  \draw[arrowline] (-0.5,0) to [bend left] node[auto, swap] {\normalsize $\hat{\pi}_{[3]}^{* 8}$} (-1, -6);
+  \draw[arrowline] (-0.5,0) to [bend left] node[auto, swap] {\normalsize $\hat{\pi}_{[3]}^{\bullet 8}$} (-1, -10.5);
+  %
+\end{tikzpicture}

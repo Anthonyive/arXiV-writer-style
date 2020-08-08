@@ -1,0 +1,486 @@
+\chapter{Preliminaries: The $(\alpha, \gamma)$-growth rule and down-up chains for binary trees}\label{ch:prelims}
+%
+This chapter introduces the growth model for multifurcating trees that serves as an essential part of the foundation for the subsequent discussion of down-up chains.
+The growth model was introduced in~\cite{RefWorks:doc:5b4cbb5fe4b02dc0c79270af} and generalizes previous growth models proposed in~\cite{RefWorks:doc:5b76ce32e4b0820c421f301d,RefWorks:doc:5b6c561fe4b06c0731a5c558,RefWorks:doc:5b71b380e4b06c0731a629f4}.
+
+The results reported here will be of some, but not vital, importance for later results --- so if the reader is already familiar with these growth models and down-up chains it might be advantageous to go straight to Chaper~\ref{ch:downupmultifurcating}, and simply use the present chapter to look up notation.
+However, one should not undestimate the importance of this preliminary chapter.
+It will later be of great value to understand the dynamics of the growth model when constructing especially the down-step of our multifurcating down-up chain.
+
+\section{The growth rule and its state space}\label{sec:alphagammatrees}
+%
+We start out by defining the state spaces, in which our growth rule will take values.
+%
+\begin{defi}[Leaf-labelled trees]\label{leaflabelledtree}
+  Let $\tree$ be a non-empty collection of subsets of a finite set, $A$, having an extra member called the \verb|Root| such that:
+    %
+    \begin{enumerate}
+        \item $\left\{ j \right\} \in \tree$ for all $j \in A$.
+            These elements are called \textit{leaf edges} while all other elements of $\tree$ are called \textit{internal edges}.
+        \item For any pair of elements of $\tree$, $B_1$ and $B_2$, exactly one of the following statements hold: $B_1 \cap B_2 = \emptyset$, $B_1 \subseteq B_2$ or $B_2 \subseteq B_1$.
+        \item $A \in \tree$.
+    \end{enumerate} 
+    %
+    We call $\tree$ a \textit{rooted, leaf-labelled tree}, and denote the space of leaf-labelled trees indexed by the elements of $A$ leaves by $\T_A$.
+\end{defi}
+%
+We need some additional vocabulary to deal with trees effeciently. 
+Call $C \in \tree$ a \textit{child} of $B \in \tree$, and similarly $B$ a \textit{parent} of $C$, if it holds that $C \subsetneq B$ and that there does not exists $D \in \tree$ such that $C \subsetneq D \subsetneq B$, and denote this by $\overleftarrow{C} = B$.
+We will call any number of elements of $\tree$, $C_1, \ldots, C_k$ for some $k \in \N$, \textit{siblings} if they all have the same parent, i.e.\ if there exist $B \in \tree$ such that $\overleftarrow{C_i} = B$ for all $i \in [k]$.
+
+The above definition can seem far from a classical graph theoretic notion of a tree.
+But note that we can translate between the two notions by labelling our vertices and edges only using the elements of $\tree$.
+We start by defining the vertices and edges of $\tree_\text{graph}$ to be the elements of $\tree$, i.e.\ $V \left( \tree_\text{graph} \right) = E \left( \tree_\text{graph} \right) = \tree$.
+Denoting an undirected edge between two vertices $B$ and $B'$ by $BB' = B'B$ we will by the edge $C \in E \left( \tree_\text{graph} \right)$ mean the edge $C\overleftarrow{C}$. 
+Finally, the edge $A \in E\left( \tree_{graph} \right)$ will connect the two vertices $A$ and \verb|Root|.
+It is easy to check that this is indeed a general multifurcating tree in the graph theoretic sense.
+
+One can make a more intuitive description of the link described above.
+If the tree is drawn such that the parent is always above its children, then the label of any vertex is simply the label of the edge directly above it.
+The vertex at the very top of this drawing is the \verb|Root|.
+
+The downside of this way of labelling vertices and edges is that it creates an ambiguity when refering to some $B \in \tree$: do we mean the vertex or the edge with that label?
+In such cases we will be careful to state which of the two we mean, and sometimes we will even denote it explicitly by $B_v$ for the vertex and $B_e$ for the edge. \\
+We will say that the vertex corresponding to a leaf edge is a \textit{leaf}, and a vertex corresponding the an internal edge is a \textit{branch point}. 
+
+In order to discuss convergence results for growth models involving leaf-labelled trees, we will need a notion of unlabelled trees as well.
+The following definition is the standard notion of unlabelled graphs translated to our way of labelling trees:
+%
+\begin{defi}[Unlabelled Trees]\label{unlabelledtrees}
+  For any finite set $A$ define an equivalence relation, $\sim$, on $\T_A$ by
+  %
+  \begin{align}
+    \tree \sim \tree' \quad \text{if and only if} \quad \exists \sigma \in \Pi_A \colon \sigma( \tree ) = \tree',
+    \label{equiv_unlabelledtrees}
+  \end{align}
+  %
+  where $\Pi_A$ denotes the collection of permutations of $A$, and
+  %
+  \begin{align}
+    \sigma \left( \tree \right)
+    = \left\{ \left\{ \sigma (i) \mid i \in B \right\} \mid B \in \tree \right\}
+    \label{relabelling_perm}
+  \end{align}
+  %
+  We define the space of \textit{unlabelled trees with $\#A$ leaves}, $\T_{\#A}^\circ$, to be the quotient space of $\T_A$ induced by $\sim$.
+\end{defi}
+%
+One should note that the above specification of $T_{\#A}^\circ$ ensures that if $A \neq B$ are two finite sets such that $\# A = \# B$ then $\T_{\#A}^\circ = \T_{\#B}^\circ$, implying that our construction is well-defined and our notation sensible. \\
+
+We will use the following structural concepts for a tree:
+%
+\begin{defi}[Ancestral line \& spine]
+  Let $A$ be a finite set, let $\tree \in \T_A$ and fix some edge $B_0 \in \tree$.
+  The \textit{ancestral line} from $B_0$ is the set of edges and vertices from $B$ to the root, i.e.\ the collection $B_0, B_1, \ldots, B_m$, where $B_m = A$, and $B_i = \overleftarrow{B_{i-1}}$ for all $i \in [m]$ as in~\fxfatal*{Fix this reference when other section is done.}{REF} of Definition~\ref{leaflabelledtree}.
+  In the case where $B_0$ is a leaf we will refer to $B_0, B_1, \ldots, B_m$ as the \textit{spine} from that leaf.
+\end{defi}
+%
+When following the spine from a leaf in any binary tree, one would encounter exactly one subtree at each branch point.
+Doing the same in a multifurcating tree, one would possibly discover several such subtrees at each branch point.
+To ease notation for subtrees, we will for any $\tree$ and $B \in \tree$ by $\tree_B$ denote the \textit{subtree of $\tree$ rooted at B} only consisting of labels of $B$, i.e.
+%
+\begin{align}
+  \tree_B = \left\{ C \in \tree \mid C \subseteq B \right\}.
+  \label{subtreenotation}
+\end{align}
+%
+\fxfatal*{Revisit this when def and notation for trees has been fixed.}{%
+\begin{defi}[Spinal decomposition]
+  Let $A$ be a finite set, fix a tree and a leaf in that tree, $\left\{ j \right\} \in \tree \in \T_A$, and let $B_0 = \left\{ j \right\}, B_1, \ldots, B_m$ be the spine from $\left\{ j \right\}$.
+  For each vertex $B_i$ with $i \in [m]$ there exist $k_i \in \N$ trees which are rooted at $B_i$ and labelled by $B_{i-1,1}', \ldots, B_{i-1, k_i}'$, respectively.
+  We refer to $\left( \tree_{B_{i-1,1}'}, \ldots, \tree_{B_{i-1, k_i}'} \right)$ as the $i$'th \textit{spinal bush} and each member of this spinal bush as a \textit{subtree}.
+  Additionally, $\left\{ j \right\}, {\left( B_{i,k}' \right)}_{1 \leq k \leq k_i, 0 \leq i \leq m - 1}$ are disjoint and exhaust $\tree$, and we will thus refer to this collection as the \textit{spinal decomposition of $\tree$ from $\left\{ j \right\}$}.
+\end{defi}
+%
+}
+Before turning to the definition of the $(\alpha, \gamma)$-growth rule, we need to introduce one final element in the construction:
+%
+\begin{defi}[Insertion of leaf]\fxfatal{Fix this so that it fits with definitions in this chapter.}
+    Let $A$ be a finite set and fix $\tree[s] \in \T_A$.
+    The operation of inserting a leaf, $j \in \N \setminus A$, to the vertex or edge, $C$, of $\tree[s]$ is a map
+    %
+    \begin{align}
+      \left( \tree[s], C, j \right) \overset{\varphi}{\mapsto} \tree \in \T_{A \cup \left\{ j \right\}},
+        \label{insertionsmap}
+    \end{align}
+    %
+    where $\tree$ is obtained in the following way:
+    %
+    \begin{itemize}
+        \item If $C$ is a vertex
+            %
+            \begin{align*}
+                \tree
+                =
+                \left\{ \left\{ j \right\} \right\}
+                &\cup
+                \left\{ B \cup \{ j \} \mid C \subseteq B \in \tree[s] \right\} \\
+                &\cup
+                \left\{ B \in \tree[s] \mid B \subsetneq C \right\} \\
+                &\cup
+                \left\{ B \in \tree[s] \mid B \cap C = \emptyset \right\}.
+            \end{align*}
+            %
+        \item If $C$ is an edge, define
+            \begin{align*}
+                \tree
+                =
+                \left\{ \left\{ j \right\} \right\}
+                &\cup
+                \left\{ B \cup \{ j \} \mid C \subseteq B \in \tree[s] \right\} \\
+                &\cup
+                \left\{ B \in \tree[s] \mid B \subseteq C \right\} \\
+                &\cup
+                \left\{ B \in \tree[s] \mid B \cap C = \emptyset \right\}.
+            \end{align*}
+    \end{itemize}
+\end{defi}
+%
+For the edge insertion the above formalistic description corresponds to the following which might be more intuitive:
+Say we wish to insert leaf $j$ into edge $C \in \tree$.
+We break the edge $C$ up into two edges, $C$ and $C \cup \{ j \}$, separated by a vertex labelled by $C \cup \{j\}$ and connect the new leaf, $j$, to this vertex with an edge.
+Subsequently we update the labels of all edges and vertices on the spine from $C$ to the root. \\
+
+To shorten notation we will, throughout this exposition, let $[n]$ denote the set $\left\{ 1, \ldots, n \right\}$, for any $\nin$.
+Since the spaces of trees indexed by exactly these sets is going to play an essential role we will simply denote these spaces by $\T_n = \T_{[n]}$ (and correspondingly the space of unlabelled trees with $n$ edges by $\T_n^\circ$).
+Lastly, to avoid any kind of technical ambiguity we will by $\N$ mean the positive integers. \\
+
+Now that the initial technicalities have been dealt with, we can specify the growth rule that we will be studying in this chapter:
+%
+\begin{defi}[$(\alpha, \gamma)$-growth rule]\label{alphagamma_gr}
+  Let $T_1$ be the deterministic element of $\T_1$.
+  For any $\nin$ construct $T_{n+1}$ conditional on $T_n = \tree$, by for each $C \in \tree$ setting
+  %
+  \begin{align}
+    w_C
+    = 
+    \begin{cases}
+      1 - \alpha & \text{if $C = C_e$ is a leaf edge} \\
+      \gamma & \text{if $C = C_e$ is an internal edge} \\
+      \left( \deg b - 2 \right) \alpha - \gamma & \text{if $C = C_v$ is a branch point} \\
+      0 & \text{if $C = C_v$ is a leaf or the \texttt{Root}}
+    \end{cases}
+  \end{align}
+  %
+  and then defining the distribution of $T_{n+1}$ by
+  %
+  \begin{align}
+    \P \left( T_{n+1} = \varphi \left( \tree, C, n+1 \right) \mid T_n = \tree \right)
+    = \frac{w_C}{n - \alpha} 
+    \label{InsertionAlphaGammaRule}
+  \end{align}
+  %
+  for each $C \in \tree$.
+  The sequence ${\left( T_n \right)}_\nin$ is referred to as the $(\alpha, \gamma)$-\textit{growth model}.
+\end{defi}
+%
+It is easy to check that the expression~\eqref{InsertionAlphaGammaRule} is indeed a conditional probability since the denominator is the total weight of any $\tree \in \T_n$ using the weights specified above.
+
+It is of interest to understand the dynamics of the above growth model for all choices of parameters, but a few combination of parameter choices deserve special attention:
+%
+\begin{itemize}
+  \item For $\gamma = \alpha$ we get the $\alpha$-growth rule of~\cite{RefWorks:doc:5b76ce32e4b0820c421f301d}.
+    Several subclasses of this growth have strong ties to tree type structures used in computer science and biological statistics (such as phylogenetics).
+    For $\gamma = \alpha = 0$ we get the \textit{Yule process}, for $\gamma = \alpha = \frac{1}{2}$ we get the uniform model (or R\'{e}my's growth model) and for $\gamma = \alpha = 1$ one obtains the \textit{comb} model.
+  \item For $\gamma = 1 - \alpha$ the growth rule is equivalent to the growth rule proposed in~\cite{RefWorks:doc:5b6c561fe4b06c0731a5c558} setting $\theta = \alpha^{-1}$.
+    This is interesting since this particular growth rule converges to the \textit{stable tree}.
+\end{itemize}
+%
+\begin{example}[The uniform growth model]\label{unifgrowth}
+  %
+  Let us give a brief and concrete example of the $(\alpha, \gamma)$-growth model, ${\left( T_n \right)}_\nin$, for $\alpha = \gamma = \frac{1}{2}$.
+  In Figure~\ref{fig:unifchain} there is an example of the unique element of $\T_2$ with the assigned labels of the edges and the probabilities of obtaining each of the elements of $\T_3$.
+  For any $n \geq 2$ the number of possible values for $T_n$ (the binary trees, $\T_n^b$) is $(2n - 3)\!\! = (2n - 3)(2n - 5) \cdots 3 \cdot 1$ and that $T_n \deq \Unif \left( \T_n^b \right)$ (see~\fxfatal{Find reference. Can't find it in Pitman.}).
+  %
+  \begin{figure}[t]
+    \centering
+    %
+    \input{Figures/ExampleT2T3Insertion}
+    %
+    \captionsetup{singlelinecheck=off}
+    \caption[fig:unifchain]{Example of labelling of edges and the insertion dynamics of the uniform chain.
+      In the drawing above, the vertices will be labelled by the edge directly above them.
+      It also illustrates that the probability of obtaining
+    %
+      \begin{align*}
+        \varphi\left( T_2, \{1,2\},3 \right) &= \left\{ \left\{ 1 \right\}, \left\{ 2 \right\}, \left\{ 3 \right\}, \left\{ 1,2 \right\}, \left\{ 1,2,3 \right\} \right\}, \\
+        \varphi\left( T_2, \{1\},3 \right) &= \left\{ \left\{ 1 \right\}, \left\{ 2 \right\}, \left\{ 3 \right\}, \left\{ 1,3 \right\}, \left\{ 1,2,3 \right\} \right\}, \\
+        \varphi\left( T_2, \{2\},3 \right) &= \left\{ \left\{ 1 \right\}, \left\{ 2 \right\}, \left\{ 3 \right\}, \left\{ 2,3 \right\}, \left\{ 1,2,3 \right\} \right\},
+      \end{align*}
+    %
+      are all equal to $\frac{1}{3}$.
+  %
+    }\label{fig:unifchain}
+%
+  \end{figure}
+\end{example}
+%
+In the way that we have defined leaf-labelled trees with $n$ leaves, there is an obvious link to partitions of $[n]$.
+Hence it is not very surprising that one can find links to the Chinese Restaurant Process as well.
+Let us first recall what we mean by two specific versions of this type of process: \\
+
+Fix $\alpha$ and $\theta$ such that either $0 \leq \alpha \leq 1$ and $\theta > -\alpha$, or $\alpha < 0$ and $\theta = L\alpha$ for some $L \in \N$.
+
+The seating plan for the customers in the \textit{Chinese Restaurant Process} with parameters $(\alpha, \theta)$, $\crp(\alpha,\theta)$, is as follows:
+%
+\begin{itemize}
+  \item The first customer sits at the first table.
+  \item If the first $n$ customers are seated at $K$ (where $K \leq L$ the case where $\theta = L\alpha$) tables with $N_1, \ldots, N_K$ customers seated at each table, customer $n+1$ will sit at
+    \begin{itemize}
+      \item table $i$ with probability $\frac{N_i - \alpha}{n + \theta}$, for each $i \in [K]$, and
+      \item at a new table, $K+1$, with probability $\frac{K\alpha + \theta}{n + \theta}$.
+    \end{itemize}
+\end{itemize}
+%
+The table-seating of the first $n$ customers naturally induces a partition of $[n]$ by saying that $i$ and $j$ belong to the same block of the partition if and only if customers $i$ and $j$ are seated at the same table in the Chinese Restaurant.
+For a more extensive account of this process, see~\cite{RefWorks:doc:5b644f76e4b0a3434e490fc8}.
+
+We can define the \textit{ordered Chinese Restaurant Process} with parameters $(\alpha, \theta)$, denoted by $\ocrp(\alpha, \theta)$, in a similar fashion.
+The seating dynamic is the same but we now associate a left-right ordering to the tables.
+For any number of tables $K \in \N$, conditional on customer $n+1$ sitting at a new table, $K+1$, place this table
+%
+\begin{itemize}
+  \item to the left of the leftmost table with probability $\frac{\alpha}{K\alpha + \theta}$,
+  \item between any pair of neighbouring tables with probability $\frac{\alpha}{K\alpha + \theta}$, and
+  \item to the right of the rightmost table with probability $\frac{\theta}{K\alpha + \theta}$.
+\end{itemize}
+%
+This construction not only gives rise to a random partition of $[n]$ but also a random permutation of $[K]$, corresponding to the ordering of the $K$ tables seating $n$ customers, see~\cite{RefWorks:doc:5b6c5580e4b0a3935d3436d8} for more details. \\
+
+From the above description we have the following immediate result which in some sense is a version of Proposition~10 of~\cite{RefWorks:doc:5b4cbb5fe4b02dc0c79270af}.
+%
+\fxwarning*{Is this remedied???}{%
+\begin{thm}[Spinal Decomposition]\label{spinaldecomp}
+  Let ${(T_n)}_\nin$ be an $(\alpha, \gamma)$-growth model.
+  For each $\nin$, let
+  %
+  \begin{align*}
+    S_1 = \left(S_{11}, \ldots, S_{1N_1} \right)
+    ,\ldots,
+    S_{K_n} = \left(S_{K_n 1}, \ldots, S_{K_n N_{K_n}}\right)
+  \end{align*}
+  %
+  denote the label sets of the spinal bushes and subtrees from leaf $1$, with leafs relabelled by the increasing bijection $\left\{ 2, \ldots, n \right\} \mapsto \left\{ 1, \ldots, n-1 \right\}$.
+  Then it holds that
+  %
+  \begin{align}
+    \left( S_1, \ldots, S_{K_n} \right)
+    \deq \ocrp_{n-1}(\gamma, 1-\alpha),
+    \label{spinaldecomp_ocrp}
+  \end{align}
+  %
+  where $\ocrp_n$ denotes an $\ocrp$ with $n$ customers.
+  In addition, for each $j \in [K_n]$ it holds that
+  %
+  \begin{align}
+    \left( S_{j1}, \ldots, S_{jN_j} \right)
+    \deq
+    \crp_{\# S_j}(\alpha, - \gamma)
+    \label{spinaldecomp_crp}
+  \end{align}
+  %
+  where $\crp_{n_j}$ denotes a $\crp$ with $n_j$ customers.
+\end{thm}
+}
+%
+\begin{proof}
+  This follows directly from the definition of the $(\alpha, \gamma)$-growth model.
+  From $T_n$ observe how new leaves get attached to the various bushes along the spine:
+  %
+  If the spine is drawn as a straight line so that the \verb|Root| is to the left and leaf $1$ is to the right, observe how the bushes act as tables while the leaves acts as customers in the Chinese Restaurant analogy: \\
+  We will have weight $\gamma$ to the left of the leftmost spinal bush and in between any pair of neighbouring spinal bushes, whilst we have weight $1-\alpha$ to the right of the rightmost one (the leaf edge $1$). \\
+  Furthermore, a spinal bush, $S$, consisting of $k$ subtrees each containing $n_1, \ldots, n_k$ leaves, respectively, will have weight
+  %
+  \begin{itemize}
+    \item $n_i - \alpha$ for each subtree, $i \in [k]$,
+    \item $k\alpha - \gamma$ for the branch point itself,
+  \end{itemize}
+  %
+  aggregating to a total weight of $\sum_{i=1}^{k}\left( n_i - \alpha \right) + k\alpha - \gamma = \sum_{i=1}^{k}n_i - \gamma$.
+  \fxwarning{Produce figure making link between CRP and Spinal Decomp}
+  This describes exactly the distribution of an $\ocrp(\gamma, 1-\alpha)$ with $n-1$ customers.
+  %
+  For the latter result, simply note that when focusing on an individual bush the subtrees will serve as tables and the leaves again as customers in a $\crp$:
+  each subtree has weight $n_i - \alpha$ as above, and the weight for opening up a new table corresponds to an insertion in the branch point with weight $k\alpha - \gamma$, which are the weights associated with a $\crp(\alpha, -\gamma)$ with $\sum_{i=1}^{k}n_i$ customers.
+\end{proof}
+%\begin{defi}[Chinese Restaurant Processes]
+%  Let ${(X_n)}_\nin$ be random variables such that $X_n$ takes values in $\{1, \ldots, n\}$ and define for each $\nin$ the vector $N_n = \left( N_{n,1}, \ldots N_{n,n} \right)$, where $N_{n,i} = \# \left\{ 1 \leq k \leq n \mid X_k = i \right\}$ for each $1 \leq i \leq n$.
+%  Define the conditional distribution of $X_n$ in the following way:
+%  %
+%  \begin{align}
+%    \P \left( X_n = i \mid \# \left\{ 1 \leq k \leq n-1 \mid X_k = i \right\} \right) = 
+%    \label{test}
+%  \end{align}
+%\end{defi}
+
+  \begin{figure}[t]\label{fig:alphagammachain}
+    \centering
+    \input{Figures/ExampleT2T3InsertionMulti}
+    \caption{Example of labelling of edges and the insertion dynamics of the $(\alpha, \gamma)$-growth model.}
+  \end{figure}
+
+\section{Down-up chains for binary trees}
+%
+Having introduced in some detail the notion of the $(\alpha, \gamma)$-growth model we pivot, and focus on a down-up-chain for binary trees.
+At first this might seem a bit detached from the first part of this exposition, and this is --- in some sense --- true.
+However, we will very much rely on characterizations from the first part as well as key information about the down-up-chain for binary trees in order to introduce a sensible down-up chain related to the $(\alpha, \gamma)$-growth model.
+
+Let us start by introducing a very general notion of a down-up chain, before subsequently giving a short account of some that are of special interest to us.
+The definition below is our attempt to provide an umbrella for all variations of down-up chains studied in detail since the introduction of the uniform down-up chain in~\cite{RefWorks:doc:5b4cbc14e4b04428cc72cf41}.
+We need one final operation we can do so:
+%
+\begin{defi}[Deletion of leaf]
+  Let $A$ be a finite set and fix $\tree \in \T_A$.
+  The operation of deleting a leaf, $\{\tildei\} \subseteq A$, from $\tree$ is a map
+  %
+  \begin{align}
+    \left( \tree, \tildei \right) \overset{\pi}{\mapsto} \tree[s] \in \T_{A \setminus \{\tildei\}}
+    \label{deletionmap}
+  \end{align}
+  %
+  where
+  %
+  \begin{align}
+    \tree[s]
+    = \left\{ B \setminus \{\tildei\} \mid B \in \tree \right\}
+    \label{deletionsoutput}
+  \end{align}
+\end{defi}
+%
+\fxwarning*{Is this fix OK?}{%
+\begin{defi}[Down-up chain]\label{downupchain_general}
+  Fix $\tree \in \T_n$, some growth rule, $G$, and a \textit{transformation function} $f \colon \T_n \times [n] \to \T_n \times [n]$.
+  \fxfatal{Define growth rule. Pitman Winkel 2009.}
+  The $(f, G)$-\textit{down-up chain, ${\left( T_n(m) \right)}_{m \in \N_0}$,  started at $\tree$} is a Markov chain on $\T_n$ with $T_n(0) \aseq \tree$ and with the following transition kernel.
+  For each $m \in \N_0$ obtain $T_n(m+1)$ from $T_n(m)$ by
+  %
+  \begin{enumerate}
+    \item\label{transformation_down} applying the transformation function, $f$, on $T_n(m)$ and a random variable $U \sim \Unif\left( [n] \right)$, thereby defining
+      \begin{align*}
+        \left( T_n'(m), U' \right)
+        = f \left( T_n(m), U \right),
+      \end{align*}
+    \item\label{step1down} deleting leaf $\tildei \in [n]$ from $T_n'(m)$ according to the distribution of $U'$, i.e.\ defining
+      %
+      \begin{align*}
+        T_n^\downarrow(m)
+        = \pi\left( f \left( T_n'(m), U' \right) \right),
+      \end{align*}
+      %
+    \item relabelling $T_n^\downarrow(m)$ by $(\tildei+1, \ldots, n) \mapsto (\tildei, \ldots, n-1)$, where $\tildei$ is the leaf deleted in step~\ref{step1down}, to obtain $T_n^{\downarrow, \text{re}}(m)$.
+    \item inserting leaf $n$ to $T_n^{\downarrow, \text{re}}(m)$ according to $G$ to obtain $T_n(m+1)$.
+  \end{enumerate}
+\end{defi}
+}
+%
+In the above definition we require $U$ to be uniform on $[n]$, but let us focus on the role of the transformation map, $f$.
+As in step~\ref{transformation_down} of the above definition, say that $f \left( \tree[s], U \right) = \left( \tree[s]', U' \right)$.
+Even though $U$ is uniformly distributed on the leaves of $\tree[s]$, it will be dependent on $f$ whether or not $U'$ is uniformly distributed on $\tree[s]'$.
+This will allow us to make non-uniform deletions, which will be of vital importance later on.
+In the most basic cases $f$ will simply be the identity function, in which case we will call it a $(1,G)$-down-up chain and then specify $G$.
+In more complicated cases, it will be cumbersome to specify $f$ directly, but we will then characterize the output of $f$ explicitely in terms of operations on $\tree[s]$ and the value of $U$.
+Furthermore, if $G$ is the $\alpha$- or $(\alpha, \gamma)$-growth rule we will denote the associated chains by $(f, \alpha)$- and $\left(f, (\alpha, \gamma)\right)$-down-up chain, respectively.
+
+\noindent
+Two down-up chains are of special interest at this time:
+%
+\begin{itemize}
+  \item the \textit{uniform down-up chain}: the $(1, G)$-down-up chain, where $G$ is the uniform growth rule, as introduced in~\cite{RefWorks:doc:5b4cbc14e4b04428cc72cf41}, and
+  \item the $(1, \alpha)$-down-up chain as introduced in~\cite{RefWorks:doc:5b4cbc93e4b07f5746e47014}.
+\end{itemize}
+%
+Since the former down-up chain is a special case of the latter (for $\alpha = \frac{1}{2}$) they both hold the following interesting property:
+%
+\begin{thm}
+  Fix $\alpha \in [0,1]$, and $n \geq 3$, and let ${\left( T_n(m) \right)}_{m \in \N}$ denote the $(1, \alpha)$-down-up chain.
+  It holds that ${\left( T_n(m) \right)}_{m \in \N}$ has a stationary distribution, the distribution being the one of $T_n$, the $n$'th step of the $\alpha$-growth model.
+\end{thm}
+%
+\begin{proof}[Sketch of proof]
+    Note that the Markov chain has a closed and recurrent communicating class, irrespective of which $\tree \in \T_n$ it is started from.
+    Now assume that $T_n(0) = T_n$ and observe that the uniform deletion step ensures that $T_n^{\downarrow, \text{re}} \deq T_{n-1}$.
+    Inserting leaf $n$ according to the $\alpha$-growth rule yields that $T_n(1) \deq T_n(0) \deq T_n$, proving the assertion.
+\end{proof}
+%
+The above result can actually be accredited to the property known as \textit{sampling consistency} or \textit{deletion stability} --- see~\cite{RefWorks:doc:5b4cbb5fe4b02dc0c79270af} for a concrete proof of the above for the $(\alpha, \gamma)$-growth model and~\cite{RefWorks:doc:5b76ce32e4b0820c421f301d} for a thorough introduction to the concept.
+Informally, a growth model is sampling consistent if one when deleting $k$ leaves uniformly at random from the unlabelled representative of $T_n$, $T_n^\circ$, obtains the distribution of the unlabelled representative of $T_{n-k}$, for all $k < n$.
+
+Combined with the following theorem, the result above is ultimately what gives rise to the conjecture of Aldous mentioned in the introduction:
+%
+\begin{thm}
+    Write exact result on convergence to Brownian CRT.\fxfatal{Write this bit.}
+\end{thm}
+%
+Since for each finite number of leaves, the uniform down-up chain has a stationary distribution which is the uniform distribution on the binary trees, and that this distribution converges to the distribution of the Brownian Continuum Random Tree, Aldous conjectured that it was possible to define a diffusive limit of the down-up chain as the number of leaves tends to infinity.
+
+\fxwarning*{Make this more formal?}{%
+Whilst the conjecture has not yet been settled, significant improvements have been made to understand certain aspects of a possible limiting process.
+Recall from the introduction that the following approach was introduced in~\cite{RefWorks:doc:5b4cbb92e4b0bc982fe42f3a}.
+Starting from some $n \in \N$, fix a specific branch point in $T_n(0)$.
+This branch point will naturally split the tree into three parts, so define the proportion of leaves in each part by $X_0^n(\cdot), X_1^n(\cdot)$, and $X_2^n(\cdot)$, and note that these are only well-defined until the branch point disappears as part of a down-step.
+It was then shown that
+%
+\begin{align*}
+    {\left( X_0^{n}(\lfloor n^2 t \rfloor), X_1^{n}(\lfloor n^2 t \rfloor ) , X_2^{n}(\lfloor n^2 t \rfloor ) \right)}_{t \geq 0}
+    \dcon
+    {\left( X_0(t), X_1(t), X_2(t) \right)}_{t \geq 0}
+\end{align*}
+%
+as $n \to \infty$, stopped when one of the latter two coordinates hits $0$, where $(X_0, X_1, X_2)$ denotes a Wright-Fisher diffusion with parameters $\left( \frac{1}{2}, -\frac{1}{2}, -\frac{1}{2} \right)$. 
+}
+
+Say that we now focus on the branch point separated by leaves $1$, $2$ and the \verb|Root|.
+Since we never make alterations to the position of the \verb|Root| in a down-up chain, we thus need to keep leaves $1$ and $2$ in roughly the same place, in order for the branch point to ``survive'' for as long as possible.
+In~\cite{RefWorks:doc:5b4cbc93e4b07f5746e47014} an ingenious way of doing this is introduced:
+if leaves $1$ or $2$ are selected for deletion, the tree is searched locally for the smallest label bigger than $2$ and in case one is found, the labels are swapped and the leaf deleted.
+
+Before defining the formally we need a notion of swapping labels in the tree.
+%
+\begin{defi}[Label swapping]
+  Let $A$ be a finite set and fix $\tree \in \T_A$.
+  The operation of \textit{swapping labels} is a map $\tau \colon \T_A \times A \times A \to \T_A$ defined by
+  %
+  \begin{align*}
+    \tau\left( \tree, i, j \right)
+    = \left\{ \{j\} \cup B \setminus \{i\} \mid i \in B \in \tree \right\}
+    &\cup \left\{ \{i\} \cup B \setminus \{j\} \mid j \in B \in \tree \right\} \\
+    &\cup \left\{ B \in \tree \mid B \cap \{i, j\} = \emptyset \right\}
+  \end{align*}
+  %
+\end{defi}
+%
+We will not have encounter a situation where we need to swap more than two labels.
+However, one can in the obvious manner extend the above notion of label swapping to allow any number of label swaps in case it is needed.
+%
+\begin{defi}[$\alpha$-chain]\label{alphachain}
+  The $\alpha$-\textit{chain} is an $(f,\alpha)$-down-up chain where $f$ is defined by setting $f(\tree[s], i) = \left(\tau\left( \tree[s], i, \tildei \right), \tildei \right)$, with
+      %
+  \begin{align}\label{eq:ab_def}
+      &a \colon = \min \left\{ \text{leaves in 1st subtree on spine from leaf}\ \{i\} \in \tree[s] \right\}, \\
+      &b \colon = \min \left\{ \text{leaves in 2nd subtree on spine from leaf}\ \{i\} \in \tree[s] \right\}
+  \end{align}
+      %
+  and $\tildei \colon = \max\left\{ i, a, b \right\}$.
+  \end{defi}
+%
+It is worth noting here that even if $i$ and $\tildei$ are fixed (non-random) numbers, $a$ and $b$ in the definition of the $(\alpha)$-chain will still be random due to the randomness of the underlying tree.
+Additionally, it is immediate that the above construction leads to a different Markov chain compared to the basic chains, where $f$ was simply the identity function, mentioned earlier.
+Surprisingly, the stationary distribution of the chain is unchanged:
+%
+\begin{thm}[Theorem 3 of~\cite{RefWorks:doc:5b4cbc93e4b07f5746e47014}]\label{StatDistBin}
+  Fix $n \geq 3$, let $T_n$ denote the $n$'th step of the $\alpha$-growth model and let $T = {\left( T_n(m) \right)}_{m \in \N_0}$ be the $\alpha$-chain.
+  It holds that $T$ has a stationary distribution, and that $T_n(m) \dcon T_n$ as $m \to \infty$.
+\end{thm}
+%
+We will not prove the above theorem here, since we will prove a more general statement later, where the fundamental strategy will be the same.
+However, we will point out that the key observation in the proof is the following:
+%
+\begin{lemma}
+  Let $T_n$ denote the $n$'th step of the $\alpha$-growth model. 
+  For fixed $1 \leq i \leq \tilde{\text{\i}} \leq n$ define $E_{i,\tilde{\text{\i}}} = \left( \tilde{\text{\i}} = \max\left\{ i, a, b \right\} \right)$, where $a$ and $b$ is defined by~\eqref{eq:ab_def}.
+  Then $E_{i,\tilde{\text{\i}}} \independent T_{\tilde{\text{\i}}-1}$ and $\pi\left(\tau\left(T_n, i, \tildei\right), \tildei \right) \mid E_{i,\tilde{\text{\i}}} \stackrel{D}{=} T_{n-1}$.
+\end{lemma}
+%
+As mentioned in the introduction, the key goal of this exposition --- and indeed the first major goal of this research project --- is to generalize Theorem~\ref{StatDistBin} to the multifurcating setting.
+The above lemma plays a crutial role in this endevour.
+Fundamentally, the aim of the following chapter will be to construct a down-up chain for which we can define a down move such that the above lemma holds.

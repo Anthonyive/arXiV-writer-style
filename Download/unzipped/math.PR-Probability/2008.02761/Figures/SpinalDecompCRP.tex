@@ -1,0 +1,104 @@
+\begin{tikzpicture}[%
+    node distance = 0.8cm,
+        table/.style={circle, draw, minimum width=1cm},
+        bp/.style={circle, draw, fill=oxfordblue, inner sep=0pt, minimum width=4pt},
+        comment/.style={color=red},
+        label/.style={text=oxfordblue},
+        line/.style={-, line width = 2pt, color = oxfordblue},
+        scale=1
+    ]
+
+    \node (0_0) at (0,0) {\verb|Root|};
+    \node (0_12) at (12,0) {1};
+    \node [label] at (0.5,3.5) {\Large $T_n$};
+
+        %%%%% 1st Subtree %%%%%
+    \node [bp] (0_4) at (4,0) {};
+    \node [color = gray] (4_4) at (4,3) {2};
+    \draw [line, color = gray] (0_4) to (4_4);
+
+    \node (dumbigwest) at (3.2,2) {};
+    \node (dumbigwest2) at (3,2) {};
+    \node (dumbigeast) at (4.8,2) {};
+    \node (dumbigeast2) at (5,2) {};
+    \node (dumbignorth2) at (4,4) {};
+
+    \draw[line] (0_4) to [bend left] (dumbigwest.west) to [bend left] (4,3.5) to [bend left] (dumbigeast.east) to [bend left] (0_4);
+    \draw[-, dotted, line width = 2pt, color=red] (0_4) to [bend left] (dumbigwest2.west) to [bend left] (dumbignorth2.center) to [bend left] (dumbigeast2.east) to [bend left] (0_4);
+
+    \node [label, color = red] at (4.7,4) {\large $S_1$};
+
+    \node [bp, color = gray] (1_4) at (4,1) {};
+    \node [color = gray] (1_3) at (4.75,4/3) {3};
+    \draw[line, color = gray] (1_4) to (1_3);
+
+    \node [color = gray] (2_1) at (3.25,7/3) {7};
+    \node [bp, color = gray] (2_4) at (4,2) {};
+    \draw[line, color = gray] (2_4) to (2_1);
+
+    \node (2sb_left) at (3.5,1) {};
+    \draw[-, line width = 2pt, color=oxfordblue] (0_4) to [bend left] (2sb_left.center) to [bend left] (0_4);
+
+    \node (2sb_right) at (4.6,1) {};
+    \draw[-, line width = 2pt, color=oxfordblue] (0_4) to [bend left] (2sb_right.center) to [bend left] (0_4);
+
+        %%%%% 2nd Subtree %%%%%
+    \node [bp] (0_6) at (6,0) {};
+    \node (2_6) at (6,2) {4};
+    \draw[line] (0_6) to (2_6);
+
+    \draw[-, dotted, line width = 2pt, color=red] (0_6) to (5.5,4/3) to [bend left] (6,2.5) to [bend left] (7.5, 1) to [bend left] (0_6);
+    \node [label, color = red] (S2) at (7.2,2.3) {\large $S_2$};
+    \node [label, anchor = west] at (S2.east) {\large $= S_{21}$};
+
+    \node [bp] (1_6) at (6,1) {};
+    \node (1_7) at (7,1) {$n$};
+    \draw[line] (1_6) to (1_7);
+
+
+        %%%%% 3nd Subtree %%%%%
+    \node [bp] (0_2) at (2,0) {};
+    \node (1_1) at (1.4,1) {};
+
+    \node (1_1e) at (1.25,1.25) {};
+    \node (1_2e) at (2.75,1.25) {};
+    \node (1_e) at (2,2.5) {};
+
+    \draw[line] (0_2.center) to [bend left] (1_1.center) to [bend left] (0_2.center);
+    \draw[-, dotted, line width = 2pt, color=red] (0_2.center) to [bend left] (1_1e.center) to [bend left] (1_e.center) to [bend left] (1_2e.center) to [bend left] (0_2.center);
+
+    \node [label, color = red] at (2,2.8) {\large $S_3$};
+    \node [label, anchor = south] at (1_1.east) {$S_{31}$};
+
+    \node (1_2) at (2.6,1) {};
+    \draw[line] (0_2.center) to [bend left] (1_2.center) to [bend left] (0_2.center);
+
+    \node [label, anchor = south] at (1_2.west) {$S_{32}$};
+
+
+    \foreach \x in {8,10}{%
+        \node [bp] (0_\x) at (\x,0) {};
+        \node (1_\x) at (\x, 1.5) {};
+    }
+
+        \node [anchor = south, text = oxfordblue] at (1_10.north) {\large $S_K$};
+
+        \draw[line] (0_8.center) to [bend left] (1_8.center) to [bend left] (0_8.center);
+        \draw[line] (0_10.center) to [bend left] (1_10.center) to [bend left] (0_10.center);
+
+        \begin{scope}[shift={(0,-1)}]
+            \node [table] (1) at (4,0) {$S_1$};
+            \node [comment, anchor = north] at (1.south) {\small $\# S_1 - \alpha$};
+            \node [table] (2) at (6,0) {$S_2$};
+            \node [comment, anchor = north] at (2.south) {\small $2 - \alpha$};
+            \node [table] (3) at (2,0) {$S_3$};
+            \node [comment, anchor = north] at (3.south) {\small $\# S_3 - \alpha$};
+            \node [table] (4) at (8,0) {};
+            \node [table] (5) at (10,0) {$S_K$};
+            \node [comment, anchor = north] at (5.south) {\small $\# S_K - \alpha$};
+\end{scope}
+
+\draw[line] (0_0) to node[auto, swap] {$\gamma$} (0_2) to node[auto, swap] {$\gamma$} (0_4) to node[auto, swap] {$\gamma$} (0_6) to node[auto, swap] {$\gamma$} (0_8);
+\draw[line, dotted] (0_8) to node[auto, swap] {$\gamma$} (0_10);
+\draw[line] (0_10) to node[auto, swap] {$1-\alpha$} (0_12);
+\end{tikzpicture}
