@@ -2,6 +2,7 @@
 [![Maintenance](https://img.shields.io/badge/Maintained%3F-no-red.svg?style=flat-square)](https://bitbucket.org/lbesson/ansi-colors)
 [![made-with-latex](https://img.shields.io/badge/Made%20with-LaTeX-1f425f.svg?style=flat-square)](https://www.latex-project.org/)
 
+Note: This repo is archived and read-only since the project was over.
 
 Task list is now in Projects tab.
 
